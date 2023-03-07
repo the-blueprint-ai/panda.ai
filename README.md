@@ -1,2 +1,1 @@
-# 🐼
-# panda.ai
+# 🐼 panda.ai 

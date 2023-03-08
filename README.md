@@ -1,7 +1,5 @@
 # 🐼 panda.ai
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/8e71d3db-4766-47d5-bed1-cbe7c951ea4e/deploy-status)](https://app.netlify.com/sites/cheerful-treacle-213a88/deploys)
-
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup

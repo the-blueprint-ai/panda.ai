@@ -11,10 +11,13 @@ from supertokens_python import (
 
 # this is the location of the SuperTokens core.
 supertokens_config = SupertokensConfig(
-    connection_uri="https://try.supertokens.com")
+    # https://try.supertokens.com is for demo purposes. Replace this with the address of your core instance (sign up on supertokens.com), or self host a core.
+    connection_uri="https://dev-32918f51bebd11eda5a2f94364e3b284-eu-west-1.aws.supertokens.io:3569",
+    api_key="RzoL-gH6kIvoimEbpxGr7bfAjiQT=n"
+)
 
 app_info = InputAppInfo(
-    app_name="Supertokens",
+    app_name="panda.ai",
     api_domain="http://localhost:3001",
     website_domain="http://localhost:3000",
 )
@@ -24,14 +27,20 @@ framework = "fastapi"
 # recipeList contains all the modules that you want to
 # use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
 recipe_list = [
-    session.init(),
+    session.init(), # initializes session features
     thirdpartyemailpassword.init(
         providers=[
+            # We have provided you with development keys which you can use for testing.
+            # IMPORTANT: Please replace them with your own OAuth keys for production use.
             Google(
                 is_default=True,
                 client_id="1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com",
                 client_secret="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"
             ),
+            # Facebook(
+            #     client_id='FACEBOOK_CLIENT_ID',
+            #     client_secret='FACEBOOK_CLIENT_SECRET'
+            # ),
             Github(
                 is_default=True,
                 client_id="467101b197249757c71f",
@@ -46,5 +55,5 @@ recipe_list = [
             ),
         ]
     ),
-    dashboard.init(api_key="supertokens_is_awesome")
+    dashboard.init(api_key="63818ab7-a904-409e-acc7-b8b5092974e1")
 ]

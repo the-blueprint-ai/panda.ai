@@ -8,7 +8,7 @@ import Session from "supertokens-web-js/recipe/session";
 
 export const SuperTokensReactConfig = {
   appInfo: {
-    appName: "SuperTokens Demo App",
+    appName: "panda.ai",
     apiDomain: "http://localhost:3001",
     websiteDomain: "http://localhost:3000",
   },
@@ -25,7 +25,7 @@ export const SuperTokensReactConfig = {
 
 export const SuperTokensWebJSConfig = {
   appInfo: {
-    appName: "SuperTokens Demo",
+    appName: "panda.ai",
     apiDomain: "http://localhost:3001",
   },
   recipeList: [Session.init()],

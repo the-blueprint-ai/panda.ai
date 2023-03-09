@@ -15,11 +15,11 @@ init(
     app_info=config.app_info,
     framework=config.framework,
     recipe_list=config.recipe_list,
-    mode="asgi",
+    mode="asgi", # use wsgi if you are running using gunicorn
 )
 
 
-app = FastAPI(title="SuperTokens example")
+app = FastAPI(title="panda.ai")
 app.add_middleware(get_middleware())
 
 @app.get("/sessioninfo")    

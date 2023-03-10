@@ -18,7 +18,33 @@ export const SuperTokensReactConfig = {
       useShadowDom: false,
       signInAndUpFeature: {
         providers: [Github.init(), Google.init(), Apple.init()],
+        signUpForm: {
+          termsOfServiceLink: "https://example.com/terms-of-service",
+          privacyPolicyLink: "https://example.com/privacy-policy"
+        },
       },
+      style: `
+        [data-supertokens~=container] {
+          font-family: "Helvetica Neue", "Arial", sans-serif;
+          --palette-background: 0, 0, 0;
+          --palette-inputBackground: 255, 255, 255;
+          --palette-inputBorder: 0, 0, 0;
+          --palette-textTitle: 255, 255, 255;
+          --palette-textLabel: 255, 255, 255;
+          --palette-textPrimary: 255, 255, 255;
+          --palette-error: 255, 203, 76;
+          --palette-textInput: 0, 0, 0;
+          --palette-buttonText: 0, 0, 0;
+          --palette-textLink: 255, 203, 76;
+          --palette-primary: 255, 203, 76;
+          --palette-primaryBorder: 255, 203, 76;
+          --palette-superTokensBrandingBackground: 255, 255, 255;
+          --palette-superTokensBrandingText: 0, 0, 0;
+        },
+        [data-supertokens~="inputWrapper"]:focus-within {
+          background-color: 255, 255, 255 !important;
+        },
+      `,
     }),
     EmailVerification.init({
       mode: "REQUIRED", // or "OPTIONAL"

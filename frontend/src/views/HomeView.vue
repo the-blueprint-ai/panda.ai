@@ -33,33 +33,31 @@ export default defineComponent({
 <template>
   <main>
     <div className="body">
-      <h1>Hello</h1>
+      <img src="../../src/assets/panda.png" width="200"/>
+      <h1>Welcome to panda.ai</h1>
 
       <div v-if="session">
-        <span>UserId:</span>
+        <h2>Your UserId Is:</h2>
         <h3>{{ userId }}</h3>
 
         <button @click="onLogout">Sign Out</button>
       </div>
       <div v-else>
-        <p>
-          Visit the
-          <a href="https://supertokens.com">SuperTokens tutorial</a> to learn
-          how to build Auth under a day.
-        </p>
-        <button @click="redirectToLogin">Sign in</button>
+        <button @click="redirectToLogin">Sign In</button>
       </div>
     </div>
   </main>
 </template>
 <style scoped>
 .body {
+  background-color: #000000;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
 }
 .user {
   display: flex;
@@ -73,28 +71,34 @@ span {
   font-size: large;
 }
 h3 {
-  color: #ff3e00;
+  color: #FFFFFF;
+}
+h2 {
+  color: #FFFFFF;
 }
 h1 {
-  color: #ff3e00;
+  color: #FFFFFF;
   text-transform: uppercase;
   font-size: 4em;
   font-weight: 100;
 }
 button {
   cursor: pointer;
-  background-color: #ffb399;
+  background-color: #FFFFFF;
   border: none;
-  color: rgb(82, 82, 82);
-  padding: 0.75rem;
+  padding: 1rem;
   margin: 2rem;
   transition: all 0.5s ease-in-out;
+  border: 5px solid #FFFFFF;
   border-radius: 2rem;
   font-size: large;
+  font-family: "Monaco";
+  width: 200px;
 }
 button:hover {
-  transform: scale(1.1);
-  background-color: #ff3e00;
-  color: white;
+  /*transform: scale(1.1);*/
+  background-color: #000000;
+  color: #FFFFFF;
+  border: 5px solid #FFFFFF;
 }
 </style>

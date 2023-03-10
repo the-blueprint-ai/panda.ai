@@ -1,4 +1,4 @@
-from supertokens_python.recipe import session, thirdpartyemailpassword, dashboard
+from supertokens_python.recipe import session, thirdpartyemailpassword, dashboard, emailverification, usermetadata
 from supertokens_python.recipe.thirdpartyemailpassword import (
     Apple,
     Github,
@@ -55,5 +55,7 @@ recipe_list = [
             ),
         ]
     ),
+    usermetadata.init(),
+    emailverification.init(mode='REQUIRED'),
     dashboard.init(api_key="63818ab7-a904-409e-acc7-b8b5092974e1")
 ]

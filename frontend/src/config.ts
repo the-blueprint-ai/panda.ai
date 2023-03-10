@@ -25,7 +25,8 @@ export const SuperTokensReactConfig = {
       },
       style: `
         [data-supertokens~=container] {
-          font-family: "Helvetica Neue", "Arial", sans-serif;
+          font-family: "Monaco";
+          text-transform: uppercase;
           --palette-background: 0, 0, 0;
           --palette-inputBackground: 255, 255, 255;
           --palette-inputBorder: 0, 0, 0;
@@ -40,10 +41,21 @@ export const SuperTokensReactConfig = {
           --palette-primaryBorder: 255, 203, 76;
           --palette-superTokensBrandingBackground: 255, 255, 255;
           --palette-superTokensBrandingText: 0, 0, 0;
-        },
+        }
+        [data-supertokens~="providerButton"] {
+          max-width: 280px !important;
+        }
+        [data-supertokens~="providerButtonText"] {
+          font-family: "Monaco";
+          text-transform: uppercase;
+        }
+        [data-supertokens~="inputWrapper"] {
+          font-family: "Monaco";
+        }
         [data-supertokens~="inputWrapper"]:focus-within {
-          background-color: 255, 255, 255 !important;
-        },
+          background-color: #FFFFFF;
+          font-family: "Monaco";
+        }
       `,
     }),
     EmailVerification.init({

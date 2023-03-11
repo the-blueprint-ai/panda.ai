@@ -19,9 +19,19 @@ export const SuperTokensReactConfig = {
       signInAndUpFeature: {
         providers: [Github.init(), Google.init(), Apple.init()],
         signUpForm: {
-          termsOfServiceLink: "https://example.com/terms-of-service",
-          privacyPolicyLink: "https://example.com/privacy-policy"
+          termsOfServiceLink: "http://localhost:3000/terms-of-service",
+          privacyPolicyLink: "http://localhost:3000/privacy-policy",
         },
+      },
+      getRedirectionURL: async (context) => {
+        if (context.action === "SUCCESS") {
+            if (context.redirectToPath !== undefined) {
+              // we are navigating back to where the user was before they authenticated
+            return context.redirectToPath;
+            }
+            return "/user";
+        }
+        return undefined;
       },
       style: `
         [data-supertokens~=container] {
@@ -55,6 +65,8 @@ export const SuperTokensReactConfig = {
         [data-supertokens~="inputWrapper"]:focus-within {
           background-color: #FFFFFF;
           font-family: "Monaco";
+          border: 3px solid #FFCB4C;
+          border-radius: 5px;
         }
       `,
     }),

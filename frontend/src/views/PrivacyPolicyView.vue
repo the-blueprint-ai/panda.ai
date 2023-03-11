@@ -18,17 +18,9 @@ export default defineComponent({
 <template>
   <main>
     <div className="body">
-      <div v-if="session">
-        <div>
-          <img src="../../src/assets/panda.png" width="200"/>
-          <h1>HOME VIEW</h1>
-        </div>
-        <button className="authButton" @click="onLogout">Sign Out</button>
-      </div>
-      <div v-else>
+      <div>
         <img src="../../src/assets/panda.png" width="200"/>
-        <h1>Welcome to panda.ai</h1>
-        <button className="authButton" @click="redirectToLogin">Sign In</button>
+        <h1>PRIVACY POLICY</h1>
       </div>
     </div>
   </main>

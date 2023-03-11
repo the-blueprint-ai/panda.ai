@@ -2,6 +2,7 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
 import chatMessage from "../components/chatMessage.vue";
+import { VueTyper } from 'vue-typer'
 
 export default defineComponent({
   data() {
@@ -14,6 +15,7 @@ export default defineComponent({
   },
   mounted() {
     this.getUserInfo();
+    this.startMessage();
   },
   methods: {
     redirectToLogin() {
@@ -40,6 +42,11 @@ export default defineComponent({
       this.messageToSend = "";
       // Add code to update the chat history database
     },
+    startMessage() {
+      setTimeout(() => this.chatHistory.push({ user: "panda", message: "Good morning/afternoon/evening private!" }), 1200);
+      setTimeout(() => this.chatHistory.push({ user: "panda", message: "Welcome to Panda Bootcamp!" }), 3200);
+      setTimeout(() => this.chatHistory.push({ user: "panda", message: "What’s your first name private?" }), 5200);
+    }
   },
   components: {
     chatMessage,
@@ -114,18 +121,22 @@ export default defineComponent({
                   placeholder="enter your message here"
                   ref="messageInput"
                 ></textarea>
-                <button className="chatButton" @click="submitMessage">Send</button>
-                <button className="chatButton" @click="removeMessage">Undo</button>
+                <button className="chatButton" @click="submitMessage">
+                  Send
+                </button>
+                <button className="chatButton" @click="removeMessage">
+                  Undo
+                </button>
               </div>
             </div>
           </div>
         </div>
-        <button className="authButton" @click="onLogout">Sign Out</button>
+        <button className="authButton" @click="onLogout">Log Out</button>
       </div>
       <div v-else>
-        <img src="../../src/assets/panda.png" width="200"/>
+        <img src="../../src/assets/panda.png" width="200" />
         <h1>Welcome to panda.ai</h1>
-        <button className="authButton" @click="redirectToLogin">Sign In</button>
+        <button className="authButton" @click="redirectToLogin">Log In</button>
       </div>
     </div>
   </main>

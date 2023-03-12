@@ -3,7 +3,8 @@
     <div className="body">
       <div>
         <img src="../../src/assets/panda.png" width="200"/>
-        <h1>PRIVACY POLICY</h1>
+        <h1>404</h1>
+        <h1>Ug Oh!</h1>
       </div>
     </div>
   </main>

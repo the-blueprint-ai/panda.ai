@@ -29,7 +29,7 @@ export const SuperTokensReactConfig = {
               // we are navigating back to where the user was before they authenticated
             return context.redirectToPath;
             }
-            return "/user";
+            return "/user/chat";
         }
         return undefined;
       },

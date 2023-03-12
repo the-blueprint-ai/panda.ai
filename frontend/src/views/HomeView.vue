@@ -1,38 +1,74 @@
 <script lang="ts">
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
+import navBar from "../components/navBar.vue";
+import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
+  data: () => {
+    return {
+      session: false,
+      userId: "",
+      typeValue: "",
+      typeStatus: false,
+      displayTextArray: ["Welcome to panda.ai"],
+      typingSpeed: 100,
+      newTextDelay: 1500,
+      displayTextArrayIndex: 0,
+      charIndex: 0,
+    };
+  },
+  props: {},
+  created() {
+    setTimeout(this.typeText, this.newTextDelay + 200);
+  },
   methods: {
-    redirectToLogin() {
-      window.location.href = "/auth";
+    typeText() {
+      if (
+        this.charIndex <
+        this.displayTextArray[this.displayTextArrayIndex].length
+      ) {
+        if (!this.typeStatus) this.typeStatus = true;
+        this.typeValue += this.displayTextArray[
+          this.displayTextArrayIndex
+        ].charAt(this.charIndex);
+        this.charIndex += 1;
+        setTimeout(this.typeText, this.typingSpeed);
+      } else {
+        this.typeStatus = false;
+        setTimeout(this.newTextDelay);
+      }
     },
-    async onLogout() {
-      await Session.signOut();
-      window.location.reload();
-    },
+  },
+  components: {
+    navBar,
+    navFooter,
   },
 });
 </script>
 
 <template>
   <main>
+    <navBar></navBar>
     <div className="body">
-      <div v-if="session">
-        <div>
-          <img src="../../src/assets/panda.png" width="200"/>
-          <h1>HOME VIEW</h1>
-        </div>
-        <button className="authButton" @click="onLogout">Sign Out</button>
-      </div>
-      <div v-else>
-        <img src="../../src/assets/panda.png" width="200"/>
-        <h1>Welcome to panda.ai</h1>
-        <button className="authButton" @click="redirectToLogin">Sign In</button>
-      </div>
+      <img src="../../src/assets/panda.png" className="biglogo" width="200" />
+      <h1>
+        <span className="typed-text">{{ typeValue }}</span>
+        <span className="blinking-cursor">|</span>
+        <span className="blinking-cursor2">|</span>
+        <span className="blinking-cursor2">|</span>
+        <span className="blinking-cursor2">|</span>
+        <span className="blinking-cursor2">|</span>
+        <span className="blinking-cursor2">|</span>
+        <span className="blinking-cursor2">|</span>
+        <span className="blinking-cursor2">|</span>
+        <span className="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
+      </h1>
     </div>
+    <navFooter></navFooter>
   </main>
 </template>
+
 <style scoped>
 @import "../assets/styles/panda-main.css";
 </style>

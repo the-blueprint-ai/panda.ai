@@ -1,6 +1,7 @@
 <script lang="ts">
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
+import navBar from "../components/navBar.vue";
 
 export default defineComponent({
   data() {
@@ -32,21 +33,22 @@ export default defineComponent({
     },
     async onLogout() {
       await Session.signOut();
-      window.location.reload();
+      window.location.href = "/"
     },
+  },
+  components: {
+    navBar,
   },
 });
 </script>
 
 <template>
   <main>
+    <navBar></navBar>
     <div className="body">
-      <img src="../../src/assets/panda.png" width="200"/>
-      <h1>Welcome to panda.ai</h1>
-
       <div v-if="session">
         <div>
-          <h2>USER VIEW</h2>
+          <h1>ACCOUNT VIEW</h1>
           <h3>Your UserId Is:</h3>
           <span>{{ userId }}</span>
           <h3>Your Email Is:</h3>
@@ -55,10 +57,9 @@ export default defineComponent({
         <div className="spacer">
           <button className="chatButton userPageButton" @click="redirectToChat">Let's Chat</button>
         </div>
-        <button className="authButton" @click="onLogout">Sign Out</button>
       </div>
       <div v-else>
-        <button className="authButton" @click="redirectToLogin">Sign In</button>
+        <button className="authButton-login" @click="redirectToLogin">Sign In</button>
       </div>
     </div>
   </main>

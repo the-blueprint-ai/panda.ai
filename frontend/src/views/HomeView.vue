@@ -22,7 +22,23 @@ export default defineComponent({
   created() {
     setTimeout(this.typeText, this.newTextDelay + 200);
   },
+  mounted() {
+    this.getUserInfo();
+  },
   methods: {
+    async getUserInfo() {
+      this.session = await Session.doesSessionExist();
+      if (this.session) {
+        this.userId = await Session.getUserId();
+      }
+    },
+    userLink() {
+      if (this.userId) {
+        return { name: "user", param: { userid: this.userId } };
+      } else {
+        return { name: "user", param: { userid: "userID" } };
+      }
+    },
     typeText() {
       if (
         this.charIndex <
@@ -64,6 +80,9 @@ export default defineComponent({
         <span className="blinking-cursor2">|</span>
         <span className="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
       </h1>
+      <router-link :to="'/' + userId + '/chat'">
+        <button className="letsChat">Let's Chat</button>
+      </router-link>
     </div>
     <navFooter></navFooter>
   </main>

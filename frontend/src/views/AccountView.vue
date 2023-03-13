@@ -22,7 +22,7 @@ export default defineComponent({
       window.location.href = "/auth";
     },
     redirectToChat() {
-      window.location.href = "/user/chat";
+      window.location.href = "/" + this.userId + "/chat";
     },
     async getUserInfo() {
       this.session = await Session.doesSessionExist();

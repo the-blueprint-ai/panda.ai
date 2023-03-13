@@ -359,6 +359,21 @@ h1 {
   font-family: "Monaco";
   width: 80%;
 }
+.letsChat {
+  cursor: pointer;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 1rem;
+  margin: 2rem;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 200px;
+}
 .startNewChat:disabled {
   cursor: not-allowed;
   opacity: 0.8;

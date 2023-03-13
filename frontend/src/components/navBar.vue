@@ -27,6 +27,13 @@ export default {
       await Session.signOut();
       window.location.href = "/";
     },
+    userLink() {
+      if (this.userId) {
+        return { name: "user", param: { userid: this.userId } };
+      } else {
+        return { name: "user", param: { userid: "userID" } };
+      }
+    },
     openClose() {
       var _this = this;
 
@@ -111,11 +118,11 @@ export default {
         />
         <div className="dropdown-menu" v-if="isOpen">
           <div className="dropdown-links">
-            <router-link to="/{{this.userId}}/chat">
+            <router-link :to="'/' + userId + '/chat'">
               <button className="dropdown-button-top">Chat</button>
             </router-link>
             <div className="dropdown-bar"></div>
-            <router-link to="/{{this.userId}}/account">
+            <router-link :to="'/' + userId + '/account'">
               <button className="dropdown-button">Account</button>
             </router-link>
             <div className="dropdown-bar"></div>

@@ -1,10 +1,20 @@
+<script lang="ts">
+import { defineComponent } from "vue";
+import navBar from "../components/navBar.vue";
+
+export default defineComponent({
+  components: {
+    navBar,
+  },
+});
+</script>
+
 <template>
   <main>
+    <navBar></navBar>
     <div className="body">
       <div>
-        <img src="../../src/assets/panda.png" width="200"/>
-        <h1>404</h1>
-        <h1>Ug Oh!</h1>
+        <img src="../../src/assets/404.png" width="1200"/>
       </div>
     </div>
   </main>

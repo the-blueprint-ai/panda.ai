@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import * as Session from "supertokens-web-js/recipe/session";
 import HomeView from "../views/HomeView.vue";
 import notFoundView from "../views/404View.vue";
 import AccountView from "../views/AccountView.vue";
@@ -9,6 +10,13 @@ import PrivacyView from "../views/PrivacyView.vue";
 import SupportView from "../views/SupportView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
 import TermsOfServiceView from "../views/TermsOfServiceView.vue";
+
+// Authorization Guard
+async function checkAuth(to, from, next) {
+  const canAccess = await Session.doesSessionExist();
+  if (!canAccess) return next("/auth");
+  else return next();
+};
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,14 +37,18 @@ const router = createRouter({
       component: () => import("../views/AuthView.vue"),
     },
     {
-      path: "/user/account",
+      path: "/:userid/account",
       name: "account",
       component: AccountView,
+      props: true,
+      beforeEnter: checkAuth,
     },
     {
-      path: "/user/chat",
+      path: "/:userid/chat",
       name: "chat",
       component: ChatView,
+      props: true,
+      beforeEnter: checkAuth,
     },
     {
       path: "/about",

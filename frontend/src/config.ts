@@ -24,12 +24,13 @@ export const SuperTokensReactConfig = {
         },
       },
       getRedirectionURL: async (context) => {
+        const userid = await Session.getUserId();
         if (context.action === "SUCCESS") {
-            if (context.redirectToPath !== undefined) {
-              // we are navigating back to where the user was before they authenticated
+          if (context.redirectToPath !== undefined) {
+            // we are navigating back to where the user was before they authenticated
             return context.redirectToPath;
-            }
-            return "/user/chat";
+          }
+          return "/" + userid + "/chat";
         }
         return undefined;
       },

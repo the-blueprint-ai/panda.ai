@@ -176,12 +176,6 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <button className="authButton-login" @click="onLogout">Logout</button>
-      </div>
-      <div v-else>
-        <img src="../../src/assets/panda.png" width="200" />
-        <h1>Welcome to panda.ai</h1>
-        <button className="authButton" @click="redirectToLogin">Log In</button>
       </div>
     </div>
   </main>

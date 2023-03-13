@@ -111,11 +111,11 @@ export default {
         />
         <div className="dropdown-menu" v-if="isOpen">
           <div className="dropdown-links">
-            <router-link to="/user/chat">
+            <router-link to="/{{this.userId}}/chat">
               <button className="dropdown-button-top">Chat</button>
             </router-link>
             <div className="dropdown-bar"></div>
-            <router-link to="/user/account">
+            <router-link to="/{{this.userId}}/account">
               <button className="dropdown-button">Account</button>
             </router-link>
             <div className="dropdown-bar"></div>

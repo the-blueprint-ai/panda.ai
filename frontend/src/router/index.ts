@@ -5,6 +5,8 @@ import notFoundView from "../views/404View.vue";
 import AccountView from "../views/AccountView.vue";
 import ChatView from "../views/ChatView.vue";
 import AboutView from "../views/AboutView.vue";
+import LoginView from "../views/LoginView.vue";
+import SignUpView from "../views/SignUpView.vue";
 import RoadmapView from "../views/RoadmapView.vue";
 import PrivacyView from "../views/PrivacyView.vue";
 import SupportView from "../views/SupportView.vue";
@@ -30,6 +32,16 @@ const router = createRouter({
       path: "/:pathMatch(.*)",
       name: "404",
       component: notFoundView,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      component: SignUpView,
     },
     {
       path: "/auth/:pathMatch(.*)*",

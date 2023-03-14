@@ -63,19 +63,21 @@ export default {
         this.saveButton = "active";
       };
     },
-    upload: async function () {
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`,
-        {
-          method: "POST",
-          body: this.formData,
-        }
-      );
-      const data = await res.json();
+    save: async function () {
+      // const res = await fetch(
+      //   `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`,
+      //   {
+      //     method: "POST",
+      //     body: this.formData,
+      //   }
+      // );
+      // const data = await res.json();
       this.fileName = "";
       this.preview = null;
       this.formData = null;
-      this.success = data.public_id;
+      this.saveButton = null;
+      this.imageDrop = null;
+      // this.success = data.public_id;
     },
     clear: function () {
       this.fileName = "";
@@ -98,7 +100,7 @@ export default {
     <input
       id="imageInput"
       type="file"
-      accept="image/*"
+      accept="image/png, image/jpg, image/jpeg, image/gif"
       @change="handleFileChange($event.target)"
       required
     />
@@ -119,9 +121,9 @@ export default {
     <p id="badFile" for="imageInput" style="color: #ffcb4c; margin: 5px;"></p>
     <button
       v-if="saveButton"
-      className="chatButton"
+      className="saveButton"
       type="submit"
-      v-on:click="upload"
+      v-on:click="save"
     >
       Save
     </button>
@@ -163,5 +165,21 @@ input[type="file"] {
   position: absolute;
   z-index: 100;
   cursor: pointer;
+}
+.saveButton {
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 0px;;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 100px;
+  z-index: 100;
 }
 </style>

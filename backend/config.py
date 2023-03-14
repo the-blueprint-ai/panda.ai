@@ -34,8 +34,8 @@ recipe_list = [
             # IMPORTANT: Please replace them with your own OAuth keys for production use.
             Google(
                 is_default=True,
-                client_id="1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com",
-                client_secret="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"
+                client_id="890985476493-etgtk9vaq00sdlbab7b9d0d5nm28vbfn.apps.googleusercontent.com" #"1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com",
+                client_secret="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" #"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"
             ),
             # Facebook(
             #     client_id='FACEBOOK_CLIENT_ID',

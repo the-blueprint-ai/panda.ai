@@ -4,11 +4,13 @@ import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import chatMessage from "../components/chatMessage.vue";
 import { daypart } from "../components/daypart.js";
+import ImageUpload from "../components/imageUpload.vue";
 
 export default defineComponent({
   data() {
     return {
       session: false,
+      imageDrop: null,
       userId: "",
       messageToSend: "",
       daypart: "",
@@ -62,7 +64,8 @@ export default defineComponent({
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Everywhere we go-oh... Everywhere we go-oh… People wanna know-oh… Who we are… Where we come from… So we tell them… We are Pandas!… Mighty mighty Pandas!📣" }), 3200);
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "I can’t hear you, sound off like you’ve got a pair!🥜" }), 7200);
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Ok, let me get a good look at you Private " + this.username + "! Upload a photo of yourself by dropping it below… 📸" }), 9200);
-        setTimeout(() => this.isDisabled = false, 9200);
+        setTimeout(() => (this.imageDrop = "active"), 9200);
+        setTimeout(() => (this.isDisabled = false), 9200);
       }
       this.messageToSend = "";
       // Add code to update the chat history database
@@ -96,6 +99,7 @@ export default defineComponent({
   components: {
     navBar,
     chatMessage,
+    ImageUpload,
   },
 });
 </script>
@@ -175,6 +179,9 @@ export default defineComponent({
               </div>
             </div>
           </div>
+        </div>
+        <div v-if="imageDrop">
+          <ImageUpload></ImageUpload>
         </div>
       </div>
     </div>

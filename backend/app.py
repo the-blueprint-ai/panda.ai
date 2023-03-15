@@ -30,9 +30,6 @@ async def secure_api(s: SessionContainer = Depends(verify_session())):
         "accessTokenPayload": s.get_access_token_payload(),
     }
 
-@app.get("/test")
-async def root():
-    return {"message": "Hello World"}
 
 app = CORSMiddleware(
     app=app,

@@ -12,7 +12,6 @@ import PrivacyView from "../views/PrivacyView.vue";
 import SupportView from "../views/SupportView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
 import TermsOfServiceView from "../views/TermsOfServiceView.vue";
-import TestView from "../views/TestView.vue";
 
 // Authorization Guard
 async function checkAuth(to, from, next) {
@@ -92,11 +91,6 @@ const router = createRouter({
       path: "/terms-of-service",
       name: "termsofservice",
       component: TermsOfServiceView,
-    },
-    {
-      path: "/test",
-      name: "test",
-      component: TestView,
     },
   ],
 });

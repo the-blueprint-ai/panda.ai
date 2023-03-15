@@ -8,7 +8,7 @@ export default {
 
 <template>
   <div>
-    <img :src="'/src/assets/' + message.user + '.png'" class="avatar"/>
+    <img :src="'/src/assets/' + message.user + '.png'" class="chatImage"/>
     <p className="message">{{ message.message }}</p>
   </div>
 </template>

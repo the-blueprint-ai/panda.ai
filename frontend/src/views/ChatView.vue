@@ -4,16 +4,12 @@ import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import chatMessage from "../components/chatMessage.vue";
 import { daypart } from "../components/daypart.js";
-import ImageUpload from "../components/imageUpload.vue";
 
 export default defineComponent({
   data() {
     return {
       session: false,
-      inputIsVisible: false,
-      imageDrop: null,
       userId: "",
-      avatar: "../../src/assets/user.png",
       messageToSend: "",
       daypart: "",
       chatHistory: [],
@@ -39,10 +35,7 @@ export default defineComponent({
     },
     async onLogout() {
       await Session.signOut();
-      window.location.href = "/";
-    },
-    focusInput() {
-      this.$refs.messageInput.focus();
+      window.location.href = "/"
     },
     startNewChat() {
       window.location.reload();
@@ -56,24 +49,20 @@ export default defineComponent({
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "What is your major malfunction Private " + this.first_name + "?!😳" }), 1200);
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "We don't use first names at Panda Bootcamp! I meant, what’s your SURNAME Private?! 🫡" }), 3200);
         setTimeout(() => this.isDisabled = false, 3200);
-        setTimeout(() => this.focusInput(), 3210);
-      } else if (this.last_name == "") {
+      } else if (this.last_name =="") {
         this.isDisabled = true;
         this.last_name = this.messageToSend;
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Ok, Private " + this.last_name + ". We’re going to have to pick this up a bit if you’re to make it through Panda Bootcamp.⛺️" }), 1200);
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "What would you like your CODENAME to be here at Panda Bootcamp? 🥸" }), 3200);
         setTimeout(() => this.isDisabled = false, 3200);
-        setTimeout(() => this.focusInput(), 3210);
-      } else if (this.username == "") {
+      } else if (this.username =="") {
         this.isDisabled = true;
         this.username = this.messageToSend;
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "That’s more like it! Right then Private " + this.username + "! If it ain't raining, we ain't training - move out!🌧️" }), 1200);
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Everywhere we go-oh... Everywhere we go-oh… People wanna know-oh… Who we are… Where we come from… So we tell them… We are Pandas!… Mighty mighty Pandas!📣" }), 3200);
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "I can’t hear you, sound off like you’ve got a pair!🥜" }), 7200);
         setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Ok, let me get a good look at you Private " + this.username + "! Upload a photo of yourself by dropping it below… 📸" }), 9200);
-        setTimeout(() => (this.imageDrop = "active"), 9200);
-        setTimeout(() => (this.isDisabled = false), 9200);
-        setTimeout(() => this.focusInput(), 9210);
+        setTimeout(() => this.isDisabled = false, 9200);
       }
       this.messageToSend = "";
       // Add code to update the chat history database
@@ -102,13 +91,11 @@ export default defineComponent({
       setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Welcome to Panda Bootcamp!⛺️" }), 3200);
       setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "What’s your FIRST NAME Private? 🫡" }), 5200);
       setTimeout(() => this.isDisabled = false, 5200);
-      setTimeout(() => this.focusInput(), 5210);
     },
   },
   components: {
     navBar,
     chatMessage,
-    ImageUpload,
   },
 });
 </script>
@@ -167,7 +154,7 @@ export default defineComponent({
               ></chatMessage>
             </div>
             <div className="userInputContainer">
-              <img v-bind:src="avatar" class="avatar" />
+              <img src="../../src/assets/user.png" class="chatImage" />
               <div className="userInput">
                 <textarea
                   :disabled='isDisabled'
@@ -188,9 +175,6 @@ export default defineComponent({
               </div>
             </div>
           </div>
-        </div>
-        <div v-if="imageDrop">
-          <ImageUpload></ImageUpload>
         </div>
       </div>
     </div>

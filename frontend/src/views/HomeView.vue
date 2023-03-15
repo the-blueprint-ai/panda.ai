@@ -80,16 +80,9 @@ export default defineComponent({
         <span className="blinking-cursor2">|</span>
         <span className="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
       </h1>
-      <div v-if="session">
-        <router-link :to="'/' + userId + '/chat'">
-          <button className="letsChat">Let's Chat</button>
-        </router-link>
-      </div>
-      <div v-else>
-        <router-link :to="'/auth'">
-          <button className="letsChat">Let's Chat</button>
-        </router-link>
-      </div>
+      <router-link :to="'/' + userId + '/chat'">
+        <button className="letsChat">Let's Chat</button>
+      </router-link>
     </div>
     <navFooter></navFooter>
   </main>

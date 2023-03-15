@@ -340,6 +340,10 @@ h1 {
   cursor: not-allowed;
   opacity: 0.5;
 }
+.chatButton:Hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
+}
 .userPageButton {
   width: 200px;
   height: 70px;
@@ -353,11 +357,15 @@ h1 {
   margin-top: 15px;
   margin-bottom: 15px;
   transition: all 0.3s ease-in-out;
-  border: 2px solid #FFCB4C;
+  border: 5px solid #FFCB4C;
   border-radius: 1rem;
   font-size: large;
   font-family: "Monaco";
   width: 80%;
+}
+.startNewChat:Hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
 }
 .letsChat {
   cursor: pointer;

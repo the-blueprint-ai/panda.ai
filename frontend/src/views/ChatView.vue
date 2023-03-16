@@ -1,33 +1,91 @@
-<script lang="ts">
+<script>
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import chatMessage from "../components/chatMessage.vue";
-import { daypart } from "../components/daypart.js";
+import { daypartFunc } from "../components/daypart.js";
 import ImageUpload from "../components/imageUpload.vue";
 
 export default defineComponent({
   data() {
     return {
       session: false,
-      inputIsVisible: false,
-      imageDrop: null,
       userId: "",
-      avatar: "../../src/assets/user.png",
       messageToSend: "",
-      daypart: "",
-      chatHistory: [],
-      first_name: "",
-      last_name: "",
-      username: "",
-      isDisabled: false,
     };
+  },
+  computed: {
+    inputIsVisible() {
+      return this.$store.state.chatStore.inputIsVisible;
+    },
+    imageDrop() {
+      return this.$store.state.chatStore.imageDrop;
+    },
+    avatar() {
+      return this.$store.state.userStore.avatar;
+    },
+    daypart() {
+      return this.$store.state.chatStore.daypart;
+    },
+    chatHistory() {
+      return this.$store.state.chatStore.chatHistory;
+    },
+    first_name() {
+      return this.$store.state.userStore.first_name;
+    },
+    last_name() {
+      return this.$store.state.userStore.last_name;
+    },
+    username() {
+      return this.$store.state.userStore.username;
+    },
+    isDisabled() {
+      return this.$store.state.chatStore.isDisabled;
+    },
   },
   mounted() {
     this.getUserInfo();
     this.startMessage();
+    this.getDaypart();
   },
   methods: {
+    setInputIsVisibleValue(value) {
+      this.$store.commit('setInputIsVisible', value)
+    },
+    setImageDropValue(value) {
+      this.$store.commit('setImageDrop', value)
+    },
+    setAvatarValue(value) {
+      this.$store.commit('setAvatar', value)
+    },
+    setDaypartValue(value) {
+      this.$store.commit('setDaypart', value)
+    },
+    addToChatHistory(value) {
+      this.$store.commit('setChatHistory', value)
+    },
+    emptyChatHistoryValues() {
+      this.$store.commit('emptyChatHistory')
+    },
+    removeFromChatHistory(value) {
+      this.$store.commit('removeChatHistory', value)
+    },
+    setFirstNameValue(value) {
+      this.$store.commit('setFirstName', value)
+    },
+    setLastNameValue(value) {
+      this.$store.commit('setLastName', value)
+    },
+    setUsernameValue(value) {
+      this.$store.commit('setUsername', value)
+    },
+    setIsDisabledValue(value) {
+      this.$store.commit('setIsDisabled', value)
+    },
+    getDaypart() {
+      const dp = daypartFunc();
+      this.setDaypartValue(dp);
+    },
     redirectToLogin() {
       window.location.href = "/auth";
     },
@@ -49,59 +107,59 @@ export default defineComponent({
     },
     submitMessage() {
       // Add code to send to chatBot
-      this.chatHistory.unshift({ user: "user", message: this.messageToSend });
+      this.addToChatHistory({ user: "user", message: this.messageToSend });
       if (this.first_name == "") {
-        this.isDisabled = true;
-        this.first_name = this.messageToSend;
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "What is your major malfunction Private " + this.first_name + "?!😳" }), 1200);
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "We don't use first names at Panda Bootcamp! I meant, what’s your SURNAME Private?! 🫡" }), 3200);
-        setTimeout(() => this.isDisabled = false, 3200);
+        this.setIsDisabledValue(true);
+        this.setFirstNameValue(this.messageToSend);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "What is your major malfunction Private " + this.first_name + "?!😳" }), 1200);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "We don't use first names at Panda Bootcamp! I meant, what’s your SURNAME Private?! 🫡" }), 3200);
+        setTimeout(() => this.setIsDisabledValue(false), 3200);
         setTimeout(() => this.focusInput(), 3210);
       } else if (this.last_name == "") {
-        this.isDisabled = true;
-        this.last_name = this.messageToSend;
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Ok, Private " + this.last_name + ". We’re going to have to pick this up a bit if you’re to make it through Panda Bootcamp.⛺️" }), 1200);
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "What would you like your CODENAME to be here at Panda Bootcamp? 🥸" }), 3200);
-        setTimeout(() => this.isDisabled = false, 3200);
+        this.setIsDisabledValue(true);
+        this.setLastNameValue(this.messageToSend);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "Ok, Private " + this.last_name + ". We’re going to have to pick this up a bit if you’re to make it through Panda Bootcamp.⛺️" }), 1200);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "What would you like your CODENAME to be here at Panda Bootcamp? 🥸" }), 3200);
+        setTimeout(() => this.setIsDisabledValue(false), 3200);
         setTimeout(() => this.focusInput(), 3210);
       } else if (this.username == "") {
-        this.isDisabled = true;
-        this.username = this.messageToSend;
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "That’s more like it! Right then Private " + this.username + "! If it ain't raining, we ain't training - move out!🌧️" }), 1200);
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Everywhere we go-oh... Everywhere we go-oh… People wanna know-oh… Who we are… Where we come from… So we tell them… We are Pandas!… Mighty mighty Pandas!📣" }), 3200);
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "I can’t hear you, sound off like you’ve got a pair!🥜" }), 7200);
-        setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Ok, let me get a good look at you Private " + this.username + "! Upload a photo of yourself by dropping it below… 📸" }), 9200);
-        setTimeout(() => (this.imageDrop = "active"), 9200);
-        setTimeout(() => (this.isDisabled = false), 9200);
+        this.setIsDisabledValue(true);
+        this.setUsernameValue(this.messageToSend);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "That’s more like it! Right then Private " + this.username + "! If it ain't raining, we ain't training - move out!🌧️" }), 1200);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "Everywhere we go-oh... Everywhere we go-oh… People wanna know-oh… Who we are… Where we come from… So we tell them… We are Pandas!… Mighty mighty Pandas!📣" }), 3200);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "I can’t hear you, sound off like you’ve got a pair!🥜" }), 7200);
+        setTimeout(() => this.addToChatHistory({ user: "panda", message: "Ok, let me get a good look at you Private " + this.username + "! Upload a photo of yourself by dropping it below… 📸" }), 9200);
+        setTimeout(() => this.setImageDropValue("active"), 9200);
+        setTimeout(() => this.setIsDisabledValue(false), 9200);
         setTimeout(() => this.focusInput(), 9210);
       }
       this.messageToSend = "";
       // Add code to update the chat history database
     },
     removeMessage() {
-      this.chatHistory.splice(0, 1);
+      this.removeFromChatHistory(1);
       if (this.first_name == "") {
-        this.chatHistory = [];
+        this.emptyChatHistoryValues();
         this.startMessage();
       } else if (this.last_name == "") {
-        this.first_name = "";
-        this.chatHistory.splice(0, 2);
+        this.setFirstNameValue("");
+        this.removeFromChatHistory(2);
       } else if (this.username == "") {
-        this.last_name = "";
-        this.chatHistory.splice(0, 2);
+        this.setLastNameValue("");
+        this.removeFromChatHistory(2);
       } else {
-        this.username = "";
-        this.chatHistory.splice(0, 4);
+        this.setUsernameValue("");
+        this.removeFromChatHistory(4);
       }
       this.messageToSend = "";
       // Add code to update the chat history database
     },
     startMessage() {
-      this.isDisabled = true;
-      setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Good " + daypart() + " Private!🫡" }), 1200);
-      setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "Welcome to Panda Bootcamp!⛺️" }), 3200);
-      setTimeout(() => this.chatHistory.unshift({ user: "panda", message: "What’s your FIRST NAME Private? 🫡" }), 5200);
-      setTimeout(() => this.isDisabled = false, 5200);
+      this.setIsDisabledValue(true);
+      setTimeout(() => this.addToChatHistory({ user: "panda", message: "Good " + this.daypart + " Private!🫡" }), 1200);
+      setTimeout(() => this.addToChatHistory({ user: "panda", message: "Welcome to Panda Bootcamp!⛺️" }), 3200);
+      setTimeout(() => this.addToChatHistory({ user: "panda", message: "What’s your FIRST NAME Private? 🫡" }), 5200);
+      setTimeout(() => this.setIsDisabledValue(false), 5200);
       setTimeout(() => this.focusInput(), 5210);
     },
   },

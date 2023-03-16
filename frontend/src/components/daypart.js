@@ -1,6 +1,6 @@
 import { DateTime, Interval } from "luxon";
 
-export function daypart() {
+export function daypartFunc() {
   const now = DateTime.now();
 
   const year = now.year;

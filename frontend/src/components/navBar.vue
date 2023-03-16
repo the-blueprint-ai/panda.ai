@@ -1,19 +1,26 @@
-<script lang="ts">
+<script>
 import * as Session from "supertokens-web-js/recipe/session";
 
 export default {
-  data: () => {
+  data() {
     return {
       session: false,
       userId: "",
-      isOpen: false,
     };
+  },
+  computed: {
+    isOpen() {
+      return this.$store.state.isOpen;
+    },
   },
   mounted() {
     this.getUserInfo();
   },
 
   methods: {
+    setIsOpenValue(value) {
+      this.$store.commit('setIsOpen', value);
+    },
     redirectToLogin() {
       window.location.href = "/auth";
     },
@@ -37,15 +44,15 @@ export default {
     openClose() {
       var _this = this;
 
-      const closeListener = (e: any) => {
+      const closeListener = (e) => {
         if (_this.catchOutsideClick(e, _this.$refs.menu))
           window.removeEventListener("click", closeListener),
-            (_this.isOpen = false);
+            _this.setIsOpenValue(false);
       };
 
       window.addEventListener("click", closeListener);
 
-      this.isOpen = !this.isOpen;
+      this.setIsOpenValue(!this.isOpen);
     },
     catchOutsideClick(event, dropdown) {
       // When user clicks menu — do nothing
@@ -65,7 +72,7 @@ export default {
         <router-link to="/">
           <img className="logo" src="../../src/assets/panda.png" width="50" />
         </router-link>
-        <p font-size="15px">panda.ai</p>
+        <p>panda.ai</p>
       </div>
       <div className="menu-items">
         <div className="menu-icon">

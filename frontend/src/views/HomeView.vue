@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
@@ -9,23 +9,57 @@ export default defineComponent({
     return {
       session: false,
       userId: "",
-      typeValue: "",
-      typeStatus: false,
-      displayTextArray: ["Welcome to panda.ai"],
-      typingSpeed: 100,
-      newTextDelay: 1500,
-      displayTextArrayIndex: 0,
-      charIndex: 0,
     };
   },
-  props: {},
-  created() {
-    setTimeout(this.typeText, this.newTextDelay + 200);
+  computed: {
+    typeValue() {
+      return this.$store.state.typingStore.typeValue;
+    },
+    typeStatus() {
+      return this.$store.state.typingStore.typeStatus;
+    },
+    typingSpeed() {
+      return this.$store.state.typingStore.typingSpeed;
+    },
+    newTextDelay() {
+      return this.$store.state.typingStore.newTextDelay;
+    },
+    displayTextArray() {
+      return this.$store.state.typingStore.displayTextArray;
+    },
+    displayTextArrayIndex() {
+      return this.$store.state.typingStore.displayTextArrayIndex;
+    },
+    charIndex() {
+      return this.$store.state.typingStore.charIndex;
+    },
   },
   mounted() {
     this.getUserInfo();
+    setTimeout(this.typeText, this.newTextDelay + 200);
   },
   methods: {
+    setTypeValueValue(value) {
+      this.$store.commit('setTypeValue', value)
+    },
+    setTypeStatusValue(value) {
+      this.$store.commit('setTypeStatus', value)
+    },
+    setTypingSpeedValue(value) {
+      this.$store.commit('setTypingSpeed', value)
+    },
+    setNewTextDelayValue(value) {
+      this.$store.commit('setNewTextDelay', value)
+    },
+    setDisplayTextArrayValue(value) {
+      this.$store.commit('setDisplayTextArray', value)
+    },
+    setDisplayTextArrayIndexValue(value) {
+      this.$store.commit('setDisplayTextArrayIndex', value)
+    },
+    setCharIndexValue(value) {
+      this.$store.commit('setCharIndex', value)
+    },
     async getUserInfo() {
       this.session = await Session.doesSessionExist();
       if (this.session) {
@@ -44,14 +78,17 @@ export default defineComponent({
         this.charIndex <
         this.displayTextArray[this.displayTextArrayIndex].length
       ) {
-        if (!this.typeStatus) this.typeStatus = true;
-        this.typeValue += this.displayTextArray[
-          this.displayTextArrayIndex
-        ].charAt(this.charIndex);
-        this.charIndex += 1;
+        if (!this.typeStatus) this.setTypeStatusValue(true);
+        this.setTypeValueValue(
+          this.typeValue +
+            this.displayTextArray[this.displayTextArrayIndex].charAt(
+              this.charIndex
+            )
+        );
+        this.setCharIndexValue(this.charIndex + 1);
         setTimeout(this.typeText, this.typingSpeed);
       } else {
-        this.typeStatus = false;
+        this.setTypeStatusValue(false);
         setTimeout(this.newTextDelay);
       }
     },

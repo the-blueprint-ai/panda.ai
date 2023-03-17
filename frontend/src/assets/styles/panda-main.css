@@ -253,6 +253,7 @@ body {
   height: 50px;
   margin: 5px;
   margin-right: 10px;
+  border-radius: 50%;
 }
 .userInputContainer {
   height: 90px;

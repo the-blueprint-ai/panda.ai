@@ -16,8 +16,16 @@ export default {
       msg: "",
     };
   },
+  computed: {
+    avatar() {
+      return this.$store.state.userStore.avatar;
+    },
+  },
   mounted() {},
   methods: {
+    setAvatar(value) {
+      this.$store.commit('setAvatar', value)
+    },
     getMessage: async function () {
       axios
         .get("/test")
@@ -60,6 +68,7 @@ export default {
       reader.onload = (e) => {
         this.preview = e.target.result;
         this.formData.append("file", this.preview);
+        this.setAvatar(this.preview);
         this.saveButton = "active";
       };
     },
@@ -82,6 +91,7 @@ export default {
     clear: function () {
       this.fileName = "";
       this.preview = null;
+      this.setAvatar("../../src/assets/user.png");
       this.formData = null;
       this.saveButton = null;
     },

@@ -1,3 +1,5 @@
+import * as Session from "supertokens-web-js/recipe/session";
+
 const userStore = {
   state: {
     session: false,
@@ -32,7 +34,15 @@ const userStore = {
     },
   },
   getters: {},
-  actions: {},
+  actions: {
+    async getSession({ commit }) {
+      commit('setSession', await Session.doesSessionExist());
+    },
+    async getUserInfo({ dispatch, commit }) {
+      await dispatch('getSession');
+      commit('setUserId', await Session.getUserId());
+    },
+  },
 };
 
 export default userStore;

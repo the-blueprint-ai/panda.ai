@@ -27,7 +27,7 @@ const chatStore = {
       state.chatHistory = [];
     },
     removeChatHistory(state, value) {
-      state.chatHistory = state.chatHistory.slice(0, value);
+      state.chatHistory = state.chatHistory.slice(value);
     },
     setIsDisabled(state, value) {
       state.isDisabled = value;

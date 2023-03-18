@@ -39,7 +39,7 @@ async def secure_api(s: SessionContainer = Depends(verify_session())):
     }
 
 @app.post("/uploadimage/")
-async def upload_file(userid, file: UploadFile = File(...)):
+async def upload_file(userid: str, file: UploadFile = File(...)):
     try:
         # Read the file content
         content = await file.read()
@@ -56,7 +56,7 @@ async def upload_file(userid, file: UploadFile = File(...)):
 
         # Return the public URL of the uploaded file
         response = {
-            "message": "File uploaded successfully",
+            "message": "Image uploaded successfully",
             "url": f"https://{S3_BUCKET}.s3.amazonaws.com/{folder}{file_extension}",
         }
         return JSONResponse(content=response, status_code=200)

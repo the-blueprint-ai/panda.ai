@@ -1,26 +1,25 @@
 const imageUploadStore = {
   state: {
     fileName: "",
-    preset: "", //process.env.VUE_APP_UPLOAD_PRESET,
     formData: null,
-    cloudName: "", //process.env.VUE_APP_CLOUD_NAME,
     success: "",
+    error: "",
   },
   mutations: {
     setFileName(state, value) {
       state.fileName = value;
     },
-    setPreset(state, value) {
-      state.preset = value;
-    },
     setFormData(state, value) {
       state.formData = value;
     },
-    setCloudName(state, value) {
-      state.cloudName = value;
+    appendFormData(state, name, value) {
+      state.formData.append(name, value);
     },
     setSuccess(state, value) {
       state.success = value;
+    },
+    setError(state, value) {
+      state.error = value;
     },
   },
   getters: {},

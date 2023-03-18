@@ -139,7 +139,7 @@ export default {
         this.$emit("imageUploaded");
       } catch (error) {
         // Handle the error
-        this.setrError("An error occurred while saving the file:", error);
+        this.setError("An error occurred while saving the file:", error);
         this.setSuccess("");
       }
     },

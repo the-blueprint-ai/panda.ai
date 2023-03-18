@@ -4,3 +4,6 @@ supertokens-python
 boto3
 python-multipart
 sqlalchemy
+asyncpg
+databases
+cryptography

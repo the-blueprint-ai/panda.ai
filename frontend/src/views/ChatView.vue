@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
@@ -11,26 +11,15 @@ import { privatePanda } from "../data/chat/privatePanda.js";
 export default defineComponent({
   data() {
     return {
-      session: false,
-      userId: "",
       messageToSend: "",
     };
   },
   computed: {
-    inputIsVisible() {
-      return this.$store.state.chatStore.inputIsVisible;
+    session() {
+      return this.$store.state.userStore.session;
     },
-    imageDrop() {
-      return this.$store.state.chatStore.imageDrop;
-    },
-    avatar() {
-      return this.$store.state.userStore.avatar;
-    },
-    daypart() {
-      return this.$store.state.chatStore.daypart;
-    },
-    chatHistory() {
-      return this.$store.state.chatStore.chatHistory;
+    userId() {
+      return this.$store.state.userStore.userId;
     },
     first_name() {
       return this.$store.state.userStore.first_name;
@@ -40,6 +29,41 @@ export default defineComponent({
     },
     username() {
       return this.$store.state.userStore.username;
+    },
+    email() {
+      return this.$store.state.userStore.email;
+    },
+    avatar() {
+      return this.$store.state.userStore.avatar;
+    },
+    userData() {
+      return {
+        user_id: this.userId,
+        first_name: this.first_name,
+        last_name: this.last_name,
+        username: this.username,
+        email: this.email,
+      };
+    },
+    chatHistoryObject() {
+      const array = JSON.parse(this.chatHistory);
+      const reverseChatHistory = array.reverse();
+      return {
+        user_id: this.userId,
+        chat_script: reverseChatHistory,
+      };
+    },
+    inputIsVisible() {
+      return this.$store.state.chatStore.inputIsVisible;
+    },
+    imageDrop() {
+      return this.$store.state.chatStore.imageDrop;
+    },
+    daypart() {
+      return this.$store.state.chatStore.daypart;
+    },
+    chatHistory() {
+      return this.$store.state.chatStore.chatHistory;
     },
     isDisabled() {
       return this.$store.state.chatStore.isDisabled;
@@ -51,19 +75,14 @@ export default defineComponent({
       return this.$store.state.imageUploadStore.error;
     },
   },
-  mounted() {
-    this.getUserInfo();
+  async mounted() {
+    await this.getSession();
+    await this.getUserInfo();
     this.startMessage();
     this.getDaypart();
   },
   methods: {
-    // ...mapActions(['getSession', 'getUserInfo']),
-    async getUserInfo() {
-      this.session = await Session.doesSessionExist();
-      if (this.session) {
-        this.userId = await Session.getUserId();
-      }
-    },
+    ...mapActions(['getSession', 'getUserInfo']),
     setInputIsVisibleValue(value) {
       this.$store.commit('setInputIsVisible', value)
     },
@@ -112,7 +131,9 @@ export default defineComponent({
       window.location.href = "/";
     },
     focusInput() {
-      this.$refs.messageInput.focus();
+      if (this.$refs.messageInput) {
+        this.$refs.messageInput.focus();
+      }
     },
     startNewChat() {
       window.location.reload();
@@ -159,6 +180,7 @@ export default defineComponent({
         setTimeout(() => this.setIsDisabledValue(true), 9200);
         setTimeout(() => this.focusInput(), 9210);
       } else if (this.avatar) {
+        this.saveUserData();
         this.removeFromChatHistory(1);
         this.setIsDisabledValue(true);
         setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name, this.username)[11]), 600);
@@ -174,7 +196,8 @@ export default defineComponent({
         setTimeout(() => this.addToChatHistory(privatePanda()[21]), 32000);
         setTimeout(() => this.addToChatHistory(privatePanda()[22]), 35200);
         setTimeout(() => this.addToChatHistory(privatePanda()[23]), 38400);
-        setTimeout(() => this.addToChatHistory(this.goToAccount()), 41600);
+        setTimeout(() => this.saveChatHistory(), 38410);
+        // setTimeout(() => this.goToAccount(), 41600);
         setTimeout(() => this.setSuccess(""), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 41600);
       }
@@ -198,6 +221,50 @@ export default defineComponent({
       }
       this.messageToSend = "";
       // Add code to update the chat history database
+    },
+    saveUserData: async function () {
+      // console.log(this.userData);
+      try {
+        const url = "http://localhost:3001/save-user-data/";
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.userData),
+        });
+
+        // Check if the response status indicates an error
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+      } catch (error) {
+        // Handle the error
+        console.log("An error occurred while saving the file:", error);
+        this.setSuccess("");
+      }
+    },
+    saveChatHistory: async function () {
+      console.log(this.chatHistoryObject);
+      try {
+        const url = "http://localhost:3001/save-user-chat-history/";
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: this.chatHistoryObject,
+        });
+
+        // Check if the response status indicates an error
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+      } catch (error) {
+        // Handle the error
+        console.log("An error occurred while saving the file:", error);
+        this.setSuccess("");
+      }
     },
   },
   components: {

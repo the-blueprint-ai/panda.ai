@@ -4,10 +4,10 @@ const userStore = {
   state: {
     session: false,
     userId: "",
-    email: "",
     first_name: "",
     last_name: "",
     username: "",
+    email: "",
     avatar: "../../src/assets/user.png",
   },
   mutations: {

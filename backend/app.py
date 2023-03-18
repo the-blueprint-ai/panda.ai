@@ -3,7 +3,7 @@ import uvicorn
 from fastapi import FastAPI, Depends, File, UploadFile, Path, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 from cryptography.fernet import Fernet
 import hashlib
 from starlette.middleware.cors import CORSMiddleware
@@ -20,6 +20,7 @@ import os
 import logging
 from databases import Database
 import config
+from typing import Any
 
 S3_BUCKET = "panda.ai"
 s3 = boto3.client('s3', aws_access_key_id = 'AKIA4M7OWVUMBL3LUZ5D', aws_secret_access_key = '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')
@@ -64,6 +65,8 @@ async def validation_exception_handler(request, exc):
     return JSONResponse(content={"error": str(exc)}, status_code=400)
 
 # Functions & Classes
+
+# User Data Functions
 async def save_user_data(user_id: str, first_name: str, last_name: str, username: str, email: str):
     # Encrypt the input values
     encrypted_first_name = cipher_suite.encrypt(first_name.encode()).decode('utf-8')
@@ -105,6 +108,40 @@ async def get_user_data(user_id: str):
     else:
         return None
 
+# Chat History Functions
+async def save_user_chat_history(user_id: str, chat_script: Json[Any]):
+    query = """
+        INSERT INTO panda_ai_chat_history (user_id, chat_script)
+        VALUES (:user_id, :chat_script)
+    """
+    values = {
+        "user_id": user_id,
+        "chat_script": chat_script
+    }
+    await database.execute(query=query, values=values)
+
+async def get_user_chat_history(user_id: str):
+    query = "SELECT user_id, created_at, chat_script FROM panda_ai_chat_history WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    results = await database.fetch_all(query=query, values=values)
+
+    if results:
+        chat_history = []
+        for result in results:
+            user_id = result["user_id"]
+            created_at = result["created_at"]
+            chat_script = result["chat_script"]
+
+            chat_history.append({
+                "user_id": user_id,
+                "created_at": created_at,
+                "chat_script": chat_script,
+            })
+
+        return chat_history
+    else:
+        return None
+
 class UserData(BaseModel):
     user_id: str
     first_name: str
@@ -112,7 +149,13 @@ class UserData(BaseModel):
     username: str
     email: str
 
+class ChatData(BaseModel):
+    user_id: str
+    chat_script: Json[Any]
+
 # APIs
+
+# User Data APIs
 @app.post("/save-user-data/")
 async def save_user_data_route(user_data: UserData):
     try:
@@ -121,7 +164,7 @@ async def save_user_data_route(user_data: UserData):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/get_user_data/")
+@app.get("/get-user-data/")
 async def get_user_data_route(user_id: str):
     try:
         data = await get_user_data(user_id)
@@ -133,6 +176,28 @@ async def get_user_data_route(user_id: str):
         logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+# Chat History APIs
+@app.post("/save-user-chat-history/")
+async def save_user_chat_history_route(chat_data: ChatData):
+    try:
+        await save_user_chat_history(chat_data.user_id, chat_data.chat_script)
+        return {"message": "Data saved successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/get-user-chat-history/")
+async def get_user_chat_history_route(user_id: str):
+    try:
+        data = await get_user_chat_history(user_id)
+        if data:
+            return data
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+# Session Info API
 @app.get("/sessioninfo")    
 async def secure_api(s: SessionContainer = Depends(verify_session())):
     return {
@@ -141,6 +206,7 @@ async def secure_api(s: SessionContainer = Depends(verify_session())):
         "accessTokenPayload": s.get_access_token_payload(),
     }
 
+# Avatar Image APIs
 @app.post("/uploadimage/")
 async def upload_file(userid: str, file: UploadFile = File(...)):
     try:
@@ -198,6 +264,7 @@ async def download_file(userid):
     except Exception as e:
         return {"error": str(e)}
 
+# Test API
 @app.get("/test")
 async def root():
     return {"message": "Hello World"}

@@ -9,9 +9,6 @@ export default {
   },
   props: ["userId"],
   computed: {
-    // userId() {
-    //   return this.$store.state.userStore.userId;
-    // },
     avatar() {
       return this.$store.state.userStore.avatar;
     },
@@ -130,6 +127,7 @@ export default {
 
         const response = await res.json();
 
+        this.setAvatar(response.url);
         this.setFileName("");
         this.setPreview(null);
         this.formData = null;

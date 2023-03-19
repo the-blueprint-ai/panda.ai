@@ -17,10 +17,11 @@ import boto3
 from io import BytesIO
 
 import os
+import json
 import logging
 from databases import Database
 import config
-from typing import Any
+from typing import Any, List, Dict
 
 S3_BUCKET = "panda.ai"
 s3 = boto3.client('s3', aws_access_key_id = 'AKIA4M7OWVUMBL3LUZ5D', aws_secret_access_key = '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')
@@ -67,7 +68,7 @@ async def validation_exception_handler(request, exc):
 # Functions & Classes
 
 # User Data Functions
-async def save_user_data(user_id: str, first_name: str, last_name: str, username: str, email: str):
+async def save_user_data(user_id: str, first_name: str, last_name: str, username: str, email: str, avatar: str):
     # Encrypt the input values
     encrypted_first_name = cipher_suite.encrypt(first_name.encode()).decode('utf-8')
     encrypted_last_name = cipher_suite.encrypt(last_name.encode()).decode('utf-8')
@@ -75,20 +76,21 @@ async def save_user_data(user_id: str, first_name: str, last_name: str, username
     encrypted_email = cipher_suite.encrypt(email.encode()).decode('utf-8')
 
     query = """
-        INSERT INTO panda_ai_users (user_id, first_name, last_name, username, email)
-        VALUES (:user_id, :first_name, :last_name, :username, :email)
+        INSERT INTO panda_ai_users (user_id, first_name, last_name, username, email, avatar)
+        VALUES (:user_id, :first_name, :last_name, :username, :email, :avatar)
     """
     values = {
         "user_id": user_id,
         "first_name": encrypted_first_name,
         "last_name": encrypted_last_name,
         "username": encrypted_username,
-        "email": encrypted_email
+        "email": encrypted_email,
+        "avatar": avatar
     }
     await database.execute(query=query, values=values)
 
 async def get_user_data(user_id: str):
-    query = "SELECT user_id, first_name, last_name, username, email FROM panda_ai_users WHERE user_id = :user_id"
+    query = "SELECT user_id, first_name, last_name, username, email, avatar FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 
@@ -97,13 +99,16 @@ async def get_user_data(user_id: str):
         decrypted_last_name = cipher_suite.decrypt(result["last_name"].encode()).decode('utf-8')
         decrypted_username = cipher_suite.decrypt(result["username"].encode()).decode('utf-8')
         decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
+        avatar = result["avatar"]
 
         return {
             "user_id": user_id,
             "first_name": decrypted_first_name,
             "last_name": decrypted_last_name,
             "username": decrypted_username,
-            "email": decrypted_email
+            "email": decrypted_email,
+            "avatar": avatar,
+
         }
     else:
         return None
@@ -116,7 +121,7 @@ async def save_user_chat_history(user_id: str, chat_script: Json[Any]):
     """
     values = {
         "user_id": user_id,
-        "chat_script": chat_script
+        "chat_script": json.dumps(chat_script)  # Convert the list of dictionaries to a JSON string
     }
     await database.execute(query=query, values=values)
 
@@ -130,7 +135,7 @@ async def get_user_chat_history(user_id: str):
         for result in results:
             user_id = result["user_id"]
             created_at = result["created_at"]
-            chat_script = result["chat_script"]
+            chat_script = json.loads(result["chat_script"]) # Convert the JSON string back to a list of dictionaries
 
             chat_history.append({
                 "user_id": user_id,
@@ -148,10 +153,15 @@ class UserData(BaseModel):
     last_name: str
     username: str
     email: str
+    avatar: str
 
 class ChatData(BaseModel):
     user_id: str
-    chat_script: Json[Any]
+    chat_script: List[Dict[str, str]] #Json[Any]
+
+class ChatHistory(BaseModel):
+    user_id: str
+    chat_script: List[Dict[str, str]]
 
 # APIs
 
@@ -159,7 +169,7 @@ class ChatData(BaseModel):
 @app.post("/save-user-data/")
 async def save_user_data_route(user_data: UserData):
     try:
-        await save_user_data(user_data.user_id, user_data.first_name, user_data.last_name, user_data.username, user_data.email)
+        await save_user_data(user_data.user_id, user_data.first_name, user_data.last_name, user_data.username, user_data.email, user_data.avatar)
         return {"message": "Data saved successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -43,15 +43,15 @@ export default defineComponent({
         last_name: this.last_name,
         username: this.username,
         email: this.email,
+        avatar: this.avatar,
       };
     },
     chatHistoryObject() {
-      const array = JSON.parse(this.chatHistory);
-      const reverseChatHistory = array.reverse();
-      return {
+      const chatHistoryObj = {
         user_id: this.userId,
-        chat_script: reverseChatHistory,
+        chat_script: this.chatHistory,
       };
+      return chatHistoryObj;
     },
     inputIsVisible() {
       return this.$store.state.chatStore.inputIsVisible;
@@ -183,23 +183,23 @@ export default defineComponent({
         this.saveUserData();
         this.removeFromChatHistory(1);
         this.setIsDisabledValue(true);
-        setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name, this.username)[11]), 600);
-        setTimeout(() => this.addToChatHistory(privatePanda()[12]), 3200);
-        setTimeout(() => this.addToChatHistory(privatePanda()[13]), 6400);
-        setTimeout(() => this.addToChatHistory(privatePanda()[14]), 9600);
-        setTimeout(() => this.addToChatHistory(privatePanda()[15]), 12800);
-        setTimeout(() => this.addToChatHistory(privatePanda()[16]), 16000);
-        setTimeout(() => this.addToChatHistory(privatePanda()[17]), 19200);
-        setTimeout(() => this.addToChatHistory(privatePanda()[18]), 22400);
-        setTimeout(() => this.addToChatHistory(privatePanda()[19]), 25600);
-        setTimeout(() => this.addToChatHistory(privatePanda()[20]), 28800);
-        setTimeout(() => this.addToChatHistory(privatePanda()[21]), 32000);
-        setTimeout(() => this.addToChatHistory(privatePanda()[22]), 35200);
-        setTimeout(() => this.addToChatHistory(privatePanda()[23]), 38400);
-        setTimeout(() => this.saveChatHistory(), 38410);
+        setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name, this.username)[11]), 60);
+        setTimeout(() => this.addToChatHistory(privatePanda()[12]), 320);
+        setTimeout(() => this.addToChatHistory(privatePanda()[13]), 640);
+        setTimeout(() => this.addToChatHistory(privatePanda()[14]), 960);
+        setTimeout(() => this.addToChatHistory(privatePanda()[15]), 1280);
+        setTimeout(() => this.addToChatHistory(privatePanda()[16]), 1600);
+        setTimeout(() => this.addToChatHistory(privatePanda()[17]), 1920);
+        setTimeout(() => this.addToChatHistory(privatePanda()[18]), 2240);
+        setTimeout(() => this.addToChatHistory(privatePanda()[19]), 2560);
+        setTimeout(() => this.addToChatHistory(privatePanda()[20]), 2880);
+        setTimeout(() => this.addToChatHistory(privatePanda()[21]), 3200);
+        setTimeout(() => this.addToChatHistory(privatePanda()[22]), 3520);
+        setTimeout(() => this.addToChatHistory(privatePanda()[23]), 3840);
+        setTimeout(() => this.saveChatHistory(), 3841);
         // setTimeout(() => this.goToAccount(), 41600);
         setTimeout(() => this.setSuccess(""), 3200);
-        setTimeout(() => this.setIsDisabledValue(false), 41600);
+        setTimeout(() => this.setIsDisabledValue(false), 4160);
       }
       this.messageToSend = "";
       // Add code to update the chat history database
@@ -223,7 +223,6 @@ export default defineComponent({
       // Add code to update the chat history database
     },
     saveUserData: async function () {
-      // console.log(this.userData);
       try {
         const url = "http://localhost:3001/save-user-data/";
         const res = await fetch(url, {
@@ -245,7 +244,7 @@ export default defineComponent({
       }
     },
     saveChatHistory: async function () {
-      console.log(this.chatHistoryObject);
+      console.log(JSON.stringify(this.chatHistoryObject));
       try {
         const url = "http://localhost:3001/save-user-chat-history/";
         const res = await fetch(url, {
@@ -253,7 +252,7 @@ export default defineComponent({
           headers: {
             "Content-Type": "application/json",
           },
-          body: this.chatHistoryObject,
+          body: JSON.stringify(this.chatHistoryObject),
         });
 
         // Check if the response status indicates an error

@@ -5,7 +5,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Json
 from cryptography.fernet import Fernet
-import hashlib
 from starlette.middleware.cors import CORSMiddleware
 
 from supertokens_python import init, get_all_cors_headers
@@ -19,6 +18,7 @@ from io import BytesIO
 import os
 import json
 import logging
+from datetime import datetime
 from databases import Database
 import config
 from typing import Any, List, Dict
@@ -90,7 +90,7 @@ async def save_user_data(user_id: str, first_name: str, last_name: str, username
     await database.execute(query=query, values=values)
 
 async def get_user_data(user_id: str):
-    query = "SELECT user_id, first_name, last_name, username, email, avatar FROM panda_ai_users WHERE user_id = :user_id"
+    query = "SELECT user_id, first_name, last_name, username, email, avatar, created_at FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 
@@ -100,6 +100,7 @@ async def get_user_data(user_id: str):
         decrypted_username = cipher_suite.decrypt(result["username"].encode()).decode('utf-8')
         decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
         avatar = result["avatar"]
+        created_at = result["created_at"]
 
         return {
             "user_id": user_id,
@@ -108,7 +109,7 @@ async def get_user_data(user_id: str):
             "username": decrypted_username,
             "email": decrypted_email,
             "avatar": avatar,
-
+            "created_at": created_at,
         }
     else:
         return None
@@ -154,6 +155,7 @@ class UserData(BaseModel):
     username: str
     email: str
     avatar: str
+    created_at: datetime
 
 class ChatData(BaseModel):
     user_id: str

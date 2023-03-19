@@ -2,6 +2,7 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
+import { DateTime } from "luxon";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 
@@ -31,11 +32,18 @@ export default defineComponent({
     avatar() {
       return this.$store.state.userStore.avatar;
     },
+    joined() {
+      return this.$store.state.userStore.joined;
+    },
+    chatHistory() {
+      return this.$store.state.userStore.chatHistory;
+    },
   },
   async mounted() {
     await this.getSession();
     await this.getUserInfo();
     await this.getUserData();
+    await this.getChatHistory();
   },
   methods: {
     ...mapActions(["getSession", "getUserInfo"]),
@@ -64,6 +72,12 @@ export default defineComponent({
     setAvatar(value) {
       this.$store.commit("setAvatar", value);
     },
+    setJoined(value) {
+      this.$store.commit("setJoined", value);
+    },
+    setChatHistory(value) {
+      this.$store.commit("setChatHistory", value);
+    },
     getUserData: async function () {
       try {
         const url =
@@ -78,12 +92,34 @@ export default defineComponent({
         }
 
         const response = await res.json();
-        console.log(response);
         this.setFirstName(response.first_name);
         this.setLastName(response.last_name);
         this.setUsername(response.username);
         this.setEmail(response.email);
         this.setAvatar(response.avatar);
+        var dt = DateTime.fromISO(response.created_at);
+        this.setJoined(dt.toLocaleString(DateTime.DATE_FULL));
+      } catch (error) {
+        // Handle the error
+        console.log("An error occurred while saving the file:", error);
+      }
+    },
+    getChatHistory: async function () {
+      try {
+        const url =
+          "http://localhost:3001/get-user-chat-history/?user_id=" + this.userId;
+        const res = await fetch(url, {
+          method: "GET",
+        });
+
+        // Check if the response status indicates an error
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+
+        const response = await res.json();
+        console.log(response);
+        this.setChatHistory(response);
       } catch (error) {
         // Handle the error
         console.log("An error occurred while saving the file:", error);
@@ -107,7 +143,7 @@ export default defineComponent({
         </div>
         <div className="profileAvatar">
           <div class="accountAvatarBackground"></div>
-          <img v-bind:src="avatar" class="accountAvatar" />
+          <img v-if="first_name" v-bind:src="avatar" class="accountAvatar" />
           <img src="../assets/camera.svg" class="avatarCamera" />
         </div>
         <div className="profilePanel">
@@ -115,17 +151,31 @@ export default defineComponent({
             <h2>{{ first_name }} {{ last_name }}</h2>
             <h3>{{ username }}</h3>
             <p>{{ email }}</p>
+            <p>Joined: {{ joined }}</p>
             <button className="chatButton" @click="redirectToChat">Let's Chat</button>
           </div>
           <div className="aboutDetails">
             <h2>ABOUT</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam maximus ut libero id tempor. Nulla eget consequat nunc, cursus tempor nisi. Vestibulum euismod magna sed sem tristique, sit amet fringilla orci accumsan. In nec sem vel dolor dapibus congue. Sed rutrum massa eget ante efficitur pretium. In tristique rutrum ipsum vitae blandit. Sed pretium, leo suscipit pulvinar aliquet, quam quam posuere massa, sed mattis leo purus non massa. Quisque blandit.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquet elit augue, at feugiat leo pulvinar nec. Maecenas consequat, elit a ornare dignissim, justo lorem auctor lectus, et accumsan urna urna ac est. Phasellus convallis quam eros, et tincidunt mauris iaculis at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ultrices sodales condimentum. Fusce rutrum hendrerit dignissim. Aenean non nibh vestibulum, gravida lectus quis, pharetra nulla. Aenean blandit diam porta, ullamcorper neque quis, maximus urna. Vivamus purus libero, vulputate id auctor non, vestibulum et enim.</p>
           </div>
           <div className="editUserDetails">
             <img src="../assets/three-dots-vertical.svg" className="profileEdit" />
           </div>
         </div>
-        <div className="spacer"></div>
+        <div className="accountDetailsWrapper">
+          <div className="accountDetailsMenu">
+            <button className="accountDetailsMenuButton">History</button>
+            <button className="accountDetailsMenuButton">Integrations</button>
+            <button className="accountDetailsMenuButton">Subscription</button>
+            <button className="accountDetailsMenuButton">Data</button>
+            <button className="accountDetailsMenuButton">Settings</button>
+          </div>
+          <div className="profileMenuLine"></div>
+          <div className="userChatHistory">
+            <h1>HISTORY GOES HERE</h1>
+            <p>{{ chatHistory }}</p>
+          </div>
+        </div>
       </div>
     </div>
     <navFooter></navFooter>
@@ -133,4 +183,5 @@ export default defineComponent({
 </template>
 <style scoped>
 @import "../assets/styles/panda-main.css";
+@import "floating-vue/dist/style.css";
 </style>

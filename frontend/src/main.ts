@@ -6,6 +6,7 @@ import SuperTokens from "supertokens-web-js";
 import "./assets/styles/panda-main.css";
 import { SuperTokensWebJSConfig } from "./config";
 import axios from "axios";
+import FloatingVue from 'floating-vue'
 
 SuperTokens.init(SuperTokensWebJSConfig);
 
@@ -16,5 +17,6 @@ axios.defaults.baseURL = "http://localhost:3001"; // the FastAPI backend
 
 app.use(router);
 app.use(store);
+app.use(FloatingVue);
 
 app.mount("#app");

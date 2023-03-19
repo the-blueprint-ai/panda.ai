@@ -12,6 +12,9 @@ export default {
     isOpen() {
       return this.$store.state.isOpen;
     },
+    avatar() {
+      return this.$store.state.userStore.avatar;
+    },
   },
   mounted() {
     this.getUserInfo();
@@ -149,7 +152,7 @@ export default {
         </div>
         <img
           className="user-icon"
-          src="../../src/assets/user.png"
+          v-bind:src="avatar"
           ref="menu"
           @click="openClose"
         />

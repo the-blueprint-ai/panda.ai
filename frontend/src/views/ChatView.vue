@@ -328,7 +328,7 @@ export default defineComponent({
               ></chatMessage>
             </div>
             <div className="userInputContainer">
-              <img v-bind:src="avatar" class="avatar" />
+              <img v-bind:src="avatar" class="chatAvatar" />
               <div className="userInput">
                 <textarea
                   :disabled='isDisabled'

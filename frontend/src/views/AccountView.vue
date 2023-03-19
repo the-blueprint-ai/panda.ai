@@ -7,14 +7,7 @@ import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
   data() {
-    return {
-      // session: false,
-      // userId: "",
-      // email: "",
-      // first_name: "",
-      // last_name: "",
-      // username: "",
-    };
+    return {};
   },
   computed: {
     session() {
@@ -42,9 +35,10 @@ export default defineComponent({
   async mounted() {
     await this.getSession();
     await this.getUserInfo();
+    await this.getUserData();
   },
   methods: {
-    ...mapActions(['getSession', 'getUserInfo']),
+    ...mapActions(["getSession", "getUserInfo"]),
     redirectToLogin() {
       window.location.href = "/auth";
     },
@@ -53,7 +47,47 @@ export default defineComponent({
     },
     async onLogout() {
       await Session.signOut();
-      window.location.href = "/"
+      window.location.href = "/";
+    },
+    setFirstName(value) {
+      this.$store.commit("setFirstName", value);
+    },
+    setLastName(value) {
+      this.$store.commit("setLastName", value);
+    },
+    setUsername(value) {
+      this.$store.commit("setUsername", value);
+    },
+    setEmail(value) {
+      this.$store.commit("setEmail", value);
+    },
+    setAvatar(value) {
+      this.$store.commit("setAvatar", value);
+    },
+    getUserData: async function () {
+      try {
+        const url =
+          "http://localhost:3001/get-user-data/?user_id=" + this.userId;
+        const res = await fetch(url, {
+          method: "GET",
+        });
+
+        // Check if the response status indicates an error
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+
+        const response = await res.json();
+        console.log(response);
+        this.setFirstName(response.first_name);
+        this.setLastName(response.last_name);
+        this.setUsername(response.username);
+        this.setEmail(response.email);
+        this.setAvatar(response.avatar);
+      } catch (error) {
+        // Handle the error
+        console.log("An error occurred while saving the file:", error);
+      }
     },
   },
   components: {
@@ -66,31 +100,32 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div className="body">
-      <div v-if="session">
-        <div>
-          <h1>ACCOUNT VIEW</h1>
-          <h3>Your UserID Is:</h3>
-          <span>{{ userId }}</span>
-          <h3>Your SessionID Is:</h3>
-          <span>{{ session }}</span>
-          <h3>Your Email Is:</h3>
-          <span>{{ email }}</span>
-          <h3>Your First Name Is:</h3>
-          <span>{{ first_name }}</span>
-          <h3>Your Last Name Is:</h3>
-          <span>{{ last_name }}</span>
-          <h3>Your Username Is:</h3>
-          <span>{{ username }}</span>
-          <h3>Your Avatar Is:</h3>
-          <span><img v-bind:src="avatar" class="avatar" /></span>
+    <div className="bodyG">
+      <div v-if="session" className="accountWrapper">
+        <div className="userBanner">
+          <img src="../assets/camera2.svg" class="bannerCamera" />
         </div>
-        <div className="spacer">
-          <button className="chatButton userPageButton" @click="redirectToChat">Let's Chat</button>
+        <div className="profileAvatar">
+          <div class="accountAvatarBackground"></div>
+          <img v-bind:src="avatar" class="accountAvatar" />
+          <img src="../assets/camera.svg" class="avatarCamera" />
         </div>
-      </div>
-      <div v-else>
-        <button className="authButton-login" @click="redirectToLogin">Sign In</button>
+        <div className="profilePanel">
+          <div className="userDetails">
+            <h2>{{ first_name }} {{ last_name }}</h2>
+            <h3>{{ username }}</h3>
+            <p>{{ email }}</p>
+            <button className="chatButton" @click="redirectToChat">Let's Chat</button>
+          </div>
+          <div className="aboutDetails">
+            <h2>ABOUT</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam maximus ut libero id tempor. Nulla eget consequat nunc, cursus tempor nisi. Vestibulum euismod magna sed sem tristique, sit amet fringilla orci accumsan. In nec sem vel dolor dapibus congue. Sed rutrum massa eget ante efficitur pretium. In tristique rutrum ipsum vitae blandit. Sed pretium, leo suscipit pulvinar aliquet, quam quam posuere massa, sed mattis leo purus non massa. Quisque blandit.</p>
+          </div>
+          <div className="editUserDetails">
+            <img src="../assets/three-dots-vertical.svg" className="profileEdit" />
+          </div>
+        </div>
+        <div className="spacer"></div>
       </div>
     </div>
     <navFooter></navFooter>

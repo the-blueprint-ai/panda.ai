@@ -5,10 +5,26 @@ import { mapActions } from "vuex";
 import { DateTime } from "luxon";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import UserChatHistory from "../components/userChatHistory.vue";
+import UserIntegrations from "../components/userIntegrations.vue";
+import UserSubscription from "../components/userSubscription.vue";
+import UserData from "../components/userData.vue";
+import UserSettings from "../components/userSettings.vue";
 
 export default defineComponent({
   data() {
-    return {};
+    return {
+      historyMenu: true,
+      integrationsMenu: false,
+      subscriptionMenu: false,
+      dataMenu: false,
+      settingsMenu: false,
+      historyMenuActive: true,
+      integrationsMenuActive: false,
+      subscriptionMenuActive: false,
+      dataMenuActive: false,
+      settingsMenuActive: false,
+    };
   },
   computed: {
     session() {
@@ -32,18 +48,21 @@ export default defineComponent({
     avatar() {
       return this.$store.state.userStore.avatar;
     },
+    banner() {
+      return this.$store.state.userStore.banner;
+    },
     joined() {
       return this.$store.state.userStore.joined;
     },
-    chatHistory() {
-      return this.$store.state.userStore.chatHistory;
+    userChatHistory() {
+      return this.$store.state.userStore.userChatHistory;
     },
   },
   async mounted() {
     await this.getSession();
     await this.getUserInfo();
     await this.getUserData();
-    await this.getChatHistory();
+    await this.getUserChatHistory();
   },
   methods: {
     ...mapActions(["getSession", "getUserInfo"]),
@@ -72,11 +91,14 @@ export default defineComponent({
     setAvatar(value) {
       this.$store.commit("setAvatar", value);
     },
+    setBanner(value) {
+      this.$store.commit("setBanner", value);
+    },
     setJoined(value) {
       this.$store.commit("setJoined", value);
     },
-    setChatHistory(value) {
-      this.$store.commit("setChatHistory", value);
+    setUserChatHistory(value) {
+      this.$store.commit("setUserChatHistory", value);
     },
     getUserData: async function () {
       try {
@@ -97,6 +119,7 @@ export default defineComponent({
         this.setUsername(response.username);
         this.setEmail(response.email);
         this.setAvatar(response.avatar);
+        this.setBanner(response.banner);
         var dt = DateTime.fromISO(response.created_at);
         this.setJoined(dt.toLocaleString(DateTime.DATE_FULL));
       } catch (error) {
@@ -104,7 +127,7 @@ export default defineComponent({
         console.log("An error occurred while saving the file:", error);
       }
     },
-    getChatHistory: async function () {
+    getUserChatHistory: async function () {
       try {
         const url =
           "http://localhost:3001/get-user-chat-history/?user_id=" + this.userId;
@@ -118,17 +141,137 @@ export default defineComponent({
         }
 
         const response = await res.json();
-        console.log(response);
-        this.setChatHistory(response);
+
+        let chatHistory = [];
+
+        for (let i in response) {
+          var dt = DateTime.fromISO(response[i].created_at);
+          var date = dt.toLocaleString(DateTime.DATE_FULL);
+          var dt3 = DateTime.now().plus({ days: -1 });
+          var yest = dt3.toLocaleString(DateTime.DATE_FULL);
+
+          if (date == DateTime.now().DATE_FULL) {
+            date = "Today";
+          } else if (date == yest) {
+            date = "Yesterday";
+          } else {
+            date = dt.toLocaleString(DateTime.DATE_FULL);
+          }
+
+          let time = dt.toLocaleString(DateTime.TIME_24_SIMPLE);
+          let content = response[i].chat_script;
+
+          let dateEntry = chatHistory.find(entry => entry.date === date); //null;
+
+          if (!dateEntry) {
+            dateEntry = {
+              date: date,
+              title: content.at(-1).message,
+              chats: [],
+            };
+            chatHistory.push(dateEntry);
+          }
+
+          dateEntry.chats.push({
+            time: time,
+            content: content,
+          });
+        }
+
+        // Use the groupedChatData object here, or set it to a reactive data property
+        console.log(chatHistory);
+        this.setUserChatHistory(chatHistory);
       } catch (error) {
         // Handle the error
         console.log("An error occurred while saving the file:", error);
       }
     },
+    triggerBannerUpload() {
+      this.$refs.bannerInput.click();
+    },
+    triggerAvatarUpload() {
+      this.$refs.avatarInput.click();
+    },
+    handleBannerUpload(event) {
+      const file = event.target.files[0];
+      // Process the uploaded image file here
+      console.log("Banner");
+    },
+    handleAvatarUpload(event) {
+      const file = event.target.files[0];
+      // Process the uploaded image file here
+      console.log("Avatar");
+    },
+    toggleHistory() {
+      this.historyMenu = true;
+      this.integrationsMenu = false;
+      this.subscriptionMenu = false;
+      this.dataMenu = false;
+      this.settingsMenu = false;
+      this.historyMenuActive = true;
+      this.integrationsMenuActive = false;
+      this.subscriptionMenuActive = false;
+      this.dataMenuActive = false;
+      this.settingsMenuActive = false;
+      this.classList.toggle("is-active");
+    },
+    toggleIntegrations() {
+      this.historyMenu = false;
+      this.integrationsMenu = true;
+      this.subscriptionMenu = false;
+      this.dataMenu = false;
+      this.settingsMenu = false;
+      this.historyMenuActive = false;
+      this.integrationsMenuActive = true;
+      this.subscriptionMenuActive = false;
+      this.dataMenuActive = false;
+      this.settingsMenuActive = false;
+    },
+    toggleSubscription() {
+      this.historyMenu = false;
+      this.integrationsMenu = false;
+      this.subscriptionMenu = true;
+      this.dataMenu = false;
+      this.settingsMenu = false;
+      this.historyMenuActive = false;
+      this.integrationsMenuActive = false;
+      this.subscriptionMenuActive = true;
+      this.dataMenuActive = false;
+      this.settingsMenuActive = false;
+    },
+    toggleData() {
+      this.historyMenu = false;
+      this.integrationsMenu = false;
+      this.subscriptionMenu = false;
+      this.dataMenu = true;
+      this.settingsMenu = false;
+      this.historyMenuActive = false;
+      this.integrationsMenuActive = false;
+      this.subscriptionMenuActive = false;
+      this.dataMenuActive = true;
+      this.settingsMenuActive = false;
+    },
+    toggleSettings() {
+      this.historyMenu = false;
+      this.integrationsMenu = false;
+      this.subscriptionMenu = false;
+      this.dataMenu = false;
+      this.settingsMenu = true;
+      this.historyMenuActive = false;
+      this.integrationsMenuActive = false;
+      this.subscriptionMenuActive = false;
+      this.dataMenuActive = false;
+      this.settingsMenuActive = true;
+    },
   },
   components: {
     navBar,
     navFooter,
+    UserChatHistory,
+    UserIntegrations,
+    UserSubscription,
+    UserData,
+    UserSettings,
   },
 });
 </script>
@@ -136,44 +279,96 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div className="bodyG">
+    <div class="bodyG">
       <div v-if="session" className="accountWrapper">
-        <div className="userBanner">
-          <img src="../assets/camera2.svg" class="bannerCamera" />
+        <div class="userBanner">
+          <img v-bind:src="banner" />
+          <img src="../assets/camera2.svg" @click="triggerBannerUpload" class="bannerCamera" />
+          <input type="file" ref="bannerInput" accept="image/*" style="display:none;" @change="handleBannerUpload" />
         </div>
-        <div className="profileAvatar">
+        <div class="profileAvatar">
           <div class="accountAvatarBackground"></div>
           <img v-if="first_name" v-bind:src="avatar" class="accountAvatar" />
-          <img src="../assets/camera.svg" class="avatarCamera" />
+          <img src="../assets/camera.svg" @click="triggerAvatarUpload" class="avatarCamera" />
+          <input type="file" ref="avatarInput" accept="image/*" style="display:none;" @change="handleAvatarUpload" />
         </div>
-        <div className="profilePanel">
-          <div className="userDetails">
+        <div class="profilePanel">
+          <div class="userDetails">
             <h2>{{ first_name }} {{ last_name }}</h2>
             <h3>{{ username }}</h3>
             <p>{{ email }}</p>
             <p>Joined: {{ joined }}</p>
-            <button className="chatButton" @click="redirectToChat">Let's Chat</button>
+            <button className="chatButton" @click="redirectToChat">
+              Let's Chat
+            </button>
           </div>
-          <div className="aboutDetails">
+          <div class="aboutDetails">
             <h2>ABOUT</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquet elit augue, at feugiat leo pulvinar nec. Maecenas consequat, elit a ornare dignissim, justo lorem auctor lectus, et accumsan urna urna ac est. Phasellus convallis quam eros, et tincidunt mauris iaculis at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ultrices sodales condimentum. Fusce rutrum hendrerit dignissim. Aenean non nibh vestibulum, gravida lectus quis, pharetra nulla. Aenean blandit diam porta, ullamcorper neque quis, maximus urna. Vivamus purus libero, vulputate id auctor non, vestibulum et enim.</p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+              aliquet elit augue, at feugiat leo pulvinar nec. Maecenas
+              consequat, elit a ornare dignissim, justo lorem auctor lectus, et
+              accumsan urna urna ac est. Phasellus convallis quam eros, et
+              tincidunt mauris iaculis at. Orci varius natoque penatibus et
+              magnis dis parturient montes, nascetur ridiculus mus. Vestibulum
+              ultrices sodales condimentum. Fusce rutrum hendrerit dignissim.
+              Aenean non nibh vestibulum, gravida lectus quis, pharetra nulla.
+              Aenean blandit diam porta, ullamcorper neque quis, maximus urna.
+              Vivamus purus libero, vulputate id auctor non, vestibulum et enim.
+            </p>
           </div>
-          <div className="editUserDetails">
-            <img src="../assets/three-dots-vertical.svg" className="profileEdit" />
+          <div class="editUserDetails">
+            <img
+              src="../assets/three-dots-vertical.svg"
+              class="profileEdit"
+            />
           </div>
         </div>
         <div className="accountDetailsWrapper">
           <div className="accountDetailsMenu">
-            <button className="accountDetailsMenuButton">History</button>
-            <button className="accountDetailsMenuButton">Integrations</button>
-            <button className="accountDetailsMenuButton">Subscription</button>
-            <button className="accountDetailsMenuButton">Data</button>
-            <button className="accountDetailsMenuButton">Settings</button>
+            <button class="userChatHistoryMenuButton" :class="{active:historyMenuActive}" @click=this.toggleHistory>History</button>
+            <button class="userIntegrationsMenuButton" :class="{active:integrationsMenuActive}" @click=this.toggleIntegrations>Integrations</button>
+            <button class="userSubscriptionMenuButton" :class="{active:subscriptionMenuActive}" @click=this.toggleSubscription>Subscription</button>
+            <button class="userDataMenuButton" :class="{active:dataMenuActive}" @click=this.toggleData>Data</button>
+            <button class="userSettingsMenuButton" :class="{active:settingsMenuActive}" @click=this.toggleSettings>Settings</button>
           </div>
-          <div className="profileMenuLine"></div>
           <div className="userChatHistory">
-            <h1>HISTORY GOES HERE</h1>
-            <p>{{ chatHistory }}</p>
+            <UserChatHistory
+              :history-menu="historyMenu"
+              :integrations-menu="integrationsMenu"
+              :subscription-menu="subscriptionMenu"
+              :data-menu="dataMenu"
+              :settings-menu="settingsMenu"
+              :user-chat-history="userChatHistory"
+            ></UserChatHistory>
+            <UserIntegrations
+              :history-menu="historyMenu"
+              :integrations-menu="integrationsMenu"
+              :subscription-menu="subscriptionMenu"
+              :data-menu="dataMenu"
+              :settings-menu="settingsMenu"
+            ></UserIntegrations>
+            <UserSubscription
+              :history-menu="historyMenu"
+              :integrations-menu="integrationsMenu"
+              :subscription-menu="subscriptionMenu"
+              :data-menu="dataMenu"
+              :settings-menu="settingsMenu"
+            ></UserSubscription>
+            <UserData
+              :history-menu="historyMenu"
+              :integrations-menu="integrationsMenu"
+              :subscription-menu="subscriptionMenu"
+              :data-menu="dataMenu"
+              :settings-menu="settingsMenu"
+            ></UserData>
+            <UserSettings
+              :history-menu="historyMenu"
+              :integrations-menu="integrationsMenu"
+              :subscription-menu="subscriptionMenu"
+              :data-menu="dataMenu"
+              :settings-menu="settingsMenu"
+            ></UserSettings>
           </div>
         </div>
       </div>

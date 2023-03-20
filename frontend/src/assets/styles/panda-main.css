@@ -9,7 +9,7 @@ body {
   flex-direction: column;
   justify-content: left;
   align-items: center;
-  height: 100vh;
+  height: 115vh;
   font-family: "Monaco";
 }
 h1 {
@@ -36,7 +36,7 @@ span {
   flex-direction: column;
   justify-content: left;
   align-items: center;
-  height: 100vh;
+  height: 115vh;
   font-family: "Monaco";
 }
 .bodyG h3 {
@@ -552,9 +552,10 @@ span.typed-text {
   width: 100%;
   height: 300px;
   margin-top: 30px;
-  background-color: #FF3D94;
-  /* background: rgb(131,58,180);
-  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%); */
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.userBanner img {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
@@ -626,7 +627,7 @@ span.typed-text {
   display: flex;
   flex-direction: column;
   align-items: start;
-  padding-top: 100px;
+  padding-top: 80px;
   padding-left: 70px;
   border-bottom-left-radius: 15px;
 }
@@ -690,7 +691,7 @@ span.typed-text {
   cursor: pointer;
 }
 .accountDetailsWrapper {
-  height: 800px;
+  height: 1000px;
   margin-top: 30px;
   background-color: #FFFFFF;
   border-top-left-radius: 15px;
@@ -706,8 +707,9 @@ span.typed-text {
   background-color: #FFFFFF;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  border-bottom: 1px solid lightgray;
 }
-.accountDetailsMenuButton {
+.userChatHistoryMenuButton, .userIntegrationsMenuButton, .userSubscriptionMenuButton, .userDataMenuButton, .userSettingsMenuButton {
   max-width: 180px;
   display: flex;
   margin-left: 30px;
@@ -723,18 +725,124 @@ span.typed-text {
   font-weight: bold;
   font-size: larger;
 }
-.accountDetailsMenuButton:hover {
-  background-color: #FFCB4C;
-  color: #000000;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  box-shadow: 0px 15px 10px -15px #C8C8C8;
+.userChatHistoryMenuButton:hover, .userIntegrationsMenuButton:hover, .userSubscriptionMenuButton:hover, .userDataMenuButton:hover, .userSettingsMenuButton:hover {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
   cursor: pointer;
 }
-.profileMenuLine {
-  height: 1px;
-  background-color: lightgray;
+.userChatHistoryMenuButton.active, .userIntegrationsMenuButton.active, .userSubscriptionMenuButton.active, .userDataMenuButton.active, .userSettingsMenuButton.active {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+  cursor: pointer;
 }
-.userChatHistory h1 {
+.userChatHistory{
+  height: 948px;
+  display: flex;
+}
+.userChatHistoryDates {
+  min-width: 300px;
+  max-width: 300px;
+  padding-left: 15px;
+  text-align: left;
+  border-right: 1px solid lightgray;
+  white-space: nowrap;
+}
+.chatHistorySearch {
+  margin-left: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+}
+.chatHistorySearchBox {
+  height: 30px;
+  width: 270px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 5px;
+  border: 2px solid lightgray;
+  border-radius: 10px;
+  font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
+  font-size: 18px;
+  overflow: wrap;
+  resize: none;
+}
+
+.chatHistorySearchBox:focus {
+  outline: none;
+}
+.userChatHistoryContent {
+  min-width: 840px;
+  display: flex;
+  flex-direction: column-reverse;
+  text-align: left;
+  padding: 20px;
+  overflow: scroll;
+  color: #000000;
+}
+.chatHistoryDay {
+  margin-left: -35px;
+  padding-right: 10px;
+  list-style-type: none;
+  text-transform: uppercase;
+  color: #000000;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.chatHistoryDay:hover {
+  cursor: pointer;
+}
+.chatHistoryTimeTitle {
+  margin-top: 5px;
+  margin-left: -5px;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chatHistoryTitle {
+  padding-left: 5px;
+}
+.chatHistoryTitle:hover {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 17px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+  cursor: pointer;
+}
+.userIntegrations {
+  display: flex;
+  width:1300px;
+  justify-content: center;
+}
+.userIntegrations h1 {
+  color: #000000;
+}
+.userSubscription {
+  display: flex;
+  width:1300px;
+  justify-content: center;
+}
+.userSubscription h1 {
+  color: #000000;
+}
+.userData {
+  display: flex;
+  width:1300px;
+  justify-content: center;
+}
+.userData h1 {
+  color: #000000;
+}
+.userSettings {
+  display: flex;
+  width:1300px;
+  justify-content: center;
+}
+.userSettings h1 {
   color: #000000;
 }

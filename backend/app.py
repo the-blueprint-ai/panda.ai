@@ -89,27 +89,41 @@ async def save_user_data(user_id: str, first_name: str, last_name: str, username
     }
     await database.execute(query=query, values=values)
 
+async def save_user_banner(user_id: str, banner: str):
+
+    query = """
+        UPDATE panda_ai_users SET banner = :banner WHERE user_id = :user_id
+    """
+    values = {
+        "user_id": user_id,
+        "banner": banner
+    }
+    await database.execute(query=query, values=values)
+
 async def get_user_data(user_id: str):
-    query = "SELECT user_id, first_name, last_name, username, email, avatar, created_at FROM panda_ai_users WHERE user_id = :user_id"
+    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 
     if result:
+        created_at = result["created_at"]
         decrypted_first_name = cipher_suite.decrypt(result["first_name"].encode()).decode('utf-8')
         decrypted_last_name = cipher_suite.decrypt(result["last_name"].encode()).decode('utf-8')
         decrypted_username = cipher_suite.decrypt(result["username"].encode()).decode('utf-8')
         decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
         avatar = result["avatar"]
-        created_at = result["created_at"]
+        banner = result["banner"]
+        
 
         return {
             "user_id": user_id,
+            "created_at": created_at,
             "first_name": decrypted_first_name,
             "last_name": decrypted_last_name,
             "username": decrypted_username,
             "email": decrypted_email,
             "avatar": avatar,
-            "created_at": created_at,
+            "banner": banner,
         }
     else:
         return None
@@ -150,12 +164,16 @@ async def get_user_chat_history(user_id: str):
 
 class UserData(BaseModel):
     user_id: str
+    created_at: datetime
     first_name: str
     last_name: str
     username: str
     email: str
     avatar: str
-    created_at: datetime
+
+class BannerData(BaseModel):
+    user_id: str
+    banner: str
 
 class ChatData(BaseModel):
     user_id: str
@@ -173,6 +191,14 @@ async def save_user_data_route(user_data: UserData):
     try:
         await save_user_data(user_data.user_id, user_data.first_name, user_data.last_name, user_data.username, user_data.email, user_data.avatar)
         return {"message": "Data saved successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/save-user-banner/")
+async def save_user_banner_route(user_data: BannerData):
+    try:
+        await save_user_banner(user_data.user_id, user_data.banner)
+        return {"message": "Banner saved successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

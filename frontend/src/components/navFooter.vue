@@ -6,5 +6,6 @@ export default {};
   <div className="navFooter">
     <div className="footerbar"></div>
     <div>I AM A FOOTER 🙂</div>
+    <div>MADE WITH ❤️</div>
   </div>
 </template>

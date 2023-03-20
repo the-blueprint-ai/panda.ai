@@ -9,8 +9,9 @@ const userStore = {
     username: "",
     email: "",
     avatar: "../../src/assets/user.png",
+    banner: "",
     joined: "",
-    chatHistory: [],
+    userChatHistory: [],
   },
   mutations: {
     setSession(state, value) {
@@ -34,11 +35,14 @@ const userStore = {
     setAvatar(state, value) {
       state.avatar = value;
     },
+    setBanner(state, value) {
+      state.banner = value;
+    },
     setJoined(state, value) {
       state.joined = value;
     },
-    setChatHistory(state, value) {
-      state.chatHistory.push(value);
+    setUserChatHistory(state, value) {
+      state.userChatHistory.push(value);
     },
   },
   getters: {},

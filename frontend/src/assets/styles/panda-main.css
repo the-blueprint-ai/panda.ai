@@ -814,6 +814,13 @@ span.typed-text {
   background-size: 1px 5px;
   cursor: pointer;
 }
+.activeChatTitle {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 17px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+  cursor: pointer;
+}
 .userIntegrations {
   display: flex;
   width:1300px;

@@ -3,8 +3,8 @@ export default {};
 </script>
 
 <template>
-  <div className="navFooter">
-    <div className="footerbar"></div>
+  <div class="navFooter">
+    <div class="footerbar"></div>
     <div>I AM A FOOTER 🙂</div>
     <div>MADE WITH ❤️</div>
   </div>

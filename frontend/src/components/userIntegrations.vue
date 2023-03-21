@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <div className="userIntegrations" v-if="integrationsMenu">
+  <div class="userIntegrations" v-if="integrationsMenu">
     <h1>USER INTEGRATIONS</h1>
   </div>
 </template>

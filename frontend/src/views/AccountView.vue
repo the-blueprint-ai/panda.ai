@@ -160,13 +160,13 @@ export default defineComponent({
 
           let time = dt.toLocaleString(DateTime.TIME_24_SIMPLE);
           let content = response[i].chat_script;
+          let title = content.at(-1).message;
 
-          let dateEntry = chatHistory.find(entry => entry.date === date); //null;
+          let dateEntry = chatHistory.find((entry) => entry.date === date); //null;
 
           if (!dateEntry) {
             dateEntry = {
               date: date,
-              title: content.at(-1).message,
               chats: [],
             };
             chatHistory.push(dateEntry);
@@ -174,12 +174,11 @@ export default defineComponent({
 
           dateEntry.chats.push({
             time: time,
+            title: title,
             content: content,
           });
         }
 
-        // Use the groupedChatData object here, or set it to a reactive data property
-        console.log(chatHistory);
         this.setUserChatHistory(chatHistory);
       } catch (error) {
         // Handle the error
@@ -280,7 +279,7 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div class="bodyG">
-      <div v-if="session" className="accountWrapper">
+      <div v-if="session" class="accountWrapper">
         <div class="userBanner">
           <img v-bind:src="banner" />
           <img src="../assets/camera2.svg" @click="triggerBannerUpload" class="bannerCamera" />
@@ -298,7 +297,7 @@ export default defineComponent({
             <h3>{{ username }}</h3>
             <p>{{ email }}</p>
             <p>Joined: {{ joined }}</p>
-            <button className="chatButton" @click="redirectToChat">
+            <button class="chatButton" @click="redirectToChat">
               Let's Chat
             </button>
           </div>
@@ -324,15 +323,15 @@ export default defineComponent({
             />
           </div>
         </div>
-        <div className="accountDetailsWrapper">
-          <div className="accountDetailsMenu">
+        <div class="accountDetailsWrapper">
+          <div class="accountDetailsMenu">
             <button class="userChatHistoryMenuButton" :class="{active:historyMenuActive}" @click=this.toggleHistory>History</button>
             <button class="userIntegrationsMenuButton" :class="{active:integrationsMenuActive}" @click=this.toggleIntegrations>Integrations</button>
             <button class="userSubscriptionMenuButton" :class="{active:subscriptionMenuActive}" @click=this.toggleSubscription>Subscription</button>
             <button class="userDataMenuButton" :class="{active:dataMenuActive}" @click=this.toggleData>Data</button>
             <button class="userSettingsMenuButton" :class="{active:settingsMenuActive}" @click=this.toggleSettings>Settings</button>
           </div>
-          <div className="userChatHistory">
+          <div class="userChatHistory">
             <UserChatHistory
               :history-menu="historyMenu"
               :integrations-menu="integrationsMenu"

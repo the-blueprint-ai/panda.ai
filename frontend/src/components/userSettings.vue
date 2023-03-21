@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <div className="userSettings" v-if="settingsMenu">
+  <div class="userSettings" v-if="settingsMenu">
     <h1>USER SETTINGS</h1>
   </div>
 </template>

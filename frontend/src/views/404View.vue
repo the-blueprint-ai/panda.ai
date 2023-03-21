@@ -12,7 +12,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div className="body">
+    <div class="body">
       <div>
         <img src="../../src/assets/404.png" width="1200"/>
       </div>

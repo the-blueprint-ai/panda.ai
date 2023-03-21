@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <div className="userData" v-if="dataMenu">
+  <div class="userData" v-if="dataMenu">
     <h1>USER DATA</h1>
   </div>
 </template>

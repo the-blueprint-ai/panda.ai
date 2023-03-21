@@ -277,49 +277,49 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div className="body">
+    <div class="body">
       <div v-if="session">
-        <div className="mainContainer">
-          <div className="chatHistoryContainer">
+        <div class="mainContainer">
+          <div class="chatHistoryContainer">
             <h2>Chat History</h2>
-            <div className="chatHistory">
-              <p className="history">+ Today</p>
-              <p className="history">+ Yesterday</p>
-              <p className="history">+ Day before</p>
-              <p className="history">+ Day before that</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ scroll...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
-              <p className="history">+ ...</p>
+            <div class="chatHistory">
+              <p class="history">+ Today</p>
+              <p class="history">+ Yesterday</p>
+              <p class="history">+ Day before</p>
+              <p class="history">+ Day before that</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ scroll...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
+              <p class="history">+ ...</p>
             </div>
-            <button :disabled='isDisabled' className="startNewChat" @click="startNewChat">
+            <button :disabled='isDisabled' class="startNewChat" @click="startNewChat">
               Start new chat
             </button>
           </div>
-          <div className="mainChatContainer">
-            <div className="chatContainer" id="chatContainer">
+          <div class="mainChatContainer">
+            <div class="chatContainer" id="chatContainer">
               <chatMessage
                 v-for="item in chatHistory"
                 :message="item"
@@ -327,12 +327,12 @@ export default defineComponent({
                 :key="item.user"
               ></chatMessage>
             </div>
-            <div className="userInputContainer">
+            <div class="userInputContainer">
               <img v-bind:src="avatar" class="chatAvatar" />
-              <div className="userInput">
+              <div class="userInput">
                 <textarea
                   :disabled='isDisabled'
-                  className="input"
+                  class="input"
                   v-model="messageToSend"
                   @keydown.enter.stop.prevent="submitMessage()"
                   id="userInput"
@@ -340,10 +340,10 @@ export default defineComponent({
                   placeholder="enter your message here"
                   ref="messageInput"
                 ></textarea>
-                <button :disabled='isDisabled' className="chatButton" id="sendButton"  @click="submitMessage()">
+                <button :disabled='isDisabled' class="chatButton" id="sendButton"  @click="submitMessage()">
                   Send
                 </button>
-                <button :disabled='isDisabled' className="chatButton" id="undoButton" @click="removeMessage()">
+                <button :disabled='isDisabled' class="chatButton" id="undoButton" @click="removeMessage()">
                   Undo
                 </button>
               </div>

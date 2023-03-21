@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <div className="userSubscription" v-if="subscriptionMenu">
+  <div class="userSubscription" v-if="subscriptionMenu">
     <h1>USER SUBSCRIPTION</h1>
   </div>
 </template>

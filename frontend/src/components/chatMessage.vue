@@ -25,6 +25,6 @@ export default {
 <template>
   <div>
     <img v-bind:src="messageImage()" class="chatAvatar" />
-    <p className="message">{{ message.message }}</p>
+    <p class="message">{{ message.message }}</p>
   </div>
 </template>

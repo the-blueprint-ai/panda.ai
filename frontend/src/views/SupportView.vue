@@ -12,7 +12,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div className="body">
+    <div class="body">
       <div>
         <h1>SUPPORT</h1>
       </div>

@@ -103,28 +103,28 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div className="body">
-      <img src="../../src/assets/panda.png" className="biglogo" width="200" />
+    <div class="body">
+      <img src="../../src/assets/panda.png" class="biglogo" width="200" />
       <h1>
-        <span className="typed-text">{{ typeValue }}</span>
-        <span className="blinking-cursor">|</span>
-        <span className="blinking-cursor2">|</span>
-        <span className="blinking-cursor2">|</span>
-        <span className="blinking-cursor2">|</span>
-        <span className="blinking-cursor2">|</span>
-        <span className="blinking-cursor2">|</span>
-        <span className="blinking-cursor2">|</span>
-        <span className="blinking-cursor2">|</span>
-        <span className="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
+        <span class="typed-text">{{ typeValue }}</span>
+        <span class="blinking-cursor">|</span>
+        <span class="blinking-cursor2">|</span>
+        <span class="blinking-cursor2">|</span>
+        <span class="blinking-cursor2">|</span>
+        <span class="blinking-cursor2">|</span>
+        <span class="blinking-cursor2">|</span>
+        <span class="blinking-cursor2">|</span>
+        <span class="blinking-cursor2">|</span>
+        <span class="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
       </h1>
       <div v-if="session">
         <router-link :to="'/' + userId + '/chat'">
-          <button className="letsChat">Let's Chat</button>
+          <button class="letsChat">Let's Chat</button>
         </router-link>
       </div>
       <div v-else>
         <router-link :to="'/auth'">
-          <button className="letsChat">Let's Chat</button>
+          <button class="letsChat">Let's Chat</button>
         </router-link>
       </div>
     </div>

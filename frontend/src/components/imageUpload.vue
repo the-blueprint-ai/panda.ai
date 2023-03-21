@@ -173,15 +173,15 @@ export default {
     <div v-if="this.preview">
       <img
         src="../assets/x-circle.svg"
-        className="cancelButton"
+        class="cancelButton"
         v-on:click="clear"
       />
     </div>
-    <img className="dropImage" v-bind:src="preview" />
+    <img class="dropImage" v-bind:src="preview" />
     <p id="badFile" for="imageInput" style="color: #ffcb4c; margin: 5px"></p>
     <button
       v-if="saveButton"
-      className="saveButton"
+      class="saveButton"
       type="submit"
       v-on:click="save"
     >

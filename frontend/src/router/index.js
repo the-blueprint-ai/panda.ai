@@ -4,6 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import notFoundView from "../views/404View.vue";
 import AccountView from "../views/AccountView.vue";
 import ChatView from "../views/ChatView.vue";
+import OnboardingView from "../views/OnboardingView.vue";
 import AboutView from "../views/AboutView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
@@ -60,6 +61,13 @@ const router = createRouter({
       path: "/:userid/chat",
       name: "chat",
       component: ChatView,
+      props: true,
+      beforeEnter: checkAuth,
+    },
+    {
+      path: "/:userid/onboarding",
+      name: "onboarding",
+      component: OnboardingView,
       props: true,
       beforeEnter: checkAuth,
     },

@@ -21,7 +21,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="body">
+    <div class="bodyG">
       <h1>TESTING</h1>
       <ImageUpload></ImageUpload>
     </div>

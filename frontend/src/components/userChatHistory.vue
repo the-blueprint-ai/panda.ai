@@ -90,7 +90,7 @@ export default {
               <span class="chatHistoryTime" @click="selectedChat = chat"
                 >{{ chat.time }}:</span
               >
-              <span className="chatHistoryTitle" @click="selectedChat = chat; activeChat = chat">{{chat.title}}</span>
+              <span class="chatHistoryTitle" @click="selectedChat = chat; activeChat = chat;">{{ chat.title }}</span>
             </li>
           </ul>
         </li>

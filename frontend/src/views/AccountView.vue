@@ -2,9 +2,10 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
-import { DateTime } from "luxon";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import { getUserData } from "../composables/getUserData.js";
+import { getUserChatHistory } from "../composables/getUserChatHistory.js";
 import UserChatHistory from "../components/userChatHistory.vue";
 import UserIntegrations from "../components/userIntegrations.vue";
 import UserSubscription from "../components/userSubscription.vue";
@@ -61,8 +62,10 @@ export default defineComponent({
   async mounted() {
     await this.getSession();
     await this.getUserInfo();
-    await this.getUserData();
-    await this.getUserChatHistory();
+    const { userData } = getUserData(this.userId, this.$store);
+    userData(this.userId);
+    const { userChatHistory } = getUserChatHistory(this.userId, this.$store);
+    userChatHistory(this.userId);
   },
   methods: {
     ...mapActions(["getSession", "getUserInfo"]),
@@ -93,97 +96,6 @@ export default defineComponent({
     },
     setBanner(value) {
       this.$store.commit("setBanner", value);
-    },
-    setJoined(value) {
-      this.$store.commit("setJoined", value);
-    },
-    setUserChatHistory(value) {
-      this.$store.commit("setUserChatHistory", value);
-    },
-    getUserData: async function () {
-      try {
-        const url =
-          "http://localhost:3001/get-user-data/?user_id=" + this.userId;
-        const res = await fetch(url, {
-          method: "GET",
-        });
-
-        // Check if the response status indicates an error
-        if (!res.ok) {
-          throw new Error(`Server responded with status ${res.status}`);
-        }
-
-        const response = await res.json();
-        this.setFirstName(response.first_name);
-        this.setLastName(response.last_name);
-        this.setUsername(response.username);
-        this.setEmail(response.email);
-        this.setAvatar(response.avatar);
-        this.setBanner(response.banner);
-        var dt = DateTime.fromISO(response.created_at);
-        this.setJoined(dt.toLocaleString(DateTime.DATE_FULL));
-      } catch (error) {
-        // Handle the error
-        console.log("An error occurred while saving the file:", error);
-      }
-    },
-    getUserChatHistory: async function () {
-      try {
-        const url =
-          "http://localhost:3001/get-user-chat-history/?user_id=" + this.userId;
-        const res = await fetch(url, {
-          method: "GET",
-        });
-
-        // Check if the response status indicates an error
-        if (!res.ok) {
-          throw new Error(`Server responded with status ${res.status}`);
-        }
-
-        const response = await res.json();
-
-        let chatHistory = [];
-
-        for (let i in response) {
-          var dt = DateTime.fromISO(response[i].created_at);
-          var date = dt.toLocaleString(DateTime.DATE_FULL);
-          var dt3 = DateTime.now().plus({ days: -1 });
-          var yest = dt3.toLocaleString(DateTime.DATE_FULL);
-
-          if (date == DateTime.now().DATE_FULL) {
-            date = "Today";
-          } else if (date == yest) {
-            date = "Yesterday";
-          } else {
-            date = dt.toLocaleString(DateTime.DATE_FULL);
-          }
-
-          let time = dt.toLocaleString(DateTime.TIME_24_SIMPLE);
-          let content = response[i].chat_script;
-          let title = content.at(-1).message;
-
-          let dateEntry = chatHistory.find((entry) => entry.date === date); //null;
-
-          if (!dateEntry) {
-            dateEntry = {
-              date: date,
-              chats: [],
-            };
-            chatHistory.push(dateEntry);
-          }
-
-          dateEntry.chats.push({
-            time: time,
-            title: title,
-            content: content,
-          });
-        }
-
-        this.setUserChatHistory(chatHistory);
-      } catch (error) {
-        // Handle the error
-        console.log("An error occurred while saving the file:", error);
-      }
     },
     triggerBannerUpload() {
       this.$refs.bannerInput.click();

@@ -6,6 +6,7 @@ import ThirdPartyEmailPasswordReact, {
 import SessionReact from "supertokens-auth-react/recipe/session";
 import EmailVerification from "supertokens-auth-react/recipe/emailverification";
 import Session from "supertokens-web-js/recipe/session";
+import { getUserChatHistory } from "./composables/getUserChatHistory.js";
 
 export const SuperTokensReactConfig = {
   appInfo: {
@@ -25,12 +26,16 @@ export const SuperTokensReactConfig = {
       },
       getRedirectionURL: async (context) => {
         const userid = await Session.getUserId();
+        const userChatHistory = await getUserChatHistory(userid);
         if (context.action === "SUCCESS") {
           if (context.redirectToPath !== undefined) {
             // we are navigating back to where the user was before they authenticated
             return context.redirectToPath;
+          } else if (userChatHistory.length == 0) {
+            return "/" + userid + "/onboarding";
+          } else {
+            return "/" + userid + "/chat";
           }
-          return "/" + userid + "/chat";
         }
         return undefined;
       },

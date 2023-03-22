@@ -9,7 +9,7 @@ body {
   flex-direction: column;
   justify-content: left;
   align-items: center;
-  height: 115vh;
+  height: 78vh;
   font-family: "Monaco";
 }
 h1 {
@@ -36,7 +36,7 @@ span {
   flex-direction: column;
   justify-content: left;
   align-items: center;
-  height: 115vh;
+  /* height: 115vh; */
   font-family: "Monaco";
 }
 .bodyG h3 {
@@ -200,10 +200,10 @@ span {
 }
 .mainContainer {
   margin-top: 50px;
-  background-color: #000000;
+  margin-bottom: 50px;
+  background-color: #EFEFEF;
   text-align: left;
   display: flex;
-  border: 3px solid #000000;
   border-radius: 15px;
   flex-direction: row;
   justify-content: top;
@@ -212,10 +212,10 @@ span {
   height: 70vh;
 }
 .chatHistoryContainer {
-  background-color: #000000;
+  background-color: #FFFFFF;
+  color:#000000;
   text-align: left;
   display: flex;
-  border: 3px solid #FFFFFF;
   border-radius: 15px;
   margin: 5px;
   margin-right: 10px;
@@ -224,6 +224,9 @@ span {
   justify-content: top;
   align-items: center;
   width: 300px;
+}
+.chatHistoryContainer h2 {
+  color:#000000;
 }
 .chatHistory {
   width: 290px;
@@ -238,14 +241,14 @@ span {
   border-radius: 5px;
 }
 .chatHistory::-webkit-scrollbar-track {
-  background: #000000;
+  background: #FFFFFF;
 }
 .chatHistory::-webkit-scrollbar-thumb {
-  background: #FFFFFF;
+  background: #FFCB4C;
   border-radius: 10px;
 }
 .chatHistory::-webkit-scrollbar-track-piece {
-  background: #000000;
+  background: #FFFFFF;
 }
 .mainChatContainer {
   background-color: #FFFFFF;
@@ -310,9 +313,9 @@ span {
 }
 .input {
   width: 100%;
-  border: 3px solid #000000;
+  border: 3px solid #EFEFEF;
   border-radius: 15px;
-  background: lightgray;
+  background: #FFFFFF;
   color: #000000;
   padding: 10px;
   font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
@@ -322,10 +325,13 @@ span {
 }
 .input:disabled {
   cursor: not-allowed;
-  background-color: #757575;
+  background-color: #C8C8C8;
 }
 .input:focus {
   outline: none;
+}
+.input::placeholder {
+  color: #C8C8C8;
 }
 .message {
   margin: 10px;
@@ -387,6 +393,7 @@ span {
   font-size: large;
   font-family: "Monaco";
   width: 80%;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .startNewChat:Hover {
   border: 5px solid #FFCB4C;
@@ -693,6 +700,7 @@ span.typed-text {
 .accountDetailsWrapper {
   height: 1000px;
   margin-top: 30px;
+  margin-bottom: 50px;
   background-color: #FFFFFF;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
@@ -814,7 +822,7 @@ span.typed-text {
   background-size: 1px 5px;
   cursor: pointer;
 }
-.activeChatTitle {
+.activeChatClass {
   background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
   background-position-y: 17px;
   background-repeat: repeat-x;

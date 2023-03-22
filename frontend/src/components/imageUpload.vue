@@ -195,14 +195,15 @@ export default {
   height: fit-content;
   height: 150px;
   width: 98%;
-  background: #000000;
   border-radius: 8px;
-  border: 2px dashed #ffffff;
+  background-color: #FFFFFF;
+  border: 2px dashed #000000;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  margin-bottom: 50px;
 }
 input[type="file"] {
   position: absolute;

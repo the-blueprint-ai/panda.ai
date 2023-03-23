@@ -138,6 +138,7 @@ export default {
       } catch (error) {
         // Handle the error
         this.setError("An error occurred while saving the file:", error);
+        setTimeout(() => this.setImageDropValue("active"), 9200);
         this.setSuccess("");
       }
     },

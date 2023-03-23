@@ -183,7 +183,7 @@ export default defineComponent({
         setTimeout(() => this.setIsDisabledValue(true), 9200);
         setTimeout(() => this.focusInput(), 9210);
       } else if (this.avatar) {
-        this.saveUserData(this.userData);
+        saveUserData(this.userData);
         this.removeFromChatHistory(1);
         this.setIsDisabledValue(true);
         setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name, this.username)[11]), 60);

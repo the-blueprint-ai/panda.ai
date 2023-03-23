@@ -19,10 +19,12 @@ export function getUserChatHistory(userId, store) {
       for (let i in response) {
         var dt = DateTime.fromISO(response[i].created_at);
         var date = dt.toLocaleString(DateTime.DATE_FULL);
-        var dt3 = DateTime.now().plus({ days: -1 });
-        var yest = dt3.toLocaleString(DateTime.DATE_FULL);
+        var dt2 = DateTime.now().plus({ days: -1 });
+        var yest = dt2.toLocaleString(DateTime.DATE_FULL);
+        var dt3 = DateTime.now();
+        var today = dt3.toLocaleString(DateTime.DATE_FULL);
 
-        if (date == DateTime.now().DATE_FULL) {
+        if (date == today) {
           date = "Today";
         } else if (date == yest) {
           date = "Yesterday";

@@ -15,6 +15,8 @@ import UserSettings from "../components/userSettings.vue";
 export default defineComponent({
   data() {
     return {
+      opened: false,
+      visible: false,
       historyMenu: true,
       integrationsMenu: false,
       subscriptionMenu: false,
@@ -229,10 +231,7 @@ export default defineComponent({
             </p>
           </div>
           <div class="editUserDetails">
-            <img
-              src="../assets/three-dots-vertical.svg"
-              class="profileEdit"
-            />
+            <img src="../assets/three-dots-vertical.svg" class="profileEdit" />
           </div>
         </div>
         <div class="accountDetailsWrapper">
@@ -289,5 +288,4 @@ export default defineComponent({
 </template>
 <style scoped>
 @import "../assets/styles/panda-main.css";
-@import "floating-vue/dist/style.css";
 </style>

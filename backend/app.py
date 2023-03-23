@@ -164,7 +164,6 @@ async def get_user_chat_history(user_id: str):
 
 class UserData(BaseModel):
     user_id: str
-    created_at: datetime
     first_name: str
     last_name: str
     username: str
@@ -176,10 +175,6 @@ class BannerData(BaseModel):
     banner: str
 
 class ChatData(BaseModel):
-    user_id: str
-    chat_script: List[Dict[str, str]] #Json[Any]
-
-class ChatHistory(BaseModel):
     user_id: str
     chat_script: List[Dict[str, str]]
 
@@ -271,36 +266,6 @@ async def upload_file(userid: str, file: UploadFile = File(...)):
     except Exception as e:
         response = {"error": str(e)}
         return JSONResponse(content=response, status_code=400)
-    
-@app.get("/getimage/")
-async def download_file(userid):
-    try:
-        prefix = f'{userid}/avatar/avatar'
-
-        # Search for files with the specified prefix in the S3 bucket
-        s3_response = s3.list_objects_v2(Bucket=S3_BUCKET, Prefix=prefix)
-
-        if "Contents" not in s3_response or not s3_response["Contents"]:
-            raise HTTPException(status_code=404, detail="File not found")
-
-        # Extract file names from the S3 response
-        file_name = [obj["Key"] for obj in s3_response["Contents"]]
-
-        # Convert file_name to string
-        key = "".join(file_name)
-
-        # Get the file from S3
-        s3_file = s3.get_object(Bucket=S3_BUCKET, Key=key)
-
-        # Create a StreamingResponse to send the file content to the client
-        response = StreamingResponse(
-            s3_file["Body"], headers={"Content-Type": s3_file["ContentType"]}
-        )
-
-        return response
-
-    except Exception as e:
-        return {"error": str(e)}
 
 # Test API
 @app.get("/test")

@@ -183,6 +183,7 @@ export default defineComponent({
         setTimeout(() => this.setIsDisabledValue(true), 9200);
         setTimeout(() => this.focusInput(), 9210);
       } else if (this.avatar) {
+        console.log(this.userData);
         saveUserData(this.userData);
         this.removeFromChatHistory(1);
         this.setIsDisabledValue(true);
@@ -199,8 +200,8 @@ export default defineComponent({
         setTimeout(() => this.addToChatHistory(privatePanda()[21]), 3200);
         setTimeout(() => this.addToChatHistory(privatePanda()[22]), 3520);
         setTimeout(() => this.addToChatHistory(privatePanda()[23]), 3840);
-        setTimeout(() => this.saveUserChatHistory(this.chatHistoryObject), 3841);
-        // setTimeout(() => this.goToAccount(), 41600);
+        setTimeout(() => saveUserChatHistory(this.chatHistoryObject), 3841);
+        // setTimeout(() => this.goToAccount(), 4160);
         setTimeout(() => this.setSuccess(""), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 4160);
       }
@@ -225,49 +226,6 @@ export default defineComponent({
       this.messageToSend = "";
       // Add code to update the chat history database
     },
-    // saveUserData: async function () {
-    //   try {
-    //     const url = "http://localhost:3001/save-user-data/";
-    //     const res = await fetch(url, {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(this.userData),
-    //     });
-
-    //     // Check if the response status indicates an error
-    //     if (!res.ok) {
-    //       throw new Error(`Server responded with status ${res.status}`);
-    //     }
-    //   } catch (error) {
-    //     // Handle the error
-    //     console.log("An error occurred while saving the file:", error);
-    //     this.setSuccess("");
-    //   }
-    // },
-    // saveChatHistory: async function () {
-    //   console.log(JSON.stringify(this.chatHistoryObject));
-    //   try {
-    //     const url = "http://localhost:3001/save-user-chat-history/";
-    //     const res = await fetch(url, {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(this.chatHistoryObject),
-    //     });
-
-    //     // Check if the response status indicates an error
-    //     if (!res.ok) {
-    //       throw new Error(`Server responded with status ${res.status}`);
-    //     }
-    //   } catch (error) {
-    //     // Handle the error
-    //     console.log("An error occurred while saving the file:", error);
-    //     this.setSuccess("");
-    //   }
-    // },
   },
   components: {
     navBar,

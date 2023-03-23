@@ -162,6 +162,7 @@ export default {
     @drop.prevent="handleFileChange($event.dataTransfer)"
   >
     <input
+      class="imageInput"
       id="imageInput"
       type="file"
       accept="image/png, image/jpg, image/jpeg, image/gif"
@@ -192,55 +193,5 @@ export default {
 </template>
 
 <style>
-.dropzone {
-  height: fit-content;
-  height: 150px;
-  width: 98%;
-  border-radius: 8px;
-  background-color: #FFFFFF;
-  border: 2px dashed #000000;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  margin-bottom: 50px;
-}
-input[type="file"] {
-  position: absolute;
-  opacity: 0;
-  width: inherit;
-  min-height: 200px;
-  max-height: 400px;
-  cursor: pointer;
-}
-.dropImage {
-  height: 100px;
-  border-radius: 50%;
-  margin-right: 20px;
-}
-.cancelButton {
-  margin-top: -60px;
-  margin-left: 90px;
-  height: 25px;
-  position: absolute;
-  z-index: 100;
-  cursor: pointer;
-}
-.saveButton {
-  cursor: pointer;
-  color: #000000;
-  background-color: #ffcb4c;
-  border: none;
-  padding: 0.5rem;
-  margin: 0.5rem;
-  margin-right: 0px;
-  transition: all 0.5s ease-in-out;
-  border: 5px solid #ffcb4c;
-  border-radius: 1rem;
-  font-size: large;
-  font-family: "Monaco";
-  width: 100px;
-  z-index: 100;
-}
+@import "../assets/styles/panda-main.css";
 </style>

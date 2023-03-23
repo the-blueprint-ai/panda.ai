@@ -1,25 +1,29 @@
 export function saveUserChatHistory(chatHistoryObject) {
-  const chatHistory = async () => {
-    try {
-      const url = "http://localhost:3001/save-user-chat-history/";
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(chatHistoryObject),
-      });
+  return new Promise((resolve, reject) => {
+    const saveData = async () => {
+      try {
+        const url = "http://localhost:3001/save-user-chat-history/";
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(chatHistoryObject),
+        });
 
-      // Check if the response status indicates an error
-      if (!res.ok) {
-        throw new Error(`Server responded with status ${res.status}`);
+        // Check if the response status indicates an error
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+
+        resolve(); // Resolve the promise when the request is successful
+      } catch (error) {
+        // Handle the error
+        console.log("An error occurred while saving the file:", error);
+        reject(error); // Reject the promise with the error
       }
-    } catch (error) {
-      // Handle the error
-      console.log("An error occurred while saving the file:", error);
-      this.$store.commit("setSuccess", "");
-    }
-  };
+    };
 
-  return chatHistory;
+    saveData();
+  });
 }

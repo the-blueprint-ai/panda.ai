@@ -15,6 +15,7 @@ import UserSettings from "../components/userSettings.vue";
 export default defineComponent({
   data() {
     return {
+      overlay: false,
       opened: false,
       visible: false,
       historyMenu: true,
@@ -27,6 +28,13 @@ export default defineComponent({
       subscriptionMenuActive: false,
       dataMenuActive: false,
       settingsMenuActive: false,
+      formData: null,
+      usernames: [],
+      emails: [],
+      new_first_name: "",
+      new_last_name: "",
+      new_username: "",
+      new_email: "",
     };
   },
   computed: {
@@ -105,15 +113,116 @@ export default defineComponent({
     triggerAvatarUpload() {
       this.$refs.avatarInput.click();
     },
-    handleBannerUpload(event) {
+    async handleBannerUpload(event) {
       const file = event.target.files[0];
-      // Process the uploaded image file here
-      console.log("Banner");
+      this.formData = new FormData();
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async (e) => {
+        this.formData.append("file", file);
+
+        // Process the uploaded image file here
+        try {
+          const url =
+            "http://localhost:3001/users/banner/?user_id=" + this.userId;
+          const res = await fetch(url, {
+            method: "POST",
+            body: this.formData,
+          });
+
+          // Check if the response status indicates an error
+          if (!res.ok) {
+            const errorResponse = await res.json();
+            console.error("Server error response:", errorResponse);
+            throw new Error(`Server responded with status ${res.status}`);
+          }
+
+          // Parse the JSON response
+          const jsonResponse = await res.json();
+          this.setBanner(jsonResponse.url);
+        } catch (error) {
+          // Handle the error
+          this.setError("An error occurred while saving the file:", error);
+        }
+      };
     },
-    handleAvatarUpload(event) {
+    async handleAvatarUpload(event) {
       const file = event.target.files[0];
-      // Process the uploaded image file here
-      console.log("Avatar");
+      this.formData = new FormData();
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async (e) => {
+        this.formData.append("file", file);
+
+        // Process the uploaded image file here
+        try {
+          const url =
+            "http://localhost:3001/users/avatar/?user_id=" + this.userId;
+          const res = await fetch(url, {
+            method: "POST",
+            body: this.formData,
+          });
+
+          // Check if the response status indicates an error
+          if (!res.ok) {
+            const errorResponse = await res.json();
+            console.error("Server error response:", errorResponse);
+            throw new Error(`Server responded with status ${res.status}`);
+          }
+
+          // Parse the JSON response
+          const jsonResponse = await res.json();
+          this.setAvatar(jsonResponse.url);
+        } catch (error) {
+          // Handle the error
+          this.setError("An error occurred while saving the file:", error);
+        }
+      };
+    },
+    async updateUserData() {
+      if (this.new_first_name !== "") {
+        this.setFirstName(this.new_first_name);
+      }
+      if (this.new_last_name !== "") {
+        this.setLastName(this.new_last_name);
+      }
+      if (this.new_username !== "") {
+        this.setUsername(this.new_username);
+      }
+      if (this.new_email !== "") {
+        this.setEmail(this.new_email);
+      }
+      try {
+        const url =
+          "http://localhost:3001/users/update/?user_id=" +
+          this.userId +
+          "&first_name=" +
+          this.first_name +
+          "&last_name=" +
+          this.last_name +
+          "&username=" +
+          this.username +
+          "&email=" +
+          this.email;
+        const res = await fetch(url, {
+          method: "POST",
+        });
+
+        this.overlay = !this.overlay;
+        // Check if the response status indicates an error
+        if (!res.ok) {
+          const errorResponse = await res.json();
+          console.error("Server error response:", errorResponse);
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+      } catch (error) {
+        // Handle the error
+        this.setError("An error occurred while saving the file:", error);
+      }
+    },
+    activateOverlay() {
+      this.overlay = !this.overlay;
+      this.focusInput();
     },
     toggleHistory() {
       this.historyMenu = true;
@@ -196,14 +305,34 @@ export default defineComponent({
       <div v-if="session" class="accountWrapper">
         <div class="userBanner">
           <img v-bind:src="banner" />
-          <img src="../assets/camera2.svg" @click="triggerBannerUpload" class="bannerCamera" />
-          <input type="file" ref="bannerInput" accept="image/*" style="display:none;" @change="handleBannerUpload" />
+          <img
+            src="../assets/camera2.svg"
+            @click="triggerBannerUpload"
+            class="bannerCamera"
+          />
+          <input
+            type="file"
+            ref="bannerInput"
+            accept="image/*"
+            style="display: none"
+            @change="handleBannerUpload"
+          />
         </div>
         <div class="profileAvatar">
           <div class="accountAvatarBackground"></div>
           <img v-if="first_name" v-bind:src="avatar" class="accountAvatar" />
-          <img src="../assets/camera.svg" @click="triggerAvatarUpload" class="avatarCamera" />
-          <input type="file" ref="avatarInput" accept="image/*" style="display:none;" @change="handleAvatarUpload" />
+          <img
+            src="../assets/camera.svg"
+            @click="triggerAvatarUpload"
+            class="avatarCamera"
+          />
+          <input
+            type="file"
+            ref="avatarInput"
+            accept="image/*"
+            style="display: none"
+            @change="handleAvatarUpload"
+          />
         </div>
         <div class="profilePanel">
           <div class="userDetails">
@@ -230,17 +359,111 @@ export default defineComponent({
               Vivamus purus libero, vulputate id auctor non, vestibulum et enim.
             </p>
           </div>
+          <div id="overlay" class="overlay" :class="{ active: overlay }">
+            <div class="overlayContent">
+              <img
+                src="../assets/x.svg"
+                class="overlayCloseButton"
+                @click="activateOverlay"
+              />
+              <div class="overlayTitle">
+                <h2>Edit Your Details</h2>
+                <p>User ID: {{ this.userId }}</p>
+              </div>
+              <div class="overlayForm">
+                <form>
+                  <div class="overlayFormInput">
+                    <p>First Name:</p>
+                    <input
+                      id="firstName"
+                      v-model="new_first_name"
+                      :placeholder="first_name"
+                      type="text"
+                      name="firstName"
+                    />
+                  </div>
+                  <div class="overlayFormInput">
+                    <p>Last Name:</p>
+                    <input
+                      id="lastName"
+                      v-model="new_last_name"
+                      :placeholder="last_name"
+                      type="text"
+                      name="lastName"
+                    />
+                  </div>
+                  <div class="overlayFormInput">
+                    <p>Username:</p>
+                    <input
+                      id="username"
+                      v-model="new_username"
+                      :placeholder="username"
+                      type="text"
+                      name="username"
+                    />
+                  </div>
+                  <div class="overlayFormInput">
+                    <p>Email:</p>
+                    <input
+                      id="email"
+                      v-model="new_email"
+                      :placeholder="email"
+                      type="email"
+                      name="email"
+                    />
+                  </div>
+                </form>
+              </div>
+              <div class="overlayButtons">
+                <button class="chatButton" @click="updateUserData()">Save</button>
+              </div>
+            </div>
+          </div>
           <div class="editUserDetails">
-            <img src="../assets/three-dots-vertical.svg" class="profileEdit" />
+            <img
+              src="../assets/three-dots-vertical.svg"
+              class="profileEdit"
+              @click="activateOverlay"
+            />
           </div>
         </div>
         <div class="accountDetailsWrapper">
           <div class="accountDetailsMenu">
-            <button class="userChatHistoryMenuButton" :class="{active:historyMenuActive}" @click=this.toggleHistory>History</button>
-            <button class="userIntegrationsMenuButton" :class="{active:integrationsMenuActive}" @click=this.toggleIntegrations>Integrations</button>
-            <button class="userSubscriptionMenuButton" :class="{active:subscriptionMenuActive}" @click=this.toggleSubscription>Subscription</button>
-            <button class="userDataMenuButton" :class="{active:dataMenuActive}" @click=this.toggleData>Data</button>
-            <button class="userSettingsMenuButton" :class="{active:settingsMenuActive}" @click=this.toggleSettings>Settings</button>
+            <button
+              class="userChatHistoryMenuButton"
+              :class="{ active: historyMenuActive }"
+              @click="this.toggleHistory"
+            >
+              Chat History
+            </button>
+            <button
+              class="userIntegrationsMenuButton"
+              :class="{ active: integrationsMenuActive }"
+              @click="this.toggleIntegrations"
+            >
+              Integrations
+            </button>
+            <button
+              class="userSubscriptionMenuButton"
+              :class="{ active: subscriptionMenuActive }"
+              @click="this.toggleSubscription"
+            >
+              Subscription
+            </button>
+            <button
+              class="userDataMenuButton"
+              :class="{ active: dataMenuActive }"
+              @click="this.toggleData"
+            >
+              Data
+            </button>
+            <button
+              class="userSettingsMenuButton"
+              :class="{ active: settingsMenuActive }"
+              @click="this.toggleSettings"
+            >
+              Settings
+            </button>
           </div>
           <div class="userChatHistory">
             <UserChatHistory

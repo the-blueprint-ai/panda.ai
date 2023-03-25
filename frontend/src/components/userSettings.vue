@@ -14,6 +14,6 @@ export default {
 
 <template>
   <div class="userSettings" v-if="settingsMenu">
-    <h1>USER SETTINGS</h1>
+    <h1>COMING SOON...</h1>
   </div>
 </template>

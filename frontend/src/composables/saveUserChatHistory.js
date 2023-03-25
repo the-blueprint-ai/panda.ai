@@ -2,7 +2,7 @@ export function saveUserChatHistory(chatHistoryObject) {
   return new Promise((resolve, reject) => {
     const saveData = async () => {
       try {
-        const url = "http://localhost:3001/save-user-chat-history/";
+        const url = "http://localhost:3001/chats/save/";
         const res = await fetch(url, {
           method: "POST",
           headers: {

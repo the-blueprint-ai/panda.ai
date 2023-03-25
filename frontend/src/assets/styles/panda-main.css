@@ -280,11 +280,32 @@ span {
   justify-content: left;
   align-items: left;
 }
+.pandaChat.highlighted {
+  width: 99%;
+  background-color: #FFCB4C;
+  border-radius: 15px;
+}
 .userChat {
   background-color: #FFFFFF;
   text-align: left;
   display: flex;
   margin: 5px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: center;
+}
+.user.userChat {
+  background-color: #FFFFFF;
+  text-align: left;
+  display: flex;
+  margin: 5px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: center;
+}
+.userChat.highlighted {
+  background-color: #FFCB4C;
+  border-radius: 15px;
   flex-direction: row-reverse;
   justify-content: right;
   align-items: right;
@@ -644,6 +665,7 @@ span.typed-text {
 }
 .accountAvatar {
   display: flex;
+  height: 200px;
   width: 200px;
   border-radius: 50%;
   background-color: #FFFFFF;
@@ -873,16 +895,17 @@ span.typed-text {
   background-size: 1px 5px;
   cursor: pointer;
 }
-.activeChatClass {
+.chatHistoryTitle.active {
   background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
   background-position-y: 17px;
   background-repeat: repeat-x;
   background-size: 1px 5px;
   cursor: pointer;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .userIntegrations {
   display: flex;
-  width:1300px;
+  width: 1300px;
   justify-content: center;
 }
 .userIntegrations h1 {
@@ -912,13 +935,95 @@ span.typed-text {
 .userSettings h1 {
   color: #000000;
 }
-:root {
-  --popper-theme-background-color: #333333;
-  --popper-theme-background-color-hover: #333333;
-  --popper-theme-text-color: #ffffff;
-  --popper-theme-border-width: 0px;
-  --popper-theme-border-style: solid;
-  --popper-theme-border-radius: 10px;
-  --popper-theme-padding: 32px;
-  --popper-theme-box-shadow: 0px 15px 10px -15px #C8C8C8;
+.overlay {
+  display: none;
+}
+.overlay.active {
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  background-color: rgba(255,255,255,0.90);
+  overflow: hidden;
+}
+.overlay h2 {
+  color: #000000;
+}
+.overlayContent {
+  display: flex;
+  z-index: 2;
+  flex-direction: column;
+  background-color: #C8C8C8;
+  border-radius: 25px;
+  height: 500px;
+  width: 600px;
+  border: 5px solid #FFCB4C;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.overlayTitle {
+  border-bottom: 2px solid #000000;
+}
+.overlayTitle p {
+  margin-top: -15px;
+}
+.overlayContent {
+  margin: 20px;
+}
+.overlayForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: -50px;
+}
+.overlayFormInput{
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+  justify-content: center;
+}
+.overlayFormInput p {
+  margin-right: 20px;
+  width: 150px;
+  text-align: right;
+}
+.overlayFormInput input {
+  width: 200px;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  border-bottom: 2px solid #000000;
+  outline: none;
+}
+.overlayButtons {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.overlayCloseButton {
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 0px;;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 50%;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  height: 30px;
+  width: 30px;
+  margin-top: -25px;
+  margin-left: 570px;
+  position: absolute;
+  z-index: 3;
+  cursor: pointer;
 }

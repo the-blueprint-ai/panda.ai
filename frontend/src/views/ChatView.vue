@@ -6,11 +6,14 @@ import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import chatMessage from "../components/chatMessage.vue";
 import { getUserData } from "../composables/getUserData.js";
+import { getUserChatHistory } from "../composables/getUserChatHistory.js";
+import UserChatHistory from "../components/userChatHistory.vue";
 
 export default defineComponent({
   data() {
     return {
       messageToSend: "",
+      chatHistoryData: [],
     };
   },
   computed: {
@@ -48,6 +51,9 @@ export default defineComponent({
     chatHistory() {
       return this.$store.state.chatStore.chatHistory;
     },
+    userChatHistory() {
+      return this.$store.state.userStore.chatHistory;
+    },
     isDisabled() {
       return this.$store.state.chatStore.isDisabled;
     },
@@ -57,17 +63,28 @@ export default defineComponent({
     await this.getUserInfo();
     const { userData } = getUserData(this.userId, this.$store);
     userData(this.userId);
+    const { userChatHistory } = getUserChatHistory(this.userId, this.$store);
+    userChatHistory(this.userId);
+    // await this.getSession();
+    // await this.getUserInfo();
+    // const { userData } = getUserData(this.userId, this.$store);
+    // userData(this.userId);
+    // const { userChatHistory } = getUserChatHistory(this.userId, this.$store);
+    // userChatHistory(this.userId).then((data) => {
+    //   this.chatHistoryData = data;
+    //   console.log("Fetched user chat history:", this.chatHistoryData);
+    // });
   },
   methods: {
-    ...mapActions(['getSession', 'getUserInfo']),
+    ...mapActions(["getSession", "getUserInfo"]),
     setInputIsVisibleValue(value) {
-      this.$store.commit('setInputIsVisible', value)
+      this.$store.commit("setInputIsVisible", value);
     },
     addToChatHistory(value) {
-      this.$store.commit('setChatHistory', value)
+      this.$store.commit("setChatHistory", value);
     },
     setIsDisabledValue(value) {
-      this.$store.commit('setIsDisabled', value)
+      this.$store.commit("setIsDisabled", value);
     },
     redirectToLogin() {
       window.location.href = "/auth";
@@ -115,6 +132,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    UserChatHistory,
     chatMessage,
   },
 });
@@ -124,43 +142,20 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div class="bodyG">
-      <div v-if="session">
+      <div>
         <div class="mainContainer">
           <div class="chatHistoryContainer">
             <h2>Chat History</h2>
-            <div class="chatHistory">
-              <p class="history">+ Today</p>
-              <p class="history">+ Yesterday</p>
-              <p class="history">+ Day before</p>
-              <p class="history">+ Day before that</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ scroll...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
-              <p class="history">+ ...</p>
+            <div v-if="userChatHistory && userChatHistory.length" class="chatHistory">
+              <UserChatHistory
+                :user-chat-history="userChatHistory"
+              ></UserChatHistory>
             </div>
-            <button :disabled='isDisabled' class="startNewChat" @click="startNewChat">
+            <button
+              :disabled="isDisabled"
+              class="startNewChat"
+              @click="startNewChat"
+            >
               Start new chat
             </button>
           </div>
@@ -177,7 +172,7 @@ export default defineComponent({
               <img v-bind:src="avatar" class="chatAvatar" />
               <div class="userInput">
                 <textarea
-                  :disabled='isDisabled'
+                  :disabled="isDisabled"
                   class="input"
                   v-model="messageToSend"
                   @keydown.enter.stop.prevent="submitMessage()"
@@ -186,7 +181,12 @@ export default defineComponent({
                   placeholder="enter your message here"
                   ref="messageInput"
                 ></textarea>
-                <button :disabled='isDisabled' class="chatButton" id="sendButton"  @click="submitMessage()">
+                <button
+                  :disabled="isDisabled"
+                  class="chatButton"
+                  id="sendButton"
+                  @click="submitMessage()"
+                >
                   Send
                 </button>
               </div>

@@ -7,3 +7,4 @@ sqlalchemy
 asyncpg
 databases
 cryptography
+python-dotenv

@@ -12,11 +12,19 @@ export default {
       chatHistorySearch: "",
     };
   },
+  props: {
+    historyMenu: Boolean,
+    userChatHistory: {
+      type: Array,
+      required: true,
+    },
+  },
   watch: {
     userChatHistory: {
       deep: true,
       immediate: true,
       handler(newVal) {
+        console.log("Received user chat history:", newVal);
         if (newVal && newVal.length > 0 && newVal[0].length > 0) {
           // Initialize isVisible property for each item in userChatHistory
           this.visibilityStates = newVal[0].map(() => false);
@@ -33,10 +41,6 @@ export default {
       },
     },
   },
-  props: {
-    historyMenu: Boolean,
-    userChatHistory: Array,
-  },
   computed: {
     reversedChatData() {
       if (
@@ -47,6 +51,30 @@ export default {
         return this.userChatHistory[0].slice().reverse();
       }
       return [];
+    },
+    filteredChatData() {
+      if (this.chatHistorySearch.trim() === "") {
+        return this.reversedChatData;
+      }
+
+      const searchTerm = this.chatHistorySearch.trim().toLowerCase();
+
+      return this.reversedChatData
+        .map((day) => {
+          const filteredChats = day.chats.filter((chat) =>
+            chat.content.some((contentItem) =>
+              contentItem.message.toLowerCase().includes(searchTerm)
+            )
+          );
+
+          if (filteredChats.length > 0) {
+            return {
+              ...day,
+              chats: filteredChats,
+            };
+          }
+        })
+        .filter((item) => item);
     },
   },
   methods: {
@@ -74,7 +102,7 @@ export default {
       <ul>
         <li
           class="chatHistoryDay"
-          v-for="(item, index) in reversedChatData"
+          v-for="(item, index) in filteredChatData"
           :key="index"
         >
           <span @click="toggleVisibility(index)">{{
@@ -84,13 +112,21 @@ export default {
           <ul v-show="visibilityStates[index]">
             <li
               class="chatHistoryTimeTitle"
+              :class="{ active: activeChat === chat }"
               v-for="(chat, chatIndex) in item.chats"
               :key="chatIndex"
             >
-              <span class="chatHistoryTime" @click="selectedChat = chat"
+              <span
+                class="chatHistoryTime"
+                @click="activeChat = selectedChat = chat"
                 >{{ chat.time }}:</span
               >
-              <span class="chatHistoryTitle" @click="selectedChat = chat; activeChat = chat;">{{ chat.title }}</span>
+              <span
+                class="chatHistoryTitle"
+                :class="{ active: chat === activeChat }"
+                @click="activeChat = selectedChat = chat"
+                >{{ chat.title }}</span
+              >
             </li>
           </ul>
         </li>
@@ -103,6 +139,7 @@ export default {
           :message="contentItem"
           :class="contentItem.user + 'Chat'"
           :key="contentIndex"
+          :searchTerm="chatHistorySearch"
         ></chatMessage>
       </span>
     </div>

@@ -2,10 +2,20 @@
 export default {
   props: {
     message: Object,
+    searchTerm: String,
   },
   computed: {
     avatar() {
       return this.$store.state.userStore.avatar;
+    },
+    containsSearchTerm() {
+      if (this.searchTerm.trim() === "") return false;
+      return this.message.message
+        .toLowerCase()
+        .includes(this.searchTerm.trim().toLowerCase());
+    },
+    messageClass() {
+      return this.containsSearchTerm ? "highlighted" : "";
     },
   },
   methods: {
@@ -23,7 +33,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div :class="['chatMessage', message.user, messageClass]">
     <img v-bind:src="messageImage()" class="chatAvatar" />
     <p class="message">{{ message.message }}</p>
   </div>

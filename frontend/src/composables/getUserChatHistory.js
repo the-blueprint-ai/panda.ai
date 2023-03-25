@@ -4,7 +4,7 @@ export function getUserChatHistory(userId, store) {
   const userChatHistory = async () => {
     try {
       const url =
-        "http://localhost:3001/get-user-chat-history/?user_id=" + userId;
+        "http://localhost:3001/chats/get/?user_id=" + userId;
       const res = await fetch(url, {
         method: "GET",
       });
@@ -53,6 +53,9 @@ export function getUserChatHistory(userId, store) {
         });
       }
       store.commit("setUserChatHistory", chatHistory);
+      // Return the chat history
+      return chatHistory;
+
     } catch (error) {
       console.log("An error occurred while saving the file:", error);
     }

@@ -6,7 +6,7 @@ import AccountView from "../views/AccountView.vue";
 import ChatView from "../views/ChatView.vue";
 import OnboardingView from "../views/OnboardingView.vue";
 import AboutView from "../views/AboutView.vue";
-import LoginView from "../views/LoginView.vue";
+import SignInView from "../views/SignInView.vue";
 import SignUpView from "../views/SignUpView.vue";
 import RoadmapView from "../views/RoadmapView.vue";
 import PrivacyView from "../views/PrivacyView.vue";
@@ -37,9 +37,9 @@ const router = createRouter({
       component: notFoundView,
     },
     {
-      path: "/login",
-      name: "login",
-      component: LoginView,
+      path: "/signin",
+      name: "signin",
+      component: SignInView,
     },
     {
       path: "/signup",

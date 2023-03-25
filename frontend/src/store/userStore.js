@@ -11,6 +11,10 @@ const userStore = {
     avatar: "../../src/assets/user.png",
     banner: "",
     joined: "",
+    about: "",
+    onboarded: false,
+    subscriber: false,
+    admin: false,
     userChatHistory: [],
   },
   mutations: {
@@ -40,6 +44,18 @@ const userStore = {
     },
     setJoined(state, value) {
       state.joined = value;
+    },
+    setAbout(state, value) {
+      state.about = value;
+    },
+    setOnboarded(state, value) {
+      state.onboarded = value;
+    },
+    setSubscriber(state, value) {
+      state.subscriber = value;
+    },
+    setAdmin(state, value) {
+      state.admin = value;
     },
     setUserChatHistory(state, value) {
       state.userChatHistory.push(value);

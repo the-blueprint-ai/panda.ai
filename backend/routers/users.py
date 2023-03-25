@@ -115,7 +115,7 @@ async def save_user_avatar_route(user_id: str, file: UploadFile = File(...)):
 
 # FUNCTIONS
 async def get_user_data(user_id: str):
-    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner FROM panda_ai_users WHERE user_id = :user_id"
+    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 
@@ -127,6 +127,10 @@ async def get_user_data(user_id: str):
         decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
         avatar = result["avatar"]
         banner = result["banner"]
+        about = result["about"]
+        onboarded = result["onboarded"]
+        subscriber = result["subscriber"]
+        admin = result["admin"]
         
 
         return {
@@ -138,6 +142,10 @@ async def get_user_data(user_id: str):
             "email": decrypted_email,
             "avatar": avatar,
             "banner": banner,
+            "about": about,
+            "onboarded": onboarded,
+            "subscriber": subscriber,
+            "admin": admin,
         }
     else:
         return None

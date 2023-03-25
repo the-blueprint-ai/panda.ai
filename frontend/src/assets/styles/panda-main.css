@@ -36,7 +36,7 @@ span {
   flex-direction: column;
   justify-content: left;
   align-items: center;
-  /* height: 115vh; */
+  min-height: 78vh;
   font-family: "Monaco";
 }
 .bodyG h3 {
@@ -645,6 +645,177 @@ span.typed-text {
   text-decoration: underline;
   cursor: pointer;
 }
+.signInContainer {
+  height: 900px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #000000;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.signInContainerTitle {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+}
+.signInContainerTitle img {
+  width: 70px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.signInContainerTitle h2 {
+  margin: 0px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 28px;
+  color: #FFFFFF;
+}
+.signInContainerTitle h3 {
+  margin: 0px;
+  margin-top: -15px;
+  text-align: center;
+  font-size: 18px;
+  color: #FFFFFF;
+}
+.signInContainerTitle p {
+  margin: 0px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #FFCB4C;
+}
+.signInContainerTitle p:hover {
+  cursor: pointer;
+}
+.signInBar {
+  height: 1px;
+  width: 95%;
+  margin-top: 10px;
+  background-color: #FFFFFF;
+}
+.thirdPartySignIn {
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.thirdPartyButton {
+  height: 35px;
+  width: 65%;
+  margin: 10px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 10px;
+  text-transform: uppercase;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.thirdPartyButton:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.thirdPartyButton img {
+  margin-left: 40px;
+  margin-right: 12px;
+  width: 20px;
+}
+.signInOption {
+  height: 50px;
+  width: 70px;
+  background-color: #000000;
+  margin: 0px;
+  padding: 0px;
+  margin-top: -15px;
+}
+.signInOption p {
+  margin: 0px;
+  padding: 0px;
+  background-color: #000000;
+  color: #FFFFFF;
+  font-size: 20px;
+}
+.emailPassword {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 75%;
+}
+.emailPassword h2 {
+  text-align: left;
+  font-size: 16px;
+}
+.emailPassword h3 {
+  margin-top: 20px;
+  margin-bottom: 33px;
+  text-align: center;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.emailPassword h3:hover {
+  color: #FFCB4C;
+  cursor: pointer;
+}
+.emailPassword h4 {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 16px;
+  color: #FFFFFF;
+}
+.emailPassword h5 {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 16px;
+  color: #FFFFFF;
+}
+.emailPassword h5:hover {
+  color: #FFCB4C;
+  cursor: pointer;
+}
+.emailPassword input {
+  height: 30px;
+  width: 90%;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 15px;
+  border: 2px solid #FFFFFF;
+  border-radius: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+}
+.emailPassword input:focus {
+  outline: none;
+}
+.emailPassword button {
+  height: 50px;
+  width: 97%;
+  margin-top: 20px;
+  background-color: #FFCB4C;
+  margin-bottom: 10px;
+  font-family: "Monaco";
+  font-size: 18px;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.emailPassword button:hover {
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
 .aboutContainer {
   width: 1200px;
   margin-top: 50px;
@@ -920,6 +1091,7 @@ span.typed-text {
   width: 50px;
   padding-right: 50px;
   display: flex;
+  flex-grow: 2;
   justify-content: end;
   align-items: start;
   padding-top: 40px;

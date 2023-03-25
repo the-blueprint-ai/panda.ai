@@ -62,6 +62,18 @@ export default defineComponent({
     banner() {
       return this.$store.state.userStore.banner;
     },
+    about() {
+      return this.$store.state.userStore.about;
+    },
+    onboarded() {
+      return this.$store.state.userStore.onboarded;
+    },
+    subscriber() {
+      return this.$store.state.userStore.subscriber;
+    },
+    admin() {
+      return this.$store.state.userStore.admin;
+    },
     joined() {
       return this.$store.state.userStore.joined;
     },
@@ -344,20 +356,9 @@ export default defineComponent({
               Let's Chat
             </button>
           </div>
-          <div class="aboutDetails">
+          <div v-if="about" class="aboutDetails">
             <h2>ABOUT</h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              aliquet elit augue, at feugiat leo pulvinar nec. Maecenas
-              consequat, elit a ornare dignissim, justo lorem auctor lectus, et
-              accumsan urna urna ac est. Phasellus convallis quam eros, et
-              tincidunt mauris iaculis at. Orci varius natoque penatibus et
-              magnis dis parturient montes, nascetur ridiculus mus. Vestibulum
-              ultrices sodales condimentum. Fusce rutrum hendrerit dignissim.
-              Aenean non nibh vestibulum, gravida lectus quis, pharetra nulla.
-              Aenean blandit diam porta, ullamcorper neque quis, maximus urna.
-              Vivamus purus libero, vulputate id auctor non, vestibulum et enim.
-            </p>
+            <p>{{ about }}</p>
           </div>
           <div id="overlay" class="overlay" :class="{ active: overlay }">
             <div class="overlayContent">

@@ -23,6 +23,10 @@ export function getUserData(userId, store) {
       store.commit("setEmail", response.email);
       store.commit("setAvatar", response.avatar);
       store.commit("setBanner", response.banner);
+      store.commit("setAbout", response.about);
+      store.commit("setOnboarded", response.onboarded);
+      store.commit("setSubscriber", response.subscriber);
+      store.commit("setAdmin", response.admin);
       var dt = DateTime.fromISO(response.created_at);
       store.commit("setJoined", dt.toLocaleString(DateTime.DATE_FULL));
     } catch (error) {

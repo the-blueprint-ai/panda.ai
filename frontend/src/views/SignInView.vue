@@ -5,14 +5,11 @@ import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
   methods: {
-    toSignIn() {
-      this.$router.push("/signin");
+    toSignUp() {
+      this.$router.push("/signup");
     },
-    toToS() {
-      this.$router.push("/terms-of-service");
-    },
-    toPP() {
-      this.$router.push("/privacy-policy");
+    toForgotPassword() {
+      this.$router.push("/");
     },
   },
   components: {
@@ -29,9 +26,9 @@ export default defineComponent({
       <div class="signInContainer">
         <div class="signInContainerTitle">
           <img src="../assets/panda.png" />
-          <h2>SIGN UP</h2>
-          <h3>ALREADY HAVE AN ACCOUNT?</h3>
-          <p @click="toSignIn()">SIGN IN</p>
+          <h2>SIGN IN</h2>
+          <h3>NOT REGISTERED YET?</h3>
+          <p @click="toSignUp()">SIGN UP</p>
         </div>
         <div class="signInBar"></div>
         <div class="emailPassword">
@@ -39,10 +36,8 @@ export default defineComponent({
           <Input></Input>
           <h2>Password</h2>
           <Input></Input>
-          <button>SIGN UP</button>
-          <h4>BY CONTINUING YOU AGREE TO OUR:</h4>
-          <h5 @click="toToS()">TERMS OF SERVICE</h5>
-          <h5 @click="toPP()">PRIVACY POLICY</h5>
+          <button>SIGN IN</button>
+          <h3 @click="toForgotPassword()">FORGOT PASSWORD?</h3>
         </div>
         <div class="signInBar"></div>
         <div class="signInOption"><p>OR</p></div>

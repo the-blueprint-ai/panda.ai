@@ -14,7 +14,9 @@ export default defineComponent({
     <navBar></navBar>
     <div class="body">
       <div>
-        <h1>SUPPORT</h1>
+        <h1>🐼</h1>
+        <h1>SUPPORT PAGE</h1>
+        <h2>COMING SOON...</h2>
       </div>
     </div>
   </main>

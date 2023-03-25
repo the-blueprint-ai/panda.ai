@@ -9,7 +9,7 @@ body {
   flex-direction: column;
   justify-content: left;
   align-items: center;
-  height: 78vh;
+  min-height: 78vh;
   font-family: "Monaco";
 }
 h1 {
@@ -640,6 +640,91 @@ span.typed-text {
   margin-top: 0px;
   margin-left: 2px;
   margin-bottom: 8px;
+}
+.aboutContainer {
+  width: 1200px;
+  margin-top: 50px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+}
+.aboutContainer h2 {
+  width: 100%;
+  margin: 0;
+  margin-bottom: 0px;
+  text-align: left;
+}
+.aboutContainer h3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.aboutContainer p {
+  margin-bottom: 30px;
+}
+.aboutContainer ol {
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+.aboutContainer ol p {
+  margin-top: 5px;
+  text-transform: none;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+.aboutContainerLine {
+  height: 1px;
+  width: 100%;
+  margin: 0px;
+  margin-top: 15px;
+  margin-bottom: 40px;
+  display: flex;
+  background-color: #FFFFFF;
+}
+.aboutBox {
+  width: 550px;
+  margin-top: -10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 2px #FFFFFF;
+  border-radius: 10px;
+}
+.aboutBox ol {
+  margin-top: -25px;
+}
+.privacyPolicyContainer {
+  width: 1200px;
+  margin-top: 50px;
+  padding: 20px;
+  margin-bottom: 70px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+}
+.privacyPolicyContainer h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+}
+.privacyPolicyContainer h3 {
+  width: 100%;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 22px;
+}
+.privacyPolicyContainer a {
+  color: #FFFFFF;
 }
 .dropzone {
   height: fit-content;

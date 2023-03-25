@@ -71,7 +71,7 @@ export default {
 <template>
   <div class="navbar">
     <div class="navbar-top">
-      <div class="brand-holder">
+      <div class="brandHolder">
         <router-link to="/">
           <img class="logo" src="../../src/assets/panda.png" width="50" />
         </router-link>

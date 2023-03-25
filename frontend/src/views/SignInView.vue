@@ -33,9 +33,9 @@ export default defineComponent({
         <div class="signInBar"></div>
         <div class="emailPassword">
           <h2>Email</h2>
-          <Input></Input>
+          <input ref="email" type="text" placeholder="kung-fu@panda.ai" />
           <h2>Password</h2>
-          <Input></Input>
+          <input ref="password" type="password" placeholder="sKad00sh" />
           <button>SIGN IN</button>
           <h3 @click="toForgotPassword()">FORGOT PASSWORD?</h3>
         </div>

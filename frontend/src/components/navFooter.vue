@@ -20,9 +20,9 @@ export default {};
         </div>
         <div class="socialsHolder">
           <img src="../assets/icons/discord.svg" />
-          <img src="../assets/icons/envelope-at-fill.svg" />
           <img src="../assets/icons/twitter.svg" />
           <img src="../assets/icons/linkedin.svg" />
+          <img src="../assets/icons/envelope-at-fill.svg" />
         </div>
         <h3>© panda.ai 2023</h3>
       </div>

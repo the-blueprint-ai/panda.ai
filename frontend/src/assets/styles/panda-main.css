@@ -585,12 +585,14 @@ span.typed-text {
 }
 .brandText h2 {
   margin: 0;
+  margin-top: -5px;
   font-size: 20px;
   text-transform: lowercase;
   color: #000000;
 }
 .brandText p {
   margin: 0;
+  margin-top: 0px;
   font-size: 16px;
   text-transform: lowercase;
   color: #000000;
@@ -614,13 +616,19 @@ span.typed-text {
 .footerMenus {
   display: flex;
   flex-grow: 4;
-  justify-content: end;
+  justify-content: flex-end;
+  align-content: space-around;
+  column-gap: 100px;
   margin-left: 20px;
   margin-right: 0px;
   padding-top: 10px;
 }
 .singleMenu {
-  width: 200px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: start;
 }
 .singleMenu h2 {
   color: #000000;

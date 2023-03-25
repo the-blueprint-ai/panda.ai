@@ -143,7 +143,7 @@ export default defineComponent({
     <div class="bodyG">
       <div>
         <div class="mainContainer">
-          <div class="chatHistoryContainer">
+          <div v-if="userChatHistory" class="chatHistoryContainer">
             <h2>Chat History</h2>
             <div v-if="userChatHistory && userChatHistory.length" class="chatHistory">
               <UserChatHistory

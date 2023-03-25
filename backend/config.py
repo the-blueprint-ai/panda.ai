@@ -1,3 +1,7 @@
+from pydantic import BaseSettings
+from dotenv import dotenv_values
+import os
+
 from supertokens_python.recipe import session, thirdpartyemailpassword, dashboard, emailverification, usermetadata
 from supertokens_python.recipe.thirdpartyemailpassword import (
     Apple,
@@ -8,9 +12,6 @@ from supertokens_python import (
     InputAppInfo,
     SupertokensConfig,
 )
-from pydantic import BaseSettings
-from dotenv import dotenv_values
-import os
 
 # Python Environment Variable setup required on System or .env file
 config_env = {
@@ -47,7 +48,6 @@ class Settings(BaseSettings):
 
 # global instance
 settings = Settings()
-
 
 # This is the location of the SuperTokens core.
 supertokens_config = SupertokensConfig(

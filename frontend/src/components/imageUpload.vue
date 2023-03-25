@@ -114,7 +114,7 @@ export default {
     },
     save: async function () {
       try {
-        const url = "http://localhost:3001/uploadimage/?userid=" + this.userId;
+        const url = import.meta.env.VITE_APP_API_URL + "/uploadimage/?userid=" + this.userId;
         const res = await fetch(url, {
           method: "POST",
           body: this.formData,

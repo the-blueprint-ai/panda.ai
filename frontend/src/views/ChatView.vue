@@ -107,9 +107,8 @@ export default defineComponent({
       // Add code to update the chat history database
     },
     saveChatHistory: async function () {
-      console.log(JSON.stringify(this.chatHistoryObject));
       try {
-        const url = "http://localhost:3001/save-user-chat-history/";
+        const url = import.meta.env.VITE_APP_API_URL + "/chats/save/";
         const res = await fetch(url, {
           method: "POST",
           headers: {

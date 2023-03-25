@@ -7,6 +7,7 @@ from databases import Database
 import logging
 import boto3
 from io import BytesIO
+import os
 
 # CONFIG
 router = APIRouter(
@@ -48,6 +49,9 @@ async def get_user_data_route(user_id: str):
             return response
         else:
             raise HTTPException(status_code=404, detail="User not found")
+    except HTTPException as e:
+        logger.error(f"HTTPException in get_user_data_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
     except Exception as e:
         logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
@@ -59,8 +63,11 @@ async def save_user_data_route(user_id, first_name, last_name, username, email, 
         if "error" in response:
             raise HTTPException(status_code=500, detail=response["error"])
         return {"message": "User data saved successfully"}
+    except HTTPException as e:
+        logger.error(f"HTTPException in save_user_data_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
     except Exception as e:
-        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in save_user_data_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.post("/update")
@@ -70,8 +77,11 @@ async def update_user_data_route(user_id, first_name, last_name, username, email
         if "error" in response:
             raise HTTPException(status_code=500, detail=response["error"])
         return {"message": "User data updated successfully"}
+    except HTTPException as e:
+        logger.error(f"HTTPException in update_user_data_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
     except Exception as e:
-        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in update_user_data_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.post("/banner")
@@ -81,8 +91,11 @@ async def save_user_banner_route(user_id: str, file: UploadFile = File(...)):
         if "error" in response:
             raise HTTPException(status_code=500, detail=response["error"])
         return {"message": "Banner saved successfully", "url": response["url"]}
+    except HTTPException as e:
+        logger.error(f"HTTPException in save_user_banner_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
     except Exception as e:
-        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in save_user_banner_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.post("/avatar")
@@ -92,8 +105,11 @@ async def save_user_avatar_route(user_id: str, file: UploadFile = File(...)):
         if "error" in response:
             raise HTTPException(status_code=500, detail=response["error"])
         return {"message": "Avatar saved successfully", "url": response["url"]}
+    except HTTPException as e:
+        logger.error(f"HTTPException in save_user_avatar_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
     except Exception as e:
-        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in save_user_avatar_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 
@@ -186,7 +202,7 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
         # Return the public URL of the uploaded file
         response = {
             "message": "Banner uploaded successfully",
-            "url": f"https://{S3_BUCKET}.s3.amazonaws.com/{folder}{file_extension}",
+            "url": f"https://s3.eu-west-2.amazonaws.com/{S3_BUCKET}/{folder}{file_extension}",
         }
         banner = response["url"]
     
@@ -201,11 +217,11 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}
-        return JSONResponse(content=response, status_code=400)
+        return response
     
     except Exception as e:
         response = {"error": str(e)}
-        return JSONResponse(content=response, status_code=400)
+        return response
 
     return response
 
@@ -227,7 +243,7 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
         # Return the public URL of the uploaded file
         response = {
             "message": "Avatar uploaded successfully",
-            "url": f"https://{S3_BUCKET}.s3.amazonaws.com/{folder}{file_extension}",
+            "url": f"https://s3.eu-west-2.amazonaws.com/{S3_BUCKET}/{folder}{file_extension}",
         }
         avatar = response["url"]
     
@@ -242,10 +258,10 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}
-        return JSONResponse(content=response, status_code=400)
+        return response
     
     except Exception as e:
         response = {"error": str(e)}
-        return JSONResponse(content=response, status_code=400)
+        return response
     
     return response

@@ -124,7 +124,7 @@ export default defineComponent({
         // Process the uploaded image file here
         try {
           const url =
-            "http://localhost:3001/users/banner/?user_id=" + this.userId;
+            import.meta.env.VITE_APP_API_URL + "/users/banner/?user_id=" + this.userId;
           const res = await fetch(url, {
             method: "POST",
             body: this.formData,
@@ -142,7 +142,7 @@ export default defineComponent({
           this.setBanner(jsonResponse.url);
         } catch (error) {
           // Handle the error
-          this.setError("An error occurred while saving the file:", error);
+          console.error("An error occurred while saving the file:", error);
         }
       };
     },
@@ -157,7 +157,7 @@ export default defineComponent({
         // Process the uploaded image file here
         try {
           const url =
-            "http://localhost:3001/users/avatar/?user_id=" + this.userId;
+            import.meta.env.VITE_APP_API_URL + "/users/avatar/?user_id=" + this.userId;
           const res = await fetch(url, {
             method: "POST",
             body: this.formData,
@@ -175,7 +175,7 @@ export default defineComponent({
           this.setAvatar(jsonResponse.url);
         } catch (error) {
           // Handle the error
-          this.setError("An error occurred while saving the file:", error);
+          console.error("An error occurred while saving the file:", error);
         }
       };
     },
@@ -194,7 +194,7 @@ export default defineComponent({
       }
       try {
         const url =
-          "http://localhost:3001/users/update/?user_id=" +
+          import.meta.env.VITE_APP_API_URL + "/users/update/?user_id=" +
           this.userId +
           "&first_name=" +
           this.first_name +
@@ -217,7 +217,7 @@ export default defineComponent({
         }
       } catch (error) {
         // Handle the error
-        this.setError("An error occurred while saving the file:", error);
+        console.error("An error occurred while saving the file:", error);
       }
     },
     activateOverlay() {

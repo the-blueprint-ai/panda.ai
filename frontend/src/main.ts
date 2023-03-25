@@ -12,7 +12,7 @@ SuperTokens.init(SuperTokensWebJSConfig);
 const app = createApp(App);
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "http://localhost:3001"; // the FastAPI backend
+axios.defaults.baseURL = process.env.VITE_APP_API_URL;
 
 app.use(router);
 app.use(store);

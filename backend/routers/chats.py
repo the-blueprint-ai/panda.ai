@@ -40,7 +40,7 @@ async def get_user_chat_history_route(user_id: str):
         else:
             raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:
-        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in get_user_chat_history_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.post("/save")
@@ -51,7 +51,7 @@ async def save_user_chat_history_route(user_id: str, chat_script: str):
             raise HTTPException(status_code=500, detail=response["error"])
         return {"message": "Data saved successfully"}
     except Exception as e:
-        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in save_user_chat_history_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 

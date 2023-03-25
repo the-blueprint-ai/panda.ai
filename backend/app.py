@@ -15,7 +15,6 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 
 import boto3
 from io import BytesIO
-
 import os
 import logging
 from databases import Database
@@ -81,7 +80,7 @@ async def secure_api(s: SessionContainer = Depends(verify_session())):
 # Test API
 @app.get("/test")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello World", "token": token}
 
 # Avatar Image APIs
 @app.post("/uploadimage/")

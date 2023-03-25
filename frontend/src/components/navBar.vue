@@ -100,11 +100,7 @@ export default {
         </div>
         <div class="menu-icon">
           <router-link to="/roadmap">
-            <img
-              src="../../src/assets/geo.svg"
-              class="homesvg"
-              alt="roadmap"
-            />
+            <img src="../../src/assets/geo.svg" class="homesvg" alt="roadmap" />
           </router-link>
           <p>roadmap</p>
         </div>
@@ -137,9 +133,7 @@ export default {
             </router-link>
             <div class="dropdown-bar"></div>
             <div v-if="session">
-              <button class="dropdown-button" @click="onLogout">
-                Logout
-              </button>
+              <button class="dropdown-button" @click="onLogout">Logout</button>
             </div>
             <div v-else>
               <router-link to="/auth">

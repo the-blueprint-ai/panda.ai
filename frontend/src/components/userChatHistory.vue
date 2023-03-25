@@ -24,7 +24,6 @@ export default {
       deep: true,
       immediate: true,
       handler(newVal) {
-        console.log("Received user chat history:", newVal);
         if (newVal && newVal.length > 0 && newVal[0].length > 0) {
           // Initialize isVisible property for each item in userChatHistory
           this.visibilityStates = newVal[0].map(() => false);

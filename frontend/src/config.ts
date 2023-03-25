@@ -10,9 +10,9 @@ import { getUserChatHistory } from "./composables/getUserChatHistory.js";
 
 export const SuperTokensReactConfig = {
   appInfo: {
-    appName: "panda.ai",
-    apiDomain: "http://localhost:3001",
-    websiteDomain: "http://localhost:3000",
+    appName: import.meta.env.VITE_APP_APP_NAME,
+    apiDomain: import.meta.env.VITE_APP_API_URL,
+    websiteDomain: import.meta.env.VITE_APP_BASE_URL,
   },
   recipeList: [
     ThirdPartyEmailPasswordReact.init({
@@ -20,8 +20,8 @@ export const SuperTokensReactConfig = {
       signInAndUpFeature: {
         providers: [Github.init(), Google.init(), Apple.init()],
         signUpForm: {
-          termsOfServiceLink: "http://localhost:3000/terms-of-service",
-          privacyPolicyLink: "http://localhost:3000/privacy-policy",
+          termsOfServiceLink: import.meta.env.VITE_APP_TOS_LINK,
+          privacyPolicyLink: import.meta.env.VITE_APP_PP_LINK,
         },
       },
       getRedirectionURL: async (context) => {
@@ -85,8 +85,8 @@ export const SuperTokensReactConfig = {
 
 export const SuperTokensWebJSConfig = {
   appInfo: {
-    appName: "panda.ai",
-    apiDomain: "http://localhost:3001",
+    appName: import.meta.env.VITE_APP_APP_NAME,
+    apiDomain: import.meta.env.VITE_APP_API_URL,
   },
   recipeList: [EmailVerification.init(), Session.init()],
 };

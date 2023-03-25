@@ -2,7 +2,7 @@ export function saveUserChatHistory(chatHistoryObject) {
   return new Promise((resolve, reject) => {
     const saveData = async () => {
       try {
-        const url = "http://localhost:3001/chats/save/";
+        const url = import.meta.env.VITE_APP_API_URL + "/chats/save/";
         const res = await fetch(url, {
           method: "POST",
           headers: {

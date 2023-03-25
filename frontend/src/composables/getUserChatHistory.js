@@ -4,7 +4,7 @@ export function getUserChatHistory(userId, store) {
   const userChatHistory = async () => {
     try {
       const url =
-        "http://localhost:3001/chats/get/?user_id=" + userId;
+        import.meta.env.VITE_APP_API_URL + "/chats/get/?user_id=" + userId;
       const res = await fetch(url, {
         method: "GET",
       });

@@ -2,7 +2,7 @@ export function saveUserData(userData) {
   return new Promise((resolve, reject) => {
     const saveData = async () => {
       try {
-        const url = "http://localhost:3001/users/save/";
+        const url = import.meta.env.VITE_APP_API_URL + "/users/save/";
         const res = await fetch(url, {
           method: "POST",
           headers: {

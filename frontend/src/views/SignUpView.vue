@@ -145,7 +145,7 @@ export default defineComponent({
           />
           <h6 v-if="emailExistsError">{{ emailExistsError }}</h6>
           <h2>Password</h2>
-          <input ref="password" v-model="this.password" type="text" placeholder="sKad00sh" />
+          <input ref="password" v-model="this.password" type="password" placeholder="sKad00sh" />
           <button @click="signUpClicked(this.email, this.password)">
             SIGN UP
           </button>

@@ -306,7 +306,7 @@ export default defineComponent({
         <div class="userBanner">
           <img v-bind:src="banner" />
           <img
-            src="../assets/camera2.svg"
+            src="../assets/icons/camera2.svg"
             @click="triggerBannerUpload"
             class="bannerCamera"
           />
@@ -322,7 +322,7 @@ export default defineComponent({
           <div class="accountAvatarBackground"></div>
           <img v-if="first_name" v-bind:src="avatar" class="accountAvatar" />
           <img
-            src="../assets/camera.svg"
+            src="../assets/icons/camera.svg"
             @click="triggerAvatarUpload"
             class="avatarCamera"
           />
@@ -362,7 +362,7 @@ export default defineComponent({
           <div id="overlay" class="overlay" :class="{ active: overlay }">
             <div class="overlayContent">
               <img
-                src="../assets/x.svg"
+                src="../assets/icons/x.svg"
                 class="overlayCloseButton"
                 @click="activateOverlay"
               />
@@ -421,7 +421,7 @@ export default defineComponent({
           </div>
           <div class="editUserDetails">
             <img
-              src="../assets/three-dots-vertical.svg"
+              src="../assets/icons/three-dots-vertical.svg"
               class="profileEdit"
               @click="activateOverlay"
             />

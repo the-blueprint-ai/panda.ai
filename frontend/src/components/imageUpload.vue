@@ -174,7 +174,7 @@ export default {
     </p>
     <div v-if="this.preview">
       <img
-        src="../assets/x-circle.svg"
+        src="../assets/icons/x-circle.svg"
         class="cancelButton"
         v-on:click="clear"
       />

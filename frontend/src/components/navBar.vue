@@ -81,7 +81,7 @@ export default {
         <div class="menu-icon">
           <router-link to="/">
             <img
-              src="../../src/assets/house-door.svg"
+              src="../../src/assets/icons/house-door.svg"
               class="homesvg"
               alt="home"
             />
@@ -91,7 +91,7 @@ export default {
         <div class="menu-icon">
           <router-link to="/about">
             <img
-              src="../../src/assets/file-person.svg"
+              src="../../src/assets/icons/file-person.svg"
               class="homesvg"
               alt="about"
             />
@@ -100,14 +100,14 @@ export default {
         </div>
         <div class="menu-icon">
           <router-link to="/roadmap">
-            <img src="../../src/assets/geo.svg" class="homesvg" alt="roadmap" />
+            <img src="../../src/assets/icons/geo.svg" class="homesvg" alt="roadmap" />
           </router-link>
           <p>roadmap</p>
         </div>
         <div class="menu-icon">
           <router-link to="/privacy">
             <img
-              src="../../src/assets/file-earmark-lock.svg"
+              src="../../src/assets/icons/file-earmark-lock.svg"
               class="homesvg"
               alt="privacy"
             />
@@ -117,7 +117,7 @@ export default {
       </div>
       <div class="account-items">
         <img
-          src="../../src/assets/caret-down-fill.svg"
+          src="../../src/assets/icons/caret-down-fill.svg"
           class="downsvg"
           ref="menu"
           @click="openClose"
@@ -164,7 +164,7 @@ export default {
         <div class="menu-icon">
           <router-link to="/support">
             <img
-              src="../../src/assets/question-square.svg"
+              src="../../src/assets/icons/question-square.svg"
               class="homesvg"
               alt="support"
             />

@@ -1,10 +1,12 @@
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
+import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
   components: {
     navBar,
+    navFooter,
   },
 });
 </script>
@@ -17,6 +19,7 @@ export default defineComponent({
         <img src="../../src/assets/404.png" width="1200"/>
       </div>
     </div>
+    <navFooter></navFooter>
   </main>
 </template>
 <style scoped>

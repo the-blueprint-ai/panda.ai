@@ -1,5 +1,22 @@
 <script>
-export default {};
+export default {
+  methods: {
+    navigate(event) {
+      const navigateTo = event.target.getAttribute("navigate-to");
+      if (navigateTo == "home") {
+        this.$router.push("/");
+      } else if (navigateTo == "discord") {
+        window.open("https://www.discord.com", "_blank");
+      } else if (navigateTo == "twitter") {
+        window.open("https://twitter.com/mypanda_ai", "_blank");
+      } else if (navigateTo == "linkedin") {
+        window.open("https://www.linkedin.com", "_blank");
+      } else {
+        this.$router.push(navigateTo);
+      }
+    },
+  },
+};
 </script>
 
 <template>
@@ -19,36 +36,56 @@ export default {};
           </div>
         </div>
         <div class="socialsHolder">
-          <img src="../assets/icons/discord.svg" />
-          <img src="../assets/icons/twitter.svg" />
-          <img src="../assets/icons/linkedin.svg" />
-          <img src="../assets/icons/envelope-at-fill.svg" />
+          <img
+            navigate-to="discord"
+            @click="navigate($event)"
+            src="../assets/icons/discord.svg"
+          />
+          <img
+            navigate-to="twitter"
+            @click="navigate($event)"
+            src="../assets/icons/twitter.svg"
+          />
+          <img
+            navigate-to="linkedin"
+            @click="navigate($event)"
+            src="../assets/icons/linkedin.svg"
+          />
+          <img
+            navigate-to="contact"
+            @click="navigate($event)"
+            src="../assets/icons/envelope-at-fill.svg"
+          />
         </div>
-        <h3>© panda.ai 2023</h3>
+        <h3>©panda.ai 2023</h3>
       </div>
       <div class="footerMenus">
         <div class="singleMenu">
           <h2>Links</h2>
-          <p>home</p>
-          <p>roadmap</p>
-          <p>privacy</p>
+          <p navigate-to="home" @click="navigate($event)">home</p>
+          <p navigate-to="roadmap" @click="navigate($event)">roadmap</p>
+          <p navigate-to="privacy" @click="navigate($event)">privacy</p>
         </div>
         <div class="singleMenu">
           <h2>Company</h2>
-          <p>about</p>
-          <p>terms of service</p>
-          <p>privacy policy</p>
+          <p navigate-to="about" @click="navigate($event)">about</p>
+          <p navigate-to="terms-of-service" @click="navigate($event)">
+            terms of service
+          </p>
+          <p navigate-to="privacy-policy" @click="navigate($event)">
+            privacy policy
+          </p>
         </div>
         <div class="singleMenu">
           <h2>Support</h2>
-          <p>support</p>
-          <p>contact us</p>
+          <p navigate-to="support" @click="navigate($event)">support</p>
+          <p navigate-to="contact" @click="navigate($event)">contact us</p>
         </div>
         <div class="singleMenu">
           <h2>Social</h2>
-          <p>Discord</p>
-          <p>Twitter</p>
-          <p>LinkedIn</p>
+          <p navigate-to="discord" @click="navigate($event)">Discord</p>
+          <p navigate-to="twitter" @click="navigate($event)">Twitter</p>
+          <p navigate-to="linkedin" @click="navigate($event)">LinkedIn</p>
         </div>
       </div>
     </div>

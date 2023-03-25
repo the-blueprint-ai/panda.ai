@@ -13,6 +13,7 @@ import PrivacyView from "../views/PrivacyView.vue";
 import SupportView from "../views/SupportView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
 import TermsOfServiceView from "../views/TermsOfServiceView.vue";
+import ContactView from "../views/ContactView.vue";
 import TestView from "../views/TestView.vue";
 
 // Authorization Guard
@@ -90,6 +91,11 @@ const router = createRouter({
       path: "/support",
       name: "support",
       component: SupportView,
+    },
+    {
+      path: "/contact",
+      name: "contact",
+      component: ContactView,
     },
     {
       path: "/privacy-policy",

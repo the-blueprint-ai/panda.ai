@@ -1,21 +1,12 @@
 <script>
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
-import navFooter from "../components/navBar.vue";
-import ImageUpload from "../components/imageUpload.vue";
+import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
-  data() {
-    return {};
-  },
-  mounted() {},
-
-  methods: {},
-
   components: {
     navBar,
     navFooter,
-    ImageUpload,
   },
 });
 </script>
@@ -23,14 +14,17 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="bodyG">
-      <h1>TESTING</h1>
-      <ImageUpload></ImageUpload>
+    <div class="body">
+      <div>
+        <h1>🐼</h1>
+        <h1>CONTACT US</h1>
+        <h2>COMING SOON...</h2>
+      </div>
     </div>
     <navFooter></navFooter>
   </main>
 </template>
 
-<style>
+<style scoped>
 @import "../assets/styles/panda-main.css";
 </style>

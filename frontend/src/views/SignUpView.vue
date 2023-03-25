@@ -1,10 +1,12 @@
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
+import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
   components: {
     navBar,
+    navFooter,
   },
 });
 </script>
@@ -17,6 +19,7 @@ export default defineComponent({
         <h1>SIGN UP</h1>
       </div>
     </div>
+    <navFooter></navFooter>
   </main>
 </template>
 

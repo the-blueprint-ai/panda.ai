@@ -14,6 +14,8 @@ import SupportView from "../views/SupportView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
 import TermsOfServiceView from "../views/TermsOfServiceView.vue";
 import ContactView from "../views/ContactView.vue";
+import EmailView from "../views/EmailView.vue";
+import EmailVerificationView from "../views/EmailVerificationView.vue";
 import TestView from "../views/TestView.vue";
 
 // Authorization Guard
@@ -47,26 +49,38 @@ const router = createRouter({
       component: SignUpView,
     },
     {
+      path: "/auth/email",
+      name: "email",
+      component: EmailView,
+      beforeEnter: checkAuth,
+    },
+    {
+      path: "/auth/verify-email",
+      name: "emailverification",
+      component: EmailVerificationView,
+      beforeEnter: checkAuth,
+    },
+    {
       path: "/auth/:pathMatch(.*)*",
       name: "auth",
       component: () => import("../views/AuthView.vue"),
     },
     {
-      path: "/:userid/account",
+      path: "/auth/:userid/account",
       name: "account",
       component: AccountView,
       props: true,
       beforeEnter: checkAuth,
     },
     {
-      path: "/:userid/chat",
+      path: "/auth/:userid/chat",
       name: "chat",
       component: ChatView,
       props: true,
       beforeEnter: checkAuth,
     },
     {
-      path: "/:userid/onboarding",
+      path: "/auth/:userid/onboarding",
       name: "onboarding",
       component: OnboardingView,
       props: true,
@@ -108,9 +122,10 @@ const router = createRouter({
       component: TermsOfServiceView,
     },
     {
-      path: "/test",
+      path: "/auth/test",
       name: "test",
       component: TestView,
+      beforeEnter: checkAuth,
     },
   ],
 });

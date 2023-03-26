@@ -1,5 +1,5 @@
 import ThirdPartyEmailPassword from "supertokens-web-js/recipe/thirdpartyemailpassword";
-import EmailVerification from "supertokens-web-js/recipe/emailverification";
+import EmailVerification from "supertokens-auth-react/recipe/emailverification";
 import Session from "supertokens-web-js/recipe/session";
 
 export const SuperTokensWebJSConfig = {

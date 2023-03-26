@@ -1,31 +1,46 @@
 <script>
 import * as Session from "supertokens-web-js/recipe/session";
+import { mapActions } from "vuex";
+import { getUserData } from "../composables/getUserData.js";
 
 export default {
   data() {
-    return {
-      session: false,
-      userId: "",
-    };
+    return {};
   },
   computed: {
     isOpen() {
       return this.$store.state.isOpen;
     },
+    session() {
+      return this.$store.state.userStore.session;
+    },
+    userId() {
+      return this.$store.state.userStore.userId;
+    },
     avatar() {
       return this.$store.state.userStore.avatar;
     },
+    admin() {
+      return this.$store.state.userStore.admin;
+    },
   },
-  mounted() {
-    this.getUserInfo();
+  async mounted() {
+    await this.getSession();
+    await this.getUserInfo();
+    const { userData } = getUserData(this.userId, this.$store);
+    userData(this.userId);
   },
 
   methods: {
+    ...mapActions(["getSession", "getUserInfo"]),
     setIsOpenValue(value) {
-      this.$store.commit('setIsOpen', value);
+      this.$store.commit("setIsOpen", value);
     },
-    redirectToLogin() {
-      window.location.href = "/auth";
+    redirectToSignUp() {
+      window.location.href = "/signup";
+    },
+    redirectToSignIn() {
+      window.location.href = "/signin";
     },
     async getUserInfo() {
       this.session = await Session.doesSessionExist();
@@ -63,6 +78,9 @@ export default {
 
       // When user clicks outside of the menu — close the menu
       if (this.isOpen && dropdown != event.target) return true;
+    },
+    goToUserDashboard() {
+      window.open("http://localhost:3001/auth/dashboard");
     },
   },
 };
@@ -124,20 +142,28 @@ export default {
         />
         <div class="dropdown-menu" v-if="isOpen">
           <div class="dropdown-links">
-            <router-link :to="'/' + userId + '/chat'">
+            <router-link :to="'/auth/' + userId + '/chat'">
               <button class="dropdown-button-top">Chat</button>
             </router-link>
             <div class="dropdown-bar"></div>
-            <router-link :to="'/' + userId + '/account'">
+            <router-link :to="'/auth/' + userId + '/account'">
               <button class="dropdown-button">Account</button>
             </router-link>
             <div class="dropdown-bar"></div>
+            <div v-if="admin">
+              <button class="dropdown-button" @click="goToUserDashboard">
+                User Dashboard
+              </button>
+              <div class="dropdown-bar"></div>
+            </div>
             <div v-if="session">
-              <button class="dropdown-button" @click="onLogout">Logout</button>
+              <button class="dropdown-button" @click="onLogout">
+                Sign Out
+              </button>
             </div>
             <div v-else>
-              <router-link to="/auth">
-                <button class="dropdown-button">Login</button>
+              <router-link to="/signin">
+                <button class="dropdown-button">Sign In</button>
               </router-link>
             </div>
             <div class="dropdown-bar"></div>
@@ -151,14 +177,14 @@ export default {
           @click="openClose"
         />
         <div v-if="session">
-          <button class="authButton-login" @click="onLogout">Logout</button>
+          <button class="authButton-login" @click="onLogout">Sign Out</button>
         </div>
         <div v-else>
-          <button class="authButton-signup" @click="redirectToLogin">
+          <button class="authButton-signup" @click="redirectToSignUp">
             Sign up
           </button>
-          <button class="authButton-login" @click="redirectToLogin">
-            Login
+          <button class="authButton-login" @click="redirectToSignIn">
+            Sign In
           </button>
         </div>
         <div class="menu-icon">

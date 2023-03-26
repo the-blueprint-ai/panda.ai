@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
-import navFooter from "../components/navBar.vue";
+import navFooter from "../components/navFooter.vue";
 import ImageUpload from "../components/imageUpload.vue";
 
 export default defineComponent({

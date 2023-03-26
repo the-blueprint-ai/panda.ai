@@ -95,7 +95,6 @@ recipe_list = [
             ),
         ]
     ),
-    usermetadata.init(),
     emailverification.init(mode='REQUIRED'),
     dashboard.init(api_key=settings.SPTKNS_DASHBOARD_API_KEY)
 ]

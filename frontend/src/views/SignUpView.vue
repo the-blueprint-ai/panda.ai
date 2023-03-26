@@ -4,7 +4,7 @@ import {
   emailPasswordSignUp,
   doesEmailExist,
 } from "supertokens-web-js/recipe/thirdpartyemailpassword";
-import * as Session from "supertokens-web-js/recipe/session";
+import { emailVerification } from "../composables/emailVerification.js";
 import { mapActions } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
@@ -17,6 +17,10 @@ export default defineComponent({
       isTyping: false,
       emailTimer: null,
       emailExistsError: "",
+      emailChecking: true,
+      emailOk: "",
+      passwordOk: "",
+      badPasswordError: "",
     };
   },
   watch: {
@@ -27,11 +31,39 @@ export default defineComponent({
       // Start a new timer for 1000ms
       this.emailTimer = setTimeout(() => {
         this.checkEmail(newValue);
-      }, 800);
+      }, 400);
+    },
+    password() {
+      if (this.isPasswordValid == true) {
+        this.passwordOk = "ok";
+        this.badPasswordError = "";
+      } else {
+        this.passwordOk = "no";
+        this.badPasswordError =
+          "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.";
+      }
+    },
+  },
+  computed: {
+    isEmailValid() {
+      return this.validateEmail(this.email);
+    },
+    isPasswordValid() {
+      return this.validatePassword(this.password);
     },
   },
   methods: {
     ...mapActions(["getSession", "getUserInfo"]),
+    emailVerification,
+    validateEmail: function (email) {
+      var re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    validatePassword: function (password) {
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      return regex.test(password);
+    },
     signUpClicked: async function (email, password) {
       try {
         let response = await emailPasswordSignUp({
@@ -63,9 +95,7 @@ export default defineComponent({
         } else {
           // sign up successful. The session tokens are automatically handled by
           // the frontend SDK.
-          await this.getSession();
-          let userId = await Session.getUserId();
-          window.location.href = userId + "/onboarding";
+          this.emailVerification();
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {
@@ -83,17 +113,22 @@ export default defineComponent({
         });
 
         if (response.doesExist) {
+          this.emailChecking = false;
           this.emailExistsError =
-            "Email already exists. Please sign in instead";
+            "Email already in use. Please sign in instead";
+          this.emailOk = "no";
           setTimeout(() => {
             this.emailExistsError = "";
-          }, 4000);
-          setTimeout(() => {
+            this.emailOk = "";
             this.email = "";
-          }, 3000);
-          setTimeout(() => {
             this.$refs.email.value = null;
-          }, 10);
+            this.emailChecking = true;
+          }, 3000);
+        } else {
+          this.emailChecking = false;
+          setTimeout(() => {
+            this.emailOk = "ok";
+          }, 3000);
         }
       } catch (err) {
         console.error(err); // log the error to the console
@@ -136,17 +171,67 @@ export default defineComponent({
         <div class="signInBar"></div>
         <div class="emailPassword">
           <h2>Email</h2>
+          <img
+            v-if="isEmailValid && emailOk === 'ok' && email"
+            id="emailGood"
+            src="../assets/icons/envelope-check-fill.svg"
+          />
+          <img
+            v-if="emailOk === 'no'"
+            id="emailBad"
+            src="../assets/icons/envelope-exclamation-fill.svg"
+          />
           <input
             ref="email"
             v-model="this.email"
             @input="isTyping = true"
-            type="text"
+            type="email"
             placeholder="kung-fu@panda.ai"
           />
+          <h6 v-if="email && emailChecking" style="color: white">
+            CHECKING...
+          </h6>
           <h6 v-if="emailExistsError">{{ emailExistsError }}</h6>
           <h2>Password</h2>
-          <input ref="password" v-model="this.password" type="password" placeholder="sKad00sh" />
-          <button @click="signUpClicked(this.email, this.password)">
+          <img
+            v-if="isPasswordValid && passwordOk === 'ok' && password"
+            id="passwordGood"
+            src="../assets/icons/shield-fill-check.svg"
+          />
+          <img
+            v-if="passwordOk === 'no'"
+            id="passwordBad"
+            src="../assets/icons/shield-fill-exclamation.svg"
+          />
+          <input
+            ref="password"
+            v-model="this.password"
+            type="password"
+            placeholder="sKad00sh"
+            @keyup.enter="signUpClicked(this.email, this.password)"
+          />
+          <h6 v-if="badPasswordError">{{ badPasswordError }}</h6>
+          <button
+            v-if="
+              isEmailValid &&
+              emailOk === 'ok' &&
+              email &&
+              isPasswordValid &&
+              passwordOk === 'ok' &&
+              password
+            "
+            @click="signUpClicked(this.email, this.password)"
+          >
+            SIGN UP
+          </button>
+          <button
+            v-else
+            style="
+              background-color: #c8c8c8;
+              border: 5px solid #c8c8c8;
+              cursor: default;
+            "
+          >
             SIGN UP
           </button>
           <h4>BY CONTINUING YOU AGREE TO OUR:</h4>

@@ -73,6 +73,32 @@ export default defineComponent({
           protecting your privacy and ensuring you have the peace of mind to
           enjoy all the benefits our AI personal assistant has to offer.
         </p>
+        <div class="aboutContainerLine"></div>
+        <h2>Powered by chatGPT 🔋</h2>
+        <p>
+          🐼 panda.ai is built on top of open.ai's ChatGPT Large Language
+          Model(LLM) Artificial Intelligence. As an AI language model, it's
+          limitations primarily stem from it's training data and inherent
+          design. While it can provide vast amounts of information, it's
+          knowledge is limited to what it's been trained on and the additional
+          data 🐼 panda.ai provides it. Consequently, it can lack real-time
+          awareness and might be unfamiliar with recent events or developments.
+        </p>
+        <p>
+          Additionally, chatGPT's understanding of context and nuance may be
+          limited, which can sometimes lead to inaccuracies or
+          misinterpretations. Though it strives to be neutral and unbiased,
+          chatGPT's training data may contain biases present in the text it was
+          trained on, inadvertently affecting it's responses.
+        </p>
+        <p>
+          🐼 panda.ai is built on open.ai's 4th generation chatGPT model, and
+          you can find out more information about it's limitations and nuances,
+          by reading the paper that open.ai published
+          <a href="https://cdn.openai.com/papers/gpt-4-system-card.pdf">here</a
+          >. It details chatGPT 4's limitations and also how it has improved
+          upon previous generations of chatGPT.
+        </p>
       </div>
     </div>
     <navFooter></navFooter>

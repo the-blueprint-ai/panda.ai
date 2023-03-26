@@ -927,6 +927,8 @@ span.typed-text {
   justify-content: center;
   align-items: center;
   text-align: center;
+  text-transform: uppercase;
+  font-size: 24px;
 }
 .aboutContainer p {
   margin-bottom: 30px;
@@ -950,6 +952,9 @@ span.typed-text {
   margin-bottom: 40px;
   display: flex;
   background-color: #FFFFFF;
+}
+.aboutContainer a {
+  color:#FFFFFF
 }
 .aboutBox {
   width: 550px;

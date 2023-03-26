@@ -49,12 +49,12 @@ export default defineComponent({
           <p>
             While we don't have any significant partnerships or collaborations
             to mention, it's worth noting that our AI is built on top of
-            OpenAI's ChatGPT LLM, the technology that powers 🐼 panda.ai's
-            awesomeness.
+            OpenAI's ChatGPT LLM, the technology foundation that powers 🐼
+            panda.ai's awesomeness.
           </p>
         </div>
         <div class="aboutBox">
-          <h2>Our Core Values 🌟</h2>
+          <h2>Our Core Values 🦄</h2>
           <p>At 🐼 panda.ai, we live by three core values:</p>
           <ol type="1">
             <li>Challenging the status quo 💪</li>

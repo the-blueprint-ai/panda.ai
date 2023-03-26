@@ -95,7 +95,10 @@ export default defineComponent({
           🐼 panda.ai is built on open.ai's 4th generation chatGPT model, and
           you can find out more information about it's limitations and nuances,
           by reading the paper that open.ai published
-          <a href="https://cdn.openai.com/papers/gpt-4-system-card.pdf">here</a
+          <a
+            href="https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+            target="_blank"
+            >here</a
           >. It details chatGPT 4's limitations and also how it has improved
           upon previous generations of chatGPT.
         </p>

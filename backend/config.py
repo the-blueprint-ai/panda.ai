@@ -1,17 +1,20 @@
 from pydantic import BaseSettings
 from dotenv import dotenv_values
+from typing import Dict, Any
 import os
 
-from supertokens_python.recipe import session, thirdpartyemailpassword, dashboard, emailverification, usermetadata
+from supertokens_python import (
+    InputAppInfo,
+    SupertokensConfig,
+)
+from supertokens_python.recipe import session, thirdpartyemailpassword, dashboard, emailverification
 from supertokens_python.recipe.thirdpartyemailpassword import (
     Apple,
     Github,
     Google,
 )
-from supertokens_python import (
-    InputAppInfo,
-    SupertokensConfig,
-)
+from supertokens_python.recipe.thirdpartyemailpassword.types import EmailDeliveryOverrideInput, EmailTemplateVars
+from supertokens_python.ingredients.emaildelivery.types import EmailDeliveryConfig
 
 # Python Environment Variable setup required on System or .env file
 config_env = {
@@ -64,11 +67,26 @@ app_info = InputAppInfo(
 
 framework = "fastapi"
 
+def custom_email_deliver(original_implementation: EmailDeliveryOverrideInput) -> EmailDeliveryOverrideInput:
+    original_send_email = original_implementation.send_email
+
+    async def send_email(template_vars: EmailTemplateVars, user_context: Dict[str, Any]) -> None:
+        # You can change the path, domain of the reset password link,
+        # or even deep link it to your mobile app
+        # This is: `${websiteDomain}${websiteBasePath}/reset-password`
+        template_vars.password_reset_link = template_vars.password_reset_link.replace(
+            "http://localhost:3000/auth/reset-password", "http://localhost:3000/reset-password")
+        return await original_send_email(template_vars, user_context)
+
+    original_implementation.send_email = send_email
+    return original_implementation
+
 # RecipeList contains all the modules that you want to
 # Use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
 recipe_list = [
     session.init(), # initializes session features
     thirdpartyemailpassword.init(
+        email_delivery=EmailDeliveryConfig(override=custom_email_deliver),
         providers=[
             # We have provided you with development keys which you can use for testing.
             # IMPORTANT: Please replace them with your own OAuth keys for production use.

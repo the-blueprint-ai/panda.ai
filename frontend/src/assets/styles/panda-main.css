@@ -1354,10 +1354,14 @@ span.typed-text {
 }
 .userSettings {
   display: flex;
+  flex-direction: column;
   width:1300px;
-  justify-content: center;
+  align-items: center;
 }
 .userSettings h1 {
+  color: #000000;
+}
+.userSettings h2 {
   color: #000000;
 }
 .overlay {

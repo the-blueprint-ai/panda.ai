@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from supertokens_python.recipe.session.framework.fastapi import verify_session
+from supertokens_python.recipe.session import SessionContainer
 from config import settings
 from fastapi.responses import JSONResponse
 from cryptography.fernet import Fernet
@@ -32,7 +34,7 @@ async def shutdown():
 
 # ROUTERS
 @router.get("/get")
-async def get_user_chat_history_route(user_id: str):
+async def get_user_chat_history_route(user_id: str, session: SessionContainer = Depends(verify_session())):
     try:
         data = await get_user_chat_history(user_id)
         if data:
@@ -44,7 +46,7 @@ async def get_user_chat_history_route(user_id: str):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.post("/save")
-async def save_user_chat_history_route(user_id: str, chat_script: str):
+async def save_user_chat_history_route(user_id: str, chat_script: str, session: SessionContainer = Depends(verify_session())):
     try:
         response = await save_user_chat_history(user_id, chat_script)
         if "error" in response:

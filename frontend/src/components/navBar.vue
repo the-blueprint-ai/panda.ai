@@ -26,9 +26,13 @@ export default {
   },
   async mounted() {
     await this.getSession();
-    await this.getUserInfo();
-    const { userData } = getUserData(this.userId, this.$store);
-    userData(this.userId);
+    if (this.session) {
+      await this.getUserInfo();
+    }
+    if (this.userId) {
+      const { userData } = getUserData(this.userId, this.$store);
+      userData(this.userId);
+    }
   },
 
   methods: {
@@ -42,22 +46,9 @@ export default {
     redirectToSignIn() {
       window.location.href = "/signin";
     },
-    async getUserInfo() {
-      this.session = await Session.doesSessionExist();
-      if (this.session) {
-        this.userId = await Session.getUserId();
-      }
-    },
     async onLogout() {
       await Session.signOut();
       window.location.href = "/";
-    },
-    userLink() {
-      if (this.userId) {
-        return { name: "user", param: { userid: this.userId } };
-      } else {
-        return { name: "user", param: { userid: "userID" } };
-      }
     },
     openClose() {
       var _this = this;
@@ -143,12 +134,12 @@ export default {
         <div class="dropdown-menu" v-if="isOpen">
           <div class="dropdown-links">
             <router-link :to="'/auth/' + userId + '/chat'">
-              <button class="dropdown-button-top">Chat</button>
-            </router-link>
+            <button class="dropdown-button-top">Chat</button>
+          </router-link>
             <div class="dropdown-bar"></div>
             <router-link :to="'/auth/' + userId + '/account'">
-              <button class="dropdown-button">Account</button>
-            </router-link>
+            <button class="dropdown-button">Account</button>
+          </router-link>
             <div class="dropdown-bar"></div>
             <div v-if="admin">
               <button class="dropdown-button" @click="goToUserDashboard">

@@ -6,7 +6,8 @@ export function getUserData(userId, store) {
 
   async function userData(userId) {
     try {
-      const url = import.meta.env.VITE_APP_API_URL + "/users/get/?user_id=" + userId;
+      const url =
+        import.meta.env.VITE_APP_API_URL + "/users/get/?user_id=" + userId;
       const res = await fetch(url, {
         method: "GET",
       });

@@ -1,4 +1,7 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
+from supertokens_python.recipe.session.framework.fastapi import verify_session
+from supertokens_python.recipe.session import SessionContainer
+from supertokens_python.asyncio import delete_user
 from pydantic import ValidationError
 from config import settings
 from fastapi.responses import JSONResponse
@@ -42,7 +45,7 @@ async def shutdown():
 
 # ROUTERS
 @router.get("/get")
-async def get_user_data_route(user_id: str):
+async def get_user_data_route(user_id: str, session: SessionContainer = Depends(verify_session())):
     try:
         response = await get_user_data(user_id)
         if response:
@@ -56,8 +59,12 @@ async def get_user_data_route(user_id: str):
         logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+@router.get("/delete")
+async def do_delete(user_id: str, session: SessionContainer = Depends(verify_session())):
+    await delete_user(user_id) # this will succeed even if the userId didn't exist.
+
 @router.post("/save")
-async def save_user_data_route(user_id, first_name, last_name, username, email, avatar):
+async def save_user_data_route(user_id, first_name, last_name, username, email, avatar, session: SessionContainer = Depends(verify_session())):
     try:
         response = await save_user_data(user_id, first_name, last_name, username, email, avatar)
         if "error" in response:
@@ -71,7 +78,7 @@ async def save_user_data_route(user_id, first_name, last_name, username, email, 
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.post("/update")
-async def update_user_data_route(user_id, first_name, last_name, username, email):
+async def update_user_data_route(user_id, first_name, last_name, username, email, session: SessionContainer = Depends(verify_session())):
     try:
         response = await update_user_data(user_id, first_name, last_name, username, email)
         if "error" in response:
@@ -85,7 +92,7 @@ async def update_user_data_route(user_id, first_name, last_name, username, email
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.post("/banner")
-async def save_user_banner_route(user_id: str, file: UploadFile = File(...)):
+async def save_user_banner_route(user_id: str, file: UploadFile = File(...), session: SessionContainer = Depends(verify_session())):
     try:
         response = await save_user_banner(user_id, file)
         if "error" in response:
@@ -99,7 +106,7 @@ async def save_user_banner_route(user_id: str, file: UploadFile = File(...)):
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.post("/avatar")
-async def save_user_avatar_route(user_id: str, file: UploadFile = File(...)):
+async def save_user_avatar_route(user_id: str, file: UploadFile = File(...), session: SessionContainer = Depends(verify_session())):
     try:
         response = await save_user_avatar(user_id, file)
         if "error" in response:
@@ -111,7 +118,7 @@ async def save_user_avatar_route(user_id: str, file: UploadFile = File(...)):
     except Exception as e:
         logger.error(f"Error in save_user_avatar_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
-    
+
 
 # FUNCTIONS
 async def get_user_data(user_id: str):

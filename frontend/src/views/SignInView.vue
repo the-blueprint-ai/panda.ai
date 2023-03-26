@@ -57,7 +57,7 @@ export default defineComponent({
       this.$router.push("/signup");
     },
     toForgotPassword() {
-      this.$router.push("/");
+      this.$router.push("/password-reset");
     },
   },
   components: {

@@ -16,12 +16,14 @@ import TermsOfServiceView from "../views/TermsOfServiceView.vue";
 import ContactView from "../views/ContactView.vue";
 import EmailView from "../views/EmailView.vue";
 import EmailVerificationView from "../views/EmailVerificationView.vue";
+import PasswordResetView from "../views/PasswordResetView.vue";
+import NewPasswordView from "../views/NewPasswordView.vue";
 import TestView from "../views/TestView.vue";
 
 // Authorization Guard
 async function checkAuth(to, from, next) {
   const canAccess = await Session.doesSessionExist();
-  if (!canAccess) return next("/auth");
+  if (!canAccess) return next("/signin");
   else return next();
 };
 
@@ -47,6 +49,16 @@ const router = createRouter({
       path: "/signup",
       name: "signup",
       component: SignUpView,
+    },
+    {
+      path: "/password-reset",
+      name: "passwordreset",
+      component: PasswordResetView,
+    },
+    {
+      path: "/reset-password",
+      name: "newpassword",
+      component: NewPasswordView,
     },
     {
       path: "/auth/email",

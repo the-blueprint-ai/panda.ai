@@ -280,6 +280,7 @@ span {
   align-items: left;
 }
 .pandaChat.highlighted {
+  position: relative;
   width: 99%;
   background-color: #FFCB4C;
   border-radius: 15px;
@@ -1278,7 +1279,7 @@ span.typed-text {
   padding: 5px;
   border: 2px solid lightgray;
   border-radius: 10px;
-  font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
+  font-family: "Monaco";
   font-size: 18px;
   overflow: wrap;
   resize: none;

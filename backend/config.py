@@ -23,17 +23,20 @@ config_env = {
 }
 
 class Settings(BaseSettings):
+    APP_NAME: str
+    API_DOMAIN: str
+    WEBSITE_DOMAIN: str
     S3_BUCKET: str
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
+    AWS_REGION: str
     PSQL_DATABASE_URL: str
     FERNET_KEY: str
     SPTKNS_CONNECTION_URI: str
     SPTKNS_API_KEY: str
     SPTKNS_DASHBOARD_API_KEY: str
-    APP_NAME: str
-    API_DOMAIN: str
-    WEBSITE_DOMAIN: str
+    OPENAI_ORGANISATION: str
+    OPENAI_API_KEY: str
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     FACEBOOK_CLIENT_ID: str

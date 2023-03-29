@@ -66,13 +66,6 @@ export default defineComponent({
         this.userId = await Session.getUserId();
       }
     },
-    userLink() {
-      if (this.userId) {
-        return { name: "user", param: { userid: this.userId } };
-      } else {
-        return { name: "user", param: { userid: "userID" } };
-      }
-    },
     typeText() {
       if (
         this.charIndex <

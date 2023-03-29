@@ -206,7 +206,7 @@ export default defineComponent({
       }
       try {
         const url =
-          import.meta.env.VITE_APP_API_URL + "/users/update/?user_id=" +
+          import.meta.env.VITE_APP_API_URL + "/users/save/?user_id=" +
           this.userId +
           "&first_name=" +
           this.first_name +
@@ -316,7 +316,8 @@ export default defineComponent({
     <div class="bodyG">
       <div v-if="session" class="accountWrapper">
         <div class="userBanner">
-          <img v-bind:src="banner" />
+          <img v-if="banner" v-bind:src="banner" />
+          <img v-else src="../assets/banner.png" />
           <img
             src="../assets/icons/camera2.svg"
             @click="triggerBannerUpload"
@@ -332,7 +333,8 @@ export default defineComponent({
         </div>
         <div class="profileAvatar">
           <div class="accountAvatarBackground"></div>
-          <img v-if="first_name" v-bind:src="avatar" class="accountAvatar" />
+          <img v-if="avatar" v-bind:src="avatar" class="accountAvatar" />
+          <img v-else src="../assets/user.png" class="accountAvatar" />
           <img
             src="../assets/icons/camera.svg"
             @click="triggerAvatarUpload"
@@ -351,7 +353,7 @@ export default defineComponent({
             <h2>{{ first_name }} {{ last_name }}</h2>
             <h3>{{ username }}</h3>
             <p>{{ email }}</p>
-            <p>Joined: {{ joined }}</p>
+            <p v-if="joined">Joined: {{ joined }}</p>
             <button class="chatButton" @click="redirectToChat">
               Let's Chat
             </button>

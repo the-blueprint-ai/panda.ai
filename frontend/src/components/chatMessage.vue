@@ -9,10 +9,13 @@ export default {
       return this.$store.state.userStore.avatar;
     },
     containsSearchTerm() {
-      if (this.searchTerm.trim() === "") return false;
-      return this.message.message
-        .toLowerCase()
-        .includes(this.searchTerm.trim().toLowerCase());
+      if (this.searchTerm) {
+        if (this.searchTerm.trim() === "") return false;
+        return this.message.message
+          .toLowerCase()
+          .includes(this.searchTerm.trim().toLowerCase());
+      }
+      return null;
     },
     messageClass() {
       return this.containsSearchTerm ? "highlighted" : "";

@@ -13,7 +13,6 @@ export default defineComponent({
   data() {
     return {
       messageToSend: "",
-      chatHistoryData: [],
     };
   },
   computed: {
@@ -69,15 +68,6 @@ export default defineComponent({
       const { userChatHistory } = getUserChatHistory(this.userId, this.$store);
       userChatHistory(this.userId);
     }
-    // await this.getSession();
-    // await this.getUserInfo();
-    // const { userData } = getUserData(this.userId, this.$store);
-    // userData(this.userId);
-    // const { userChatHistory } = getUserChatHistory(this.userId, this.$store);
-    // userChatHistory(this.userId).then((data) => {
-    //   this.chatHistoryData = data;
-    //   console.log("Fetched user chat history:", this.chatHistoryData);
-    // });
   },
   methods: {
     ...mapActions(["getSession", "getUserInfo"]),
@@ -107,6 +97,7 @@ export default defineComponent({
     },
     submitMessage() {
       // Add code to send to chatBot
+      this.addToChatHistory({ user: "user", message: this.messageToSend });
       this.messageToSend = "";
       // Add code to update the chat history database
     },
@@ -149,7 +140,7 @@ export default defineComponent({
         <div class="mainContainer">
           <div v-if="userChatHistory" class="chatHistoryContainer">
             <h2>Chat History</h2>
-            <div v-if="userChatHistory && userChatHistory.length" class="chatHistory">
+            <div class="chatHistory">
               <UserChatHistory
                 :user-chat-history="userChatHistory"
               ></UserChatHistory>

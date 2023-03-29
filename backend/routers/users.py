@@ -5,9 +5,10 @@ from supertokens_python.asyncio import delete_user
 from pydantic import ValidationError
 from config import settings
 from fastapi.responses import JSONResponse
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from databases import Database
 import logging
+from typing import Optional
 import boto3
 from io import BytesIO
 import os
@@ -18,11 +19,15 @@ router = APIRouter(
     tags=["users"],
 )
 
+# DATABASES
 S3_BUCKET = settings.S3_BUCKET #"panda.ai"
 s3 = boto3.client('s3', aws_access_key_id = settings.AWS_ACCESS_KEY_ID, aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY)
 
 DATABASE_URL = settings.PSQL_DATABASE_URL
 database = Database(DATABASE_URL)
+
+dynamodb = boto3.resource('dynamodb', region_name='eu-west-2')
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -64,9 +69,9 @@ async def do_delete(user_id: str, session: SessionContainer = Depends(verify_ses
     await delete_user(user_id) # this will succeed even if the userId didn't exist.
 
 @router.post("/save")
-async def save_user_data_route(user_id, first_name, last_name, username, email, avatar, session: SessionContainer = Depends(verify_session())):
+async def save_user_data_route(user_id, first_name=None, last_name=None, username=None, email=None, avatar=None, banner=None, about=None, onboarded=None, subscriber=None, admin=None, session: SessionContainer = Depends(verify_session())):
     try:
-        response = await save_user_data(user_id, first_name, last_name, username, email, avatar)
+        response = await save_user_data(user_id, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin)
         if "error" in response:
             raise HTTPException(status_code=500, detail=response["error"])
         return {"message": "User data saved successfully"}
@@ -75,20 +80,6 @@ async def save_user_data_route(user_id, first_name, last_name, username, email, 
         raise e
     except Exception as e:
         logger.error(f"Error in save_user_data_route: {e}, type: {type(e)}, args: {e.args}")
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-    
-@router.post("/update")
-async def update_user_data_route(user_id, first_name, last_name, username, email, session: SessionContainer = Depends(verify_session())):
-    try:
-        response = await update_user_data(user_id, first_name, last_name, username, email)
-        if "error" in response:
-            raise HTTPException(status_code=500, detail=response["error"])
-        return {"message": "User data updated successfully"}
-    except HTTPException as e:
-        logger.error(f"HTTPException in update_user_data_route: {e}, type: {type(e)}, args: {e.args}")
-        raise e
-    except Exception as e:
-        logger.error(f"Error in update_user_data_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.post("/banner")
@@ -128,13 +119,17 @@ async def get_user_data(user_id: str):
 
     if result:
         created_at = result["created_at"]
-        decrypted_first_name = cipher_suite.decrypt(result["first_name"].encode()).decode('utf-8')
-        decrypted_last_name = cipher_suite.decrypt(result["last_name"].encode()).decode('utf-8')
-        decrypted_username = cipher_suite.decrypt(result["username"].encode()).decode('utf-8')
-        decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
+        try:
+            decrypted_first_name = cipher_suite.decrypt(result["first_name"].encode()).decode('utf-8')
+            decrypted_last_name = cipher_suite.decrypt(result["last_name"].encode()).decode('utf-8')
+            decrypted_username = cipher_suite.decrypt(result["username"].encode()).decode('utf-8')
+            decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
+            decrypted_about = cipher_suite.decrypt(result["about"].encode()).decode('utf-8')
+        except InvalidToken:
+            return {"error": "Error decrpyting user data"}
+
         avatar = result["avatar"]
         banner = result["banner"]
-        about = result["about"]
         onboarded = result["onboarded"]
         subscriber = result["subscriber"]
         admin = result["admin"]
@@ -149,7 +144,7 @@ async def get_user_data(user_id: str):
             "email": decrypted_email,
             "avatar": avatar,
             "banner": banner,
-            "about": about,
+            "about": decrypted_about,
             "onboarded": onboarded,
             "subscriber": subscriber,
             "admin": admin,
@@ -157,47 +152,99 @@ async def get_user_data(user_id: str):
     else:
         return None
 
-async def save_user_data(user_id: str, first_name: str, last_name: str, username: str, email: str, avatar: str):
-    # Encrypt the input values
-    encrypted_first_name = cipher_suite.encrypt(first_name.encode()).decode('utf-8')
-    encrypted_last_name = cipher_suite.encrypt(last_name.encode()).decode('utf-8')
-    encrypted_username = cipher_suite.encrypt(username.encode()).decode('utf-8')
-    encrypted_email = cipher_suite.encrypt(email.encode()).decode('utf-8')
+async def save_user_data(user_id: str, first_name: Optional[str] = None, last_name: Optional[str] = None, username: Optional[str] = None, email: Optional[str] = None, avatar: Optional[str] = None, banner: Optional[str] = None, about: Optional[str] = None, onboarded: Optional[bool] = None, subscriber: Optional[bool] = None, admin: Optional[bool] = None):
+    # Fetch the existing user data from the database
+    existing_user_data = await get_user_data(user_id)
 
-    query = """
-        INSERT INTO panda_ai_users (user_id, first_name, last_name, username, email, avatar)
-        VALUES (:user_id, :first_name, :last_name, :username, :email, :avatar)
-    """
+    # If the existing user data is None, the user does not exist, so insert a new user
+    if existing_user_data is None:
+        return await save_new_user_data(user_id, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin)
+
+    # If there's an error in the existing user data, handle it accordingly
+    if existing_user_data is None or "error" in existing_user_data:
+        # Handle the error according to your application's requirements, e.g., raise an exception or return an error message
+        raise Exception("Error fetching existing user data")
+
+    # Prepare the query and the values dictionary
+    query = "UPDATE panda_ai_users SET"
+    values = {"user_id": user_id}
+    fields_to_update = []
+
+    # Add fields to the query and the values dictionary only if they have new values
+    if first_name is not None:
+        fields_to_update.append("first_name = :first_name")
+        values["first_name"] = encrypt_if_not_none(first_name)
+
+    if last_name is not None:
+        fields_to_update.append("last_name = :last_name")
+        values["last_name"] = encrypt_if_not_none(last_name)
+
+    if username is not None:
+        fields_to_update.append("username = :username")
+        values["username"] = encrypt_if_not_none(username)
+
+    if email is not None:
+        fields_to_update.append("email = :email")
+        values["email"] = encrypt_if_not_none(email)
+
+    if avatar is not None:
+        fields_to_update.append("avatar = :avatar")
+        values["avatar"] = avatar
+
+    if banner is not None:
+        fields_to_update.append("banner = :banner")
+        values["banner"] = banner
+
+    if about is not None:
+        fields_to_update.append("about = :about")
+        values["about"] = encrypt_if_not_none(about)
+
+    if onboarded is not None:
+        fields_to_update.append("onboarded = :onboarded")
+        values["onboarded"] = onboarded
+
+    if subscriber is not None:
+        fields_to_update.append("subscriber = :subscriber")
+        values["subscriber"] = subscriber
+
+    if admin is not None:
+        fields_to_update.append("admin = :admin")
+        values["admin"] = admin
+
+    # Join the fields to update and add the WHERE clause to the query
+    query += " " + ", ".join(fields_to_update) + " WHERE user_id = :user_id"
+    
+    await database.execute(query=query, values=values)
+    return {"message": "User data updated successfully"}
+
+def encrypt_if_not_none(value: Optional[str]) -> Optional[str]:
+    if value is not None:
+        return cipher_suite.encrypt(value.encode()).decode('utf-8')
+    return None
+
+async def save_new_user_data(user_id: str, first_name: Optional[str] = None, last_name: Optional[str] = None, username: Optional[str] = None, email: Optional[str] = None, avatar: Optional[str] = None, banner: Optional[str] = None, about: Optional[str] = None, onboarded: Optional[bool] = None, subscriber: Optional[bool] = None, admin: Optional[bool] = None):
+
     values = {
         "user_id": user_id,
-        "first_name": encrypted_first_name,
-        "last_name": encrypted_last_name,
-        "username": encrypted_username,
-        "email": encrypted_email,
-        "avatar": avatar
+        "first_name": encrypt_if_not_none(first_name),
+        "last_name": encrypt_if_not_none(last_name),
+        "username": encrypt_if_not_none(username),
+        "email": encrypt_if_not_none(email),
+        "avatar": avatar,
+        "banner": banner,
+        "about": encrypt_if_not_none(about),
+        "onboarded": onboarded,
+        "subscriber": subscriber,
+        "admin": admin
     }
-    await database.execute(query=query, values=values)
-
-async def update_user_data(user_id: str, first_name: str, last_name: str, username: str, email: str):
-    # Encrypt the input values
-    encrypted_first_name = cipher_suite.encrypt(first_name.encode()).decode('utf-8')
-    encrypted_last_name = cipher_suite.encrypt(last_name.encode()).decode('utf-8')
-    encrypted_username = cipher_suite.encrypt(username.encode()).decode('utf-8')
-    encrypted_email = cipher_suite.encrypt(email.encode()).decode('utf-8')
 
     query = """
-        UPDATE panda_ai_users 
-        SET first_name = :first_name, last_name = :last_name, username = :username, email = :email
-        WHERE user_id = :user_id
+        INSERT INTO panda_ai_users (user_id, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin)
+        VALUES (:user_id, :first_name, :last_name, :username, :email, :avatar, :banner, :about, :onboarded, :subscriber, :admin)
     """
-    values = {
-        "user_id": user_id,
-        "first_name": encrypted_first_name,
-        "last_name": encrypted_last_name,
-        "username": encrypted_username,
-        "email": encrypted_email
-    }
+
     await database.execute(query=query, values=values)
+    return {"message": "User data inserted successfully"}
     
 async def save_user_banner(user_id: str, file: UploadFile = File(...)):
     try:
@@ -229,6 +276,7 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
             "banner": banner
         }
         await database.execute(query=query, values=values)
+        return {"message": "User banner updated successfully"}
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}
@@ -270,6 +318,7 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
             "avatar": avatar
         }
         await database.execute(query=query, values=values)
+        return {"message": "User avatar updated successfully"}
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}

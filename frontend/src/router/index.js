@@ -75,7 +75,7 @@ const router = createRouter({
     {
       path: "/auth/:pathMatch(.*)*",
       name: "auth",
-      component: () => import("../views/AuthView.vue"),
+      beforeEnter: checkAuth,
     },
     {
       path: "/auth/:userid/account",

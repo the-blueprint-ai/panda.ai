@@ -8,3 +8,5 @@ asyncpg
 databases
 cryptography
 python-dotenv
+openai
+promptlayer

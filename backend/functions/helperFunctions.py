@@ -1,23 +1,12 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
-from supertokens_python.recipe.session.framework.fastapi import verify_session
-from supertokens_python.recipe.session import SessionContainer
-from supertokens_python.asyncio import delete_user
-from pydantic import ValidationError
+from fastapi import UploadFile, File
 from config import settings
-from fastapi.responses import JSONResponse
+from pydantic import ValidationError
 from cryptography.fernet import Fernet, InvalidToken
-from databases import Database
-import logging
 from typing import Optional
-import boto3
 from io import BytesIO
+from databases import Database
+import boto3
 import os
-
-# CONFIG
-router = APIRouter(
-    prefix="/users",
-    tags=["users"],
-)
 
 # DATABASES
 S3_BUCKET = settings.S3_BUCKET #"panda.ai"
@@ -26,18 +15,6 @@ s3 = boto3.client('s3', aws_access_key_id = settings.AWS_ACCESS_KEY_ID, aws_secr
 DATABASE_URL = settings.PSQL_DATABASE_URL
 database = Database(DATABASE_URL)
 
-# Connect/Disconnect from Aurora
-@router.on_event("startup")
-async def startup():
-    await database.connect()
-
-@router.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
-
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 key = settings.FERNET_KEY
 if not key:
@@ -45,70 +22,7 @@ if not key:
 cipher_suite = Fernet(key.encode())
 
 
-# ROUTERS
-@router.get("/get")
-async def get_user_data_route(user_id: str, session: SessionContainer = Depends(verify_session())):
-    try:
-        response = await get_user_data(user_id)
-        if response:
-            return response
-        else:
-            raise HTTPException(status_code=404, detail="User not found")
-    except HTTPException as e:
-        logger.error(f"HTTPException in get_user_data_route: {e}, type: {type(e)}, args: {e.args}")
-        raise e
-    except Exception as e:
-        logger.error(f"Error in get_data_route: {e}, type: {type(e)}, args: {e.args}")
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-
-@router.get("/delete")
-async def do_delete(user_id: str, session: SessionContainer = Depends(verify_session())):
-    await delete_user(user_id) # this will succeed even if the userId didn't exist.
-
-@router.post("/save")
-async def save_user_data_route(user_id, first_name=None, last_name=None, username=None, email=None, avatar=None, banner=None, about=None, onboarded=None, subscriber=None, admin=None, session: SessionContainer = Depends(verify_session())):
-    try:
-        response = await save_user_data(user_id, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin)
-        if "error" in response:
-            raise HTTPException(status_code=500, detail=response["error"])
-        return {"message": "User data saved successfully"}
-    except HTTPException as e:
-        logger.error(f"HTTPException in save_user_data_route: {e}, type: {type(e)}, args: {e.args}")
-        raise e
-    except Exception as e:
-        logger.error(f"Error in save_user_data_route: {e}, type: {type(e)}, args: {e.args}")
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-    
-@router.post("/banner")
-async def save_user_banner_route(user_id: str, file: UploadFile = File(...), session: SessionContainer = Depends(verify_session())):
-    try:
-        response = await save_user_banner(user_id, file)
-        if "error" in response:
-            raise HTTPException(status_code=500, detail=response["error"])
-        return {"message": "Banner saved successfully", "url": response["url"]}
-    except HTTPException as e:
-        logger.error(f"HTTPException in save_user_banner_route: {e}, type: {type(e)}, args: {e.args}")
-        raise e
-    except Exception as e:
-        logger.error(f"Error in save_user_banner_route: {e}, type: {type(e)}, args: {e.args}")
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-    
-@router.post("/avatar")
-async def save_user_avatar_route(user_id: str, file: UploadFile = File(...), session: SessionContainer = Depends(verify_session())):
-    try:
-        response = await save_user_avatar(user_id, file)
-        if "error" in response:
-            raise HTTPException(status_code=500, detail=response["error"])
-        return {"message": "Avatar saved successfully", "url": response["url"]}
-    except HTTPException as e:
-        logger.error(f"HTTPException in save_user_avatar_route: {e}, type: {type(e)}, args: {e.args}")
-        raise e
-    except Exception as e:
-        logger.error(f"Error in save_user_avatar_route: {e}, type: {type(e)}, args: {e.args}")
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-
-
-# FUNCTIONS
+# HELPER FUNCTIONS
 async def get_user_data(user_id: str):
     query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
@@ -148,6 +62,7 @@ async def get_user_data(user_id: str):
         }
     else:
         return None
+
 
 async def save_user_data(user_id: str, first_name: Optional[str] = None, last_name: Optional[str] = None, username: Optional[str] = None, email: Optional[str] = None, avatar: Optional[str] = None, banner: Optional[str] = None, about: Optional[str] = None, onboarded: Optional[bool] = None, subscriber: Optional[bool] = None, admin: Optional[bool] = None):
     # Fetch the existing user data from the database
@@ -219,6 +134,7 @@ def encrypt_if_not_none(value: Optional[str]) -> Optional[str]:
         return cipher_suite.encrypt(value.encode()).decode('utf-8')
     return None
 
+
 async def save_new_user_data(user_id: str, first_name: Optional[str] = None, last_name: Optional[str] = None, username: Optional[str] = None, email: Optional[str] = None, avatar: Optional[str] = None, banner: Optional[str] = None, about: Optional[str] = None, onboarded: Optional[bool] = None, subscriber: Optional[bool] = None, admin: Optional[bool] = None):
 
     values = {
@@ -243,6 +159,7 @@ async def save_new_user_data(user_id: str, first_name: Optional[str] = None, las
     await database.execute(query=query, values=values)
     return {"message": "User data inserted successfully"}
     
+
 async def save_user_banner(user_id: str, file: UploadFile = File(...)):
     try:
         # Read the file content
@@ -284,6 +201,7 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
         return response
 
     return response
+
 
 async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
     try:

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Depends, HTTPException
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import boto3
 from boto3.dynamodb.conditions import Key
+
 
 # DATABASES
 dynamodb = boto3.resource(
@@ -31,6 +32,7 @@ class EntityItem(BaseModel):
     description: str
     updated: datetime
 
+
 # FUNCTIONS
 async def get_user_entities(user_id: str, entity: str, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
@@ -47,6 +49,7 @@ async def get_user_entities(user_id: str, entity: str, session: SessionContainer
     else:
         return {"error": "Item not found"}
 
+
 async def get_all_user_entities(user_id: str, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
     response = table.query(
@@ -55,6 +58,7 @@ async def get_all_user_entities(user_id: str, session: SessionContainer = Depend
     items = response.get('Items', [])
 
     return items
+
 
 async def delete_entity(user_id: str, entity: str, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
@@ -69,6 +73,7 @@ async def delete_entity(user_id: str, entity: str, session: SessionContainer = D
         return {"message": "Item deleted successfully"}
     else:
         raise HTTPException(status_code=500, detail="Error deleting item from the table")
+
 
 async def add_entity(item: EntityItem, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')

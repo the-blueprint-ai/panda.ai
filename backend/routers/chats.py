@@ -19,9 +19,6 @@ router = APIRouter(
 DATABASE_URL = settings.PSQL_DATABASE_URL
 database = Database(DATABASE_URL)
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 # Connect/Disconnect from Aurora
 @router.on_event("startup")
 async def startup():
@@ -30,6 +27,10 @@ async def startup():
 @router.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
+    
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 # ROUTERS

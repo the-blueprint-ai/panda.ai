@@ -58,14 +58,6 @@ app.include_router(chats.router)
 app.include_router(gpt.router)
 app.add_middleware(get_middleware())
 
-# Connect/Disconnect from Aurora
-@app.on_event("startup")
-async def startup():
-    await database.connect()
-
-@app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
 
 # Catch exceptions
 @app.exception_handler(RequestValidationError)
@@ -84,7 +76,7 @@ async def secure_api(s: SessionContainer = Depends(verify_session())):
 # Test API
 @app.get("/test")
 async def root():
-    return {"message": "Hello World", "token": token}
+    return {"message": "Hello World"}
 
 # Avatar Image APIs
 @app.post("/uploadimage/")

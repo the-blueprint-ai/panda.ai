@@ -1,14 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
-from supertokens_python.asyncio import delete_user
-from config import settings
-from cryptography.fernet import Fernet
-import logging
 from pydantic import BaseModel
 from datetime import datetime
-import boto3
-from boto3.dynamodb.conditions import Key
 
 from functions.entityFunctions import get_user_entities, get_all_user_entities, delete_entity, add_entity
 
@@ -32,10 +26,12 @@ async def fetch_user_entities(user_id: str, entity: str, session: SessionContain
     result = await get_user_entities(user_id, entity, session)
     return result
 
+
 @router.get("/get-all")
 async def fetch_all_user_entities(user_id: str, session: SessionContainer = Depends(verify_session())):
     result = await get_all_user_entities(user_id, session)
     return result
+
 
 @router.get("/delete")
 async def delete_user_entity(user_id: str, entity: str, session: SessionContainer = Depends(verify_session())):

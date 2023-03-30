@@ -1,7 +1,6 @@
-<script type="text/javascript">
-import * as Session from "supertokens-web-js/recipe/session";
+<script>
 import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import chatMessage from "../components/chatMessage.vue";
@@ -16,27 +15,16 @@ export default defineComponent({
     };
   },
   computed: {
-    session() {
-      return this.$store.state.userStore.session;
-    },
-    userId() {
-      return this.$store.state.userStore.userId;
-    },
-    first_name() {
-      return this.$store.state.userStore.first_name;
-    },
-    last_name() {
-      return this.$store.state.userStore.last_name;
-    },
-    username() {
-      return this.$store.state.userStore.username;
-    },
-    email() {
-      return this.$store.state.userStore.email;
-    },
-    avatar() {
-      return this.$store.state.userStore.avatar;
-    },
+    ...mapGetters("userStore", {
+      session: "getStoreSession",
+      userId: "getStoreUserId",
+      email: "getStoreEmail",
+      first_name: "getStoreFirstName",
+      last_name: "getStoreLastName",
+      username: "getStoreUsername",
+      avatar: "getStoreAvatar",
+      userChatHistory: "getStoreUserChatHistory",
+    }),
     chatHistoryObject() {
       const chatHistoryObj = {
         user_id: this.userId,
@@ -50,27 +38,20 @@ export default defineComponent({
     chatHistory() {
       return this.$store.state.chatStore.chatHistory;
     },
-    userChatHistory() {
-      return this.$store.state.userStore.chatHistory;
-    },
     isDisabled() {
       return this.$store.state.chatStore.isDisabled;
     },
   },
   async mounted() {
     await this.getSession();
-    if (this.sesison) {
-      await this.getUserInfo();
-    }
-    if (this.userId) {
-      const { userData } = getUserData(this.userId, this.$store);
-      userData(this.userId);
-      const { userChatHistory } = getUserChatHistory(this.userId, this.$store);
-      userChatHistory(this.userId);
-    }
+    await this.getUserInfo();
+    const { userData } = getUserData(this.$store, this.userId);
+    userData(this.userId);
+    const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
+    userChatHistory(this.userId);
   },
   methods: {
-    ...mapActions(["getSession", "getUserInfo"]),
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
     setInputIsVisibleValue(value) {
       this.$store.commit("setInputIsVisible", value);
     },
@@ -82,10 +63,6 @@ export default defineComponent({
     },
     redirectToLogin() {
       window.location.href = "/auth";
-    },
-    async onLogout() {
-      await Session.signOut();
-      window.location.href = "/";
     },
     focusInput() {
       if (this.$refs.messageInput) {

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-export function getUserData(userId, store) {
+export function getUserData(store, userId) {
   async function userData() {
     try {
       const url =
@@ -25,38 +25,38 @@ export function getUserData(userId, store) {
 
       const response = await res.json();
       if (response.first_name) {
-        store.commit("setFirstName", response.first_name);
+        store.commit("userStore/setStoreFirstName", response.first_name);
       }
       if (response.last_name) {
-        store.commit("setLastName", response.last_name);
+        store.commit("userStore/setStoreLastName", response.last_name);
       }
       if (response.username) {
-        store.commit("setUsername", response.username);
+        store.commit("userStore/setStoreUsername", response.username);
       }
       if (response.email) {
-        store.commit("setEmail", response.email);
+        store.commit("userStore/setStoreEmail", response.email);
       }
       if (response.avatar) {
-        store.commit("setAvatar", response.avatar);
+        store.commit("userStore/setStoreAvatar", response.avatar);
       }
       if (response.banner) {
-        store.commit("setBanner", response.banner);
+        store.commit("userStore/setStoreBanner", response.banner);
       }
       if (response.about) {
-        store.commit("setAbout", response.about);
+        store.commit("userStore/setStoreAbout", response.about);
       }
       if (response.onboarded) {
-        store.commit("setOnboarded", response.onboarded);
+        store.commit("userStore/setStoreOnboarded", response.onboarded);
       }
       if (response.subscriber) {
-        store.commit("setSubscriber", response.subscriber);
+        store.commit("userStore/setStoreSubscriber", response.subscriber);
       }
       if (response.admin) {
-        store.commit("setAdmin", response.admin);
+        store.commit("userStore/setStoreAdmin", response.admin);
       }
       if (response.created_at) {
         var dt = DateTime.fromISO(response.created_at);
-        store.commit("setJoined", dt.toLocaleString(DateTime.DATE_FULL));
+        store.commit("userStore/setStoreJoined", dt.toLocaleString(DateTime.DATE_FULL));
       }
     } catch (error) {
       // Handle the error

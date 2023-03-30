@@ -45,7 +45,7 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapGetters('userStore', ['getEmail']),
+    ...mapGetters('userStore', ['getStoreEmail']),
     retrieveEmail() {
       return this.getEmail;
     },
@@ -99,7 +99,7 @@ export default defineComponent({
         } else {
           // sign up successful. The session tokens are automatically handled by
           // the frontend SDK.
-          this.$store.commit("userStore/setEmail", email);
+          this.$store.commit("userStore/setStoreEmail", email);
           console.log("Email saved to store: " + email);
           this.emailVerification();
         }

@@ -1,4 +1,5 @@
 const imageUploadStore = {
+  namespaced: true,
   state: {
     fileName: "",
     formData: null,

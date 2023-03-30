@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-export function getUserChatHistory(userId, store) {
+export function getUserChatHistory(store, userId) {
   const userChatHistory = async () => {
     try {
       const url =
@@ -52,7 +52,7 @@ export function getUserChatHistory(userId, store) {
           content: content,
         });
       }
-      store.commit("setUserChatHistory", chatHistory);
+      store.commit("userStore/setStoreUserChatHistory", chatHistory);
       // Return the chat history
       return chatHistory;
 

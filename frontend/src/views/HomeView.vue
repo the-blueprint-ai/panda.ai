@@ -1,71 +1,50 @@
 <script>
-import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
   data: () => {
-    return {
-      session: false,
-      userId: "",
-    };
+    return {};
   },
   computed: {
-    typeValue() {
-      return this.$store.state.typingStore.typeValue;
-    },
-    typeStatus() {
-      return this.$store.state.typingStore.typeStatus;
-    },
-    typingSpeed() {
-      return this.$store.state.typingStore.typingSpeed;
-    },
-    newTextDelay() {
-      return this.$store.state.typingStore.newTextDelay;
-    },
-    displayTextArray() {
-      return this.$store.state.typingStore.displayTextArray;
-    },
-    displayTextArrayIndex() {
-      return this.$store.state.typingStore.displayTextArrayIndex;
-    },
-    charIndex() {
-      return this.$store.state.typingStore.charIndex;
-    },
+    ...mapGetters("userStore", {
+      session: "getStoreSession",
+      userId: "getStoreUserId",
+    }),
+    ...mapGetters("typingStore", {
+      typeValue: "getTypeValue",
+      typeStatus: "getTypeStatus",
+      typingSpeed: "getTypingSpeed",
+      newTextDelay: "getNewTextDelay",
+      displayTextArray: "getDisplayTextArray",
+      displayTextArrayIndex: "getDisplayTextArrayIndex",
+      charIndex: "getCharIndex",
+    }),
   },
-  mounted() {
-    this.getUserInfo();
+  async mounted() {
     setTimeout(this.typeText, this.newTextDelay + 200);
+    try {
+      await this.getSession();
+      if (this.session) {
+        await this.getUserInfo();
+      }
+    } catch (error) {
+      console.error("Error in mounted hook:", error);
+    }
   },
   methods: {
-    setTypeValueValue(value) {
-      this.$store.commit('setTypeValue', value)
-    },
-    setTypeStatusValue(value) {
-      this.$store.commit('setTypeStatus', value)
-    },
-    setTypingSpeedValue(value) {
-      this.$store.commit('setTypingSpeed', value)
-    },
-    setNewTextDelayValue(value) {
-      this.$store.commit('setNewTextDelay', value)
-    },
-    setDisplayTextArrayValue(value) {
-      this.$store.commit('setDisplayTextArray', value)
-    },
-    setDisplayTextArrayIndexValue(value) {
-      this.$store.commit('setDisplayTextArrayIndex', value)
-    },
-    setCharIndexValue(value) {
-      this.$store.commit('setCharIndex', value)
-    },
-    async getUserInfo() {
-      this.session = await Session.doesSessionExist();
-      if (this.session) {
-        this.userId = await Session.getUserId();
-      }
-    },
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
+    ...mapMutations("typingStore", {
+      setTypeValueValue: "setTypeValue",
+      setTypeStatusValue: "setTypeStatus",
+      setTypingSpeedValue: "setTypingSpeed",
+      setNewTextDelayValue: "setNewTextDelay",
+      setDisplayTextArrayValue: "setDisplayTextArray",
+      setDisplayTextArrayIndexValue: "setDisplayTextArrayIndex",
+      setCharIndexValue: "setCharIndex",
+    }),
     typeText() {
       if (
         this.charIndex <
@@ -116,7 +95,7 @@ export default defineComponent({
         </router-link>
       </div>
       <div v-else>
-        <router-link :to="'/auth'">
+        <router-link :to="'/signin'">
           <button class="letsChat">Let's Chat</button>
         </router-link>
       </div>

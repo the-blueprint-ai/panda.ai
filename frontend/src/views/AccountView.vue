@@ -1,7 +1,7 @@
 <script>
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getUserData } from "../composables/getUserData.js";
@@ -38,59 +38,33 @@ export default defineComponent({
     };
   },
   computed: {
-    session() {
-      return this.$store.state.userStore.session;
-    },
-    userId() {
-      return this.$store.state.userStore.userId;
-    },
-    email() {
-      return this.$store.state.userStore.email;
-    },
-    first_name() {
-      return this.$store.state.userStore.first_name;
-    },
-    last_name() {
-      return this.$store.state.userStore.last_name;
-    },
-    username() {
-      return this.$store.state.userStore.username;
-    },
-    avatar() {
-      return this.$store.state.userStore.avatar;
-    },
-    banner() {
-      return this.$store.state.userStore.banner;
-    },
-    about() {
-      return this.$store.state.userStore.about;
-    },
-    onboarded() {
-      return this.$store.state.userStore.onboarded;
-    },
-    subscriber() {
-      return this.$store.state.userStore.subscriber;
-    },
-    admin() {
-      return this.$store.state.userStore.admin;
-    },
-    joined() {
-      return this.$store.state.userStore.joined;
-    },
-    userChatHistory() {
-      return this.$store.state.userStore.userChatHistory;
-    },
+    ...mapGetters("userStore", {
+      session: "getStoreSession",
+      userId: "getStoreUserId",
+      email: "getStoreEmail",
+      first_name: "getStoreFirstName",
+      last_name: "getStoreLastName",
+      username: "getStoreUsername",
+      avatar: "getStoreAvatar",
+      banner: "getStoreBanner",
+      joined: "getStoreJoined",
+      about: "getStoreAbout",
+      onboarded: "getStoreOnboarded",
+      subscriber: "getStoreSubscriber",
+      admin: "getStoreAdmin",
+      userChatHistory: "getStoreUserChatHistory",
+    }),
   },
   async mounted() {
     await this.getSession();
     await this.getUserInfo();
-    const { userData } = getUserData(this.userId, this.$store);
+    const { userData } = getUserData(this.$store, this.userId);
     userData(this.userId);
-    const { userChatHistory } = getUserChatHistory(this.userId, this.$store);
+    const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
   },
   methods: {
-    ...mapActions(["getSession", "getUserInfo"]),
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
     redirectToLogin() {
       window.location.href = "/auth";
     },
@@ -100,24 +74,6 @@ export default defineComponent({
     async onLogout() {
       await Session.signOut();
       window.location.href = "/";
-    },
-    setFirstName(value) {
-      this.$store.commit("setFirstName", value);
-    },
-    setLastName(value) {
-      this.$store.commit("setLastName", value);
-    },
-    setUsername(value) {
-      this.$store.commit("setUsername", value);
-    },
-    setEmail(value) {
-      this.$store.commit("setEmail", value);
-    },
-    setAvatar(value) {
-      this.$store.commit("setAvatar", value);
-    },
-    setBanner(value) {
-      this.$store.commit("setBanner", value);
     },
     triggerBannerUpload() {
       this.$refs.bannerInput.click();
@@ -136,7 +92,9 @@ export default defineComponent({
         // Process the uploaded image file here
         try {
           const url =
-            import.meta.env.VITE_APP_API_URL + "/users/banner/?user_id=" + this.userId;
+            import.meta.env.VITE_APP_API_URL +
+            "/users/banner/?user_id=" +
+            this.userId;
           const res = await fetch(url, {
             method: "POST",
             body: this.formData,
@@ -151,7 +109,7 @@ export default defineComponent({
 
           // Parse the JSON response
           const jsonResponse = await res.json();
-          this.setBanner(jsonResponse.url);
+          this.$store.commit("userStore/setStoreBanner", jsonResponse.url);
         } catch (error) {
           // Handle the error
           console.error("An error occurred while saving the file:", error);
@@ -169,7 +127,9 @@ export default defineComponent({
         // Process the uploaded image file here
         try {
           const url =
-            import.meta.env.VITE_APP_API_URL + "/users/avatar/?user_id=" + this.userId;
+            import.meta.env.VITE_APP_API_URL +
+            "/users/avatar/?user_id=" +
+            this.userId;
           const res = await fetch(url, {
             method: "POST",
             body: this.formData,
@@ -184,7 +144,7 @@ export default defineComponent({
 
           // Parse the JSON response
           const jsonResponse = await res.json();
-          this.setAvatar(jsonResponse.url);
+          this.$store.commit("userStore/setStoreAvatar", jsonResponse.url);
         } catch (error) {
           // Handle the error
           console.error("An error occurred while saving the file:", error);
@@ -193,20 +153,21 @@ export default defineComponent({
     },
     async updateUserData() {
       if (this.new_first_name !== "") {
-        this.setFirstName(this.new_first_name);
+        this.$store.commit("userStore/setStoreFirstName", this.new_first_name);
       }
       if (this.new_last_name !== "") {
-        this.setLastName(this.new_last_name);
+        this.$store.commit("userStore/setStoreLastName", this.new_last_name);
       }
       if (this.new_username !== "") {
-        this.setUsername(this.new_username);
+        this.$store.commit("userStore/setStoreUsername", this.new_username);
       }
       if (this.new_email !== "") {
-        this.setEmail(this.new_email);
+        this.$store.commit("userStore/setStoreEmail", this.new_email);
       }
       try {
         const url =
-          import.meta.env.VITE_APP_API_URL + "/users/save/?user_id=" +
+          import.meta.env.VITE_APP_API_URL +
+          "/users/save/?user_id=" +
           this.userId +
           "&first_name=" +
           this.first_name +
@@ -371,7 +332,7 @@ export default defineComponent({
               />
               <div class="overlayTitle">
                 <h2>Edit Your Details</h2>
-                <p>User ID: {{ this.userId }}</p>
+                <p>User ID: {{ userId }}</p>
               </div>
               <div class="overlayForm">
                 <form>
@@ -418,7 +379,9 @@ export default defineComponent({
                 </form>
               </div>
               <div class="overlayButtons">
-                <button class="chatButton" @click="updateUserData()">Save</button>
+                <button class="chatButton" @click="updateUserData()">
+                  Save
+                </button>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 const typingStore = {
+  namespaced: true,
   state: {
     typeValue: "",
     typeStatus: false,
@@ -32,7 +33,29 @@ const typingStore = {
       state.charIndex = value;
     },
   },
-  getters: {},
+  getters: {
+    getTypeValue(state) {
+      return state.typeValue;
+    },
+    getTypeStatus(state) {
+      return state.typeStatus;
+    },
+    getDisplayTextArray(state) {
+      return state.displayTextArray;
+    },
+    getTypingSpeed(state) {
+      return state.typingSpeed;
+    },
+    getNewTextDelay(state) {
+      return state.newTextDelay;
+    },
+    getDisplayTextArrayIndex(state) {
+      return state.displayTextArrayIndex;
+    },
+    getCharIndex(state) {
+      return state.charIndex;
+    },
+  },
   actions: {},
 };
 

@@ -1,4 +1,5 @@
 const chatStore = {
+  namespaced: true,
   state: {
     msg: "",
     inputIsVisible: false,

@@ -101,7 +101,7 @@ export default defineComponent({
 <style>
 /* @import "../assets/styles/panda-main.css"; */
 
-.cursor {
+.smallcursor {
   display: inline-block;
   width: 12px;
   height: 16px;

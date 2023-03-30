@@ -5,7 +5,7 @@ import {
   doesEmailExist,
 } from "supertokens-web-js/recipe/thirdpartyemailpassword";
 import { emailVerification } from "../composables/emailVerification.js";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 
@@ -45,6 +45,10 @@ export default defineComponent({
     },
   },
   computed: {
+    ...mapGetters('userStore', ['getEmail']),
+    retrieveEmail() {
+      return this.getEmail;
+    },
     isEmailValid() {
       return this.validateEmail(this.email);
     },
@@ -53,7 +57,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(["getSession", "getUserInfo"]),
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
     emailVerification,
     validateEmail: function (email) {
       var re =
@@ -95,6 +99,8 @@ export default defineComponent({
         } else {
           // sign up successful. The session tokens are automatically handled by
           // the frontend SDK.
+          this.$store.commit("userStore/setEmail", email);
+          console.log("Email saved to store: " + email);
           this.emailVerification();
         }
       } catch (err) {
@@ -183,7 +189,7 @@ export default defineComponent({
           />
           <input
             ref="email"
-            v-model="this.email"
+            v-model="email"
             @input="isTyping = true"
             type="email"
             placeholder="kung-fu@panda.ai"
@@ -205,7 +211,7 @@ export default defineComponent({
           />
           <input
             ref="password"
-            v-model="this.password"
+            v-model="password"
             type="password"
             placeholder="sKad00sh"
             @keyup.enter="signUpClicked(this.email, this.password)"

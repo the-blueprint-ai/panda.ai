@@ -1,11 +1,11 @@
-import Vuex from "vuex";
+import { createStore } from "vuex";
 import chatStore from "./chatStore";
 import imageUploadStore from "./imageUploadStore";
 import typingStore from "./typingStore";
 import userStore from "./userStore";
 
 // Create a new store instance.
-const store = new Vuex.Store({
+export default createStore({
   modules: {
     userStore: userStore,
     typingStore: typingStore,
@@ -23,5 +23,3 @@ const store = new Vuex.Store({
     },
   },
 });
-
-export default store;

@@ -29,14 +29,14 @@ export default {
     if (this.session) {
       await this.getUserInfo();
     }
-    if (this.userId) {
+    if (this.session && this.userId) {
       const { userData } = getUserData(this.userId, this.$store);
       userData(this.userId);
     }
   },
 
   methods: {
-    ...mapActions(["getSession", "getUserInfo"]),
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
     setIsOpenValue(value) {
       this.$store.commit("setIsOpen", value);
     },

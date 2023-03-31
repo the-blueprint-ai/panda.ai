@@ -5,7 +5,6 @@ import {
   doesEmailExist,
 } from "supertokens-web-js/recipe/thirdpartyemailpassword";
 import { emailVerification } from "../composables/emailVerification.js";
-import { mapActions, mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 
@@ -45,10 +44,6 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapGetters('userStore', ['getStoreEmail']),
-    retrieveEmail() {
-      return this.getEmail;
-    },
     isEmailValid() {
       return this.validateEmail(this.email);
     },
@@ -57,7 +52,6 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions("userStore", ["getSession", "getUserInfo"]),
     emailVerification,
     validateEmail: function (email) {
       var re =
@@ -68,7 +62,7 @@ export default defineComponent({
       const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
       return regex.test(password);
     },
-    signUpClicked: async function (email, password) {
+    signUpClicked: async function (store, email, password) {
       try {
         let response = await emailPasswordSignUp({
           formFields: [
@@ -99,8 +93,7 @@ export default defineComponent({
         } else {
           // sign up successful. The session tokens are automatically handled by
           // the frontend SDK.
-          this.$store.commit("userStore/setStoreEmail", email);
-          console.log("Email saved to store: " + email);
+          store.commit("userStore/setStoreEmail", email);
           this.emailVerification();
         }
       } catch (err) {
@@ -214,7 +207,7 @@ export default defineComponent({
             v-model="password"
             type="password"
             placeholder="sKad00sh"
-            @keyup.enter="signUpClicked(this.email, this.password)"
+            @keyup.enter="signUpClicked(this.$store, this.email, this.password)"
           />
           <h6 v-if="badPasswordError">{{ badPasswordError }}</h6>
           <button
@@ -226,7 +219,7 @@ export default defineComponent({
               passwordOk === 'ok' &&
               password
             "
-            @click="signUpClicked(this.email, this.password)"
+            @click="signUpClicked(this.$store, this.email, this.password)"
           >
             SIGN UP
           </button>

@@ -42,7 +42,8 @@ export default defineComponent({
         } else {
           await this.getSession();
           let userId = await Session.getUserId();
-          window.location.href = "/auth/" + userId + "/chat";
+          this.$router.push("/auth/" + userId + "/chat");
+          // window.location.href = "/auth/" + userId + "/chat";
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {

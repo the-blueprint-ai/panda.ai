@@ -62,7 +62,7 @@ export default defineComponent({
       this.$store.commit("setIsDisabled", value);
     },
     redirectToLogin() {
-      window.location.href = "/auth";
+      this.$router.push("/signin");
     },
     focusInput() {
       if (this.$refs.messageInput) {

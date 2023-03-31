@@ -66,14 +66,14 @@ export default defineComponent({
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     redirectToLogin() {
-      window.location.href = "/auth";
+      this.$router.push("/signin");
     },
     redirectToChat() {
-      window.location.href = "/" + this.userId + "/chat";
+      this.$router.push("/" + this.userId + "/chat");
     },
     async onLogout() {
       await Session.signOut();
-      window.location.href = "/";
+      this.$router.push("/");
     },
     triggerBannerUpload() {
       this.$refs.bannerInput.click();

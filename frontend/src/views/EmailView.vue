@@ -1,6 +1,5 @@
 <script>
 import { defineComponent } from "vue";
-import { mapGetters, mapActions, mapState } from "vuex";
 import * as Session from "supertokens-web-js/recipe/session";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
@@ -9,25 +8,13 @@ export default defineComponent({
   data() {
     return {};
   },
-  watch: {
-    getEmail(newValue) {
-      if (newValue) {
-        console.log("EmailView, from store: " + newValue);
-      }
-    },
-  },
-  mounted() {
-    console.log("EmailView, from store: " + this.email);
-  },
-  computed: {
-    ...mapGetters("userStore", ["getEmail"]),
-    ...mapState("userStore", ["email"]),
-  },
+  watch: {},
+  mounted() {},
+  computed: {},
   methods: {
-    ...mapActions("userStore", ["getSession"]),
     async onLogout() {
       await Session.signOut();
-      window.location.href = "/";
+      this.$router.push("/");
     },
   },
   components: {

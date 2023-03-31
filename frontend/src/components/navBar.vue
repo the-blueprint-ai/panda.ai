@@ -12,6 +12,7 @@ export default {
       session: "getStoreSession",
       userId: "getStoreUserId",
       avatar: "getStoreAvatar",
+      onboarded: "getStoreOnboarded",
       admin: "getStoreAdmin",
     }),
     isOpen() {
@@ -39,14 +40,14 @@ export default {
       this.$store.commit("setIsOpen", value);
     },
     redirectToSignUp() {
-      window.location.href = "/signup";
+      this.$router.push("/signup");
     },
     redirectToSignIn() {
-      window.location.href = "/signin";
+      this.$router.push("/signin");
     },
     async onLogout() {
       await Session.signOut();
-      window.location.href = "/";
+      this.$router.push("/");
     },
     openClose() {
       var _this = this;
@@ -128,6 +129,7 @@ export default {
       </div>
       <div class="account-items">
         <img
+          v-if="onboarded"
           src="../../src/assets/icons/caret-down-fill.svg"
           class="downsvg"
           ref="menu"
@@ -164,6 +166,7 @@ export default {
           </div>
         </div>
         <img
+          v-if="onboarded"
           class="user-icon"
           v-bind:src="avatar"
           ref="menu"

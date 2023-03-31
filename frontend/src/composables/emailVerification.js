@@ -9,10 +9,12 @@ export async function emailVerification() {
       // Redirect the user to the home page
       await this.getSession();
       let userId = await Session.getUserId();
-      window.location.assign = userId + "/onboarding";
+      this.$router.push(userId + "/onboarding");
+      // window.location.assign = userId + "/onboarding";
     } else {
       // email was sent successfully
-      window.location.href = "/auth/email";
+      this.$router.push("/auth/email");
+      // window.location.href = "/auth/email";
     }
   } catch (err) {
     console.error(err);
@@ -24,3 +26,9 @@ export async function emailVerification() {
     }
   }
 }
+
+
+// await this.getSession();
+// let userId = await Session.getUserId();
+// console.log("From emailVerification.js - userId: " + userId + "email: " + email);
+// saveEmail(userId, email);

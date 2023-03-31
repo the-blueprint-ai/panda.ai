@@ -127,11 +127,11 @@ export default defineComponent({
       this.setDaypartValue(dp);
     },
     redirectToLogin() {
-      window.location.href = "/auth";
+      this.$router.push("/signin");
     },
     async onLogout() {
       await Session.signOut();
-      window.location.href = "/";
+      this.$router.push("/");
     },
     focusInput() {
       if (this.$refs.messageInput) {
@@ -145,7 +145,8 @@ export default defineComponent({
       return chat[Math.floor(Math.random() * chat.length)];
     },
     goToAccount(){
-      window.location.href = "/" + this.userId + "/account";
+      this.$router.push("/" + this.userId + "/account");
+      // window.location.href = "/" + this.userId + "/account";
     },
     startMessage() {
       this.setIsDisabledValue(true);

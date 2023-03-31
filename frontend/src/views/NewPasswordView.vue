@@ -55,10 +55,10 @@ export default defineComponent({
         } else if (response.status === "RESET_PASSWORD_INVALID_TOKEN_ERROR") {
           // the password reset token in the URL is invalid, expired, or already consumed
           window.alert("Password reset failed. Please try again");
-          window.location.assign("/signin"); // back to the login screen.
+          this.$router.push("signin"); // back to the login screen.
         } else {
           window.alert("Password reset successful!");
-          window.location.assign("/signin");
+          this.$router.push("signin"); // back to the login screen.
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {

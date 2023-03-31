@@ -1,7 +1,7 @@
-<script type="text/javascript">
+<script>
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import chatMessage from "../components/chatMessage.vue";
@@ -18,27 +18,33 @@ export default defineComponent({
     };
   },
   computed: {
-    session() {
-      return this.$store.state.userStore.session;
-    },
-    userId() {
-      return this.$store.state.userStore.userId;
-    },
-    first_name() {
-      return this.$store.state.userStore.first_name;
-    },
-    last_name() {
-      return this.$store.state.userStore.last_name;
-    },
-    username() {
-      return this.$store.state.userStore.username;
-    },
-    email() {
-      return this.$store.state.userStore.email;
-    },
-    avatar() {
-      return this.$store.state.userStore.avatar;
-    },
+    ...mapGetters("userStore", {
+      session: "getStoreSession",
+      userId: "getStoreUserId",
+      email: "getStoreEmail",
+      first_name: "getStoreFirstName",
+      last_name: "getStoreLastName",
+      username: "getStoreUsername",
+      avatar: "getStoreAvatar",
+      banner: "getStoreBanner",
+      joined: "getStoreJoined",
+      about: "getStoreAbout",
+      onboarded: "getStoreOnboarded",
+      subscriber: "getStoreSubscriber",
+      admin: "getStoreAdmin",
+      userChatHistory: "getStoreUserChatHistory",
+    }),
+    ...mapGetters("chatStore", {
+      inputIsVisible: "getInputIsVisible",
+      imageDrop: "getImageDrop",
+      daypart: "getDaypart",
+      chatHistory: "getChatHistory",
+      isDisabled: "getIsDisabled",
+    }),
+    ...mapGetters("imageUploadStore", {
+      success: "getSuccess",
+      error: "getError",
+    }),
     userData() {
       return {
         user_id: this.userId,
@@ -56,27 +62,6 @@ export default defineComponent({
       };
       return chatHistoryObj;
     },
-    inputIsVisible() {
-      return this.$store.state.chatStore.inputIsVisible;
-    },
-    imageDrop() {
-      return this.$store.state.chatStore.imageDrop;
-    },
-    daypart() {
-      return this.$store.state.chatStore.daypart;
-    },
-    chatHistory() {
-      return this.$store.state.chatStore.chatHistory;
-    },
-    isDisabled() {
-      return this.$store.state.chatStore.isDisabled;
-    },
-    success() {
-      return this.$store.state.imageUploadStore.success;
-    },
-    error() {
-      return this.$store.state.imageUploadStore.error;
-    },
   },
   async mounted() {
     await this.getSession();
@@ -85,53 +70,31 @@ export default defineComponent({
     this.getDaypart();
   },
   methods: {
-    ...mapActions(['getSession', 'getUserInfo']),
-    setInputIsVisibleValue(value) {
-      this.$store.commit('setInputIsVisible', value)
-    },
-    setImageDropValue(value) {
-      this.$store.commit('setImageDrop', value)
-    },
-    setAvatarValue(value) {
-      this.$store.commit('setAvatar', value)
-    },
-    setDaypartValue(value) {
-      this.$store.commit('setDaypart', value)
-    },
-    addToChatHistory(value) {
-      this.$store.commit('setChatHistory', value)
-    },
-    emptyChatHistoryValues() {
-      this.$store.commit('emptyChatHistory')
-    },
-    removeFromChatHistory(value) {
-      this.$store.commit('removeChatHistory', value)
-    },
-    setFirstNameValue(value) {
-      this.$store.commit('setFirstName', value)
-    },
-    setLastNameValue(value) {
-      this.$store.commit('setLastName', value)
-    },
-    setUsernameValue(value) {
-      this.$store.commit('setUsername', value)
-    },
-    setIsDisabledValue(value) {
-      this.$store.commit('setIsDisabled', value)
-    },
-    setSuccess(value) {
-      this.$store.commit("setSuccess", value);
-    },
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
+    ...mapMutations("chatStore", {
+      setInputIsVisibleValue: "setInputIsVisible",
+      setDaypartValue: "setDaypart",
+      setImageDropValue: "setImageDrop",
+      addToChatHistory: "setChatHistory",
+      emptyChatHistoryValues: "emptyChatHistory",
+      removeFromChatHistory: "removeChatHistory",
+      setIsDisabledValue: "setIsDisabled",
+    }),
+    ...mapMutations("userStore", {
+      setFirstNameValue: "setFirstNameValue",
+      setLastNameValue: "setLastNameValue",
+      setUsernameValue: "setUsernameValue",
+      setAvatarValue: "setAvatarValue",
+    }),
+    ...mapMutations("imageUploadStore", {
+      setSuccess: "setSuccess",
+    }),
     getDaypart() {
       const dp = daypartFunc();
       this.setDaypartValue(dp);
     },
     redirectToLogin() {
       this.$router.push("/signin");
-    },
-    async onLogout() {
-      await Session.signOut();
-      this.$router.push("/");
     },
     focusInput() {
       if (this.$refs.messageInput) {
@@ -144,13 +107,16 @@ export default defineComponent({
     randomChat(chat) {
       return chat[Math.floor(Math.random() * chat.length)];
     },
-    goToAccount(){
+    goToAccount() {
       this.$router.push("/" + this.userId + "/account");
       // window.location.href = "/" + this.userId + "/account";
     },
     startMessage() {
       this.setIsDisabledValue(true);
-      setTimeout(() => this.addToChatHistory(privatePanda(this.daypart)[0]), 1200);
+      setTimeout(
+        () => this.addToChatHistory(privatePanda(this.daypart)[0]),
+        1200
+      );
       setTimeout(() => this.addToChatHistory(privatePanda()[1]), 3200);
       setTimeout(() => this.addToChatHistory(privatePanda()[2]), 5200);
       setTimeout(() => this.setIsDisabledValue(false), 5200);
@@ -162,24 +128,58 @@ export default defineComponent({
       if (this.first_name == "") {
         this.setIsDisabledValue(true);
         this.setFirstNameValue(this.messageToSend);
-        setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name)[3]), 1200);
+        setTimeout(
+          () =>
+            this.addToChatHistory(
+              privatePanda(this.daypart, this.first_name)[3]
+            ),
+          1200
+        );
         setTimeout(() => this.addToChatHistory(privatePanda()[4]), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 3200);
         setTimeout(() => this.focusInput(), 3210);
       } else if (this.last_name == "") {
         this.setIsDisabledValue(true);
         this.setLastNameValue(this.messageToSend);
-        setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name)[5]), 1200);
+        setTimeout(
+          () =>
+            this.addToChatHistory(
+              privatePanda(this.daypart, this.first_name, this.last_name)[5]
+            ),
+          1200
+        );
         setTimeout(() => this.addToChatHistory(privatePanda()[6]), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 3200);
         setTimeout(() => this.focusInput(), 3210);
       } else if (this.username == "") {
         this.setIsDisabledValue(true);
         this.setUsernameValue(this.messageToSend);
-        setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name, this.username)[7]), 1200);
+        setTimeout(
+          () =>
+            this.addToChatHistory(
+              privatePanda(
+                this.daypart,
+                this.first_name,
+                this.last_name,
+                this.username
+              )[7]
+            ),
+          1200
+        );
         setTimeout(() => this.addToChatHistory(privatePanda()[8]), 3200);
         setTimeout(() => this.addToChatHistory(privatePanda()[9]), 7200);
-        setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name, this.username)[10]), 9200);
+        setTimeout(
+          () =>
+            this.addToChatHistory(
+              privatePanda(
+                this.daypart,
+                this.first_name,
+                this.last_name,
+                this.username
+              )[10]
+            ),
+          9200
+        );
         setTimeout(() => this.setImageDropValue("active"), 9200);
         setTimeout(() => this.setIsDisabledValue(true), 9200);
         setTimeout(() => this.focusInput(), 9210);
@@ -188,7 +188,18 @@ export default defineComponent({
         saveUserData(this.userData);
         this.removeFromChatHistory(1);
         this.setIsDisabledValue(true);
-        setTimeout(() => this.addToChatHistory(privatePanda(this.daypart, this.first_name, this.last_name, this.username)[11]), 60);
+        setTimeout(
+          () =>
+            this.addToChatHistory(
+              privatePanda(
+                this.daypart,
+                this.first_name,
+                this.last_name,
+                this.username
+              )[11]
+            ),
+          60
+        );
         setTimeout(() => this.addToChatHistory(privatePanda()[12]), 320);
         setTimeout(() => this.addToChatHistory(privatePanda()[13]), 640);
         setTimeout(() => this.addToChatHistory(privatePanda()[14]), 960);
@@ -256,7 +267,7 @@ export default defineComponent({
               <img v-bind:src="avatar" class="chatAvatar" />
               <div class="userInput">
                 <textarea
-                  :disabled='isDisabled'
+                  :disabled="isDisabled"
                   class="input"
                   v-model="messageToSend"
                   @keydown.enter.stop.prevent="submitMessage()"
@@ -265,10 +276,20 @@ export default defineComponent({
                   placeholder="enter your message here"
                   ref="messageInput"
                 ></textarea>
-                <button :disabled='isDisabled' class="chatButton" id="sendButton"  @click="submitMessage()">
+                <button
+                  :disabled="isDisabled"
+                  class="chatButton"
+                  id="sendButton"
+                  @click="submitMessage()"
+                >
                   Send
                 </button>
-                <button :disabled='isDisabled' class="chatButton" id="undoButton" @click="removeMessage()">
+                <button
+                  :disabled="isDisabled"
+                  class="chatButton"
+                  id="undoButton"
+                  @click="removeMessage()"
+                >
                   Undo
                 </button>
               </div>
@@ -276,7 +297,10 @@ export default defineComponent({
           </div>
         </div>
         <div v-if="imageDrop">
-          <ImageUpload :user-id=this.userId @image-uploaded.once="submitMessage()"></ImageUpload>
+          <ImageUpload
+            :user-id="this.userId"
+            @image-uploaded.once="submitMessage()"
+          ></ImageUpload>
         </div>
         <h3 v-if="success">Image uploaded successfully!</h3>
         <h3 v-if="error">Error uploading image, please try again.</h3>

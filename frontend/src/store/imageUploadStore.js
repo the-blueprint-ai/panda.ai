@@ -23,7 +23,20 @@ const imageUploadStore = {
       state.error = value;
     },
   },
-  getters: {},
+  getters: {
+    getFileName(state) {
+      return state.fileName;
+    },
+    getFormData(state) {
+      return state.formData;
+    },
+    getSuccess(state) {
+      return state.success;
+    },
+    getError(state) {
+      return state.error;
+    },
+  },
   actions: {},
 };
 

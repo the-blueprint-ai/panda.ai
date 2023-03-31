@@ -46,7 +46,35 @@ const chatStore = {
       state.preview = value;
     },
   },
-  getters: {},
+  getters: {
+    getMsg(state) {
+      return state.msg;
+    },
+    getInputIsVisible(state) {
+      return state.inputIsVisible;
+    },
+    getDaypart(state) {
+      return state.daypart;
+    },
+    getChatHistory(state) {
+      return state.chatHistory;
+    },
+    getIsDisabled(state) {
+      return state.isDisabled;
+    },
+    getImageDrop(state) {
+      return state.imageDrop;
+    },
+    getSaveButton(state) {
+      return state.saveButton;
+    },
+    getFileError(state) {
+      return state.fileError;
+    },
+    getPreview(state) {
+      return state.preview;
+    },
+  },
   actions: {},
 };
 

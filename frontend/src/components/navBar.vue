@@ -47,7 +47,7 @@ export default {
     },
     async onLogout() {
       await Session.signOut();
-      this.$router.push("/");
+      window.location.href = ("http://localhost:3000/");
     },
     openClose() {
       var _this = this;

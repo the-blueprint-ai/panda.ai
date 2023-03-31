@@ -66,7 +66,7 @@ async def do_delete(user_id: str, session: SessionContainer = Depends(verify_ses
     await delete_user(user_id) # this will succeed even if the userId didn't exist.
 
 @router.post("/save")
-async def save_user_data_route(user_id, first_name=None, last_name=None, username=None, email=None, avatar=None, banner=None, about=None, onboarded=None, subscriber=None, admin=None, session: SessionContainer = Depends(verify_session())):
+async def save_user_data_route(user_id, first_name=None, last_name=None, username=None, email=None, avatar=None, banner=None, about=None, onboarded=None, subscriber=None, admin=None):
     try:
         response = await save_user_data(user_id, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin)
         if "error" in response:

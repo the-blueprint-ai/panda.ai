@@ -27,7 +27,6 @@ const userStore = {
     },
     setStoreEmail(state, value) {
       state.email = value;
-      console.log("Email set in store:", state.email);
     },
     setStoreFirstName(state, value) {
       state.first_name = value;

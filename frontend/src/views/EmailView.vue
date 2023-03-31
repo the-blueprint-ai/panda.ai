@@ -1,17 +1,29 @@
 <script>
 import { defineComponent } from "vue";
+import { mapActions, mapGetters } from "vuex";
 import * as Session from "supertokens-web-js/recipe/session";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import { saveEmail } from "../composables/saveEmail.js";
 
 export default defineComponent({
   data() {
     return {};
   },
   watch: {},
-  mounted() {},
-  computed: {},
+  async mounted() {
+    await this.getSession();
+    await this.getUserInfo();
+    saveEmail(this.userId, this.email);
+  },
+  computed: {
+    ...mapGetters("userStore", {
+      userId: "getStoreUserId",
+      email: "getStoreEmail",
+    }),
+  },
   methods: {
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
     async onLogout() {
       await Session.signOut();
       this.$router.push("/");

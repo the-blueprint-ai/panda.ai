@@ -14,7 +14,7 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions(["getSession", "getUserInfo"]),
+    ...mapActions("userStore", ["getSession", "getUserInfo"]),
     signInClicked: async function (email, password) {
       try {
         let response = await emailPasswordSignIn({
@@ -40,7 +40,7 @@ export default defineComponent({
         } else if (response.status === "WRONG_CREDENTIALS_ERROR") {
           window.alert("Email password combination is incorrect.");
         } else {
-          await this.getSession();
+          await this.getSession;
           let userId = await Session.getUserId();
           this.$router.push("/auth/" + userId + "/chat");
           // window.location.href = "/auth/" + userId + "/chat";

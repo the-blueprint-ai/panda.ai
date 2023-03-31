@@ -64,6 +64,7 @@ app.add_middleware(get_middleware())
 async def validation_exception_handler(request, exc):
     return JSONResponse(content={"error": str(exc)}, status_code=400)
 
+
 # Session Info API
 @app.get("/sessioninfo")    
 async def secure_api(s: SessionContainer = Depends(verify_session())):

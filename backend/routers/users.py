@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
+from dependencies import database
+from event_utils import register_events
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from supertokens_python.asyncio import delete_user
@@ -8,7 +10,7 @@ from fastapi.responses import JSONResponse
 from cryptography.fernet import Fernet, InvalidToken
 from databases import Database
 import logging
-from typing import Optional
+from typing import Optional, Any
 import boto3
 from io import BytesIO
 import os
@@ -19,22 +21,11 @@ router = APIRouter(
     tags=["users"],
 )
 
+register_events(router)
+
 # DATABASES
 S3_BUCKET = settings.S3_BUCKET #"panda.ai"
 s3 = boto3.client('s3', aws_access_key_id = settings.AWS_ACCESS_KEY_ID, aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY)
-
-DATABASE_URL = settings.PSQL_DATABASE_URL
-database = Database(DATABASE_URL)
-
-# Connect/Disconnect from Aurora
-@router.on_event("startup")
-async def startup():
-    await database.connect()
-
-@router.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

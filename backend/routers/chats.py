@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
+from dependencies import database
+from event_utils import register_events
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
@@ -16,18 +18,10 @@ router = APIRouter(
     tags=["chats"],
 )
 
+register_events(router)
+
 DATABASE_URL = settings.PSQL_DATABASE_URL
 database = Database(DATABASE_URL)
-
-# Connect/Disconnect from Aurora
-@router.on_event("startup")
-async def startup():
-    await database.connect()
-
-@router.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
-    
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

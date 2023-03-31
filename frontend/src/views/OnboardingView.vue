@@ -210,7 +210,7 @@ export default defineComponent({
         setTimeout(() => this.addToChatHistory(privatePanda()[22]), 3520);
         setTimeout(() => this.addToChatHistory(privatePanda()[23]), 3840);
         setTimeout(() => saveUserChatHistory(this.chatHistoryObject.user_id, this.chatHistoryObject.chat_script), 3841);
-        // setTimeout(() => this.goToAccount(), 4160);
+        setTimeout(() => this.goToAccount(), 4160);
         setTimeout(() => this.setSuccess(""), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 4160);
       }

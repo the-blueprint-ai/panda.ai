@@ -1,4 +1,4 @@
-import uvicorn
+from uvicorn import Config, Server
 from functools import lru_cache
 from config import settings
 
@@ -117,5 +117,20 @@ app = CORSMiddleware(
     allow_headers=["Content-Type"] + get_all_cors_headers(),
 )
 
-if __name__  == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=3001)
+if __name__ == "__main__":
+    uvicorn_config = Config(
+        "app:app",
+        host="0.0.0.0",
+        port=3001,
+        log_level="info",
+        log_config={
+            "version": 1,
+            "disable_existing_loggers": False,
+            "loggers": {
+                "uvicorn.error": {"level": "ERROR"},
+                "uvicorn.access": {"level": "INFO"},
+            },
+        },
+    )
+    server = Server(config=uvicorn_config)
+    server.run()

@@ -20,9 +20,6 @@ router = APIRouter(
 
 register_events(router)
 
-DATABASE_URL = settings.PSQL_DATABASE_URL
-database = Database(DATABASE_URL)
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -41,7 +38,7 @@ async def get_user_chat_history_route(user_id: str, session: SessionContainer = 
         else:
             raise HTTPException(status_code=404, detail="User not found")
     except ValidationError as e:
-        logger.error(f"ValidationError in save_user_chat_history_route: {e}, details: {e.errors()}")
+        logger.error(f"ValidationError in get_user_chat_history_route: {e}, details: {e.errors()}")
         return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
     except Exception as e:
         logger.error(f"Error in get_user_chat_history_route: {e}, type: {type(e)}, args: {e.args}")
@@ -62,7 +59,7 @@ async def save_user_chat_history_route(data: SaveUserChatHistoryRequest, session
 
 # FUNCTIONS
 async def get_user_chat_history(user_id: str):
-    query = "SELECT user_id, created_at, chat_script FROM panda_ai_chat_history WHERE user_id = :user_id"
+    query = "SELECT user_id, created_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id"
     values = {"user_id": user_id}
     results = await database.fetch_all(query=query, values=values)
 
@@ -85,7 +82,7 @@ async def get_user_chat_history(user_id: str):
 
 async def save_user_chat_history(user_id: str, chat_script: Json[Any]):
     query = """
-        INSERT INTO panda_ai_chat_history (user_id, chat_script)
+        INSERT INTO panda_ai_user_chat_history (user_id, chat_script)
         VALUES (:user_id, :chat_script)
     """
     values = {

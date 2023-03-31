@@ -1,5 +1,4 @@
 <script>
-import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
@@ -8,6 +7,7 @@ import chatMessage from "../components/chatMessage.vue";
 import ImageUpload from "../components/imageUpload.vue";
 import { daypartFunc } from "../composables/daypart.js";
 import { privatePanda } from "../data/chat/privatePanda.js";
+import { piratePanda } from "../data/chat/piratePanda.js";
 import { saveUserData } from "../composables/saveUserData.js";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 
@@ -91,6 +91,15 @@ export default defineComponent({
     ...mapMutations("imageUploadStore", {
       setSuccess: "setSuccess",
     }),
+    getRandomChat() {
+      const chatFunctions = [privatePanda, piratePanda];
+      if (!this.getRandomChat.previousFunction) {
+        // if no previous function has been selected, select a random one
+        this.getRandomChat.previousFunction =
+          chatFunctions[Math.floor(Math.random() * chatFunctions.length)]();
+      }
+      return this.getRandomChat.previousFunction;
+    },
     getDaypart() {
       const dp = daypartFunc();
       this.setDaypartValue(dp);
@@ -112,11 +121,11 @@ export default defineComponent({
     startMessage() {
       this.setIsDisabledValue(true);
       setTimeout(
-        () => this.addToChatHistory(privatePanda(this.daypart)[0]),
+        () => this.addToChatHistory(this.getRandomChat(this.daypart)[0]),
         1200
       );
-      setTimeout(() => this.addToChatHistory(privatePanda()[1]), 3200);
-      setTimeout(() => this.addToChatHistory(privatePanda()[2]), 5200);
+      setTimeout(() => this.addToChatHistory(this.getRandomChat()[1]), 3200);
+      setTimeout(() => this.addToChatHistory(this.getRandomChat()[2]), 5200);
       setTimeout(() => this.setIsDisabledValue(false), 5200);
       setTimeout(() => this.focusInput(), 5210);
     },
@@ -129,11 +138,11 @@ export default defineComponent({
         setTimeout(
           () =>
             this.addToChatHistory(
-              privatePanda(this.daypart, this.first_name)[3]
+              this.getRandomChat(this.daypart, this.first_name)[3]
             ),
           1200
         );
-        setTimeout(() => this.addToChatHistory(privatePanda()[4]), 3200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[4]), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 3200);
         setTimeout(() => this.focusInput(), 3210);
       } else if (this.last_name == "") {
@@ -142,11 +151,11 @@ export default defineComponent({
         setTimeout(
           () =>
             this.addToChatHistory(
-              privatePanda(this.daypart, this.first_name, this.last_name)[5]
+              this.getRandomChat(this.daypart, this.first_name, this.last_name)[5]
             ),
           1200
         );
-        setTimeout(() => this.addToChatHistory(privatePanda()[6]), 3200);
+        setTimeout(() => this.addToChatHistory(privthis.getRandomChatatePanda()[6]), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 3200);
         setTimeout(() => this.focusInput(), 3210);
       } else if (this.username == "") {
@@ -155,7 +164,7 @@ export default defineComponent({
         setTimeout(
           () =>
             this.addToChatHistory(
-              privatePanda(
+              this.getRandomChat(
                 this.daypart,
                 this.first_name,
                 this.last_name,
@@ -164,12 +173,12 @@ export default defineComponent({
             ),
           1200
         );
-        setTimeout(() => this.addToChatHistory(privatePanda()[8]), 3200);
-        setTimeout(() => this.addToChatHistory(privatePanda()[9]), 7200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[8]), 3200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[9]), 7200);
         setTimeout(
           () =>
             this.addToChatHistory(
-              privatePanda(
+              this.getRandomChat(
                 this.daypart,
                 this.first_name,
                 this.last_name,
@@ -188,7 +197,7 @@ export default defineComponent({
         setTimeout(
           () =>
             this.addToChatHistory(
-              privatePanda(
+              this.getRandomChat(
                 this.daypart,
                 this.first_name,
                 this.last_name,
@@ -197,19 +206,26 @@ export default defineComponent({
             ),
           60
         );
-        setTimeout(() => this.addToChatHistory(privatePanda()[12]), 320);
-        setTimeout(() => this.addToChatHistory(privatePanda()[13]), 640);
-        setTimeout(() => this.addToChatHistory(privatePanda()[14]), 960);
-        setTimeout(() => this.addToChatHistory(privatePanda()[15]), 1280);
-        setTimeout(() => this.addToChatHistory(privatePanda()[16]), 1600);
-        setTimeout(() => this.addToChatHistory(privatePanda()[17]), 1920);
-        setTimeout(() => this.addToChatHistory(privatePanda()[18]), 2240);
-        setTimeout(() => this.addToChatHistory(privatePanda()[19]), 2560);
-        setTimeout(() => this.addToChatHistory(privatePanda()[20]), 2880);
-        setTimeout(() => this.addToChatHistory(privatePanda()[21]), 3200);
-        setTimeout(() => this.addToChatHistory(privatePanda()[22]), 3520);
-        setTimeout(() => this.addToChatHistory(privatePanda()[23]), 3840);
-        setTimeout(() => saveUserChatHistory(this.chatHistoryObject.user_id, this.chatHistoryObject.chat_script), 3841);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[12]), 320);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[13]), 640);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[14]), 960);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[15]), 1280);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[16]), 1600);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[17]), 1920);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[18]), 2240);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[19]), 2560);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[20]), 2880);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[21]), 3200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[22]), 3520);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[23]), 3840);
+        setTimeout(
+          () =>
+            saveUserChatHistory(
+              this.chatHistoryObject.user_id,
+              this.chatHistoryObject.chat_script
+            ),
+          3841
+        );
         setTimeout(() => this.goToAccount(), 4160);
         setTimeout(() => this.setSuccess(""), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 4160);

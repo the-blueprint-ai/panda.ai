@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from "vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import chatMessage from "../components/chatMessage.vue";
@@ -12,6 +12,7 @@ export default defineComponent({
   data() {
     return {
       messageToSend: "",
+      historyMenu: true,
     };
   },
   computed: {
@@ -24,6 +25,9 @@ export default defineComponent({
       username: "getStoreUsername",
       avatar: "getStoreAvatar",
       userChatHistory: "getStoreUserChatHistory",
+    }),
+    ...mapMutations("chatStore", {
+      emptyChatHistory: "emptyChatHistory",
     }),
     chatHistoryObject() {
       const chatHistoryObj = {
@@ -49,6 +53,7 @@ export default defineComponent({
     userData(this.userId);
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
+    this.emptyChatHistory;
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
@@ -119,6 +124,7 @@ export default defineComponent({
             <h2>Chat History</h2>
             <div class="chatHistory">
               <UserChatHistory
+                :history-menu="historyMenu"
                 :user-chat-history="userChatHistory"
               ></UserChatHistory>
             </div>

@@ -91,14 +91,15 @@ export default defineComponent({
     ...mapMutations("imageUploadStore", {
       setSuccess: "setSuccess",
     }),
-    getRandomChat() {
+    getRandomChat(daypart = '', first_name = '', last_name = '', username = '') {
       const chatFunctions = [privatePanda, piratePanda];
       if (!this.getRandomChat.previousFunction) {
         // if no previous function has been selected, select a random one
         this.getRandomChat.previousFunction =
-          chatFunctions[Math.floor(Math.random() * chatFunctions.length)]();
+          chatFunctions[Math.floor(Math.random() * chatFunctions.length)];
       }
-      return this.getRandomChat.previousFunction;
+      const chat = this.getRandomChat.previousFunction(daypart, first_name, last_name, username);
+      return chat;
     },
     getDaypart() {
       const dp = daypartFunc();
@@ -155,7 +156,7 @@ export default defineComponent({
             ),
           1200
         );
-        setTimeout(() => this.addToChatHistory(privthis.getRandomChatatePanda()[6]), 3200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[6]), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 3200);
         setTimeout(() => this.focusInput(), 3210);
       } else if (this.username == "") {

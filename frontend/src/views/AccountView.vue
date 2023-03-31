@@ -276,7 +276,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="bodyG">
+    <div class="bodyG" id="body">
       <div v-if="session" class="accountWrapper">
         <div class="userBanner">
           <img v-if="banner" v-bind:src="banner" />

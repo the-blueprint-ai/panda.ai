@@ -41,6 +41,7 @@ span {
 }
 .bodyG h3 {
     color: #000000;
+    margin-bottom: 20px;
 }
 .bodyG p {
   color: #000000;
@@ -188,7 +189,7 @@ span {
 }
 .user-icon {
   width: 50px;
-  margin-left: 20px;
+  margin-left: 0px;
   border-radius: 50%;
 }
 .user-icon:hover {

@@ -1,18 +1,20 @@
-export function saveUserChatHistory(chatHistoryObject) {
+export function saveUserChatHistory(user_id, chat_script) {
   return new Promise((resolve, reject) => {
     const saveData = async () => {
       try {
-        const url = import.meta.env.VITE_APP_API_URL + "/chats/save/";
+        const url = import.meta.env.VITE_APP_API_URL + "/chats/save";
         const res = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(chatHistoryObject),
+          body: JSON.stringify({ user_id, chat_script: JSON.stringify(chat_script) }),
         });
 
         // Check if the response status indicates an error
         if (!res.ok) {
+          const errorText = await res.text();
+          console.log("Error response body:", errorText);
           throw new Error(`Server responded with status ${res.status}`);
         }
 

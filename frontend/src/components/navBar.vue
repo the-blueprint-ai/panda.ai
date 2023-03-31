@@ -172,9 +172,6 @@ export default {
           ref="menu"
           @click="openClose"
         />
-        <div v-if="session">
-          <button class="authButton-login" @click="onLogout">Sign Out</button>
-        </div>
         <div v-else>
           <button class="authButton-signup" @click="redirectToSignUp">
             Sign up

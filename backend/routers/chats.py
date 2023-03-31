@@ -5,7 +5,7 @@ from config import settings
 from fastapi.responses import JSONResponse
 from cryptography.fernet import Fernet
 from databases import Database
-from pydantic import Json
+from pydantic import Json, BaseModel, ValidationError
 import logging
 import json
 from typing import Any
@@ -32,6 +32,10 @@ async def shutdown():
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+class SaveUserChatHistoryRequest(BaseModel):
+    user_id: str
+    chat_script: Json[Any]
+
 
 # ROUTERS
 @router.get("/get")
@@ -42,17 +46,21 @@ async def get_user_chat_history_route(user_id: str, session: SessionContainer = 
             return data
         else:
             raise HTTPException(status_code=404, detail="User not found")
+    except ValidationError as e:
+        logger.error(f"ValidationError in save_user_chat_history_route: {e}, details: {e.errors()}")
+        return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
     except Exception as e:
         logger.error(f"Error in get_user_chat_history_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.post("/save")
-async def save_user_chat_history_route(user_id: str, chat_script: str, session: SessionContainer = Depends(verify_session())):
+async def save_user_chat_history_route(data: SaveUserChatHistoryRequest, session: SessionContainer = Depends(verify_session())):
     try:
-        response = await save_user_chat_history(user_id, chat_script)
-        if "error" in response:
-            raise HTTPException(status_code=500, detail=response["error"])
-        return {"message": "Data saved successfully"}
+        response = await save_user_chat_history(data.user_id, data.chat_script)
+        return response
+    except ValidationError as e:
+        logger.error(f"ValidationError in save_user_chat_history_route: {e}, details: {e.errors()}")
+        return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
     except Exception as e:
         logger.error(f"Error in save_user_chat_history_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
@@ -91,3 +99,5 @@ async def save_user_chat_history(user_id: str, chat_script: Json[Any]):
         "chat_script": json.dumps(chat_script)  # Convert the list of dictionaries to a JSON string
     }
     await database.execute(query=query, values=values)
+    print("Data saved successfully")
+    return {"message": "Data saved successfully"}

@@ -51,8 +51,8 @@ export default defineComponent({
         first_name: this.first_name,
         last_name: this.last_name,
         username: this.username,
-        email: this.email,
         avatar: this.avatar,
+        onboarded: true,
       };
     },
     chatHistoryObject() {
@@ -66,6 +66,7 @@ export default defineComponent({
   async mounted() {
     await this.getSession();
     await this.getUserInfo();
+    this.setUserId(this.userId);
     this.startMessage();
     this.getDaypart();
   },
@@ -81,10 +82,11 @@ export default defineComponent({
       setIsDisabledValue: "setIsDisabled",
     }),
     ...mapMutations("userStore", {
-      setFirstNameValue: "setFirstNameValue",
-      setLastNameValue: "setLastNameValue",
-      setUsernameValue: "setUsernameValue",
-      setAvatarValue: "setAvatarValue",
+      setUserId: "setStoreUserId",
+      setFirstNameValue: "setStoreFirstName",
+      setLastNameValue: "setStoreLastName",
+      setUsernameValue: "setStoreUsername",
+      setAvatarValue: "setStoreAvatar",
     }),
     ...mapMutations("imageUploadStore", {
       setSuccess: "setSuccess",
@@ -101,15 +103,11 @@ export default defineComponent({
         this.$refs.messageInput.focus();
       }
     },
-    startNewChat() {
-      window.location.reload();
-    },
     randomChat(chat) {
       return chat[Math.floor(Math.random() * chat.length)];
     },
     goToAccount() {
-      this.$router.push("/" + this.userId + "/account");
-      // window.location.href = "/" + this.userId + "/account";
+      this.$router.push("/auth/" + this.userId + "/account");
     },
     startMessage() {
       this.setIsDisabledValue(true);
@@ -184,7 +182,6 @@ export default defineComponent({
         setTimeout(() => this.setIsDisabledValue(true), 9200);
         setTimeout(() => this.focusInput(), 9210);
       } else if (this.avatar) {
-        console.log(this.userData);
         saveUserData(this.userData);
         this.removeFromChatHistory(1);
         this.setIsDisabledValue(true);
@@ -212,7 +209,7 @@ export default defineComponent({
         setTimeout(() => this.addToChatHistory(privatePanda()[21]), 3200);
         setTimeout(() => this.addToChatHistory(privatePanda()[22]), 3520);
         setTimeout(() => this.addToChatHistory(privatePanda()[23]), 3840);
-        setTimeout(() => saveUserChatHistory(this.chatHistoryObject), 3841);
+        setTimeout(() => saveUserChatHistory(this.chatHistoryObject.user_id, this.chatHistoryObject.chat_script), 3841);
         // setTimeout(() => this.goToAccount(), 4160);
         setTimeout(() => this.setSuccess(""), 3200);
         setTimeout(() => this.setIsDisabledValue(false), 4160);

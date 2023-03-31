@@ -1,4 +1,5 @@
 <script>
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import axios from "axios";
 
 export default {
@@ -9,63 +10,41 @@ export default {
   },
   props: ["userId"],
   computed: {
-    avatar() {
-      return this.$store.state.userStore.avatar;
-    },
-    fileName() {
-      return this.$store.state.imageUploadStore.fileName;
-    },
-    imageDrop() {
-      return this.$store.state.chatStore.imageDrop;
-    },
-    saveButton() {
-      return this.$store.state.chatStore.saveButton;
-    },
-    fileError() {
-      return this.$store.state.chatStore.fileError;
-    },
-    preview() {
-      return this.$store.state.chatStore.preview;
-    },
-    success() {
-      return this.$store.state.imageUploadStore.success;
-    },
-    error() {
-      return this.$store.state.imageUploadStore.error;
-    },
-    msg() {
-      return this.$store.state.chatStore.msg;
-    },
+    ...mapGetters("userStore", {
+      avatar: "getStoreAvatar",
+    }),
+    ...mapGetters("chatStore", {
+      imageDrop: "getImageDrop",
+      saveButton: "getSaveButton",
+      fileError: "getFileError",
+      preview: "getPreview",
+      msg: "getMsg",
+    }),
+    ...mapGetters("imageUploadStore", {
+      fileName: "getFileName",
+      success: "getSuccess",
+      error: "getError",
+    }),
   },
   mounted() {},
   methods: {
-    setAvatar(value) {
-      this.$store.commit("setAvatar", value);
-    },
-    setFileName(value) {
-      this.$store.commit("setFileName", value);
-    },
-    setImageDrop(value) {
-      this.$store.commit("setImageDrop", value);
-    },
-    setSaveButton(value) {
-      this.$store.commit("setSaveButton", value);
-    },
-    setFileError(value) {
-      this.$store.commit("setFileError", value);
-    },
-    setPreview(value) {
-      this.$store.commit("setPreview", value);
-    },
-    setSuccess(value) {
-      this.$store.commit("setSuccess", value);
-    },
-    setError(value) {
-      this.$store.commit("setError", value);
-    },
-    setMsg(value) {
-      this.$store.commit("setMsg", value);
-    },
+    ...mapMutations("userStore", {
+      setAvatar: "setStoreAvatar",
+    }),
+    ...mapMutations("imageUploadStore", {
+      setFileName: "setFileName",
+    }),
+    ...mapMutations("chatStore", {
+      setImageDrop: "setImageDrop",
+      setSaveButton: "setSaveButton",
+      setFileError: "setFileError",
+      setPreview: "setPreview",
+      setMsg: "setMsg",
+    }),
+    ...mapMutations("imageUploadStore", {
+      setSuccess: "setSuccess",
+      setError: "setError",
+    }),
     getMessage: async function () {
       axios
         .get("/test")
@@ -114,7 +93,7 @@ export default {
     },
     save: async function () {
       try {
-        const url = import.meta.env.VITE_APP_API_URL + "/uploadimage/?userid=" + this.userId;
+        const url = import.meta.env.VITE_APP_API_URL + "/uploadimage?userid=" + this.userId;
         const res = await fetch(url, {
           method: "POST",
           body: this.formData,

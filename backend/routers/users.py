@@ -67,6 +67,10 @@ async def do_delete(user_id: str, session: SessionContainer = Depends(verify_ses
 
 @router.post("/save")
 async def save_user_data_route(user_id, first_name=None, last_name=None, username=None, email=None, avatar=None, banner=None, about=None, onboarded=None, subscriber=None, admin=None):
+    # Convert 'onboarded', 'subscriber', and 'admin' to boolean values
+    onboarded = onboarded.lower() == "true" if onboarded is not None else None
+    subscriber = subscriber.lower() == "true" if subscriber is not None else None
+    admin = admin.lower() == "true" if admin is not None else None
     try:
         response = await save_user_data(user_id, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin)
         if "error" in response:
@@ -117,11 +121,12 @@ async def get_user_data(user_id: str):
     if result:
         created_at = result["created_at"]
         try:
-            decrypted_first_name = cipher_suite.decrypt(result["first_name"].encode()).decode('utf-8')
-            decrypted_last_name = cipher_suite.decrypt(result["last_name"].encode()).decode('utf-8')
-            decrypted_username = cipher_suite.decrypt(result["username"].encode()).decode('utf-8')
-            decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
-            decrypted_about = cipher_suite.decrypt(result["about"].encode()).decode('utf-8')
+            decrypted_first_name = decrypt_if_not_none(result["first_name"])
+            decrypted_last_name = decrypt_if_not_none(result["last_name"])
+            decrypted_username = decrypt_if_not_none(result["username"])
+            decrypted_email = decrypt_if_not_none(result["email"])
+            decrypted_about = decrypt_if_not_none(result["about"])
+
         except InvalidToken:
             return {"error": "Error decrpyting user data"}
 
@@ -148,6 +153,11 @@ async def get_user_data(user_id: str):
         }
     else:
         return None
+    
+def decrypt_if_not_none(value):
+    if value is not None:
+        return cipher_suite.decrypt(value.encode()).decode('utf-8')
+    return None
 
 async def save_user_data(user_id: str, first_name: Optional[str] = None, last_name: Optional[str] = None, username: Optional[str] = None, email: Optional[str] = None, avatar: Optional[str] = None, banner: Optional[str] = None, about: Optional[str] = None, onboarded: Optional[bool] = None, subscriber: Optional[bool] = None, admin: Optional[bool] = None):
     # Fetch the existing user data from the database
@@ -199,14 +209,23 @@ async def save_user_data(user_id: str, first_name: Optional[str] = None, last_na
     if onboarded is not None:
         fields_to_update.append("onboarded = :onboarded")
         values["onboarded"] = onboarded
+    else:
+        fields_to_update.append("onboarded = :onboarded")
+        values["onboarded"] = False
 
     if subscriber is not None:
         fields_to_update.append("subscriber = :subscriber")
         values["subscriber"] = subscriber
+    else:
+        fields_to_update.append("subscriber = :subscriber")
+        values["subscriber"] = False
 
     if admin is not None:
         fields_to_update.append("admin = :admin")
         values["admin"] = admin
+    else:
+        fields_to_update.append("admin = :admin")
+        values["admin"] = False
 
     # Join the fields to update and add the WHERE clause to the query
     query += " " + ", ".join(fields_to_update) + " WHERE user_id = :user_id"
@@ -220,6 +239,12 @@ def encrypt_if_not_none(value: Optional[str]) -> Optional[str]:
     return None
 
 async def save_new_user_data(user_id: str, first_name: Optional[str] = None, last_name: Optional[str] = None, username: Optional[str] = None, email: Optional[str] = None, avatar: Optional[str] = None, banner: Optional[str] = None, about: Optional[str] = None, onboarded: Optional[bool] = None, subscriber: Optional[bool] = None, admin: Optional[bool] = None):
+    if onboarded is None:
+        onboarded = False
+    if subscriber is None:
+        subscriber = False
+    if admin is None:
+        admin = False
 
     values = {
         "user_id": user_id,
@@ -273,7 +298,7 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
             "banner": banner
         }
         await database.execute(query=query, values=values)
-        return {"message": "User banner updated successfully"}
+        return {"message": "User banner updated successfully", "url": banner}
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}
@@ -315,7 +340,7 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
             "avatar": avatar
         }
         await database.execute(query=query, values=values)
-        return {"message": "User avatar updated successfully"}
+        return {"message": "User avatar updated successfully", "url": avatar}
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}

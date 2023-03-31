@@ -98,7 +98,7 @@ async def upload_file(userid: str, file: UploadFile = File(...)):
         # Return the public URL of the uploaded file
         response = {
             "message": "Image uploaded successfully",
-            "url": f"https://{S3_BUCKET}.s3.amazonaws.com/{folder}{file_extension}",
+            "url": f"https://s3.eu-west-2.amazonaws.com/{S3_BUCKET}/{folder}{file_extension}"
         }
         return JSONResponse(content=response, status_code=200)
 

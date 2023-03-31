@@ -73,7 +73,7 @@ export default defineComponent({
     },
     async onLogout() {
       await Session.signOut();
-      this.$router.push("/");
+      window.location.href = ("http://localhost:3000/");
     },
     triggerBannerUpload() {
       this.$refs.bannerInput.click();
@@ -93,7 +93,7 @@ export default defineComponent({
         try {
           const url =
             import.meta.env.VITE_APP_API_URL +
-            "/users/banner/?user_id=" +
+            "/users/banner?user_id=" +
             this.userId;
           const res = await fetch(url, {
             method: "POST",
@@ -109,7 +109,8 @@ export default defineComponent({
 
           // Parse the JSON response
           const jsonResponse = await res.json();
-          this.$store.commit("userStore/setStoreBanner", jsonResponse.url);
+          const updatedBannerUrl = jsonResponse.url + "?t=" + new Date().getTime();
+          this.$store.commit("userStore/setStoreBanner", updatedBannerUrl);
         } catch (error) {
           // Handle the error
           console.error("An error occurred while saving the file:", error);
@@ -128,7 +129,7 @@ export default defineComponent({
         try {
           const url =
             import.meta.env.VITE_APP_API_URL +
-            "/users/avatar/?user_id=" +
+            "/users/avatar?user_id=" +
             this.userId;
           const res = await fetch(url, {
             method: "POST",
@@ -144,7 +145,8 @@ export default defineComponent({
 
           // Parse the JSON response
           const jsonResponse = await res.json();
-          this.$store.commit("userStore/setStoreAvatar", jsonResponse.url);
+          const updatedAvatarUrl = jsonResponse.url + "?t=" + new Date().getTime();
+          this.$store.commit("userStore/setStoreAvatar", updatedAvatarUrl);
         } catch (error) {
           // Handle the error
           console.error("An error occurred while saving the file:", error);

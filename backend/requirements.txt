@@ -9,4 +9,6 @@ databases
 cryptography
 python-dotenv
 openai
+langchain
 promptlayer
+google-search-results

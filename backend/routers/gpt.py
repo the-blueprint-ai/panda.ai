@@ -3,9 +3,9 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
 import os
-import openai
 import logging
 import httpx
+from functions.chatFunctions import conversationAgent
 
 # CONFIG
 router = APIRouter(
@@ -20,9 +20,8 @@ logger = logging.getLogger(__name__)
 # ROUTERS
 @router.get("/chat")
 async def send_gpt_request(userid: str, message: str, session: SessionContainer = Depends(verify_session())):
-    
-
-    return response.json()
+    result = await conversationAgent(userid, message)
+    return result
 
 @router.get("/gpt-chat")
 async def send_gpt_request(message: str, session: SessionContainer = Depends(verify_session())):

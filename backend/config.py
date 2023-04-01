@@ -37,6 +37,8 @@ class Settings(BaseSettings):
     SPTKNS_DASHBOARD_API_KEY: str
     OPENAI_ORGANISATION: str
     OPENAI_API_KEY: str
+    PRMPTLYR_API_KEY: str
+    SERPAPI_API_KEY: str
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     FACEBOOK_CLIENT_ID: str

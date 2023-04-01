@@ -27,6 +27,10 @@ class SaveUserChatHistoryRequest(BaseModel):
     user_id: str
     chat_script: Json[Any]
 
+class UpdateUserChatHistoryRequest(BaseModel):
+    chat_id: int
+    chat_script: Json[Any]
+
 
 # ROUTERS
 @router.get("/get")
@@ -54,6 +58,18 @@ async def save_user_chat_history_route(data: SaveUserChatHistoryRequest, session
         return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
     except Exception as e:
         logger.error(f"Error in save_user_chat_history_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@router.post("/update")
+async def update_user_chat_history_route(data: UpdateUserChatHistoryRequest, session: SessionContainer = Depends(verify_session())):
+    try:
+        response = await update_user_chat_history(data.chat_id, data.chat_script)
+        return response
+    except ValidationError as e:
+        logger.error(f"ValidationError in update_user_chat_history_route: {e}, details: {e.errors()}")
+        return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
+    except Exception as e:
+        logger.error(f"Error in update_user_chat_history_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 
@@ -84,11 +100,27 @@ async def save_user_chat_history(user_id: str, chat_script: Json[Any]):
     query = """
         INSERT INTO panda_ai_user_chat_history (user_id, chat_script)
         VALUES (:user_id, :chat_script)
+        RETURNING chat_id
     """
     values = {
         "user_id": user_id,
         "chat_script": json.dumps(chat_script)  # Convert the list of dictionaries to a JSON string
     }
-    await database.execute(query=query, values=values)
+    chat_id = await database.execute(query=query, values=values)
     print("Data saved successfully")
-    return {"message": "Data saved successfully"}
+    return {"message": "Data saved successfully", "chat_id": chat_id}
+
+async def update_user_chat_history(chat_id: int, chat_script: Json[Any]):
+    query = """
+        UPDATE panda_ai_user_chat_history
+        SET chat_script = :chat_script
+        WHERE chat_id = :chat_id
+    """
+    values = {
+        "chat_id": chat_id,
+        "chat_script": json.dumps(chat_script)  # Convert the list of dictionaries to a JSON string
+    }
+    await database.execute(query=query, values=values)
+
+    print("Chat history updated successfully")
+    return {"message": "Chat history updated successfully"}

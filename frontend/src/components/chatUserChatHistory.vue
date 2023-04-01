@@ -101,6 +101,14 @@ export default {
       this.setIsDisabled(true);
       const selectedDay = this.filteredChatData[dayIndex];
       this.selectedChat = selectedDay.chats[chatIndex];
+
+      const searchTerm = this.chatHistorySearch.trim().toLowerCase();
+
+      // Add highlighted property to each chat message
+      this.selectedChat.content.forEach((contentItem) => {
+        contentItem.highlighted = contentItem.message.toLowerCase().includes(searchTerm);
+      });
+
       this.activeChat = this.selectedChat;
       this.emptyStoreChatHistory();
       this.addToStoreChatHistory(this.selectedChat.content);
@@ -121,6 +129,7 @@ export default {
           class="chatUserChatHistorySearchBox"
           type="text"
           v-model="chatHistorySearch"
+          @input="$emit('update-search-term', chatHistorySearch)"
           placeholder="Search chat history..."
         />
       </div>

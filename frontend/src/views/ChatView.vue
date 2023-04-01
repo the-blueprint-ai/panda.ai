@@ -8,20 +8,20 @@ import { getUserData } from "../composables/getUserData.js";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
 import ChatUserChatHistory from "../components/chatUserChatHistory.vue";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
+import { updateUserChatHistory } from "../composables/updateUserChatHistory.js";
+import { gptChat } from "../composables/gptChat.js";
+import { pandaChat } from "../composables/pandaChat.js";
 
 export default defineComponent({
   data() {
     return {
       messageToSend: "",
+      chat_id: null,
       historyMenu: true,
+      currentSearchTerm: null,
     };
   },
-  watch: {
-    userStoreChatHistory(newValue, oldValue) {
-      // React to changes in userStoreChatHistory
-      this.refreshUserChatHistory();
-    },
-  },
+  watch: {},
   computed: {
     ...mapGetters("userStore", {
       session: "getStoreSession",
@@ -84,14 +84,44 @@ export default defineComponent({
         }
       }
       this.emptyStoreChatHistory();
-      getUserChatHistory(this.$store, this.userId);
       this.setIsDisabled(false);
+      this.focusInput();
     },
-    submitMessage() {
-      // Add code to send to chatBot
+    async submitMessage() {
       this.addToChatStoreChatHistory({ user: "user", message: this.messageToSend });
-      this.messageToSend = "";
+      const waitForResponse = async () => {
+        return new Promise((resolve) => {
+          const pandaResponse = pandaChat(this.userId, this.messageToSend);
+          resolve(pandaResponse);
+        });
+      };
+
+      Promise.resolve().then(() => {
+        this.messageToSend = "";
+      });
+
+      const pandaResponse = await waitForResponse();
+      this.addToChatStoreChatHistory({ user: "panda", message: pandaResponse });
+
       // Add code to update the chat history database
+      const chatHistory = this.getChatStoreChatHistory;
+
+      if (this.chat_id === null) {
+        // Save chat history for the first time
+        try {
+          const savedChatId = await saveUserChatHistory(this.userId, chatHistory);
+          this.chat_id = savedChatId;
+        } catch (error) {
+          console.error("Failed to save chat history:", error);
+        }
+      } else {
+        // Update chat history with the existing chat_id
+        try {
+          await updateUserChatHistory(this.chat_id, chatHistory);
+        } catch (error) {
+          console.error("Failed to update chat history:", error);
+        }
+      }
     },
   },
   components: {
@@ -113,9 +143,11 @@ export default defineComponent({
             <h2>Chat History</h2>
             <div class="chatHistory">
               <ChatUserChatHistory
+                v-if="historyMenu"
                 :history-menu="historyMenu"
                 :user-store-chat-history="userStoreChatHistory"
                 :user-id="userId"
+                @update-search-term="currentSearchTerm = $event"
               ></ChatUserChatHistory>
             </div>
             <button class="startNewChat" @click="startNewChat">
@@ -129,6 +161,7 @@ export default defineComponent({
                 :message="item"
                 :class="item.user + 'Chat'"
                 :key="item.user + '-' + index"
+                :search-term="currentSearchTerm"
               ></chatMessage>
             </div>
             <div class="userInputContainer">

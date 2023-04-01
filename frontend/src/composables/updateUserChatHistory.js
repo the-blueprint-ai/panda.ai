@@ -1,14 +1,17 @@
-export function saveUserChatHistory(user_id, chat_script) {
+export function updateUserChatHistory(chat_id, chat_script) {
   return new Promise((resolve, reject) => {
     const saveData = async () => {
       try {
-        const url = import.meta.env.VITE_APP_API_URL + "/chats/save";
+        const url = import.meta.env.VITE_APP_API_URL + "/chats/update";
         const res = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user_id, chat_script: JSON.stringify(chat_script) }),
+          body: JSON.stringify({
+            chat_id,
+            chat_script: JSON.stringify(chat_script),
+          }),
         });
 
         // Check if the response status indicates an error
@@ -19,8 +22,9 @@ export function saveUserChatHistory(user_id, chat_script) {
         }
 
         const jsonResponse = await res.json();
-        const chat_id = jsonResponse.chat_id;
-        resolve(chat_id); // Resolve the promise with the chat_id when the request is successful
+        const message = jsonResponse.message;
+        console.log("Update response:", message); // Log the success message for debugging
+        resolve(message); // Resolve the promise with the success message when the request is successful
       } catch (error) {
         // Handle the error
         console.log("An error occurred while saving the file:", error);

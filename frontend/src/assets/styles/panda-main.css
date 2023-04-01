@@ -223,13 +223,13 @@ span {
   flex-direction: column;
   justify-content: top;
   align-items: center;
-  width: 300px;
+  width: 400px;
 }
 .chatHistoryContainer h2 {
   color:#000000;
 }
 .chatHistory {
-  width: 290px;
+  width: 390px;
   margin-left: -30px;
   height: 90%;
   padding-left: 40px;
@@ -1252,6 +1252,41 @@ span.typed-text {
   background-repeat: repeat-x;
   background-size: 1px 5px;
   cursor: pointer;
+}
+.chatUserChatHistory{
+  height: 880px;
+  display: flex;
+}
+.chatUserChatHistoryDates {
+  min-width: 375px;
+  max-width: 375px;
+  padding-left: 5px;
+  text-align: left;
+  white-space: nowrap;
+}
+.chatUserChatHistorySearch {
+  margin-left: -5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+}
+.chatUserChatHistorySearchBox {
+  height: 30px;
+  width: 340px;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  padding: 5px;
+  border: 2px solid lightgray;
+  border-radius: 10px;
+  font-family: "Monaco";
+  font-size: 18px;
+  overflow: wrap;
+  resize: none;
+}
+
+.chatUserChatHistorySearchBox:focus {
+  outline: none;
 }
 .userChatHistory{
   height: 948px;

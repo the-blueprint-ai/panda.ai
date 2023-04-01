@@ -55,7 +55,6 @@ export function getUserChatHistory(store, userId) {
       store.commit("userStore/setStoreUserChatHistory", chatHistory);
       // Return the chat history
       return chatHistory;
-
     } catch (error) {
       console.log("An error occurred while saving the file:", error);
     }

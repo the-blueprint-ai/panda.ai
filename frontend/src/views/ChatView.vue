@@ -6,7 +6,8 @@ import navFooter from "../components/navFooter.vue";
 import chatMessage from "../components/chatMessage.vue";
 import { getUserData } from "../composables/getUserData.js";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
-import UserChatHistory from "../components/userChatHistory.vue";
+import ChatUserChatHistory from "../components/chatUserChatHistory.vue";
+import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 
 export default defineComponent({
   data() {
@@ -14,6 +15,12 @@ export default defineComponent({
       messageToSend: "",
       historyMenu: true,
     };
+  },
+  watch: {
+    userStoreChatHistory(newValue, oldValue) {
+      // React to changes in userStoreChatHistory
+      this.refreshUserChatHistory();
+    },
   },
   computed: {
     ...mapGetters("userStore", {
@@ -24,18 +31,12 @@ export default defineComponent({
       last_name: "getStoreLastName",
       username: "getStoreUsername",
       avatar: "getStoreAvatar",
-      userChatHistory: "getStoreUserChatHistory",
+      userStoreChatHistory: "getStoreUserChatHistory",
     }),
-    ...mapMutations("chatStore", {
-      emptyChatHistory: "emptyChatHistory",
+    ...mapGetters("chatStore", {
+      getChatStoreChatHistory: "getChatStoreChatHistory",
+      getIsDisabled: "getIsDisabled",
     }),
-    chatHistoryObject() {
-      const chatHistoryObj = {
-        user_id: this.userId,
-        chat_script: this.chatHistory,
-      };
-      return chatHistoryObj;
-    },
     inputIsVisible() {
       return this.$store.state.chatStore.inputIsVisible;
     },
@@ -53,15 +54,17 @@ export default defineComponent({
     userData(this.userId);
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
-    this.emptyChatHistory;
+    this.emptyChatStoreHistory;
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
+    ...mapMutations("chatStore", {
+      addToChatStoreChatHistory: "setChatStoreChatHistory",
+      emptyStoreChatHistory: "emptyChatHistory",
+      setIsDisabled: "setIsDisabled",
+    }),
     setInputIsVisibleValue(value) {
       this.$store.commit("setInputIsVisible", value);
-    },
-    addToChatHistory(value) {
-      this.$store.commit("setChatHistory", value);
     },
     setIsDisabledValue(value) {
       this.$store.commit("setIsDisabled", value);
@@ -74,41 +77,27 @@ export default defineComponent({
         this.$refs.messageInput.focus();
       }
     },
-    startNewChat() {
-      window.location.reload();
+    async startNewChat() {
+      if (!this.getIsDisabled) {
+        if (this.getChatStoreChatHistory.length > 0) {
+          saveUserChatHistory(this.userId, this.getChatStoreChatHistory);
+        }
+      }
+      this.emptyStoreChatHistory();
+      getUserChatHistory(this.$store, this.userId);
+      this.setIsDisabled(false);
     },
     submitMessage() {
       // Add code to send to chatBot
-      this.addToChatHistory({ user: "user", message: this.messageToSend });
+      this.addToChatStoreChatHistory({ user: "user", message: this.messageToSend });
       this.messageToSend = "";
       // Add code to update the chat history database
-    },
-    saveChatHistory: async function () {
-      try {
-        const url = import.meta.env.VITE_APP_API_URL + "/chats/save/";
-        const res = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(this.chatHistoryObject),
-        });
-
-        // Check if the response status indicates an error
-        if (!res.ok) {
-          throw new Error(`Server responded with status ${res.status}`);
-        }
-      } catch (error) {
-        // Handle the error
-        console.log("An error occurred while saving the file:", error);
-        this.setSuccess("");
-      }
     },
   },
   components: {
     navBar,
     navFooter,
-    UserChatHistory,
+    ChatUserChatHistory,
     chatMessage,
   },
 });
@@ -120,29 +109,26 @@ export default defineComponent({
     <div class="bodyG">
       <div>
         <div class="mainContainer">
-          <div v-if="userChatHistory" class="chatHistoryContainer">
+          <div v-if="userStoreChatHistory" class="chatHistoryContainer">
             <h2>Chat History</h2>
             <div class="chatHistory">
-              <UserChatHistory
+              <ChatUserChatHistory
                 :history-menu="historyMenu"
-                :user-chat-history="userChatHistory"
-              ></UserChatHistory>
+                :user-store-chat-history="userStoreChatHistory"
+                :user-id="userId"
+              ></ChatUserChatHistory>
             </div>
-            <button
-              :disabled="isDisabled"
-              class="startNewChat"
-              @click="startNewChat"
-            >
+            <button class="startNewChat" @click="startNewChat">
               Start new chat
             </button>
           </div>
           <div class="mainChatContainer">
             <div class="chatContainer" id="chatContainer">
               <chatMessage
-                v-for="item in chatHistory"
+                v-for="(item, index) in chatHistory"
                 :message="item"
                 :class="item.user + 'Chat'"
-                :key="item.user"
+                :key="item.user + '-' + index"
               ></chatMessage>
             </div>
             <div class="userInputContainer">

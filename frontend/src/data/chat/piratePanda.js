@@ -10,7 +10,7 @@ export function piratePanda(daypart, first_name, last_name, username) {
     { user: "panda", message: "Aye, that be more like it, matey! Right then Pirate " + username + "! Hoist the anchor, let's set sail! 💨" },
     { user: "panda", message: "Yo ho ho and a bamboo shoot, Pandas sail the seven seas in search of loot, With a patch on their eye and a hook for a paw, They're the fiercest pirates you ever saw! 🏴‍☠️" },
     { user: "panda", message: "Avast, ye scurvy dogs! Speak up like ye got a pair of sea legs! 🌊" },
-    { user: "panda", message: "Arr, let me get a good look at ye, Pirate" + username + "! Upload a photo of yourself by dropping it below… 📸" },
+    { user: "panda", message: "Arr, let me get a good look at ye, Pirate " + username + "! Upload a photo of yourself by dropping it below… 📸" },
     { user: "panda", message: "Yarr, Pirate " + username + " - Ye be one scurvy dog! 🤮" },
     { user: "panda", message: "Pirates, gather around and listen up! We're setting sail on a voyage. Hoist the colours! 🏳️‍🌈" },
     { user: "panda", message: "You and I be getting to know each other very well on this voyage!. 😇" },

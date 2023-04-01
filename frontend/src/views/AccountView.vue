@@ -6,7 +6,7 @@ import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getUserData } from "../composables/getUserData.js";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
-import UserChatHistory from "../components/userChatHistory.vue";
+import AccountUserChatHistory from "../components/accountUserChatHistory.vue";
 import UserIntegrations from "../components/userIntegrations.vue";
 import UserSubscription from "../components/userSubscription.vue";
 import UserData from "../components/userData.vue";
@@ -264,7 +264,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
-    UserChatHistory,
+    AccountUserChatHistory,
     UserIntegrations,
     UserSubscription,
     UserData,
@@ -434,14 +434,14 @@ export default defineComponent({
             </button>
           </div>
           <div class="userChatHistory">
-            <UserChatHistory
+            <AccountUserChatHistory
               :history-menu="historyMenu"
               :integrations-menu="integrationsMenu"
               :subscription-menu="subscriptionMenu"
               :data-menu="dataMenu"
               :settings-menu="settingsMenu"
               :user-chat-history="userChatHistory"
-            ></UserChatHistory>
+            ></AccountUserChatHistory>
             <UserIntegrations
               :history-menu="historyMenu"
               :integrations-menu="integrationsMenu"

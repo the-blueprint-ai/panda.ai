@@ -21,8 +21,11 @@ const chatStore = {
     setDaypart(state, value) {
       state.daypart = value;
     },
-    setChatHistory(state, value) {
+    setChatStoreChatHistory(state, value) {
       state.chatHistory.unshift(value);
+    },
+    setMultiChatHistory(state, values) {
+      state.chatHistory.unshift(...values);
     },
     emptyChatHistory(state) {
       state.chatHistory = [];
@@ -56,7 +59,7 @@ const chatStore = {
     getDaypart(state) {
       return state.daypart;
     },
-    getChatHistory(state) {
+    getChatStoreChatHistory(state) {
       return state.chatHistory;
     },
     getIsDisabled(state) {

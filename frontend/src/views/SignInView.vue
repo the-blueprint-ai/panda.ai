@@ -5,17 +5,21 @@ import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
     return {
       email: "",
       password: "",
+      loading: false,
+      buttonText: "SIGN IN",
     };
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     signInClicked: async function (email, password) {
+      this.loading = true;
       try {
         let response = await emailPasswordSignIn({
           formFields: [
@@ -33,23 +37,27 @@ export default defineComponent({
         if (response.status === "FIELD_ERROR") {
           response.formFields.forEach((formField) => {
             if (formField.id === "email") {
+              this.loading = false;
               // Email validation failed (for example incorrect email syntax).
               window.alert(formField.error);
             }
           });
         } else if (response.status === "WRONG_CREDENTIALS_ERROR") {
+          this.loading = false;
           window.alert("Email password combination is incorrect.");
         } else {
           await this.getSession;
           let userId = await Session.getUserId();
+          this.loading = false;
           this.$router.push("/auth/" + userId + "/chat");
-          // window.location.href = "/auth/" + userId + "/chat";
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {
+          this.loading = false;
           // this may be a custom error message sent from the API by you.
           window.alert(err.message);
         } else {
+          this.loading = false;
           window.alert("Oops! Something went wrong.");
         }
       }
@@ -64,6 +72,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    SpinnerComponent,
   },
 });
 </script>
@@ -85,7 +94,9 @@ export default defineComponent({
           <input ref="email" v-model="this.email" type="email" placeholder="kung-fu@panda.ai" />
           <h2>Password</h2>
           <input ref="password" v-model="this.password" type="password" placeholder="sKad00sh" @keyup.enter="signInClicked(this.email, this.password)" />
-          <button @click="signInClicked(this.email, this.password)">SIGN IN</button>
+          <button @click="signInClicked(this.email, this.password)">
+            <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
+          </button>
           <h3 @click="toForgotPassword()">FORGOT PASSWORD?</h3>
         </div>
         <div class="signInBar"></div>

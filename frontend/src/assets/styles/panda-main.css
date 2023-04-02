@@ -373,6 +373,9 @@ span {
   padding: 0.1rem;
 }
 .chatButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   color: #000000;
   background-color: #FFCB4C;
@@ -895,6 +898,9 @@ span.typed-text {
 .emailPassword button {
   height: 50px;
   width: 97%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 50px;
   background-color: #FFCB4C;
   margin-bottom: 10px;

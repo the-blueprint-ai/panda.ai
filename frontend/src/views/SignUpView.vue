@@ -7,6 +7,7 @@ import {
 import { emailVerification } from "../composables/emailVerification.js";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
@@ -20,6 +21,8 @@ export default defineComponent({
       emailOk: "",
       passwordOk: "",
       badPasswordError: "",
+      loading: false,
+      buttonText: "SIGN UP",
     };
   },
   watch: {
@@ -63,6 +66,7 @@ export default defineComponent({
       return regex.test(password);
     },
     signUpClicked: async function (store, email, password) {
+      this.loading = true;
       try {
         let response = await emailPasswordSignUp({
           formFields: [
@@ -83,10 +87,12 @@ export default defineComponent({
             if (formField.id === "email") {
               // Email validation failed (for example incorrect email syntax),
               // or the email is not unique.
+              this.loading = false;
               window.alert(formField.error);
             } else if (formField.id === "password") {
               // Password validation failed.
               // Maybe it didn't match the password strength
+              this.loading = false;
               window.alert(formField.error);
             }
           });
@@ -99,8 +105,10 @@ export default defineComponent({
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
+          this.loading = false;
           window.alert(err.message);
         } else {
+          this.loading = false;
           window.alert("Oops! Something went wrong.");
         }
       }
@@ -152,6 +160,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    SpinnerComponent,
   },
 });
 </script>
@@ -221,7 +230,7 @@ export default defineComponent({
             "
             @click="signUpClicked(this.$store, this.email, this.password)"
           >
-            SIGN UP
+            <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
           </button>
           <button
             v-else
@@ -231,7 +240,7 @@ export default defineComponent({
               cursor: default;
             "
           >
-            SIGN UP
+            <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
           </button>
           <h4>BY CONTINUING YOU AGREE TO OUR:</h4>
           <h5 @click="toToS()">TERMS OF SERVICE</h5>

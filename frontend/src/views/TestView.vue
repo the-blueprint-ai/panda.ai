@@ -2,6 +2,7 @@
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
@@ -20,6 +21,8 @@ export default defineComponent({
       pauseDuration: 1000,
       initiallength: 6,
       lastTypedIndex: -1,
+      loading: true,
+      buttonText: "SEND",
     };
   },
   mounted() {
@@ -78,6 +81,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    SpinnerComponent,
   },
 });
 </script>
@@ -87,6 +91,12 @@ export default defineComponent({
     <navBar></navBar>
     <div class="body">
       <h1>TESTING</h1>
+      <div class="spacer"></div>
+      <button class="chatButton">
+        <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
+      </button>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
       <button @click="addSentences">Add sentences</button>
       <div id="app">
         <p v-for="(sentence, index) in sentences" :key="index">

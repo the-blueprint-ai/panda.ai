@@ -1,7 +1,9 @@
 <script>
 import { defineComponent } from "vue";
+import { mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import { getRoadmap } from "../composables/getRoadmap.js";
 
 export default defineComponent({
   data() {
@@ -9,56 +11,51 @@ export default defineComponent({
       roadmapOverlay: false,
       email: "",
       roadmapSuggestion: "",
-      roadmapData: [
-        {
-          name: "Feature 1",
-          description: "This is a description for Feature 1.",
-          votes: 15,
-          tags: ["built"],
-          createdAt: "2023-03-22T18:30:00.000Z",
-        },
-        {
-          name: "Feature 2",
-          description: "This is a description for Feature 2.",
-          votes: 32,
-          tags: ["newly added"],
-          createdAt: "2023-03-25T10:45:00.000Z",
-        },
-        {
-          name: "Feature 3",
-          description: "This is a description for Feature 3.",
-          votes: 8,
-          tags: ["in progress", "newly added"],
-          createdAt: "2023-03-20T12:15:00.000Z",
-        },
-        {
-          name: "Feature 4",
-          description: "This is a description for Feature 4.",
-          votes: 47,
-          tags: ["built"],
-          createdAt: "2023-03-28T16:00:00.000Z",
-        },
-        {
-          name: "Feature 5",
-          description: "This is a description for Feature 5.",
-          votes: 26,
-          tags: ["built"],
-          createdAt: "2023-03-18T20:30:00.000Z",
-        },
-      ],
     };
   },
+  async mounted() {
+    await getRoadmap(this.$store);
+  },
   computed: {
+    ...mapGetters("roadmapStore", {
+      getRoadmapData: "getRoadmapData",
+    }),
+    roadmapData() {
+      return this.getRoadmapData || [];
+    },
     builtItems() {
       return this.roadmapData.filter((item) => item.tags.includes("built"));
     },
     notBuiltItems() {
       return this.roadmapData.filter((item) => !item.tags.includes("built"));
     },
+    sortedNotBuiltItems() {
+      return [...this.notBuiltItems].sort((a, b) => b.votes - a.votes);
+    },
   },
   methods: {
     activateOverlay() {
       this.roadmapOverlay = !this.roadmapOverlay;
+    },
+    async upvoteItem(item) {
+      try {
+        const url = import.meta.env.VITE_APP_API_URL + "/roadmap/upvote?id=" + item.id;
+        const res = await fetch(url, {
+          method: "PUT",
+        });
+
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+
+        const updatedItem = await res.json();
+        const index = this.roadmapData.findIndex(
+          (i) => i.id === updatedItem.id
+        );
+        this.roadmapData[index] = updatedItem;
+      } catch (error) {
+        console.log("An error occurred while upvoting the item:", error);
+      }
     },
   },
   components: {
@@ -81,10 +78,10 @@ export default defineComponent({
             launched...
           </h2>
         </div>
-        <div class="roadmapContainer">
+        <div v-if="roadmapData.length > 0" class="roadmapContainer">
           <div
             class="roadmapItem"
-            v-for="item in notBuiltItems"
+            v-for="item in sortedNotBuiltItems"
             :key="item.name"
           >
             <div class="roadmapItemRow1">
@@ -119,7 +116,7 @@ export default defineComponent({
             </div>
             <div v-if="!item.tags.includes('built')" class="roadmapItemRow3">
               <div class="roadmapItemVote">
-                <button>
+                <button @click="upvoteItem(item)">
                   <img src="../assets/icons/arrow-up-circle-fill.svg" />
                   <p>Upvote</p>
                   <p id="roadmapItemVotes">{{ item.votes }}</p>
@@ -146,8 +143,16 @@ export default defineComponent({
             </div>
             <div class="roadmapItemRow3">
               <div class="roadmapItemSubmit">
-                <input v-model="roadmapSuggestion" placeholder="please submit your ideas here!" />
-                <button v-if="roadmapSuggestion.length > 0" @click="activateOverlay">Submit</button>
+                <input
+                  v-model="roadmapSuggestion"
+                  placeholder="please submit your ideas here!"
+                />
+                <button
+                  v-if="roadmapSuggestion.length > 0"
+                  @click="activateOverlay"
+                >
+                  Submit
+                </button>
                 <button v-else>Submit</button>
               </div>
             </div>

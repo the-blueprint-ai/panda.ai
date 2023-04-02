@@ -24,6 +24,7 @@ from routers import users
 from routers import entities
 from routers import chats
 from routers import gpt
+from routers import roadmap
 
 @lru_cache()
 def get_settings():
@@ -56,6 +57,7 @@ app.include_router(users.router)
 app.include_router(entities.router)
 app.include_router(chats.router)
 app.include_router(gpt.router)
+app.include_router(roadmap.router)
 app.add_middleware(get_middleware())
 
 

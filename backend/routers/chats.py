@@ -6,7 +6,6 @@ from supertokens_python.recipe.session import SessionContainer
 from config import settings
 from fastapi.responses import JSONResponse
 from cryptography.fernet import Fernet
-from databases import Database
 from pydantic import Json, BaseModel, ValidationError
 import logging
 import json

@@ -54,6 +54,14 @@ export default defineComponent({
       }, 400);
     },
   },
+  async mounted() {
+    await this.getSession();
+    await this.getUserInfo();
+    const { userData } = getUserData(this.$store, this.userId);
+    userData(this.userId);
+    const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
+    userChatHistory(this.userId);
+  },
   computed: {
     ...mapGetters("userStore", {
       session: "getStoreSession",
@@ -74,14 +82,6 @@ export default defineComponent({
     isEmailValid() {
       return this.validateEmail(this.new_email);
     },
-  },
-  async mounted() {
-    await this.getSession();
-    await this.getUserInfo();
-    const { userData } = getUserData(this.$store, this.userId);
-    userData(this.userId);
-    const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
-    userChatHistory(this.userId);
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),

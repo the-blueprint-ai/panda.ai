@@ -38,8 +38,9 @@ export default defineComponent({
       this.roadmapOverlay = !this.roadmapOverlay;
     },
     async upvoteItem(item) {
+      console.log(item);
       try {
-        const url = import.meta.env.VITE_APP_API_URL + "/roadmap/upvote?id=" + item.id;
+        const url = import.meta.env.VITE_APP_API_URL + "/roadmap/upvote?id=" + item.roadmap_id;
         const res = await fetch(url, {
           method: "PUT",
         });

@@ -11,6 +11,7 @@ body {
   align-items: center;
   min-height: 78vh;
   font-family: "Monaco";
+  padding-bottom: 30px;
 }
 h1 {
   color: #FFFFFF;
@@ -83,7 +84,6 @@ span {
   height: 32px;
   width: 32px;
 }
-/* Style The Dropdown Button */
 .downsvg {
   margin: 5px;
   height: 16px;
@@ -417,7 +417,7 @@ span {
   border: none;
   padding: 0.5rem;
   margin: 0.5rem;
-  margin-right: 0px;;
+  margin-right: 0px;
   transition: all 0.5s ease-in-out;
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
@@ -1591,4 +1591,163 @@ span.typed-text {
   margin-left: 570px;
   position: absolute;
   z-index: 3;
+}
+.roadmapTitle h1 {
+  font-size: 42px;
+}
+.roadmapTitle h2 {
+  text-transform: unset;
+  font-size: 20px;
+}
+.roadmapContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.roadmapItem {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  border-radius: 15px;
+  background-color: #292929;
+  padding: 30px;
+}
+.roadmapItem-built {
+  border: 2px solid #FFCB4C;
+}
+.roadmapItemRow1 {
+  height: 65px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.roadmapItemRow2 {
+  min-height: 65px;
+  display: flex;
+  flex-grow: 10;
+  text-align: left;
+  align-items: center;
+}
+.roadmapItemRow3 {
+  height: 65px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.roadmapItemTitle {
+  margin-right: 40px;
+}
+.roadmapItemTitle h2 {
+  color: #FFFFFF;
+}
+.roadmapItemTags {
+  display: flex;
+  flex-direction: row;
+}
+.roadmapItemTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 150px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #997f30;
+  border: 1px solid #FFCB4C;
+  border-radius: 20px;
+  color: #FFCB4C;
+  font-size: 14px;
+}
+.roadmapItemTag p {
+  text-transform: uppercase;
+}
+.roadmapItemTag img {
+  height: 20px;
+  margin-left: 10px;
+}
+.roadmapItemDescription p {
+  color: #FFFFFF;
+}
+.roadmapItemVote button {
+  width: 200px;
+  height: 50px;
+  display: flex;
+  margin-left: -2px;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  font-size: large;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  box-shadow: 0px 15px 10px -15px grey;
+}
+.roadmapItemVote button:hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.roadmapItemVote button img {
+  height: 30px;
+  margin: 5px;
+}
+.roadmapItemVote button p {
+  margin: 10px;
+}
+#roadmapItemVotes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30px;
+  min-width: 30px;
+  margin: 10px;
+  background-color: #000000;
+  border-radius: 50%;
+  color: #FFCB4C;
+  font-size: 14px;
+}
+.roadmapItemSubmit {
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.roadmapItemSubmit input {
+  width: 400px;
+  height: 30px;
+  border-radius: 10px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  outline: none;
+}
+.roadmapItemSubmit button {
+  width: 100px;
+  height: 40px;
+  display: flex;
+  margin-left: 20px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  font-size: large;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  box-shadow: 0px 15px 10px -15px grey;
 }

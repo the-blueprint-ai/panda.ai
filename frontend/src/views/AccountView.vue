@@ -1,16 +1,19 @@
 <script>
 import * as Session from "supertokens-web-js/recipe/session";
+import { doesEmailExist } from "supertokens-web-js/recipe/thirdpartyemailpassword";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getUserData } from "../composables/getUserData.js";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
+import { emailVerification } from "../composables/emailVerification.js";
 import AccountUserChatHistory from "../components/accountUserChatHistory.vue";
 import UserIntegrations from "../components/userIntegrations.vue";
 import UserSubscription from "../components/userSubscription.vue";
 import UserData from "../components/userData.vue";
 import UserSettings from "../components/userSettings.vue";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
@@ -29,14 +32,27 @@ export default defineComponent({
       dataMenuActive: false,
       settingsMenuActive: false,
       formData: null,
-      usernames: [],
-      emails: [],
+      new_email: "",
+      emailTimer: null,
+      emailExistsError: "",
+      emailChecking: null,
+      emailOk: "",
       new_first_name: "",
       new_last_name: "",
       new_username: "",
-      new_email: "",
       isDisabled: true,
     };
+  },
+  watch: {
+    new_email(newValue) {
+      // Clear the previous timer (if there was one)
+      clearTimeout(this.emailTimer);
+
+      // Start a new timer for 1000ms
+      this.emailTimer = setTimeout(() => {
+        this.checkEmail(newValue);
+      }, 400);
+    },
   },
   computed: {
     ...mapGetters("userStore", {
@@ -55,6 +71,9 @@ export default defineComponent({
       admin: "getStoreAdmin",
       userChatHistory: "getStoreUserChatHistory",
     }),
+    isEmailValid() {
+      return this.validateEmail(this.new_email);
+    },
   },
   async mounted() {
     await this.getSession();
@@ -69,6 +88,46 @@ export default defineComponent({
     ...mapMutations("chatStore", {
       setIsDisabled: "setIsDisabled",
     }),
+    emailVerification,
+    validateEmail: function (email) {
+      var re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    checkEmail: async function (email) {
+      try {
+        let response = await doesEmailExist({
+          email,
+        });
+
+        if (response.doesExist) {
+          this.emailChecking = false;
+          this.emailExistsError =
+            "Email already in use. Please choose another one instead";
+          this.emailOk = "no";
+          setTimeout(() => {
+            this.emailExistsError = "";
+            this.emailOk = "";
+            this.email = "";
+            this.$refs.email.value = null;
+            this.emailChecking = true;
+          }, 3000);
+        } else {
+          this.emailChecking = false;
+          setTimeout(() => {
+            this.emailOk = "ok";
+          }, 3000);
+        }
+      } catch (err) {
+        console.error(err); // log the error to the console
+        if (err.isSuperTokensGeneralError === true) {
+          // this may be a custom error message sent from the API by you.
+          window.alert(err.message);
+        } else {
+          window.alert("Oops! Something went wrong.");
+        }
+      }
+    },
     redirectToLogin() {
       this.$router.push("/signin");
     },
@@ -77,7 +136,7 @@ export default defineComponent({
     },
     async onLogout() {
       await Session.signOut();
-      window.location.href = ("http://localhost:3000/");
+      window.location.href = "http://localhost:3000/";
     },
     triggerBannerUpload() {
       this.$refs.bannerInput.click();
@@ -113,7 +172,8 @@ export default defineComponent({
 
           // Parse the JSON response
           const jsonResponse = await res.json();
-          const updatedBannerUrl = jsonResponse.url + "?t=" + new Date().getTime();
+          const updatedBannerUrl =
+            jsonResponse.url + "?t=" + new Date().getTime();
           this.$store.commit("userStore/setStoreBanner", updatedBannerUrl);
         } catch (error) {
           // Handle the error
@@ -149,7 +209,8 @@ export default defineComponent({
 
           // Parse the JSON response
           const jsonResponse = await res.json();
-          const updatedAvatarUrl = jsonResponse.url + "?t=" + new Date().getTime();
+          const updatedAvatarUrl =
+            jsonResponse.url + "?t=" + new Date().getTime();
           this.$store.commit("userStore/setStoreAvatar", updatedAvatarUrl);
         } catch (error) {
           // Handle the error
@@ -201,7 +262,6 @@ export default defineComponent({
     },
     activateOverlay() {
       this.overlay = !this.overlay;
-      this.focusInput();
     },
     toggleHistory() {
       this.historyMenu = true;
@@ -268,6 +328,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    SpinnerComponent,
     AccountUserChatHistory,
     UserIntegrations,
     UserSubscription,
@@ -367,20 +428,39 @@ export default defineComponent({
                     <input
                       id="username"
                       v-model="new_username"
-                      :placeholder="username"
+                      :placeholder="'READ ONLY - ' + username"
                       type="text"
                       name="username"
+                      readonly
                     />
                   </div>
                   <div class="overlayFormInput">
                     <p>Email:</p>
+                    <img
+                      v-if="isEmailValid && emailOk === 'ok' && email"
+                      id="emailAccountGood"
+                      src="../assets/icons/envelope-check-fill.svg"
+                    />
+                    <img
+                      v-if="emailOk === 'no'"
+                      id="emailAccountBad"
+                      src="../assets/icons/envelope-exclamation-fill.svg"
+                    />
                     <input
                       id="email"
+                      ref="email"
                       v-model="new_email"
-                      :placeholder="email"
+                      :placeholder="'READ ONLY - ' + email"
                       type="email"
                       name="email"
+                      readonly
                     />
+                  </div>
+                  <div>
+                    <h6 v-if="new_email && emailChecking" style="color: black">
+                      CHECKING...
+                    </h6>
+                    <h6 v-if="emailExistsError">{{ emailExistsError }}</h6>
                   </div>
                 </form>
               </div>

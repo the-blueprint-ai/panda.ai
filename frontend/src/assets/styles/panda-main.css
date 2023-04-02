@@ -1519,25 +1519,27 @@ span.typed-text {
   margin: 20px;
 }
 .overlayForm {
+  min-height: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
-  margin-left: -50px;
+  margin-left: 0px;
 }
 .overlayFormInput{
   display: flex;
   flex-direction: row;
   margin-top: 15px;
-  justify-content: center;
+  align-items: center;
 }
 .overlayFormInput p {
   margin-right: 20px;
-  width: 150px;
+  width: 110px;
   text-align: right;
 }
 .overlayFormInput input {
-  width: 200px;
+  width: 300px;
+  height: 25px;
   border-radius: 10px;
   padding: 10px;
   font-family: "Monaco";
@@ -1545,9 +1547,29 @@ span.typed-text {
   border-bottom: 2px solid #000000;
   outline: none;
 }
+.overlayForm h6 {
+  color: red;
+  width: 100%;
+  margin-top: 3px;
+  margin-left: 65px;
+  text-align: center;
+}
+#emailAccountGood {
+  width: 25px;
+  margin-top: 0px;
+  margin-left: 410px;
+  position: absolute;
+}
+#emailAccountBad {
+  width: 25px;
+  margin-top: 0px;
+  margin-left: 410px;
+  position: absolute;
+}
 .overlayButtons {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: -20px;
 }
 .overlayCloseButton {
   cursor: pointer;

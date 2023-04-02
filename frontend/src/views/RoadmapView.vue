@@ -6,6 +6,9 @@ import navFooter from "../components/navFooter.vue";
 export default defineComponent({
   data() {
     return {
+      roadmapOverlay: false,
+      email: "",
+      roadmapSuggestion: "",
       roadmapData: [
         {
           name: "Feature 1",
@@ -51,6 +54,11 @@ export default defineComponent({
     },
     notBuiltItems() {
       return this.roadmapData.filter((item) => !item.tags.includes("built"));
+    },
+  },
+  methods: {
+    activateOverlay() {
+      this.roadmapOverlay = !this.roadmapOverlay;
     },
   },
   components: {
@@ -130,15 +138,17 @@ export default defineComponent({
             <div class="roadmapItemRow2">
               <div class="roadmapItemDescription">
                 <p>
-                  If you would like something else, please type in the field
-                  below. We’ll notify you once it is available.
+                  If you have any great ideas and would like something added to
+                  our roadmap, please type in the field below. We’ll notify you
+                  once it is available.
                 </p>
               </div>
             </div>
             <div class="roadmapItemRow3">
               <div class="roadmapItemSubmit">
-                <input />
-                <button><p>Submit</p></button>
+                <input v-model="roadmapSuggestion" placeholder="please submit your ideas here!" />
+                <button v-if="roadmapSuggestion.length > 0" @click="activateOverlay">Submit</button>
+                <button v-else>Submit</button>
               </div>
             </div>
           </div>
@@ -190,6 +200,41 @@ export default defineComponent({
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="roadmapOverlay"
+        class="roadmapOverlay"
+        :class="{ active: roadmapOverlay }"
+      >
+        <div class="roadmapOverlayContent">
+          <img
+            src="../assets/icons/x.svg"
+            class="roadmapOverlayCloseButton"
+            @click="activateOverlay"
+          />
+          <h1>🐼</h1>
+          <h2>Thanks for the feedback!</h2>
+          <p>
+            We’re doing our best to add the new features you want. Please share
+            your email address and we’ll notify you as we make progress!
+          </p>
+          <div class="roadmapOverlayForm">
+            <input
+              id="email"
+              ref="email"
+              v-model="email"
+              placeholder="your email address"
+              type="email"
+              name="email"
+            />
+            <button
+              class="roadmapOverlayButton"
+              @click="submitRoadmapSuggestion()"
+            >
+              Notify Me
+            </button>
           </div>
         </div>
       </div>

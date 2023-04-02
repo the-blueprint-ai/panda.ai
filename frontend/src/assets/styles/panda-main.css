@@ -1577,8 +1577,6 @@ span.typed-text {
   background-color: #FFFFFF;
   border: none;
   padding: 0.5rem;
-  margin: 0.5rem;
-  margin-right: 0px;;
   transition: all 0.5s ease-in-out;
   border: 5px solid #FFCB4C;
   border-radius: 50%;
@@ -1600,6 +1598,7 @@ span.typed-text {
   font-size: 20px;
 }
 .roadmapContainer {
+  max-width: 900px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1732,7 +1731,7 @@ span.typed-text {
   outline: none;
 }
 .roadmapItemSubmit button {
-  width: 100px;
+  width: 120px;
   height: 40px;
   display: flex;
   margin-left: 20px;
@@ -1750,4 +1749,96 @@ span.typed-text {
   font-family: "Monaco";
   text-transform: uppercase;
   box-shadow: 0px 15px 10px -15px grey;
+}
+.roadmapItemSubmit button:hover {
+  border: 3px solid #FFCB4C;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.roadmapOverlay {
+  display: none;
+}
+.roadmapOverlay.active {
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  background-color: rgba(255,255,255,0.8);
+  overflow: hidden;
+}
+.roadmapOverlayContent {
+  display: flex;
+  z-index: 2;
+  flex-direction: column;
+  background-color: #000000;
+  border-radius: 25px;
+  height: 400px;
+  width: 600px;
+  padding: 20px;
+  border: 5px solid #FFCB4C;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.roadmapOverlayContent h1 {
+  margin: 0px;
+}
+.roadmapOverlayForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 0px;
+}
+.roadmapOverlayForm input {
+  width: 300px;
+  height: 25px;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  border-bottom: 2px solid #000000;
+  outline: none;
+}
+.roadmapOverlayButton {
+  height: 45px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 10px;
+  margin: 20px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.roadmapOverlayCloseButton {
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 50%;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  height: 30px;
+  width: 30px;
+  margin-top: -45px;
+  margin-left: 595px;
+  position: absolute;
+  z-index: 3;
 }

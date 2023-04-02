@@ -1,8 +1,14 @@
 <script>
 export default {
+  data() {
+    return {
+      isDisabled: true,
+    };
+  },
   props: {
     message: Object,
     searchTerm: String,
+    // isDisabled: Boolean,
   },
   computed: {
     avatar() {
@@ -39,5 +45,9 @@ export default {
   <div :class="['chatMessage', message.user, messageClass]">
     <img v-bind:src="messageImage()" class="chatAvatar" />
     <p class="message">{{ message.message }}</p>
+    <span class="messageRating" v-if="message.user == 'panda' && !isDisabled">
+      <img class="thumbUp" src="../assets/icons/hand-thumbs-up.svg" />
+      <img class="thumbDown" src="../assets/icons/hand-thumbs-down.svg" />
+    </span>
   </div>
 </template>

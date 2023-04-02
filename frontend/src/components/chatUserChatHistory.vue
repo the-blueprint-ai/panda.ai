@@ -11,6 +11,7 @@ export default {
       activeChat: null,
       selectedChat: null,
       chatHistorySearch: "",
+      typing: false,
     };
   },
   props: {
@@ -32,6 +33,15 @@ export default {
 
           // Set the first item's visibility to true (expand the most recent date)
           this.visibilityStates[0] = true;
+        }
+      },
+    },
+    chatHistorySearch: {
+      handler(newVal) {
+        if (this.chatHistorySearch == "") {
+          this.typing = false;
+        } else {
+          this.typing = true;
         }
       },
     },
@@ -95,9 +105,6 @@ export default {
       }
     },
     showSelectedChat(dayIndex, chatIndex) {
-      if (!this.getIsDisabled) {
-        this.saveUnsavedChats();
-      }
       this.setIsDisabled(true);
       const selectedDay = this.filteredChatData[dayIndex];
       this.selectedChat = selectedDay.chats[chatIndex];
@@ -112,6 +119,10 @@ export default {
       this.activeChat = this.selectedChat;
       this.emptyStoreChatHistory();
       this.addToStoreChatHistory(this.selectedChat.content);
+    },
+    clearSearch() {
+      this.chatHistorySearch = "";
+      this.typing = false;
     },
   },
   components: {},
@@ -133,6 +144,7 @@ export default {
           placeholder="Search chat history..."
         />
       </div>
+      <img v-if="typing" class="clearChatSearch" src="../assets/icons/x-circle.svg" @click="clearSearch" />
       <ul>
         <li
           class="chatHistoryDay"

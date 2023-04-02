@@ -315,7 +315,7 @@ span {
   width: 50px;
   height: 50px;
   margin: 5px;
-  margin-right: 10px;
+  margin-bottom: 12px;
   border-radius: 50%;
 }
 .userInputContainer {
@@ -355,15 +355,50 @@ span {
 .input::placeholder {
   color: #C8C8C8;
 }
+.chatMessage {
+  display: flex;
+  align-items: center;
+  width: 98%;
+  border-bottom: 1px solid #EFEFEF;
+}
 .message {
+  display: flex;
+  align-items: center;
   margin: 10px;
-  padding: 10px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
   width:fit-content;
   max-width: 820px;
-  border: 2px solid #000000;
+  /* border: 1px solid #000000; */
   border-radius: 15px;
-  background-color: #FFFFFF;
+  /* background-color: #FFFFFF; */
   color: #000000;
+}
+.messageRating {
+  display: flex;
+  flex-grow: 5;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 7px;
+}
+.messageRating img {
+  height: 20px;
+  margin-right: 8px;
+  padding: 6px;
+}
+.messageRating img:hover {
+  cursor: pointer;
+  border-radius: 50%;
+}
+.thumbUp:hover {
+  background-color: green;
+  opacity: 70%;
+}
+.thumbDown:hover {
+  background-color: red;
+  opacity: 70%;
 }
 .user {
   display: flex;
@@ -1290,7 +1325,38 @@ span.typed-text {
   overflow: wrap;
   resize: none;
 }
-
+.clearChatSearch {
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  display: inline-block;
+  margin-top: -51px;
+  margin-left: 325px;
+  border-radius: 50%;
+  background-color: #ffcb4c;
+}
+.clearAccountSearch {
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  display: inline-block;
+  margin-top: -51px;
+  margin-left: 245px;
+  border-radius: 50%;
+  background-color: #ffcb4c;
+}
+.clearChatSearch:hover {
+  cursor: pointer;
+  background-color: #ffffff;
+}
+.clearAccountSearch:hover {
+  cursor: pointer;
+  background-color: #ffffff;
+}
 .chatUserChatHistorySearchBox:focus {
   outline: none;
 }

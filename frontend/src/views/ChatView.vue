@@ -78,11 +78,6 @@ export default defineComponent({
       }
     },
     async startNewChat() {
-      if (!this.getIsDisabled) {
-        if (this.getChatStoreChatHistory.length > 0) {
-          saveUserChatHistory(this.userId, this.getChatStoreChatHistory);
-        }
-      }
       this.emptyStoreChatHistory();
       this.setIsDisabled(false);
       this.focusInput();
@@ -162,6 +157,7 @@ export default defineComponent({
                 :class="item.user + 'Chat'"
                 :key="item.user + '-' + index"
                 :search-term="currentSearchTerm"
+                :is-disabled="this.isDisabled"
               ></chatMessage>
             </div>
             <div class="userInputContainer">

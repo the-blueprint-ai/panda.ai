@@ -1,7 +1,7 @@
 <script>
 import * as Session from "supertokens-web-js/recipe/session";
 import { defineComponent } from "vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getUserData } from "../composables/getUserData.js";
@@ -35,6 +35,7 @@ export default defineComponent({
       new_last_name: "",
       new_username: "",
       new_email: "",
+      isDisabled: true,
     };
   },
   computed: {
@@ -65,6 +66,9 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
+    ...mapMutations("chatStore", {
+      setIsDisabled: "setIsDisabled",
+    }),
     redirectToLogin() {
       this.$router.push("/signin");
     },
@@ -441,6 +445,7 @@ export default defineComponent({
               :data-menu="dataMenu"
               :settings-menu="settingsMenu"
               :user-chat-history="userChatHistory"
+              :is-disabled="this.isDisabled"
             ></AccountUserChatHistory>
             <UserIntegrations
               :history-menu="historyMenu"

@@ -10,6 +10,8 @@ export default {
       activeChat: null,
       selectedChat: null,
       chatHistorySearch: "",
+      typing: false,
+      isDisabled: true,
     };
   },
   props: {
@@ -36,6 +38,15 @@ export default {
 
           // Set the activeChat
           this.activeChat = this.selectedChat;
+        }
+      },
+    },
+    chatHistorySearch: {
+      handler(newVal) {
+        if (this.chatHistorySearch == "") {
+          this.typing = false;
+        } else {
+          this.typing = true;
         }
       },
     },
@@ -80,6 +91,10 @@ export default {
     toggleVisibility(index) {
       this.visibilityStates[index] = !this.visibilityStates[index];
     },
+    clearSearch() {
+      this.chatHistorySearch = "";
+      this.typing = false;
+    },
   },
   components: {
     chatMessage,
@@ -98,6 +113,7 @@ export default {
           placeholder="Search chat history..."
         />
       </div>
+      <img v-if="typing" class="clearAccountSearch" src="../assets/icons/x-circle.svg" @click="clearSearch" />
       <ul>
         <li
           class="chatHistoryDay"
@@ -139,6 +155,7 @@ export default {
           :class="contentItem.user + 'Chat'"
           :key="contentIndex"
           :searchTerm="chatHistorySearch"
+          :is-disabled="this.isDisabled"
         ></chatMessage>
       </span>
     </div>

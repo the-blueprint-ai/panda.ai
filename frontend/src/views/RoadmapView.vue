@@ -11,6 +11,7 @@ export default defineComponent({
       roadmapOverlay: false,
       email: "",
       roadmapSuggestion: "",
+      newIdeaId: 0,
     };
   },
   async mounted() {
@@ -37,8 +38,43 @@ export default defineComponent({
     activateOverlay() {
       this.roadmapOverlay = !this.roadmapOverlay;
     },
+    async addIdea(idea) {
+      try {
+        const url = import.meta.env.VITE_APP_API_URL + "/roadmap/add-idea?idea=" + idea;
+        const res = await fetch(url, {
+          method: "PUT",
+        });
+
+        const data = await res.json(); // get the response data from the server
+        this.newIdeaId = data.roadmap_id; // set the newIdeaId to the returned roadmap_id
+        this.roadmapSuggestion = "";
+        this.activateOverlay();
+
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+      } catch (error) {
+        console.log("An error occurred while upvoting the item:", error);
+      }
+    },
+    async addEmail(id, email) {
+      try {
+        const url = import.meta.env.VITE_APP_API_URL + "/roadmap/add-email?id=" + id + "&email=" + email;
+        const res = await fetch(url, {
+          method: "PUT",
+        });
+
+        this.email = "";
+        this.activateOverlay();
+
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+      } catch (error) {
+        console.log("An error occurred while upvoting the item:", error);
+      }
+    },
     async upvoteItem(item) {
-      console.log(item);
       try {
         const url = import.meta.env.VITE_APP_API_URL + "/roadmap/upvote?id=" + item.roadmap_id;
         const res = await fetch(url, {
@@ -147,10 +183,11 @@ export default defineComponent({
                 <input
                   v-model="roadmapSuggestion"
                   placeholder="please submit your ideas here!"
+                  @keyup.enter="addIdea(roadmapSuggestion)"
                 />
                 <button
                   v-if="roadmapSuggestion.length > 0"
-                  @click="activateOverlay"
+                  @click="addIdea(roadmapSuggestion)"
                 >
                   Submit
                 </button>
@@ -234,10 +271,11 @@ export default defineComponent({
               placeholder="your email address"
               type="email"
               name="email"
+              @keyup.enter="addEmail(this.newIdeaId, this.email)"
             />
             <button
               class="roadmapOverlayButton"
-              @click="submitRoadmapSuggestion()"
+              @click="addEmail(this.newIdeaId, this.email)"
             >
               Notify Me
             </button>

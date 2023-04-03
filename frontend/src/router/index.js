@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import * as Session from "supertokens-web-js/recipe/session";
+import { checkAdmin } from "../composables/checkAdmin.js";
 import HomeView from "../views/HomeView.vue";
 import notFoundView from "../views/404View.vue";
 import AccountView from "../views/AccountView.vue";
@@ -19,13 +20,25 @@ import EmailVerificationView from "../views/EmailVerificationView.vue";
 import PasswordResetView from "../views/PasswordResetView.vue";
 import NewPasswordView from "../views/NewPasswordView.vue";
 import TestView from "../views/TestView.vue";
+import AdminView from "../views/AdminView.vue";
 
 // Authorization Guard
 async function checkAuth(to, from, next) {
   const canAccess = await Session.doesSessionExist();
   if (!canAccess) return next("/signin");
   else return next();
-};
+}
+
+// Admin Guard
+async function adminGuard(to, from, next) {
+  const userId = await Session.getUserId();
+  const { checkAdmin: isUserAdmin } = checkAdmin(userId); // Destructure the checkAdmin function
+  const canAccess = await isUserAdmin(); // Call the checkAdmin function
+  if (!canAccess) return next("/" + userId + "/account");
+  else if (to.path === "/auth/admin" || to.path === "/auth/admin/") {
+    return next("/auth/admin/dashboard");
+  } else return next();
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -97,6 +110,17 @@ const router = createRouter({
       component: OnboardingView,
       props: true,
       beforeEnter: checkAuth,
+    },
+    {
+      path: "/auth/admin/:pathMatch(.*)*",
+      name: "admin",
+      beforeEnter: adminGuard,
+    },
+    {
+      path: "/auth/admin/dashboard",
+      name: "admindashboard",
+      component: AdminView,
+      beforeEnter: adminGuard,
     },
     {
       path: "/about",

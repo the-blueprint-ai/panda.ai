@@ -146,6 +146,10 @@ export default {
             </router-link>
             <div class="dropdown-bar"></div>
             <div v-if="admin">
+              <router-link :to="'/auth/admin/dashboard'">
+              <button class="dropdown-button">Admin Panel</button>
+              </router-link>
+              <div class="dropdown-bar"></div>
               <button class="dropdown-button" @click="goToUserDashboard">
                 User Dashboard
               </button>

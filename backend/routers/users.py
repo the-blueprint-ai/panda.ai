@@ -101,7 +101,7 @@ async def save_user_avatar_route(user_id: str, file: UploadFile = File(...), ses
     except Exception as e:
         logger.error(f"Error in save_user_avatar_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
-
+    
 
 # FUNCTIONS
 async def get_user_data(user_id: str):

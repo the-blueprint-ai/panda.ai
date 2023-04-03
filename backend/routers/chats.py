@@ -120,6 +120,4 @@ async def update_user_chat_history(chat_id: int, chat_script: Json[Any]):
         "chat_script": json.dumps(chat_script)  # Convert the list of dictionaries to a JSON string
     }
     await database.execute(query=query, values=values)
-
-    print("Chat history updated successfully")
     return {"message": "Chat history updated successfully"}

@@ -15,7 +15,7 @@ export default defineComponent({
     };
   },
   async mounted() {
-    await getRoadmap(this.$store);
+    await getRoadmap(this.$store, "roadmap");
   },
   computed: {
     ...mapGetters("roadmapStore", {

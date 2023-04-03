@@ -1,21 +1,27 @@
-export function getRoadmap(store) {
+export function getRoadmap(store, route) {
   async function roadmap() {
     try {
-      const url = import.meta.env.VITE_APP_API_URL + "/roadmap/get";
-      const res = await fetch(url, {
-        method: "GET",
-      });
+      let res;
+      if (route == "roadmap") {
+        const url = import.meta.env.VITE_APP_API_URL + "/roadmap/get";
+        res = await fetch(url, {
+          method: "GET",
+        });
+      } else if (route == "admin") {
+        const url = import.meta.env.VITE_APP_API_URL + "/admin/roadmap";
+        res = await fetch(url, {
+          method: "GET",
+        });
+      }
 
-      // Check if the response status indicates an error
       if (!res.ok) {
         if (res.status === 403) {
           console.log("Session is not available or not authorized");
-          // Update the UI or take other actions as needed
-          return;
+          return res;
         }
         if (res.status === 404) {
           console.log("User not found");
-          return;
+          return res;
         }
         throw new Error(`Server responded with status ${res.status}`);
       }
@@ -23,11 +29,10 @@ export function getRoadmap(store) {
       const response = await res.json();
       store.commit("roadmapStore/setRoadmapData", response);
     } catch (error) {
-      // Handle the error
       console.log("An error occurred while saving the file:", error);
     }
   }
-  roadmap(); // Call the function directly
+  roadmap();
   return {
     roadmap,
   };

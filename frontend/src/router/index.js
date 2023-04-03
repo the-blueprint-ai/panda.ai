@@ -34,7 +34,7 @@ async function adminGuard(to, from, next) {
   const userId = await Session.getUserId();
   const { checkAdmin: isUserAdmin } = checkAdmin(userId); // Destructure the checkAdmin function
   const canAccess = await isUserAdmin(); // Call the checkAdmin function
-  if (!canAccess) return next("/" + userId + "/account");
+  if (!canAccess) return next("/auth/" + userId + "/account");
   else if (to.path === "/auth/admin" || to.path === "/auth/admin/") {
     return next("/auth/admin/dashboard");
   } else return next();

@@ -1899,3 +1899,40 @@ span.typed-text {
   text-align: left;
   padding: 40px;
 }
+.roadmapAdmin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.roadmapAdmin table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: auto;
+  border: 1px solid #C8C8C8;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.roadmapAdmin th {
+  border: 1px solid #C8C8C8;
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 15px;
+}
+.roadmapAdmin td {
+  border: 1px solid #C8C8C8;
+  padding: 10px;
+}
+.roadmapAdmin td:focus {
+  outline-color: #000000;
+}
+.roadmapAdmin tr:nth-child(even) {
+  background-color: #EFEFEF;
+}
+.roadmapAdmin tr:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.centered {
+  text-align: center;
+}

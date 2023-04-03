@@ -2,7 +2,7 @@ export function checkAdmin(userId) {
   async function checkAdmin() {
     try {
       const url =
-        import.meta.env.VITE_APP_API_URL + "/admin/check?user_id=" + userId;
+        import.meta.env.VITE_APP_API_URL + "/admin/check-admin?user_id=" + userId;
       const res = await fetch(url, {
         method: "GET",
       });

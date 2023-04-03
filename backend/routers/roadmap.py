@@ -81,7 +81,7 @@ async def add_email_route(id: int, email: str):
 
 # FUNCTIONS
 async def get_roadmap():
-    query = "SELECT roadmap_id, name, description, tags, votes FROM panda_ai_roadmap WHERE reviewed = true"
+    query = "SELECT roadmap_id, created_at, name, description, tags, votes, reviewed, email FROM panda_ai_roadmap WHERE reviewed = true ORDER BY roadmap_id;"
     results = await database.fetch_all(query=query)
 
     if results:
@@ -114,8 +114,8 @@ async def add_item(idea: str):
 
     # Insert new idea into the database
     query = """
-        INSERT INTO panda_ai_roadmap (description, tags, reviewed)
-        VALUES (:idea, '["newly added"]'::jsonb, false);"""
+        INSERT INTO panda_ai_roadmap (name, description, tags, votes, reviewed, email)
+        VALUES ('TBC', :idea, '["newly added"]'::jsonb, 0, false, 'admin@mypanda.ai');"""
     await database.execute(query=query, values={"idea": idea})
 
     # Get the ID of the newly inserted item

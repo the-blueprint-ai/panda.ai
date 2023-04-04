@@ -52,24 +52,14 @@ export default {
     },
   },
   computed: {
-    reversedChatData() {
-      if (
-        this.userChatHistory &&
-        this.userChatHistory.length > 0 &&
-        this.userChatHistory[0].length > 0
-      ) {
-        return this.userChatHistory[0].slice().reverse();
-      }
-      return [];
-    },
     filteredChatData() {
       if (this.chatHistorySearch.trim() === "") {
-        return this.reversedChatData;
+        return this.userChatHistory[0];
       }
 
       const searchTerm = this.chatHistorySearch.trim().toLowerCase();
 
-      return this.reversedChatData
+      return this.userChatHistory[0]
         .map((day) => {
           const filteredChats = day.chats.filter((chat) =>
             chat.content.some((contentItem) =>

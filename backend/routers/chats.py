@@ -74,7 +74,7 @@ async def update_user_chat_history_route(data: UpdateUserChatHistoryRequest, ses
 
 # FUNCTIONS
 async def get_user_chat_history(user_id: str):
-    query = "SELECT user_id, created_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id"
+    query = "SELECT user_id, created_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id ORDER BY created_at DESC"
     values = {"user_id": user_id}
     results = await database.fetch_all(query=query, values=values)
 

@@ -5,7 +5,7 @@ from config import settings
 import os
 import logging
 import httpx
-from functions.chatFunctions import conversationAgent
+from functions.chatFunctions import conversationAgent, save_entities
 
 # CONFIG
 router = APIRouter(
@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 # ROUTERS
 @router.get("/chat")
-async def send_gpt_request(userid: str, message: str, session: SessionContainer = Depends(verify_session())):
-    result = await conversationAgent(userid, message)
+async def send_gpt_request(userid: str, first_name: str, last_name: str, username: str, message: str, session: SessionContainer = Depends(verify_session())):
+    result = await conversationAgent(userid, message, first_name, last_name, username)
     return result
 
 @router.get("/gpt-chat")

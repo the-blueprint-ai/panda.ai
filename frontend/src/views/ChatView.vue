@@ -9,7 +9,6 @@ import { getUserChatHistory } from "../composables/getUserChatHistory.js";
 import ChatUserChatHistory from "../components/chatUserChatHistory.vue";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 import { updateUserChatHistory } from "../composables/updateUserChatHistory.js";
-import { gptChat } from "../composables/gptChat.js";
 import { pandaChat } from "../composables/pandaChat.js";
 
 export default defineComponent({
@@ -86,7 +85,7 @@ export default defineComponent({
       this.addToChatStoreChatHistory({ user: "user", message: this.messageToSend });
       const waitForResponse = async () => {
         return new Promise((resolve) => {
-          const pandaResponse = pandaChat(this.userId, this.messageToSend);
+          const pandaResponse = pandaChat(this.userid, this.first_name, this.last_name, this.username, this.messageToSend);
           resolve(pandaResponse);
         });
       };

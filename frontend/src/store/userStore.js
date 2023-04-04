@@ -17,6 +17,7 @@ const userStore = {
     subscriber: false,
     admin: false,
     userChatHistory: [],
+    entities: [],
   },
   mutations: {
     setStoreSession(state, value) {
@@ -61,6 +62,9 @@ const userStore = {
     setStoreUserChatHistory(state, value) {
       state.userChatHistory.push(value);
     },
+    setStoreEntities(state, value) {
+      state.entities.push(value);
+    },
   },
   getters: {
     getStoreSession(state) {
@@ -104,6 +108,9 @@ const userStore = {
     },
     getStoreUserChatHistory(state) {
       return state.userChatHistory;
+    },
+    getStoreEntities(state) {
+      return state.entities;
     },
   },
   actions: {

@@ -54,24 +54,14 @@ export default {
     ...mapGetters("userStore", {
       getUserStoreChatHistory: "getStoreUserChatHistory",
     }),
-    reversedChatData() {
-      if (
-        this.userStoreChatHistory &&
-        this.userStoreChatHistory.length > 0 &&
-        this.userStoreChatHistory[0].length > 0
-      ) {
-        return this.userStoreChatHistory[0].slice().reverse();
-      }
-      return [];
-    },
     filteredChatData() {
       if (this.chatHistorySearch.trim() === "") {
-        return this.reversedChatData;
+        return this.userStoreChatHistory[0];
       }
 
       const searchTerm = this.chatHistorySearch.trim().toLowerCase();
 
-      return this.reversedChatData
+      return this.userStoreChatHistory[0]
         .map((day) => {
           const filteredChats = day.chats.filter((chat) =>
             chat.content.some((contentItem) =>

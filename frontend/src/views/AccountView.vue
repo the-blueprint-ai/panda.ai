@@ -274,7 +274,6 @@ export default defineComponent({
       this.subscriptionMenuActive = false;
       this.dataMenuActive = false;
       this.settingsMenuActive = false;
-      this.classList.toggle("is-active");
     },
     toggleIntegrations() {
       this.historyMenu = false;

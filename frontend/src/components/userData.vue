@@ -8,13 +8,21 @@ export default {
       tab: "entities",
     };
   },
-  watch: {},
+  watch: {
+    userId: {
+      immediate: true,
+      handler: async function(newUserId) {
+        if (newUserId) {
+          await getEntities(this.$store, newUserId);
+        }
+      },
+    },
+  },
   props: {
     dataMenu: Boolean,
+    userId: String,
   },
-  async mounted() {
-    await getEntities(this.$store, 'e00ca46a-16df-4844-bd4f-d8c37b2ce08a');
-  },
+  async mounted() {},
   computed: {
     ...mapGetters("userStore", {
       getStoreUserId: "getStoreUserId",
@@ -48,6 +56,9 @@ export default {
   methods: {
     dataTabSelector(tabName) {
       this.tab = tabName;
+    },
+    redirectToChat() {
+      this.$router.push("/" + this.userId + "/chat");
     },
   },
   components: {},
@@ -93,7 +104,14 @@ export default {
     </div>
     <div class="userDataContent">
       <div v-if="tab === 'entities'" class="entitiesData">
-        <table class="entitiesTable">
+        <p>
+          Below are all the different 'entities' that 🐼 panda.ai has knowledge
+          of from all the chats you've had. They are created by 🐼 panda.ai by
+          identifying individual items, such as people, pets, places, and then
+          summarising the information provided about each of them. The entities
+          are added to over time as 🐼 panda.ai learns more about them.
+        </p>
+        <table v-if="entitiesData.length != 0" class="entitiesTable">
           <thead>
             <tr>
               <th>Entity</th>
@@ -107,18 +125,23 @@ export default {
             </tr>
           </tbody>
         </table>
+        <div v-else class="noEntityData">
+          <h2>No entities data available</h2>
+          <p style="text-align: center">
+            Please have more chats with 🐼 panda.ai so that it can learn more
+            about you.
+          </p>
+          <button class="chatButton" @click="redirectToChat">Let's Chat</button>
+        </div>
       </div>
       <div v-if="tab === 'documents'" class="documentsData">
-        <h2>Documents Data</h2>
-        <p>Coming soon...</p>
+        <p>Your shared documents coming soon...</p>
       </div>
       <div v-if="tab === 'social'" class="socialData">
-        <h2>Social Data</h2>
-        <p>Coming soon...</p>
+        <p>Your shared social data coming soon...</p>
       </div>
       <div v-if="tab === 'browsing'" class="browsingData">
-        <h2>Browsing Data</h2>
-        <p>Coming soon...</p>
+        <p>Your shared browsing data coming soon...</p>
       </div>
     </div>
   </div>

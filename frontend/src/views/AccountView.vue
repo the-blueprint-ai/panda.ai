@@ -505,7 +505,7 @@ export default defineComponent({
             <button
               class="userDataMenuButton"
               :class="{ active: dataMenuActive }"
-              @click="this.toggleData"
+              @click="this.toggleData()"
             >
               Data
             </button>
@@ -547,6 +547,7 @@ export default defineComponent({
               :subscription-menu="subscriptionMenu"
               :data-menu="dataMenu"
               :settings-menu="settingsMenu"
+              :user-id="userId"
             ></UserData>
             <UserSettings
               :history-menu="historyMenu"

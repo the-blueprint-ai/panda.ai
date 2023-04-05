@@ -14,12 +14,27 @@ import boto3
 from botocore.exceptions import ClientError
 
 
+from typing import Any, Dict, List, Optional
+from pydantic import BaseModel
+from langchain.memory.chat_memory import BaseChatMemory
+from langchain.memory.prompt import (
+    ENTITY_EXTRACTION_PROMPT,
+    ENTITY_SUMMARIZATION_PROMPT,
+)
+from langchain.memory.utils import get_prompt_input_key
+from langchain.prompts.base import BasePromptTemplate
+from langchain.schema import BaseLanguageModel, BaseMessage, get_buffer_string
+
+
+
+
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-template = """Assistant is a large language model called panda and trained on top of OpenAI's chatGPT.
+template = """
+Assistant is a large language model called panda and trained on top of OpenAI's chatGPT.
 
 panda is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, panda is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
 
@@ -40,84 +55,3 @@ panda:"""
 
 
 # FUNCTIONS
-async def conversationAgent(userid: str, first_name: str, last_name: str, username: str, message: str):
-    llm=PromptLayerOpenAI(openai_api_key = settings.OPENAI_API_KEY, temperature=0.1, pl_tags=[f"{ userid }"])
-
-    new_template = template.format(
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        entities="{entities}",
-        history="{history}",
-        input="{input}"
-    )
-
-    prompt = PromptTemplate(
-        input_variables=["entities", "history", "input"], 
-        template=new_template
-    )
-
-    conversation = ConversationChain(
-        llm=llm, 
-        verbose=False,
-        prompt=prompt,
-        memory=ConversationEntityMemory(llm=OpenAI(openai_api_key=settings.OPENAI_API_KEY))
-    )
-    entityMemory = conversation.memory.store
-    response = conversation.predict(input=f"{ message }")
-
-    if response:
-        await save_entities(userid, entityMemory)
-
-         # Include entityMemory in the JSON response
-        return JSONResponse(content={"response": response, "entityMemory": entityMemory})
-    else:
-        raise HTTPException(status_code=400, detail="An error occurred while processing the request.")
-
-async def save_entities(userid: str, entity_memory: dict):
-    dynamodb = boto3.resource(
-        'dynamodb',
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        region_name=settings.AWS_REGION,
-    )
-    table = dynamodb.Table('panda-ai-entities')
-
-    try:
-        for entity, description in entity_memory.items():
-            logging.info(f"Updating item with UserId={userid}, Entity={entity}, Description={description}")  # Debugging line
-
-            response = table.get_item(
-                Key={
-                    'userId': userid,
-                    'entity': entity
-                }
-            )
-
-            existing_description = response.get('Item', {}).get('description', '')
-            new_description = f"{existing_description} {description}"
-
-            response = table.update_item(
-                Key={
-                    'userId': userid,
-                    'entity': entity
-                },
-                UpdateExpression="SET description = :newDescription",
-                ExpressionAttributeValues={
-                    ':newDescription': new_description
-                },
-                ReturnValues="UPDATED_NEW"
-            )
-
-            if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-                logging.info(f"Updated item: {response}")  # This line should be printed if the update is successful
-            else:
-                logging.info(f"Failed to update item. Response: {response}")
-
-    except ClientError as e:
-        logging.info(e.response['Error']['Message'])
-
-    return logging.info("Entities saved to DynamoDB successfully")
-
-
-

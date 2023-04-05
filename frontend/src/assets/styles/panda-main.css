@@ -1497,11 +1497,39 @@ span.typed-text {
 .userDataContent {
   display: flex;
   padding: 20px;
-  padding-top: 30px;
   text-align: left;
 }
 .userDataContent h2 {
   margin: 0;
+}
+.userDataContent table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0;
+  border: 1px solid #C8C8C8;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.userDataContent th {
+  border: 1px solid #C8C8C8;
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 15px;
+}
+.userDataContent td {
+  border: 1px solid #C8C8C8;
+  padding: 10px;
+}
+.userDataContent td:focus {
+  outline-color: #000000;
+}
+.userDataContent tr:nth-child(even) {
+  background-color: #EFEFEF;
+}
+.userDataContent tr:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
 }
 .userSettings {
   display: flex;

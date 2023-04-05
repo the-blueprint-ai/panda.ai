@@ -13,7 +13,7 @@ export default {
     dataMenu: Boolean,
   },
   async mounted() {
-    await getEntities(this.$store, this.getStoreUserId);
+    await getEntities(this.$store, 'e00ca46a-16df-4844-bd4f-d8c37b2ce08a');
   },
   computed: {
     ...mapGetters("userStore", {
@@ -21,7 +21,7 @@ export default {
       getStoreEntities: "getStoreEntities",
     }),
     entitiesData() {
-      return this.getStoreEntities || [];
+      return this.getStoreEntities[0] || [];
     },
     entitiesDataClasses() {
       return {
@@ -93,20 +93,17 @@ export default {
     </div>
     <div class="userDataContent">
       <div v-if="tab === 'entities'" class="entitiesData">
-        <h2>Entities Data</h2>
-        <p>Coming soon...</p>
-        <h2>Table goes here</h2>
-        <table class="roadmapTable">
+        <table class="entitiesTable">
           <thead>
-            <tr v-for="entity in entitiesData" :key="index">
-              <th>{{ entity.entity }}</th>
-              <th>{{ entity.description }}</th>
+            <tr>
+              <th>Entity</th>
+              <th>Description</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>entity 1</td>
-              <td>description 1</td>
+            <tr v-for="entity in entitiesData" :key="entity.entity">
+              <td>{{ entity.entity }}</td>
+              <td>{{ entity.description }}</td>
             </tr>
           </tbody>
         </table>

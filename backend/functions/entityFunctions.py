@@ -3,6 +3,7 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
 from cryptography.fernet import Fernet
+from typing import Optional
 import logging
 from pydantic import BaseModel
 from datetime import datetime
@@ -31,6 +32,11 @@ class EntityItem(BaseModel):
     entity: str
     description: str
     updated: datetime
+
+class EntityUpdate(BaseModel):
+    userId: str
+    entity: str
+    description: str
 
 
 # FUNCTIONS
@@ -99,3 +105,24 @@ async def add_entity(item: EntityItem, session: SessionContainer = Depends(verif
         return {"message": "Item added successfully"}
     else:
         raise HTTPException(status_code=500, detail="Error adding item to the table")
+    
+async def update_entity(entity_update: EntityUpdate, session: SessionContainer = Depends(verify_session())):
+    table = dynamodb.Table('panda-ai-entities')
+    # Update the entity description in the database
+
+    response = table.update_item(
+        Key={
+            'userId': entity_update.userId,
+            'entity': entity_update.entity
+        },
+        UpdateExpression="SET description = :desc",
+        ExpressionAttributeValues={
+            ':desc': entity_update.description,
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+    
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+        return {"message": "Description updated successfully"}
+    else:
+        raise HTTPException(status_code=500, detail="Error updating description in the table")

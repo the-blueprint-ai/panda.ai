@@ -1,6 +1,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { getEntities } from "../composables/getEntities.js";
+import { updateEntityDescription } from "../composables/updateEntityDescription.js";
 
 export default {
   data() {
@@ -11,7 +12,7 @@ export default {
   watch: {
     userId: {
       immediate: true,
-      handler: async function(newUserId) {
+      handler: async function (newUserId) {
         if (newUserId) {
           await getEntities(this.$store, newUserId);
         }
@@ -54,6 +55,7 @@ export default {
   },
   created() {},
   methods: {
+    updateEntityDescription,
     dataTabSelector(tabName) {
       this.tab = tabName;
     },
@@ -111,6 +113,11 @@ export default {
           summarising the information provided about each of them. The entities
           are added to over time as 🐼 panda.ai learns more about them.
         </p>
+        <p>
+          If you see anything wrong in the description of any of your entities
+          below you can click on the description in the table to edit it and
+          that will update 🐼 panda.ai's memory 🤓.
+        </p>
         <table v-if="entitiesData.length != 0" class="entitiesTable">
           <thead>
             <tr>
@@ -119,9 +126,16 @@ export default {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="entity in entitiesData" :key="entity.entity">
+            <tr v-for="(entity, index) in entitiesData" :key="entity.entity">
               <td>{{ entity.entity }}</td>
-              <td>{{ entity.description }}</td>
+              <td
+                contenteditable="true"
+                @blur="
+                  updateEntityDescription($event, this.entitiesData, index)
+                "
+              >
+                {{ entity.description }}
+              </td>
             </tr>
           </tbody>
         </table>

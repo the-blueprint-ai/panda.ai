@@ -63,7 +63,6 @@ export default defineComponent({
         return;
       }
       this.updating = true;
-      console.log("updateRoadmapData called");
       const newValue = event.target.innerText;
       const roadmap = this.roadmapData[index];
       roadmap[key] = newValue;

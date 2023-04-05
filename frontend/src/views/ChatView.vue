@@ -85,7 +85,7 @@ export default defineComponent({
       this.addToChatStoreChatHistory({ user: "user", message: this.messageToSend });
       const waitForResponse = async () => {
         return new Promise((resolve) => {
-          const pandaResponse = pandaChat(this.userid, this.first_name, this.last_name, this.username, this.messageToSend);
+          const pandaResponse = pandaChat(this.userId, this.first_name, this.last_name, this.username, this.messageToSend);
           resolve(pandaResponse);
         });
       };

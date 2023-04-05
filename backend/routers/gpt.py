@@ -20,5 +20,6 @@ logger = logging.getLogger(__name__)
 # ROUTERS
 @router.get("/chat")
 async def send_gpt_request(userid: str, first_name: str, last_name: str, username: str, message: str, session: SessionContainer = Depends(verify_session())):
+    logging.info("Chat User ID: " + userid)
     result = await conversationAgent(userid, first_name, last_name, username, message)
     return result

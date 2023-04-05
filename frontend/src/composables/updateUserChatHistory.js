@@ -23,7 +23,6 @@ export function updateUserChatHistory(chat_id, chat_script) {
 
         const jsonResponse = await res.json();
         const message = jsonResponse.message;
-        console.log("Update response:", message); // Log the success message for debugging
         resolve(message); // Resolve the promise with the success message when the request is successful
       } catch (error) {
         // Handle the error

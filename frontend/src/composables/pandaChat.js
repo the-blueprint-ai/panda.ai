@@ -10,7 +10,6 @@ export async function pandaChat(userid, first_name, last_name, username, message
       throw new Error(`Server responded with status ${res.status}`);
     }
     const response = await res.json();
-    console.log(response.entityMemory);
     return response.response;
   } catch (error) {
     console.log("An error occurred while saving the file:", error);

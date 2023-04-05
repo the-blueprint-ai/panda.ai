@@ -11,6 +11,7 @@ import promptlayer
 from config import settings
 import logging
 import boto3
+import json
 from botocore.exceptions import ClientError
 from functions.entityFunctions import get_all_user_entities
 
@@ -31,6 +32,8 @@ Overall, panda is a powerful tool that can help with a wide range of tasks and p
 The user panda is speaking to is a human and their first name is {first_name}, their surname is {last_name} and their username is {username}.
 
 Entities:
+{old_entities}
+
 {entities}
 
 Conversation history:
@@ -44,15 +47,18 @@ panda:"""
 async def conversationAgent(userid: str, first_name: str, last_name: str, username: str, message: str):
     llm=PromptLayerOpenAI(openai_api_key = settings.OPENAI_API_KEY, temperature=0.1, pl_tags=[f"{ userid }"])
 
+    old_entities = await get_all_user_entities(userid)
+    old_entities_text = '\n'.join([f"{item['entity']}: {item['description']}" for item in old_entities])
+
     new_template = template.format(
         first_name=first_name,
         last_name=last_name,
         username=username,
+        old_entities=old_entities_text,
         entities="{entities}",
         history="{history}",
         input="{input}"
     )
-    logging.info("New: " + new_template)
 
     prompt = PromptTemplate(
         input_variables=["entities", "history", "input"], 
@@ -71,8 +77,7 @@ async def conversationAgent(userid: str, first_name: str, last_name: str, userna
     if response:
         await save_entities(userid, entityMemory)
 
-         # Include entityMemory in the JSON response
-        return JSONResponse(content={"response": response, "entityMemory": entityMemory})
+        return JSONResponse(content={"response": response})
     else:
         raise HTTPException(status_code=400, detail="An error occurred while processing the request.")
 

@@ -1498,6 +1498,7 @@ span.typed-text {
   display: flex;
   padding: 20px;
   text-align: left;
+  flex-wrap: wrap;
 }
 .userDataContent h2 {
   margin: 0;
@@ -1973,6 +1974,55 @@ span.typed-text {
   align-items: flex-start;
   text-align: left;
   padding: 40px;
+}
+.usersAdmin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.chatsAdmin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.entitiesAdmin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.usersTopLine {
+  display: flex;
+  flex-direction: row;
+}
+.displayNumber {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 260px;
+  width: 260px;
+  padding: 20px;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  border-radius: 15px;
+  background-color: #FFFFFF;
+}
+.displayNumber h1 {
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 100px;
+}
+.usersChart {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
 .roadmapAdmin {
   display: flex;

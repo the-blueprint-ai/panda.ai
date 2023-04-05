@@ -5,11 +5,12 @@ import { DateTime } from "luxon";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getRoadmap } from "../composables/getRoadmap.js";
+import BarChart from "../components/barChart.vue";
 
 export default defineComponent({
   data() {
     return {
-      tab: "roadmap",
+      tab: "users",
       editingItem: null,
       updating: false,
     };
@@ -24,26 +25,6 @@ export default defineComponent({
     }),
     roadmapData() {
       return this.getRoadmapData || [];
-    },
-    userAdminClasses() {
-      return {
-        selected: this.tab === "users",
-      };
-    },
-    analyticsAdminClasses() {
-      return {
-        selected: this.tab === "analytics",
-      };
-    },
-    roadmapAdminClasses() {
-      return {
-        selected: this.tab === "roadmap",
-      };
-    },
-    logsAdminClasses() {
-      return {
-        selected: this.tab === "logs",
-      };
     },
   },
   methods: {
@@ -107,6 +88,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    BarChart,
   },
 });
 </script>
@@ -125,13 +107,25 @@ export default defineComponent({
             <img src="../assets/icons/person-circle.svg" />USERS
           </p>
           <p
+            :class="{ selected: tab === 'chats', unselected: tab !== 'chats' }"
+            @click="adminTabSelector('chats')"
+          >
+            <img src="../assets/icons/chat-right-text-fill.svg" />CHATS
+          </p>
+          <p
+            :class="{ selected: tab === 'entities', unselected: tab !== 'entities' }"
+            @click="adminTabSelector('entities')"
+          >
+            <img src="../assets/icons/list-ul.svg" />ENTITIES
+          </p>
+          <p
             :class="{
               selected: tab === 'analytics',
               unselected: tab !== 'analytics',
             }"
             @click="adminTabSelector('analytics')"
           >
-            <img src="../assets/icons/clipboard-data-fill.svg" />ANALYTICS
+            <img src="../assets/icons/clipboard-data-fill.svg" />SITE ANALYTICS
           </p>
           <p
             :class="{
@@ -150,12 +144,77 @@ export default defineComponent({
           </p>
         </div>
         <div class="adminContent">
-          <div v-if="tab === 'users'" class="userAdmin">
-            <h2>User Admin</h2>
-            <p>Coming soon...</p>
+          <div v-if="tab === 'users'" class="usersAdmin">
+            <div class="usersTopLine">
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>2</h1>
+                <p># Total Users Registered</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>3</h1>
+                <p># Daily Active Users</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>4</h1>
+                <p># Weekly Active Users</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>5</h1>
+                <p># Monthly Active Users</p>
+              </div>
+            </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
+          </div>
+          <div v-if="tab === 'chats'" class="chatsAdmin">
+            <div class="usersTopLine">
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>2</h1>
+                <p># Total Chats Started</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>3</h1>
+                <p># Daily Entites Started</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>4</h1>
+                <p># Weekly Entites Started</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>5</h1>
+                <p># Monthly Entites Started</p>
+              </div>
+            </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
+          </div>
+          <div v-if="tab === 'entities'" class="entitiesAdmin">
+            <div class="usersTopLine">
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>2</h1>
+                <p># Total Entities Created</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>3</h1>
+                <p># Daily Entites Created</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>4</h1>
+                <p># Weekly Entites Created</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>5</h1>
+                <p># Monthly Entites Created</p>
+              </div>
+            </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
           </div>
           <div v-if="tab === 'analytics'" class="analyticsAdmin">
-            <h2>panda.ai Analytics</h2>
+            <h2>panda.ai Site Analytics</h2>
             <p>Coming soon...</p>
           </div>
           <div v-if="tab === 'roadmap'" class="roadmapAdmin">

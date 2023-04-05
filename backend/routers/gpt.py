@@ -22,25 +22,3 @@ logger = logging.getLogger(__name__)
 async def send_gpt_request(userid: str, first_name: str, last_name: str, username: str, message: str, session: SessionContainer = Depends(verify_session())):
     result = await conversationAgent(userid, first_name, last_name, username, message)
     return result
-
-# @router.get("/gpt-chat")
-# async def send_gpt_request(message: str, session: SessionContainer = Depends(verify_session())):
-#     OPENAI_API_KEY = settings.OPENAI_API_KEY
-#     headers = {
-#         "Content-Type": "application/json",
-#         "Authorization": f"Bearer {OPENAI_API_KEY}",
-#     }
-#     data = {
-#         "model": "gpt-3.5-turbo",
-#         "messages": [{"role": "user", "content": message}],
-#         "temperature": 0.7,
-#     }
-
-#     async with httpx.AsyncClient() as client:
-#         response = await client.post(
-#             "https://api.openai.com/v1/chat/completions",
-#             json=data,
-#             headers=headers,
-#         )
-
-#     return response.json()

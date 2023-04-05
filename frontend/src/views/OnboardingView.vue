@@ -8,6 +8,8 @@ import ImageUpload from "../components/imageUpload.vue";
 import { daypartFunc } from "../composables/daypart.js";
 import { privatePanda } from "../data/chat/privatePanda.js";
 import { piratePanda } from "../data/chat/piratePanda.js";
+import { streetPanda } from "../data/chat/streetPanda.js";
+import { pandaWeather } from "../data/chat/pandaWeather.js";
 import { saveUserData } from "../composables/saveUserData.js";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 
@@ -92,7 +94,7 @@ export default defineComponent({
       setSuccess: "setSuccess",
     }),
     getRandomChat(daypart = '', first_name = '', last_name = '', username = '') {
-      const chatFunctions = [privatePanda, piratePanda];
+      const chatFunctions = [privatePanda, piratePanda, streetPanda, pandaWeather];
       if (!this.getRandomChat.previousFunction) {
         // if no previous function has been selected, select a random one
         this.getRandomChat.previousFunction =

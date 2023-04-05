@@ -107,6 +107,12 @@ export default defineComponent({
             <img src="../assets/icons/person-circle.svg" />USERS
           </p>
           <p
+            :class="{ selected: tab === 'onboarding', unselected: tab !== 'onboarding' }"
+            @click="adminTabSelector('onboarding')"
+          >
+            <img src="../assets/icons/arrow-up-right-circle-fill.svg" />ONBOARDING
+          </p>
+          <p
             :class="{ selected: tab === 'chats', unselected: tab !== 'chats' }"
             @click="adminTabSelector('chats')"
           >
@@ -166,6 +172,35 @@ export default defineComponent({
             <div class="usersChart">
               <BarChart />
             </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
+          </div>
+          <div v-if="tab === 'onboarding'" class="onboardingAdmin">
+            <div class="usersTopLine">
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>2</h1>
+                <p># Total Users Onboarded</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>3</h1>
+                <p># Daily Onboards</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>4</h1>
+                <p># Weekly Onboards</p>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h1>5</h1>
+                <p># Monthly Onboards</p>
+              </div>
+            </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
           </div>
           <div v-if="tab === 'chats'" class="chatsAdmin">
             <div class="usersTopLine">
@@ -189,6 +224,9 @@ export default defineComponent({
             <div class="usersChart">
               <BarChart />
             </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
           </div>
           <div v-if="tab === 'entities'" class="entitiesAdmin">
             <div class="usersTopLine">
@@ -208,6 +246,9 @@ export default defineComponent({
                 <h1>5</h1>
                 <p># Monthly Entites Created</p>
               </div>
+            </div>
+            <div class="usersChart">
+              <BarChart />
             </div>
             <div class="usersChart">
               <BarChart />

@@ -38,6 +38,7 @@ export default {
       },
       plugins: ["plugin"],
       chartOptions: {
+        aspectRatio: 4,
         scales: {
           x: {
             // display: false,
@@ -49,6 +50,15 @@ export default {
             },
           },
           y: {
+            title: {
+              display: true,
+              text: "Cumulative",
+              padding: 16,
+              font: {
+                family: 'Monaco',
+                size: 18,
+              },
+            },
             // display: false,
             grid: {
               display: false,

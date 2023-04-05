@@ -1982,6 +1982,13 @@ span.typed-text {
   justify-content: center;
   align-items: center;
 }
+.onboardingAdmin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
 .chatsAdmin {
   display: flex;
   flex-direction: column;
@@ -2019,10 +2026,12 @@ span.typed-text {
   font-size: 100px;
 }
 .usersChart {
-  width: 50%;
+  width: 1360px;
   display: flex;
+  position: relative;
   justify-content: center;
   margin-top: 50px;
+  margin-left: -80px;
 }
 .roadmapAdmin {
   display: flex;

@@ -107,15 +107,12 @@ export default defineComponent({
           ...faq,
           visible: faq.visible ? "true" : "false",
         };
-
-        console.log("editedData: ", this.editedData);
         this.updateFAQs();
       } else {
         console.log("updateFAQField skipped");
       }
     },
     async updateFAQs() {
-      console.log("updatedFAQs called");
       try {
         const response = await fetch(
           `${import.meta.env.VITE_APP_API_URL}/faqs/update`,

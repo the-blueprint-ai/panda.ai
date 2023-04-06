@@ -30,17 +30,32 @@ export default defineComponent({
         items: faqSection.items.map((faq) => ({
           question: faq.question,
           answer: faq.answer,
+          visible: faq.visible,
         })),
       }));
+
+      const filterItemsByVisibility = (items) =>
+        items.filter((faq) => faq.visible);
+      const filterItemsByQuery = (items) =>
+        items.filter((faq) => faq.question.toLowerCase().includes(query));
+
+      const filteredFaqSections = faqs
+        .map((faqSection) => ({
+          ...faqSection,
+          items: filterItemsByVisibility(faqSection.items),
+        }))
+        .filter((faqSection) => faqSection.items.length > 0);
+
       if (!query) {
-        return faqs;
+        return filteredFaqSections;
       }
-      return faqs.map((faqSection) => ({
-        title: faqSection.title,
-        items: faqSection.items.filter((faq) =>
-          faq.question.toLowerCase().includes(query)
-        ),
-      }));
+
+      return filteredFaqSections
+        .map((faqSection) => ({
+          ...faqSection,
+          items: filterItemsByQuery(faqSection.items),
+        }))
+        .filter((faqSection) => faqSection.items.length > 0);
     },
   },
   components: {
@@ -90,7 +105,12 @@ export default defineComponent({
             <h2>Please enter your message:</h2>
             <textarea v-model="message" class="messageInput"></textarea>
           </div>
-          <button  v-if="this.email === this.confirmedEmail && this.message.length > 0" class="chatButton">SEND</button>
+          <button
+            v-if="this.email === this.confirmedEmail && this.message.length > 0"
+            class="chatButton"
+          >
+            SEND
+          </button>
           <button v-else class="chatButtonDisabled">SEND</button>
         </div>
       </div>

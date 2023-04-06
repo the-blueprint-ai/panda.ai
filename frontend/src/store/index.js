@@ -4,6 +4,7 @@ import imageUploadStore from "./imageUploadStore";
 import typingStore from "./typingStore";
 import userStore from "./userStore";
 import roadmapStore from "./roadmapStore";
+import faqsStore from "./faqsStore";
 
 // Create a new store instance.
 export default createStore({
@@ -13,6 +14,7 @@ export default createStore({
     chatStore: chatStore,
     imageUploadStore: imageUploadStore,
     roadmapStore: roadmapStore,
+    faqsStore: faqsStore,
   },
   state() {
     return {

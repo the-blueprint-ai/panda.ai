@@ -1046,6 +1046,140 @@ span.typed-text {
 .privacyPolicyContainer a {
   color: #FFFFFF;
 }
+.faqContainer {
+  width: 1000px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+}
+.faqContainer h1 {
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 38px;
+}
+.faqContainer input {
+  height: 40px;
+  width: 600px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  border: 2px #000000;
+  font-family: 'Monaco';
+  font-size: 18px;
+  outline: none;
+}
+.faqTitle {
+  width: 100%;
+}
+.faqTitle h2 {
+  margin-top: 50px;
+}
+.faqContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  background-color: #FFFFFF;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 18px;
+  font-family: 'Monaco';
+}
+.faqQuestion img {
+  margin-top: 4px;
+}
+.faqQuestion:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.faqAnswer {
+  padding: 10px;
+  margin-top: 0px;
+}
+.contactContainer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 70px;
+}
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.contactFormItem {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 520px;
+  align-items: center;
+}
+.contactFormItem h2 {
+  margin-right: 20px;
+}
+.contactFormItem input {
+  height: 40px;
+  width: 300px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  border: 2px #000000;
+  font-family: 'Monaco';
+  font-size: 18px;
+  outline: none;
+}
+.contactFormItemLong {
+  margin-bottom: 20px;
+}
+.messageInput {
+  margin-bottom: 20px;
+  height: 300px;
+  width: 500px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  border: 2px #000000;
+  font-family: 'Monaco';
+  font-size: 18px;
+  outline: none;
+}
+.chatButtonDisabled {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 0px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 100px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 .dropzone {
   height: fit-content;
   height: 150px;
@@ -2069,4 +2203,39 @@ span.typed-text {
 }
 .centered {
   text-align: center;
+}
+.faqsAdmin {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: scroll;
+}
+.faqsAdmin table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: auto;
+  border: 1px solid #C8C8C8;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.faqsAdmin th {
+  border: 1px solid #C8C8C8;
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 15px;
+}
+.faqsAdmin td {
+  border: 1px solid #C8C8C8;
+  padding: 10px;
+}
+.faqsAdmin td:focus {
+  outline-color: #000000;
+}
+.faqsAdmin tr:nth-child(even) {
+  background-color: #EFEFEF;
+}
+.faqsAdmin tr:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
 }

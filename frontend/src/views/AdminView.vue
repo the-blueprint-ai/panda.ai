@@ -5,12 +5,13 @@ import { DateTime } from "luxon";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getRoadmap } from "../composables/getRoadmap.js";
+import { getFAQs } from "../composables/getFAQs.js";
 import BarChart from "../components/barChart.vue";
 
 export default defineComponent({
   data() {
     return {
-      tab: "users",
+      tab: "faqs",
       editingItem: null,
       updating: false,
     };
@@ -18,13 +19,20 @@ export default defineComponent({
   watch: {},
   async mounted() {
     await getRoadmap(this.$store, "admin");
+    await getFAQs(this.$store);
   },
   computed: {
     ...mapGetters("roadmapStore", {
       getRoadmapData: "getRoadmapData",
     }),
+    ...mapGetters("faqsStore", {
+      getStoreFAQs: "getStoreUnsortedFAQs",
+    }),
     roadmapData() {
       return this.getRoadmapData || [];
+    },
+    faqsData() {
+      return this.getStoreFAQs || [];
     },
   },
   methods: {
@@ -141,6 +149,15 @@ export default defineComponent({
             @click="adminTabSelector('roadmap')"
           >
             <img src="../assets/icons/signpost-2-fill.svg" />ROADMAP
+          </p>
+          <p
+            :class="{
+              selected: tab === 'faqs',
+              unselected: tab !== 'faqs',
+            }"
+            @click="adminTabSelector('faqs')"
+          >
+            <img src="../assets/icons/question-circle-fill.svg" />FAQs
           </p>
           <p
             :class="{ selected: tab === 'logs', unselected: tab !== 'logs' }"
@@ -353,6 +370,26 @@ export default defineComponent({
                     "
                     v-text="roadmap.email"
                   ></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div v-if="tab === 'faqs'" class="faqsAdmin">
+            <table class="roadmapTable">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Question</th>
+                  <th>Answer</th>
+                  <th class="centered">Visible</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(faq, index) in faqsData" :key="index">
+                  <td>{{ faq.title }}</td>
+                  <td>{{ faq.question }}</td>
+                  <td>{{ faq.answer }}</td>
+                  <td class="centered">{{ faq.visible }}</td>
                 </tr>
               </tbody>
             </table>

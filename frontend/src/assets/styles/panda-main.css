@@ -1525,10 +1525,12 @@ span.typed-text {
   margin-top: 15px;
   margin-bottom: 15px;
   padding: 5px;
+  padding-left: 10x;
+  padding-right: 10x;
   border: 2px solid lightgray;
   border-radius: 10px;
   font-family: "Monaco";
-  font-size: 18px;
+  font-size: 16px;
   overflow: wrap;
   resize: none;
 }

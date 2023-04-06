@@ -182,7 +182,7 @@ export default defineComponent({
               <div class="roadmapItemSubmit">
                 <input
                   v-model="roadmapSuggestion"
-                  placeholder="please submit your ideas here!"
+                  placeholder="🐼 please submit your ideas here!"
                   @keyup.enter="addIdea(roadmapSuggestion)"
                 />
                 <button

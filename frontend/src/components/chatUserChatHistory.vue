@@ -131,7 +131,7 @@ export default {
           type="text"
           v-model="chatHistorySearch"
           @input="$emit('update-search-term', chatHistorySearch)"
-          placeholder="Search chat history..."
+          placeholder="🐼 search chat history..."
         />
       </div>
       <img v-if="typing" class="clearChatSearch" src="../assets/icons/x-circle.svg" @click="clearSearch" />

@@ -1524,8 +1524,9 @@ span.typed-text {
   width: 270px;
   margin-top: 15px;
   margin-bottom: 15px;
-  padding: 5px;
-  padding-left: 10x;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   padding-right: 10x;
   border: 2px solid lightgray;
   border-radius: 10px;

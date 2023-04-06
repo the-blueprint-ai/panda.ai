@@ -2,11 +2,8 @@ from fastapi import Depends, HTTPException
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
-from cryptography.fernet import Fernet
-from typing import Optional
 import logging
 from pydantic import BaseModel
-from datetime import datetime
 import boto3
 from boto3.dynamodb.conditions import Key
 
@@ -23,10 +20,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class FAQsItem(BaseModel):
-    userId: str
-    entity: str
-    description: str
-    updated: datetime
+    title: str
+    question: str
+    answer: str
+    visible: bool
 
 
 # FUNCTIONS
@@ -49,3 +46,26 @@ async def get_faqs(session: SessionContainer = Depends(verify_session())):
         faqs.append(faq)
 
     return faqs
+
+async def update_faqs_on_db(faq: FAQsItem, session: SessionContainer = Depends(verify_session())):
+    table = dynamodb.Table('panda-ai-faqs')
+    
+    # Update the FAQ record in the table
+    response = table.update_item(
+        Key={
+            'title': faq.title,
+            'question': faq.question,
+        },
+        UpdateExpression='SET answer = :answer, visible = :visible',
+        ExpressionAttributeValues={
+            ':answer': faq.answer,
+            ':visible': faq.visible,
+        },
+    )
+    
+    # Check if the update was successful
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        raise HTTPException(status_code=500, detail="Error updating FAQ data.")
+    
+    # Return a success message
+    return {"message": "FAQ data updated successfully."}

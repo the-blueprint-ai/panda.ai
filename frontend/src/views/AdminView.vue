@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import { DateTime } from "luxon";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
@@ -12,8 +12,8 @@ export default defineComponent({
   data() {
     return {
       tab: "faqs",
-      editingItem: null,
       updating: false,
+      editedData: {},
     };
   },
   watch: {},
@@ -36,6 +36,9 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapMutations("faqsStore", {
+      setStoreFAQs: "setStoreUnsortedFAQs",
+    }),
     adminTabSelector(tabName) {
       this.tab = tabName;
     },
@@ -92,6 +95,44 @@ export default defineComponent({
         this.updating = false;
       }
     },
+    updateFAQField(field, index, value, e) {
+      const faq = this.faqsData[index];
+      if (faq) {
+        if (field === "visible") {
+          faq[field] = e.target.checked;
+        } else if (faq[field] !== value) {
+          faq[field] = value;
+        }
+        this.editedData = {
+          ...faq,
+          visible: faq.visible ? "true" : "false",
+        };
+
+        console.log("editedData: ", this.editedData);
+        this.updateFAQs();
+      } else {
+        console.log("updateFAQField skipped");
+      }
+    },
+    async updateFAQs() {
+      console.log("updatedFAQs called");
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_APP_API_URL}/faqs/update`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.editedData),
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   components: {
     navBar,
@@ -115,10 +156,15 @@ export default defineComponent({
             <img src="../assets/icons/person-circle.svg" />USERS
           </p>
           <p
-            :class="{ selected: tab === 'onboarding', unselected: tab !== 'onboarding' }"
+            :class="{
+              selected: tab === 'onboarding',
+              unselected: tab !== 'onboarding',
+            }"
             @click="adminTabSelector('onboarding')"
           >
-            <img src="../assets/icons/arrow-up-right-circle-fill.svg" />ONBOARDING
+            <img
+              src="../assets/icons/arrow-up-right-circle-fill.svg"
+            />ONBOARDING
           </p>
           <p
             :class="{ selected: tab === 'chats', unselected: tab !== 'chats' }"
@@ -127,7 +173,10 @@ export default defineComponent({
             <img src="../assets/icons/chat-right-text-fill.svg" />CHATS
           </p>
           <p
-            :class="{ selected: tab === 'entities', unselected: tab !== 'entities' }"
+            :class="{
+              selected: tab === 'entities',
+              unselected: tab !== 'entities',
+            }"
             @click="adminTabSelector('entities')"
           >
             <img src="../assets/icons/list-ul.svg" />ENTITIES
@@ -386,10 +435,34 @@ export default defineComponent({
               </thead>
               <tbody>
                 <tr v-for="(faq, index) in faqsData" :key="index">
-                  <td>{{ faq.title }}</td>
-                  <td>{{ faq.question }}</td>
-                  <td>{{ faq.answer }}</td>
-                  <td class="centered">{{ faq.visible }}</td>
+                  <td
+                    contenteditable="true"
+                    v-text="faq.title"
+                    @blur="
+                      updateFAQField('title', index, $event.target.innerText)
+                    "
+                  ></td>
+                  <td
+                    contenteditable="true"
+                    v-text="faq.question"
+                    @blur="
+                      updateFAQField('question', index, $event.target.innerText)
+                    "
+                  ></td>
+                  <td
+                    contenteditable="true"
+                    v-text="faq.answer"
+                    @blur="
+                      updateFAQField('answer', index, $event.target.innerText)
+                    "
+                  ></td>
+                  <td class="checkBox">
+                    <input
+                      type="checkbox"
+                      v-model="faq.visible"
+                      @change="updateFAQField('visible', index, faq.visible, $event)"
+                    />
+                  </td>
                 </tr>
               </tbody>
             </table>

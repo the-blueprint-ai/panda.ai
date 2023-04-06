@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import logging
 
-from functions.faqFunctions import get_faqs
+from functions.faqFunctions import get_faqs, update_faqs_on_db
 
 
 # CONFIG
@@ -18,10 +18,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class FAQsItem(BaseModel):
-    userId: str
-    entity: str
-    description: str
-    updated: datetime
+    title: str
+    question: str
+    answer: str
+    visible: bool
 
 
 # ROUTERS

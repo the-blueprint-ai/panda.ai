@@ -1111,7 +1111,7 @@ span.typed-text {
 }
 .faqAnswer {
   padding: 10px;
-  margin-top: 0px;
+  margin-top: -20px;
 }
 .contactContainer {
   display: flex;
@@ -2228,6 +2228,12 @@ span.typed-text {
 .faqsAdmin td {
   border: 1px solid #C8C8C8;
   padding: 10px;
+}
+.checkBox {
+  text-align: center;
+}
+.checkBox input {
+  accent-color: #000000;
 }
 .faqsAdmin td:focus {
   outline-color: #000000;

@@ -716,6 +716,9 @@ span.typed-text {
   background-color: #000000;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
+.emailSentContainer h2{
+  color: #FFFFFF;
+}
 #emailGood {
   width: 25px;
   margin-top: 6px;
@@ -781,6 +784,7 @@ span.typed-text {
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .emailVerifiedContainer h2 {
+  color: #FFFFFF;
   margin-top: 30px;
   margin-bottom: 30px;
   font-size: 28px;
@@ -1693,10 +1697,49 @@ span.typed-text {
   align-items: center;
 }
 .userSettings h1 {
+  margin: 10px;
+  margin-top: 30px;
   color: #000000;
 }
 .userSettings h2 {
   color: #000000;
+}
+.userSettings button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+  margin-top: 30px;
+  margin-bottom: 0px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 220px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.emailDelete, .changePassword {
+  width: 300px;
+  height: 25px;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  border-bottom: 2px solid #000000;
+  outline: none;
+}
+#emailDeleteGood {
+  width: 25px;
+  margin-top: 140px;
+  margin-left: 270px;
+  position: absolute;
 }
 .overlay {
   display: none;
@@ -1723,7 +1766,7 @@ span.typed-text {
   flex-direction: column;
   background-color: #C8C8C8;
   border-radius: 25px;
-  height: 500px;
+  height: 550px;
   width: 600px;
   border: 5px solid #FFCB4C;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
@@ -1742,8 +1785,14 @@ span.typed-text {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-top: 20px;
   margin-left: 0px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.overlayForm h1 {
+  margin: 0px;
 }
 .overlayFormInput{
   display: flex;
@@ -1772,6 +1821,16 @@ span.typed-text {
   margin-top: 3px;
   margin-left: 65px;
   text-align: center;
+}
+#loadingSpinner {
+  margin-top: -500px;
+  margin-bottom: 40px;
+}
+#loadingOverlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 #emailAccountGood {
   width: 25px;

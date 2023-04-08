@@ -17,6 +17,9 @@ export default defineComponent({
   data() {
     return {
       messageToSend: "",
+      chatIndex: "",
+      parts: [],
+      chatName: "",
     };
   },
   computed: {
@@ -40,7 +43,7 @@ export default defineComponent({
       inputIsVisible: "getInputIsVisible",
       imageDrop: "getImageDrop",
       daypart: "getDaypart",
-      chatHistory: "getChatHistory",
+      chatHistory: "getChatStoreChatHistory",
       isDisabled: "getIsDisabled",
     }),
     ...mapGetters("imageUploadStore", {
@@ -78,7 +81,7 @@ export default defineComponent({
       setInputIsVisibleValue: "setInputIsVisible",
       setDaypartValue: "setDaypart",
       setImageDropValue: "setImageDrop",
-      addToChatHistory: "setChatHistory",
+      addToChatHistory: "setChatStoreChatHistory",
       emptyChatHistoryValues: "emptyChatHistory",
       removeFromChatHistory: "removeChatHistory",
       setIsDisabledValue: "setIsDisabled",
@@ -97,8 +100,11 @@ export default defineComponent({
       const chatFunctions = [privatePanda, piratePanda, streetPanda, pandaWeather];
       if (!this.getRandomChat.previousFunction) {
         // if no previous function has been selected, select a random one
-        this.getRandomChat.previousFunction =
+        this.chatIndex = this.getRandomChat.previousFunction =
           chatFunctions[Math.floor(Math.random() * chatFunctions.length)];
+        this.parts = String(this.chatIndex).split(/\s*\(\s*/);
+        const functionPrefix = "function ";
+        this.chatName = this.parts[0].substring(functionPrefix.length);
       }
       const chat = this.getRandomChat.previousFunction(daypart, first_name, last_name, username);
       return chat;
@@ -316,6 +322,7 @@ export default defineComponent({
           <ImageUpload
             :user-id="this.userId"
             @image-uploaded.once="submitMessage()"
+            :chat-name="chatName"
           ></ImageUpload>
         </div>
         <h3 v-if="success">Image uploaded successfully!</h3>

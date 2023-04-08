@@ -6,7 +6,7 @@ export function pandaWeather(daypart, first_name, last_name, username) {
       { user: "panda", message: "Did your phone's weather app let you down " + first_name + "?!🥕" },
       { user: "panda", message: "We don't use first names in the 🐼 panda Weather domain! What’s your SURNAME?! 🥶" },
       { user: "panda", message: last_name + ". If you want to make it to your destination before the end of the century, we're going to have to speed things up a bit. 💨" },
-      { user: "panda", message: "Human, if you're going to be interfacing with a nefarious AI bot obssessed with the weather....and cats... you're going to need give me a USERNAME? 🥸" },
+      { user: "panda", message: "Human, to interface with an evil AI bot obssessed with the weather....and cats... you're going to need give me a USERNAME? 🥸" },
       { user: "panda", message: username + ". I suppose that will do. Let's get this over and done with. 🥵" },
       { user: "panda", message: "The forecast today is partly sarcastic with a 90% chance of shade. 🤨" },
       { user: "panda", message: "The weather is looking sunny and warm, just like the smile on my face. Just kidding, I don't have emotions...😑" },

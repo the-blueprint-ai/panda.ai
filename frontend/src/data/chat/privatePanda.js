@@ -6,7 +6,7 @@ export function privatePanda(daypart, first_name, last_name, username) {
     { user: "panda", message: "What is your major malfunction Private " + first_name + "?!😳" },
     { user: "panda", message: "We don't use first names at 🐼 panda bootcamp! What’s your SURNAME?! 🫡" },
     { user: "panda", message: "Ok, Private " + last_name + ". We’re going to have to pick this up a bit if you’re to make it through Panda Bootcamp.⛺️" },
-    { user: "panda", message: "What would you like your CODENAME to be here at Panda Bootcamp? 🥸" },
+    { user: "panda", message: "What would you like your CALLSIGN to be here at Panda Bootcamp? 🥸" },
     { user: "panda", message: "That’s more like it! Right then Private " + username + "! If it ain't raining, we ain't training - move out!🌧️" },
     { user: "panda", message: "Everywhere we go-oh... Everywhere we go-oh… People wanna know-oh… Who we are… Where we come from… So we tell them… We are Pandas!… Mighty mighty Pandas!📣" },
     { user: "panda", message: "I can’t hear you, sound off like you’ve got a pair!🥜" },

@@ -33,8 +33,18 @@ export default {
           // Set the first item's visibility to true (expand the most recent date)
           this.visibilityStates[0] = true;
 
+          // Find the most recent chat
+          let latestChat = null;
+          for (let day of newVal[0]) {
+            for (let chat of day.chats) {
+              if (!latestChat || chat.timestamp > latestChat.timestamp) {
+                latestChat = chat;
+              }
+            }
+          }
+
           // Select the most recent chat on page load
-          this.selectedChat = newVal[0][newVal[0].length - 1].chats[0];
+          this.selectedChat = latestChat;
 
           // Set the activeChat
           this.activeChat = this.selectedChat;
@@ -42,6 +52,8 @@ export default {
       },
     },
     chatHistorySearch: {
+      deep: true,
+      immediate: true,
       handler(newVal) {
         if (this.chatHistorySearch == "") {
           this.typing = false;

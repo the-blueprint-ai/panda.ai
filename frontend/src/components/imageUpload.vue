@@ -1,14 +1,15 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import axios from "axios";
 
 export default {
   data() {
     return {
       formData: null,
+      imageDropPhrase: "",
     };
   },
-  props: ["userId"],
+  props: ["userId", "chatName"],
   computed: {
     ...mapGetters("userStore", {
       avatar: "getStoreAvatar",
@@ -26,7 +27,9 @@ export default {
       error: "getError",
     }),
   },
-  mounted() {},
+  mounted() {
+    this.setImageDropPhrase(this.chatName);
+  },
   methods: {
     ...mapMutations("userStore", {
       setAvatar: "setStoreAvatar",
@@ -45,6 +48,17 @@ export default {
       setSuccess: "setSuccess",
       setError: "setError",
     }),
+    setImageDropPhrase(chatName) {
+      if (chatName == "privatePanda") {
+        this.imageDropPhrase = "drop it, then give me 10...";
+      } else if (chatName == "piratePanda") {
+        this.imageDropPhrase = "drop it, ye scallywag...";
+      } else if (chatName == "streetPanda") {
+        this.imageDropPhrase = "drop it like a thotty, drop it like a thotty...";
+      } else if (chatName == "pandaWeather") {
+        this.imageDropPhrase = "drop it, human...";
+      }
+    },
     getMessage: async function () {
       axios
         .get("/test")
@@ -148,9 +162,7 @@ export default {
       @change="handleFileChange($event.target)"
       required
     />
-    <p v-if="(preview == null) & (fileError == null)" for="imageInput">
-      drop it, then give me 10!
-    </p>
+    <p v-if="(preview == null) & (fileError == null)" for="imageInput" v-text="imageDropPhrase"></p>
     <div v-if="this.preview">
       <img
         src="../assets/icons/x-circle.svg"

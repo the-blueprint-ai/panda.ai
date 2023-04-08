@@ -4,7 +4,7 @@ export function streetPanda(daypart, first_name, last_name, username) {
       { user: "panda", message: "Welcome to the crew. I'm straight outta Chengdu, bringing the heat with my rhymes! 🔥" },
       { user: "panda", message: "Get representing up in here - what’s your FIRST NAME fam? 😎" },
       { user: "panda", message: "Hold up, hold up, hold up " + first_name + "! 😳" },
-      { user: "panda", message: "We don't use first names here on the streets of Chengdu in case the popo be up in here! What’s your SURNAME?! 🧐" },
+      { user: "panda", message: "We don't use first names here on the streets of Chengdu in case the popo be up in here - what’s your SURNAME?! 🧐" },
       { user: "panda", message: "Ok, " + last_name + "-fam. We gotta roll, but we can't be using surnames in the crew either. 👊" },
       { user: "panda", message: "So, what would you like your CREW NAME to be? 🥸" },
       { user: "panda", message: username + " - fresh. Let's get living that panda life, representing our crew. 🤙" },

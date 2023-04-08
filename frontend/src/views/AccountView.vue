@@ -554,6 +554,8 @@ export default defineComponent({
               :subscription-menu="subscriptionMenu"
               :data-menu="dataMenu"
               :settings-menu="settingsMenu"
+              :user-id="this.userId"
+              :email="this.email"
             ></UserSettings>
           </div>
         </div>

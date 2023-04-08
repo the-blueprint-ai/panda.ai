@@ -54,7 +54,20 @@ async def get_user_data_route(user_id: str, session: SessionContainer = Depends(
 
 @router.get("/delete")
 async def do_delete(user_id: str, session: SessionContainer = Depends(verify_session())):
-    await delete_user(user_id) # this will succeed even if the userId didn't exist.
+    try:
+        await delete_user(user_id) # this will succeed even if the userId didn't exist.
+        await delete_internal_user(user_id)
+        response = await delete_internal_user(user_id)
+        if response:
+            return response
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
+    except HTTPException as e:
+        logger.error(f"HTTPException in delete_user: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in delete_user: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.post("/save")
 async def save_user_data_route(user_id, first_name=None, last_name=None, username=None, email=None, avatar=None, banner=None, about=None, onboarded=None, subscriber=None, admin=None):
@@ -299,8 +312,6 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
         response = {"error": str(e)}
         return response
 
-    return response
-
 async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
     try:
         # Read the file content
@@ -340,5 +351,22 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
     except Exception as e:
         response = {"error": str(e)}
         return response
+
+async def delete_internal_user(user_id: str):
+    try:
+        query = """
+            DELETE FROM panda_ai_users WHERE user_id = :user_id
+        """
+        values = {
+            "user_id": user_id
+        }
+        await database.execute(query=query, values=values)
+        return {"message": "User deleted successfully"}
+
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        return response
     
-    return response
+    except Exception as e:
+        response = {"error": str(e)}
+        return response

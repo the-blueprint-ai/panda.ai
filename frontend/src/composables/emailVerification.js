@@ -26,9 +26,3 @@ export async function emailVerification() {
     }
   }
 }
-
-
-// await this.getSession();
-// let userId = await Session.getUserId();
-// console.log("From emailVerification.js - userId: " + userId + "email: " + email);
-// saveEmail(userId, email);

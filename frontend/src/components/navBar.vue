@@ -30,7 +30,7 @@ export default {
         userData(this.userId);
       }
     } catch (error) {
-      console.error("Error in mounted hook:", error);
+      console.error("Error getting session/userData:", error);
     }
   },
 

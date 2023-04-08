@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     SPTKNS_CONNECTION_URI: str
     SPTKNS_API_KEY: str
     SPTKNS_DASHBOARD_API_KEY: str
+    SENDGRID_API_KEY: str
     OPENAI_ORGANISATION: str
     OPENAI_API_KEY: str
     PRMPTLYR_API_KEY: str

@@ -28,11 +28,21 @@ export default {
       immediate: true,
       handler(newVal) {
         if (newVal && newVal.length > 0 && newVal[0].length > 0) {
-          // Initialize isVisible property for each item in userStoreChatHistory
+          // Initialize isVisible property for each item in userChatHistory
           this.visibilityStates = newVal[0].map(() => false);
 
           // Set the first item's visibility to true (expand the most recent date)
           this.visibilityStates[0] = true;
+
+          // Find the most recent chat
+          let latestChat = null;
+          for (let day of newVal[0]) {
+            for (let chat of day.chats) {
+              if (!latestChat || chat.timestamp > latestChat.timestamp) {
+                latestChat = chat;
+              }
+            }
+          }
         }
       },
     },

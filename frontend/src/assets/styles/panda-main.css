@@ -2171,28 +2171,7 @@ span.typed-text {
   text-align: left;
   padding: 40px;
 }
-.usersAdmin {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-}
-.onboardingAdmin {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-}
-.chatsAdmin {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-}
-.entitiesAdmin {
+.usersAdmin, .trendingAdmin, .onboardingAdmin, .chatsAdmin, .entitiesAdmin {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -2234,6 +2213,11 @@ span.typed-text {
   flex-direction: column;
   width: 100%;
 }
+.roadmapAdmin h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0px;
+}
 .roadmapAdmin table {
   border-collapse: collapse;
   width: 100%;
@@ -2263,19 +2247,111 @@ span.typed-text {
   cursor: pointer;
   background-color: #FFCB4C;
 }
+.newRoadmapItem, .newFAQItem {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.newRoadmapName {
+  margin-left: 370px;
+  width: 210px;
+}
+.newRoadmapName input {
+  height: 30px;
+  width: 90%;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  font-family: "Monaco";
+  outline: none;
+}
+.newRoadmapDescription {
+  width: 810px;
+  margin-left: 20px;
+}
+.newRoadmapDescription input {
+  height: 30px;
+  width: 90%;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  font-family: "Monaco";
+  outline: none;
+}
+#saveRoadmapButton {
+  margin-top: 60px;
+  margin-left: -30px;
+}
 .centered {
   text-align: center;
 }
 .faqsAdmin {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   overflow: scroll;
+}
+.newFAQItem {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 50px;
+}
+.newFAQTitle {
+  width: 110px;
+  margin-right: 5px;
+}
+.newFAQTitle input {
+  width: 75%;
+}
+.newFAQQuestion {
+  width: 390px;
+  margin-right: 5px;
+}
+.newFAQQuestion input {
+  width: 93%;
+}
+.newFAQAnswer {
+  width: 1340px;
+}
+.newFAQItem input {
+  height: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  font-family: "Monaco";
+  outline: none;
+}
+.newFAQAnswer input {
+  width: 100%;
+}
+.faqInput {
+  display: flex;
+}
+.newFAQItemSave {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 .faqsAdmin table {
   border-collapse: collapse;
   width: 100%;
-  margin: auto;
+  border: 1px solid #C8C8C8;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#saveFAQButton {
+  margin-top: 20px;
+}
+.faqsAdmin table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 30px;
   border: 1px solid #C8C8C8;
   background-color: #FFFFFF;
   color: #000000;

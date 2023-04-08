@@ -141,7 +141,9 @@ async def update_entity(entity_update: EntityUpdate, session: SessionContainer =
         ReturnValues="UPDATED_NEW"
     )
     
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-        return {"message": "Description updated successfully"}
-    else:
-        raise HTTPException(status_code=500, detail="Error updating description in the table")
+    # Check if the update was successful
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        raise HTTPException(status_code=500, detail="Error updating Entity data.")
+    
+    # Return a success message
+    return {"message": "Description updated successfully"}

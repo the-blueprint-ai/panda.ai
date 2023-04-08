@@ -79,6 +79,21 @@ async def update_roadmap_route(roadmap_id: int, roadmap: Roadmap):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+@router.put("/add-roadmap-idea")
+async def add_roadmap_idea_route(name: str, description: str):
+    try:
+        updated_item = await add_roadmap_item(name, description)
+        if updated_item:
+            return updated_item
+        else:
+            raise HTTPException(status_code=404, detail="Item not found")
+    except ValidationError as e:
+        logger.error(f"ValidationError in add_item_route: {e}, details: {e.errors()}")
+        return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
+    except Exception as e:
+        logger.error(f"Error in add_item_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 # FUNCTIONS
 async def get_roadmap():
     query = "SELECT roadmap_id, created_at, name, description, tags, votes, reviewed, email FROM panda_ai_roadmap ORDER BY roadmap_id;"
@@ -110,3 +125,21 @@ async def update_roadmap(roadmap_id: int, roadmap: Roadmap):
     except Exception as e:
         logger.error(f"Error in update_roadmap: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
+async def add_roadmap_item(name: str, description: str):
+
+    # Insert new idea into the database
+    query = """
+        INSERT INTO panda_ai_roadmap (name, description, tags, votes, reviewed, email)
+        VALUES (:name, :description, '["newly added"]'::jsonb, 0, false, 'admin@mypanda.ai');"""
+    await database.execute(query=query, values={"name": name, "description": description})
+
+    # Get the ID of the newly inserted item
+    query = """
+        SELECT roadmap_id FROM panda_ai_roadmap
+        WHERE description = :description
+        ORDER BY roadmap_id DESC
+        LIMIT 1;"""
+    result = await database.fetch_one(query=query, values={"description": description})
+
+    return {"message": "Roadmap item successfully added to database", "roadmap_id": result["roadmap_id"]}

@@ -189,13 +189,16 @@ export default defineComponent({
             id="emailBad"
             src="../assets/icons/envelope-exclamation-fill.svg"
           />
-          <input
-            ref="email"
-            v-model="email"
-            @input="isTyping = true"
-            type="email"
-            placeholder="kung-fu@panda.ai"
-          />
+          <form>
+            <input
+              ref="email"
+              v-model="email"
+              @input="isTyping = true"
+              type="email"
+              placeholder="kung-fu@panda.ai"
+              autocomplete="email"
+            />
+          </form>
           <h6 v-if="email && emailChecking" style="color: white">
             CHECKING...
           </h6>
@@ -211,13 +214,18 @@ export default defineComponent({
             id="passwordBad"
             src="../assets/icons/shield-fill-exclamation.svg"
           />
-          <input
-            ref="password"
-            v-model="password"
-            type="password"
-            placeholder="sKad00sh"
-            @keyup.enter="signUpClicked(this.$store, this.email, this.password)"
-          />
+          <form>
+            <input
+              ref="password"
+              v-model="password"
+              type="password"
+              placeholder="sKad00sh"
+              @keyup.enter="
+                signUpClicked(this.$store, this.email, this.password)
+              "
+              autocomplete="password"
+            />
+          </form>
           <h6 v-if="badPasswordError">{{ badPasswordError }}</h6>
           <button
             v-if="
@@ -230,7 +238,10 @@ export default defineComponent({
             "
             @click="signUpClicked(this.$store, this.email, this.password)"
           >
-            <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
+            <SpinnerComponent
+              :loading="this.loading"
+              :button-text="this.buttonText"
+            ></SpinnerComponent>
           </button>
           <button
             v-else
@@ -240,7 +251,10 @@ export default defineComponent({
               cursor: default;
             "
           >
-            <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
+            <SpinnerComponent
+              :loading="this.loading"
+              :button-text="this.buttonText"
+            ></SpinnerComponent>
           </button>
           <h4>BY CONTINUING YOU AGREE TO OUR:</h4>
           <h5 @click="toToS()">TERMS OF SERVICE</h5>

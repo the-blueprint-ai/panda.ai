@@ -37,6 +37,7 @@ export function updateEntityDescription(event, entitiesData, index) {
         }
         throw new Error(`Server responded with status ${res.status}`);
       }
+      console.log("Entity data updated successfully");
     } catch (error) {
       console.error("Error updating entity description:", error);
     }

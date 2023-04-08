@@ -1,8 +1,11 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends, Request
 from dependencies import database
 from event_utils import register_events
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
+from supertokens_python.recipe.thirdpartyemailpassword.syncio import get_user_by_id, emailpassword_sign_in, update_email_or_password
+from supertokens_python.recipe.session.syncio import revoke_all_sessions_for_user
+from supertokens_python.recipe.thirdpartyemailpassword.interfaces import EmailPasswordSignInWrongCredentialsError
 from supertokens_python.asyncio import delete_user
 from pydantic import ValidationError
 from config import settings
@@ -58,7 +61,7 @@ async def get_user_data_route(user_id: str, session: SessionContainer = Depends(
 async def do_delete(user_id: str, session: SessionContainer = Depends(verify_session())):
     try:
         await delete_user(user_id) # this will succeed even if the userId didn't exist.
-        await delete_internal_user(user_id)
+        await delete_internal_user(user_id, session)
         response = await delete_internal_user(user_id)
         if response:
             return response
@@ -115,6 +118,20 @@ async def save_user_avatar_route(user_id: str, file: UploadFile = File(...), ses
         raise e
     except Exception as e:
         logger.error(f"Error in save_user_avatar_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+@router.post("/change-password") 
+def update_password_route(oldPassword: str, newPassword: str, session: SessionContainer = Depends(verify_session())):
+    try:
+        response = update_password(oldPassword, newPassword, session)
+        if "error" in response:
+            raise HTTPException(status_code=500, detail=response["error"])
+        return {"message": "Password updated successfully"}
+    except HTTPException as e:
+        logger.error(f"HTTPException in update_password_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in update_password_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 
@@ -370,10 +387,15 @@ async def delete_user_chat_history(user_id: str):
         response = {"error": str(e)}
         return response
 
-async def delete_internal_user(user_id: str):
+async def delete_internal_user(user_id: str, session: SessionContainer = Depends(verify_session())):
     try:
         await delete_entity(user_id)
         await delete_user_chat_history(user_id)
+
+        # revoke all sessions for the user
+        revoke_all_sessions_for_user(user_id)
+        # revoke the user's current session, we do this to remove the auth cookies, logging out the user on the frontend
+        session.sync_revoke_session()
 
         query = """
             DELETE FROM panda_ai_users WHERE user_id = :user_id
@@ -383,6 +405,41 @@ async def delete_internal_user(user_id: str):
         }
         await database.execute(query=query, values=values)
         return {"message": "User deleted successfully"}
+
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        return response
+    
+    except Exception as e:
+        response = {"error": str(e)}
+        return response
+
+def update_password(oldPassword: str, newPassword: str, session: SessionContainer = Depends(verify_session())):
+    try:
+         # get the userId from the session object
+        user_id = session.get_user_id()
+
+        # get the signed in user's email from the getUserById function
+        users_info = get_user_by_id(user_id)
+
+        if users_info is None:
+            raise Exception("Should never come here")
+        
+        isPasswordValid = emailpassword_sign_in(users_info.email, oldPassword) 
+
+        if isinstance(isPasswordValid, EmailPasswordSignInWrongCredentialsError):
+            return {"message": "Current password incorrect"}
+
+        # update the users password
+        update_email_or_password(user_id, password=newPassword)
+
+        # revoke all sessions for the user
+        revoke_all_sessions_for_user(user_id)
+        
+        # revoke the user's current session, we do this to remove the auth cookies, logging out the user on the frontend
+        session.sync_revoke_session()
+
+        return {"message": "Password updated successfully"}
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}

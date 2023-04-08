@@ -32,7 +32,41 @@ export default {
       this.deleteOverlay = false;
       this.loading = true;
       await deleteUser(userId);
-      window.location.href = ("http://localhost:3000/");
+      window.location.href = "http://localhost:3000/";
+    },
+    async changePassword(userId, email, oldPassword, newPassword) {
+      this.passwordOverlay = false;
+      this.loading = true;
+      try {
+        const url =
+          import.meta.env.VITE_APP_API_URL +
+          "/users/change-password?user_id=" +
+          userId +
+          "&email=" +
+          email +
+          "&oldPassword=" +
+          oldPassword +
+          "&newPassword=" +
+          newPassword;
+        const res = await fetch(url, {
+          method: "POST",
+        });
+
+        // Check if the response status indicates an error
+        if (!res.ok) {
+          const errorResponse = await res.json();
+          console.error("Server error response:", errorResponse);
+          window.alert("Password updated unsuccessful. Please try again.");
+        }
+        this.loading = false;
+        window.alert(
+          "Password updated successfully. Please sign in again with your new password."
+        );
+        window.location.href = "http://localhost:3000/signin";
+      } catch (error) {
+        // Handle the error
+        console.error("An error occurred while saving the file:", error);
+      }
     },
   },
   components: {
@@ -43,12 +77,22 @@ export default {
 
 <template>
   <div class="userSettings" v-if="settingsMenu">
-    <LoadingOverlay v-if="this.loading" :loading="this.loading"></LoadingOverlay>
+    <LoadingOverlay
+      v-if="this.loading"
+      :loading="this.loading"
+      :spinner-size="80"
+    ></LoadingOverlay>
     <h1>🐼</h1>
     <h2>CHANGE PASSWORD</h2>
     <p>To change your 🐼 panda.ai password please click the button below:</p>
-    <button class="chatButton" @click="activatePasswordOverlay">CHANGE PASSWORD</button>
-    <div id="passwordOverlay" class="overlay" :class="{ active: passwordOverlay }">
+    <button class="chatButton" @click="activatePasswordOverlay">
+      CHANGE PASSWORD
+    </button>
+    <div
+      id="passwordOverlay"
+      class="overlay"
+      :class="{ active: passwordOverlay }"
+    >
       <div class="overlayContent">
         <img
           src="../assets/icons/x.svg"
@@ -61,38 +105,65 @@ export default {
         <div class="overlayForm">
           <h1>🐼</h1>
           <p>
-            To change your password, please enter your current password and your new password below:
+            To change your password, please enter your current password and your
+            new password below:
           </p>
-          <img
-            v-if="this.email == this.confirmedEmail"
-            id="emailDeleteGood"
-            src="../assets/icons/envelope-check-fill.svg"
-          />
-          <input
-            class="changePassword"
-            id="currentPassword"
-            v-model="currentPassword"
-            placeholder="current password"
-            type="password"
-            name="password"
-          />
-          <input
-            class="changePassword"
-            id="newPassword"
-            v-model="newPassword"
-            placeholder="new password"
-            type="password"
-            name="password"
-          />
-          <input
-            class="changePassword"
-            id="confirmNewPassword"
-            v-model="confirmNewPassword"
-            placeholder="confirm new password"
-            type="password"
-            name="password"
-          />
-          <button v-if="this.currentPassword === this.newPassword === this.confirmNewPassword" class="chatButton" @click="changePassword(this.userId)">CHANGE PASSWORD</button>
+          <form>
+            <img
+              v-if="this.email == this.confirmedEmail"
+              id="emailDeleteGood"
+              src="../assets/icons/envelope-check-fill.svg"
+            />
+            <input
+              class="changePassword"
+              id="currentPassword"
+              v-model="currentPassword"
+              placeholder="current password"
+              type="password"
+              name="password"
+              autocomplete="password"
+            />
+            <input
+              class="changePassword"
+              id="newPassword"
+              v-model="newPassword"
+              placeholder="new password"
+              type="password"
+              name="password"
+              autocomplete="password"
+            />
+            <input
+              class="changePassword"
+              @keyup.enter="
+                changePassword(
+                  this.userId,
+                  this.email,
+                  this.currentPassword,
+                  this.newPassword
+                )
+              "
+              id="confirmNewPassword"
+              v-model="confirmNewPassword"
+              placeholder="confirm new password"
+              type="password"
+              name="password"
+              autocomplete="password"
+            />
+          </form>
+          <button
+            v-if="this.newPassword === this.confirmNewPassword"
+            class="chatButton"
+            @click="
+              changePassword(
+                this.userId,
+                this.email,
+                this.currentPassword,
+                this.newPassword
+              )
+            "
+          >
+            CHANGE PASSWORD
+          </button>
           <button v-else class="chatButton" disabled>CHANGE PASSWORD</button>
         </div>
       </div>
@@ -100,7 +171,9 @@ export default {
     <span class="spacer"></span>
     <h2>DELETE ACCOUNT</h2>
     <p>To delete your 🐼 panda.ai account please click the button below:</p>
-    <button class="chatButton" @click="activateDeleteOverlay">DELETE ACCOUNT</button>
+    <button class="chatButton" @click="activateDeleteOverlay">
+      DELETE ACCOUNT
+    </button>
     <div id="deleteOverlay" class="overlay" :class="{ active: deleteOverlay }">
       <div class="overlayContent">
         <img
@@ -125,13 +198,19 @@ export default {
           />
           <input
             class="emailDelete"
-            id="email"
+            id="emailDelete"
             v-model="confirmedEmail"
             :placeholder="email"
             type="email"
             name="email"
           />
-          <button v-if="this.email === this.confirmedEmail" class="chatButton" @click="deleteAccount(this.userId)">CONFIRM DELETION</button>
+          <button
+            v-if="this.email === this.confirmedEmail"
+            class="chatButton"
+            @click="deleteAccount(this.userId)"
+          >
+            CONFIRM DELETION
+          </button>
           <button v-else class="chatButton" disabled>CONFIRM DELETION</button>
         </div>
       </div>

@@ -91,11 +91,31 @@ export default defineComponent({
         <div class="signInBar"></div>
         <div class="emailPassword">
           <h2>Email</h2>
-          <input ref="email" v-model="this.email" type="email" placeholder="kung-fu@panda.ai" />
+          <form>
+            <input
+              ref="email"
+              v-model="this.email"
+              type="email"
+              placeholder="kung-fu@panda.ai"
+              autocomplete="email"
+            />
+          </form>
           <h2>Password</h2>
-          <input ref="password" v-model="this.password" type="password" placeholder="sKad00sh" @keyup.enter="signInClicked(this.email, this.password)" />
+          <form>
+            <input
+              ref="password"
+              v-model="this.password"
+              type="password"
+              placeholder="sKad00sh"
+              @keyup.enter="signInClicked(this.email, this.password)"
+              autocomplete="email"
+            />
+          </form>
           <button @click="signInClicked(this.email, this.password)">
-            <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
+            <SpinnerComponent
+              :loading="this.loading"
+              :button-text="this.buttonText"
+            ></SpinnerComponent>
           </button>
           <h3 @click="toForgotPassword()">FORGOT PASSWORD?</h3>
         </div>

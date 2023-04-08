@@ -463,6 +463,7 @@ export default defineComponent({
                   </div>
                 </form>
               </div>
+              <span class="spacer"></span>
               <div class="overlayButtons">
                 <button class="chatButton" @click="updateUserData()">
                   Save

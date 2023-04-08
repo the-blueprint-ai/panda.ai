@@ -14,6 +14,11 @@ export default defineComponent({
       tab: "faqs",
       updating: false,
       editedData: {},
+      newRoadmapName: "",
+      newRoadmapDescription: "",
+      newFAQTitle: "",
+      newFAQQuestion: "",
+      newFAQAnswer: "",
     };
   },
   watch: {},
@@ -125,7 +130,27 @@ export default defineComponent({
           }
         );
         const data = await response.json();
-        console.log(data);
+        console.log(data.message);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async saveRoadmapItem(name, description) {
+      const url =
+        import.meta.env.VITE_APP_API_URL +
+        "/admin/add-roadmap-idea?name=" +
+        name +
+        "&description=" +
+        description;
+      try {
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        console.log(data.message);
       } catch (error) {
         console.error(error);
       }
@@ -146,6 +171,15 @@ export default defineComponent({
       <div class="adminPanel">
         <div class="sidePanel">
           <h2>ADMIN PANEL</h2>
+          <p
+            :class="{
+              selected: tab === 'trending',
+              unselected: tab !== 'trending',
+            }"
+            @click="adminTabSelector('trending')"
+          >
+            <img src="../assets/icons/graph-up-arrow.svg" />TRENDING
+          </p>
           <p
             :class="{ selected: tab === 'users', unselected: tab !== 'users' }"
             @click="adminTabSelector('users')"
@@ -213,6 +247,22 @@ export default defineComponent({
           </p>
         </div>
         <div class="adminContent">
+          <div v-if="tab === 'trending'" class="trendingAdmin">
+            <div class="usersTopLine">
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h2>Top Entities</h2>
+              </div>
+              <div class="displayNumber" id="totalUsersRegistered">
+                <h2>Top Topics</h2>
+              </div>
+            </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
+            <div class="usersChart">
+              <BarChart />
+            </div>
+          </div>
           <div v-if="tab === 'users'" class="usersAdmin">
             <div class="usersTopLine">
               <div class="displayNumber" id="totalUsersRegistered">
@@ -322,6 +372,35 @@ export default defineComponent({
             <p>Coming soon...</p>
           </div>
           <div v-if="tab === 'roadmap'" class="roadmapAdmin">
+            <h2>ADD NEW ROADMAP ITEM</h2>
+            <div class="newRoadmapItem">
+              <div class="newRoadmapName">
+                <p>Name</p>
+                <form>
+                  <input v-model="newRoadmapName" />
+                </form>
+              </div>
+              <div class="newRoadmapDescription">
+                <p>Description</p>
+                <form>
+                  <input v-model="newRoadmapDescription" />
+                </form>
+              </div>
+              <div class="newRoadmapItemSave">
+                <button
+                  class="chatButton"
+                  id="saveRoadmapButton"
+                  @click="
+                    saveRoadmapItem(
+                      this.newRoadmapName,
+                      this.newRoadmapDescription
+                    )
+                  "
+                >
+                  SAVE
+                </button>
+              </div>
+            </div>
             <table class="roadmapTable">
               <thead>
                 <tr>
@@ -421,7 +500,44 @@ export default defineComponent({
             </table>
           </div>
           <div v-if="tab === 'faqs'" class="faqsAdmin">
-            <table class="roadmapTable">
+            <h2>ADD NEW FAQ ITEM</h2>
+            <div class="newFAQItem">
+              <div class="faqInput">
+                <div class="newFAQTitle">
+                  <p>Title</p>
+                  <form>
+                    <input v-model="newFAQTitle" />
+                  </form>
+                </div>
+                <div class="newFAQQuestion">
+                  <p>Question</p>
+                  <form>
+                    <input v-model="newFAQQuestion" />
+                  </form>
+                </div>
+                <div class="newFAQAnswer">
+                  <p>Answer</p>
+                  <form>
+                    <input v-model="newFAQAnswer" />
+                  </form>
+                </div>
+              </div>
+              <div class="newFAQItemSave">
+                <button
+                  class="chatButton"
+                  id="saveFAQButton"
+                  @click="
+                    saveRoadmapItem(
+                      this.newRoadmapName,
+                      this.newRoadmapDescription
+                    )
+                  "
+                >
+                  SAVE
+                </button>
+              </div>
+            </div>
+            <table class="faqTable">
               <thead>
                 <tr>
                   <th>Title</th>
@@ -457,7 +573,9 @@ export default defineComponent({
                     <input
                       type="checkbox"
                       v-model="faq.visible"
-                      @change="updateFAQField('visible', index, faq.visible, $event)"
+                      @change="
+                        updateFAQField('visible', index, faq.visible, $event)
+                      "
                     />
                   </td>
                 </tr>

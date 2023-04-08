@@ -2,7 +2,9 @@
 import { HalfCircleSpinner } from "epic-spinners";
 
 export default {
-  data() {},
+  data() {
+    return {};
+  },
   props: {
     loading: Boolean,
     buttonText: String,
@@ -11,9 +13,7 @@ export default {
       default: 25, // or whatever default value you want to use
     },
   },
-  mounted() {
-    console.log(this.spinnerSize);
-  },
+  mounted() {},
   computed: {},
   components: {
     HalfCircleSpinner,
@@ -23,7 +23,12 @@ export default {
 
 <template>
   <span>
-    <half-circle-spinner v-if="loading" :animation-duration="1000" :size="spinnerSize" color="#000000" />
+    <half-circle-spinner
+      v-if="loading"
+      :animation-duration="1000"
+      :size="spinnerSize"
+      color="#000000"
+    />
     <span v-if="!loading">{{ buttonText }}</span>
   </span>
 </template>

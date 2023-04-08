@@ -56,6 +56,5 @@ async def add_user_entity(item: EntityItem, session: SessionContainer = Depends(
 
 @router.post("/update-description")
 async def update_entity_description(item: EntityUpdate, session: SessionContainer = Depends(verify_session())):
-    logging.info(f"Received payload: {item}")
     result = await update_entity(item, session)
     return result

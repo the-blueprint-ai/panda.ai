@@ -8,7 +8,7 @@ import logging
 from pydantic import BaseModel
 from datetime import datetime
 import boto3
-from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Key, Attr
 
 
 # DATABASES
@@ -66,19 +66,38 @@ async def get_all_user_entities(user_id: str, session: SessionContainer = Depend
     return items
 
 
-async def delete_entity(user_id: str, entity: str, session: SessionContainer = Depends(verify_session())):
+async def delete_entity(user_id: str, entity: Optional[str] = None, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
-    response = table.delete_item(
-        Key={
-            'userId': user_id,
-            'entity': entity
-        }
-    )
+    
+    if entity is None:
+        # Delete all entities for the user
+        response = table.scan(
+            FilterExpression=Attr('userId').eq(user_id)
+        )
+        
+        with table.batch_writer() as batch:
+            for item in response['Items']:
+                batch.delete_item(
+                    Key={
+                        'userId': item['userId'],
+                        'entity': item['entity']
+                    }
+                )
+        
+    else:
+        # Delete the specific entity for the user
+        response = table.delete_item(
+            Key={
+                'userId': user_id,
+                'entity': entity
+            }
+        )
 
     if response['ResponseMetadata']['HTTPStatusCode'] == 200:
         return {"message": "Item deleted successfully"}
     else:
         raise HTTPException(status_code=500, detail="Error deleting item from the table")
+
 
 
 async def add_entity(item: EntityItem, session: SessionContainer = Depends(verify_session())):

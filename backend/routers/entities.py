@@ -3,6 +3,7 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 import logging
 
 from functions.entityFunctions import get_user_entities, get_all_user_entities, delete_entity, add_entity, update_entity
@@ -43,7 +44,7 @@ async def fetch_all_user_entities(user_id: str, session: SessionContainer = Depe
 
 
 @router.get("/delete")
-async def delete_user_entity(user_id: str, entity: str, session: SessionContainer = Depends(verify_session())):
+async def delete_user_entity(user_id: str, entity: Optional[str] = None, session: SessionContainer = Depends(verify_session())):
     result = await delete_entity(user_id, entity, session)
     return result
 

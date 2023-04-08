@@ -11,9 +11,11 @@ from cryptography.fernet import Fernet, InvalidToken
 from databases import Database
 import logging
 from typing import Optional, Any
+import json
 import boto3
 from io import BytesIO
 import os
+from functions.entityFunctions import delete_entity
 
 # CONFIG
 router = APIRouter(
@@ -352,8 +354,27 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
         response = {"error": str(e)}
         return response
 
+async def delete_user_chat_history(user_id: str):
+    try:
+        query = "DELETE FROM panda_ai_user_chat_history WHERE user_id = :user_id"
+        values = {"user_id": user_id}
+        results = await database.fetch_all(query=query, values=values)
+
+        return {"message": "User chat history deleted successfully"}
+
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        return response
+    
+    except Exception as e:
+        response = {"error": str(e)}
+        return response
+
 async def delete_internal_user(user_id: str):
     try:
+        await delete_entity(user_id)
+        await delete_user_chat_history(user_id)
+
         query = """
             DELETE FROM panda_ai_users WHERE user_id = :user_id
         """

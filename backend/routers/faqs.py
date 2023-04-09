@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import logging
 
-from functions.faqFunctions import get_faqs, update_faqs_on_db
+from functions.faqFunctions import get_faqs, update_faqs_on_db, add_faq_to_db
 
 
 # CONFIG
@@ -35,9 +35,9 @@ async def delete_faqs(item: FAQsItem, session: SessionContainer = Depends(verify
     result = await delete_faqs_from_db(item, session)
     return result
 
-@router.post("/save")
+@router.post("/add")
 async def add_faqs(item: FAQsItem, session: SessionContainer = Depends(verify_session())):
-    result = await add_faqs_to_db(item, session)
+    result = await add_faq_to_db(item, session)
     return result
 
 @router.post("/update")

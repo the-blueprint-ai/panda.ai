@@ -1,6 +1,9 @@
 <script>
 export default {
   methods: {
+    goToPage(route) {
+      this.$router.push(route);
+    },
     navigate(event) {
       const navigateTo = event.target.getAttribute("navigate-to");
       if (navigateTo == "home") {
@@ -51,35 +54,36 @@ export default {
             @click="navigate($event)"
             src="../assets/icons/linkedin.svg"
           />
-          <img
-            navigate-to="contact"
-            @click="navigate($event)"
-            src="../assets/icons/envelope-at-fill.svg"
-          />
+          <a :href="'mailto:contact@mypanda.ai?subject=Hello!'">
+            <img
+              navigate-to="contact"
+              src="../assets/icons/envelope-at-fill.svg"
+            />
+          </a>
         </div>
         <h3>©panda.ai 2023</h3>
       </div>
       <div class="footerMenus">
         <div class="singleMenu">
           <h2>Links</h2>
-          <p navigate-to="home" @click="navigate($event)">home</p>
-          <p navigate-to="roadmap" @click="navigate($event)">roadmap</p>
-          <p navigate-to="privacy" @click="navigate($event)">privacy</p>
+          <p navigate-to="home" @click="goToPage('/')">home</p>
+          <p navigate-to="roadmap" @click="goToPage('/roadmap')">roadmap</p>
+          <p navigate-to="privacy" @click="goToPage('/privacy')">privacy</p>
         </div>
         <div class="singleMenu">
           <h2>Company</h2>
-          <p navigate-to="about" @click="navigate($event)">about</p>
-          <p navigate-to="terms-of-service" @click="navigate($event)">
+          <p navigate-to="about" @click="goToPage('/about')">about</p>
+          <p navigate-to="terms-of-service" @click="goToPage('/terms-of-service')">
             terms of service
           </p>
-          <p navigate-to="privacy-policy" @click="navigate($event)">
+          <p navigate-to="privacy-policy" @click="goToPage('/privacy-policy')">
             privacy policy
           </p>
         </div>
         <div class="singleMenu">
           <h2>Support</h2>
-          <p navigate-to="support" @click="navigate($event)">support</p>
-          <p navigate-to="contact" @click="navigate($event)">contact us</p>
+          <p navigate-to="support" @click="goToPage('/support')">support</p>
+          <p navigate-to="contact" @click="goToPage('/support')">contact us</p>
         </div>
         <div class="singleMenu">
           <h2>Social</h2>

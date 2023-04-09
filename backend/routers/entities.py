@@ -22,12 +22,8 @@ class EntityItem(BaseModel):
     userId: str
     entity: str
     description: str
+    created_at: datetime
     updated: datetime
-
-class EntityUpdate(BaseModel):
-    userId: str
-    entity: str
-    description: str
 
 
 # ROUTERS
@@ -55,6 +51,6 @@ async def add_user_entity(item: EntityItem, session: SessionContainer = Depends(
     return result
 
 @router.post("/update-description")
-async def update_entity_description(item: EntityUpdate, session: SessionContainer = Depends(verify_session())):
+async def update_entity_description(item: EntityItem, session: SessionContainer = Depends(verify_session())):
     result = await update_entity(item, session)
     return result

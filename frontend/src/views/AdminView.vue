@@ -6,12 +6,19 @@ import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getRoadmap } from "../composables/getRoadmap.js";
 import { getFAQs } from "../composables/getFAQs.js";
+import { getUserStats } from "../composables/getUserStats.js";
 import BarChart from "../components/barChart.vue";
 
 export default defineComponent({
   data() {
     return {
-      tab: "faqs",
+      tab: "users",
+      userStats: {
+        totalUsers: 0,
+        dailyUsers: 0,
+        weeklyUsers: 0,
+        monthlyUsers: 0,
+      },
       updating: false,
       editedData: {},
       newRoadmapName: "",
@@ -19,10 +26,19 @@ export default defineComponent({
       newFAQTitle: "",
       newFAQQuestion: "",
       newFAQAnswer: "",
+      roadmapAdded: false,
+      faqAdded: false,
     };
   },
   watch: {},
   async mounted() {
+    const userStats = await getUserStats(this.$store);
+    this.userStats = {
+      totalUsers: userStats[0][0].total_users,
+      dailyUsers: userStats[0][0].daily_users,
+      weeklyUsers: userStats[0][0].weekly_users,
+      monthlyUsers: userStats[0][0].monthly_users,
+    };
     await getRoadmap(this.$store, "admin");
     await getFAQs(this.$store);
   },
@@ -33,6 +49,24 @@ export default defineComponent({
     ...mapGetters("faqsStore", {
       getStoreFAQs: "getStoreUnsortedFAQs",
     }),
+    ...mapGetters("userStatsStore", {
+      getStoreToplineUsersStats: "getStoreToplineUsersStats",
+      getStoreDailyUsersStats: "getStoreDailyUsersStats",
+      getStoreToplineOnboardingStats: "getStoreToplineOnboardingStats",
+      getStoreDailyOnboardingStats: "getStoreDailyOnboardingStats",
+      getStoreToplineChatsStats: "getStoreToplineChatsStats",
+      getStoreDailyChatsStats: "getStoreDailyChatsStats",
+      getStoreToplineEntitiesStats: "getStoreToplineEntitiesStats",
+      getStoreDailyEntitiesStats: "getStoreDailyEntitiesStats",
+    }),
+    userStats() {
+      return {
+        totalUsers: this.getStoreToplineUsersStats[0][0].total_users,
+        dailyUsers: this.getStoreToplineUsersStats[0][0].total_users,
+        weeklyUsers: this.getStoreToplineUsersStats[0][0].total_users,
+        monthlyUsers: this.getStoreToplineUsersStats[0][0].total_users,
+      };
+    },
     roadmapData() {
       return this.getRoadmapData || [];
     },
@@ -150,6 +184,41 @@ export default defineComponent({
           },
         });
         const data = await response.json();
+        await getRoadmap(this.$store, "admin");
+        this.roadmapData;
+        this.roadmapAdded = true;
+        setTimeout(() => {
+          this.roadmapAdded = false;
+        }, 5000);
+
+        console.log(data.message);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async saveFAQItem(title, question, answer) {
+      const url = import.meta.env.VITE_APP_API_URL + "/faqs/add";
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: title,
+            question: question,
+            answer: answer,
+            visible: false,
+          }),
+        });
+        const data = await response.json();
+        await getFAQs(this.$store);
+        this.faqsData;
+        this.faqAdded = true;
+        setTimeout(() => {
+          this.faqAdded = false;
+        }, 5000);
+
         console.log(data.message);
       } catch (error) {
         console.error(error);
@@ -266,19 +335,19 @@ export default defineComponent({
           <div v-if="tab === 'users'" class="usersAdmin">
             <div class="usersTopLine">
               <div class="displayNumber" id="totalUsersRegistered">
-                <h1>2</h1>
+                <h1 v-text="userStats.totalUsers"></h1>
                 <p># Total Users Registered</p>
               </div>
               <div class="displayNumber" id="totalUsersRegistered">
-                <h1>3</h1>
+                <h1 v-text="userStats.dailyUsers"></h1>
                 <p># Daily Active Users</p>
               </div>
               <div class="displayNumber" id="totalUsersRegistered">
-                <h1>4</h1>
+                <h1 v-text="userStats.weeklyUsers"></h1>
                 <p># Weekly Active Users</p>
               </div>
               <div class="displayNumber" id="totalUsersRegistered">
-                <h1>5</h1>
+                <h1 v-text="userStats.monthlyUsers"></h1>
                 <p># Monthly Active Users</p>
               </div>
             </div>
@@ -401,7 +470,8 @@ export default defineComponent({
                 </button>
               </div>
             </div>
-            <table class="roadmapTable">
+            <p v-if="roadmapAdded" class="roadmapSuccess" style="color: green; ">new roadmap item saved to database</p>
+            <table class="roadmapTable" :key="roadmapData.length">
               <thead>
                 <tr>
                   <th>Roadmap ID</th>
@@ -500,7 +570,7 @@ export default defineComponent({
             </table>
           </div>
           <div v-if="tab === 'faqs'" class="faqsAdmin">
-            <h2>ADD NEW FAQ ITEM</h2>
+            <h2>ADD NEW FAQ</h2>
             <div class="newFAQItem">
               <div class="faqInput">
                 <div class="newFAQTitle">
@@ -518,7 +588,16 @@ export default defineComponent({
                 <div class="newFAQAnswer">
                   <p>Answer</p>
                   <form>
-                    <input v-model="newFAQAnswer" />
+                    <input
+                      v-model="newFAQAnswer"
+                      @keyup.enter.prevent="
+                        saveFAQItem(
+                          this.newFAQTitle,
+                          this.newFAQQuestion,
+                          this.newFAQAnswer
+                        )
+                      "
+                    />
                   </form>
                 </div>
               </div>
@@ -527,9 +606,10 @@ export default defineComponent({
                   class="chatButton"
                   id="saveFAQButton"
                   @click="
-                    saveRoadmapItem(
-                      this.newRoadmapName,
-                      this.newRoadmapDescription
+                    saveFAQItem(
+                      this.newFAQTitle,
+                      this.newFAQQuestion,
+                      this.newFAQAnswer
                     )
                   "
                 >
@@ -537,50 +617,57 @@ export default defineComponent({
                 </button>
               </div>
             </div>
-            <table class="faqTable">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Question</th>
-                  <th>Answer</th>
-                  <th class="centered">Visible</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(faq, index) in faqsData" :key="index">
-                  <td
-                    contenteditable="true"
-                    v-text="faq.title"
-                    @blur="
-                      updateFAQField('title', index, $event.target.innerText)
-                    "
-                  ></td>
-                  <td
-                    contenteditable="true"
-                    v-text="faq.question"
-                    @blur="
-                      updateFAQField('question', index, $event.target.innerText)
-                    "
-                  ></td>
-                  <td
-                    contenteditable="true"
-                    v-text="faq.answer"
-                    @blur="
-                      updateFAQField('answer', index, $event.target.innerText)
-                    "
-                  ></td>
-                  <td class="checkBox">
-                    <input
-                      type="checkbox"
-                      v-model="faq.visible"
-                      @change="
-                        updateFAQField('visible', index, faq.visible, $event)
+            <p v-if="faqAdded" class="faqSuccess" style="color: green; ">new faq saved to database</p>
+            <div class="faqTableContainer">
+              <table class="faqTable">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Question</th>
+                    <th>Answer</th>
+                    <th class="centered">Visible</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(faq, index) in faqsData" :key="index">
+                    <td
+                      contenteditable="true"
+                      v-text="faq.title"
+                      @blur="
+                        updateFAQField('title', index, $event.target.innerText)
                       "
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    ></td>
+                    <td
+                      contenteditable="true"
+                      v-text="faq.question"
+                      @blur="
+                        updateFAQField(
+                          'question',
+                          index,
+                          $event.target.innerText
+                        )
+                      "
+                    ></td>
+                    <td
+                      contenteditable="true"
+                      v-text="faq.answer"
+                      @blur="
+                        updateFAQField('answer', index, $event.target.innerText)
+                      "
+                    ></td>
+                    <td class="checkBox">
+                      <input
+                        type="checkbox"
+                        v-model="faq.visible"
+                        @change="
+                          updateFAQField('visible', index, faq.visible, $event)
+                        "
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div v-if="tab === 'logs'" class="logsAdmin">
             <h2>Server Logs</h2>

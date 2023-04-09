@@ -132,7 +132,7 @@ export default defineComponent({
       this.$router.push("/signin");
     },
     redirectToChat() {
-      this.$router.push("/" + this.userId + "/chat");
+      this.$router.push("/auth/" + this.userId + "/chat");
     },
     async onLogout() {
       await Session.signOut();

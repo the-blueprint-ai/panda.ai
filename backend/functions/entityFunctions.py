@@ -31,12 +31,8 @@ class EntityItem(BaseModel):
     userId: str
     entity: str
     description: str
+    created_at: datetime
     updated: datetime
-
-class EntityUpdate(BaseModel):
-    userId: str
-    entity: str
-    description: str
 
 
 # FUNCTIONS
@@ -61,6 +57,14 @@ async def get_all_user_entities(user_id: str, session: SessionContainer = Depend
     response = table.query(
         KeyConditionExpression=Key('userId').eq(user_id)
     )
+    items = response.get('Items', [])
+
+    return items
+
+
+async def get_all_entities(session: SessionContainer = Depends(verify_session())):
+    table = dynamodb.Table('panda-ai-entities')
+    response = table.scan()
     items = response.get('Items', [])
 
     return items
@@ -109,13 +113,11 @@ async def add_entity(item: EntityItem, session: SessionContainer = Depends(verif
             'userId': item.userId,
             'entity': item.entity
         },
-        UpdateExpression="SET description = :desc, #ts = :ts",
+        UpdateExpression="SET description = :desc, created_at = :created_at, updated = :updated ",
         ExpressionAttributeValues={
             ':desc': item.description,
-            ':ts': timestamp
-        },
-            ExpressionAttributeNames={
-                "#ts": "updated"
+            ':created_at': timestamp,
+            ':updated': timestamp
         },
         ReturnValues="UPDATED_NEW"
     )
@@ -125,18 +127,20 @@ async def add_entity(item: EntityItem, session: SessionContainer = Depends(verif
     else:
         raise HTTPException(status_code=500, detail="Error adding item to the table")
     
-async def update_entity(entity_update: EntityUpdate, session: SessionContainer = Depends(verify_session())):
+async def update_entity(entity_update: EntityItem, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
-    # Update the entity description in the database
+    timestamp = datetime.utcnow().isoformat()
 
+    # Update the entity description in the database
     response = table.update_item(
         Key={
             'userId': entity_update.userId,
             'entity': entity_update.entity
         },
-        UpdateExpression="SET description = :desc",
+        UpdateExpression="SET description = :desc, updated = :updated",
         ExpressionAttributeValues={
             ':desc': entity_update.description,
+            ':updated': timestamp
         },
         ReturnValues="UPDATED_NEW"
     )

@@ -7,9 +7,10 @@ from supertokens_python.recipe.session import SessionContainer
 from event_utils import register_events
 from pydantic import ValidationError, BaseModel
 import logging
-import json
 from datetime import datetime
 from typing import List
+
+from functions.adminFunctions import get_roadmap, update_roadmap, add_roadmap_item, topline_user_stats, users_by_day_stats, topline_onboarding_stats, onboarding_by_day_stats, topline_chat_stats, chat_by_day_stats, topline_entity_stats, entity_by_day_stats
 
 # CONFIG
 router = APIRouter(
@@ -51,7 +52,7 @@ async def check_admin_route(user_id: str, session: SessionContainer = Depends(ve
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.get("/roadmap")
-async def get_roadmap_route():
+async def get_roadmap_route(session: SessionContainer = Depends(verify_session())):
     try:
         data = await get_roadmap()
         if data:
@@ -66,7 +67,7 @@ async def get_roadmap_route():
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.put("/update-roadmap")
-async def update_roadmap_route(roadmap_id: int, roadmap: Roadmap):
+async def update_roadmap_route(roadmap_id: int, roadmap: Roadmap, session: SessionContainer = Depends(verify_session())):
     try:
         response = await update_roadmap(roadmap_id, roadmap)
         if response:
@@ -80,7 +81,7 @@ async def update_roadmap_route(roadmap_id: int, roadmap: Roadmap):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.put("/add-roadmap-idea")
-async def add_roadmap_idea_route(name: str, description: str):
+async def add_roadmap_idea_route(name: str, description: str, session: SessionContainer = Depends(verify_session())):
     try:
         updated_item = await add_roadmap_item(name, description)
         if updated_item:
@@ -94,52 +95,34 @@ async def add_roadmap_idea_route(name: str, description: str):
         logger.error(f"Error in add_item_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
-# FUNCTIONS
-async def get_roadmap():
-    query = "SELECT roadmap_id, created_at, name, description, tags, votes, reviewed, email FROM panda_ai_roadmap ORDER BY roadmap_id;"
-    results = await database.fetch_all(query=query)
-
-    if results:
-        return results
-    else:
-        return None
-
-async def update_roadmap(roadmap_id: int, roadmap: Roadmap):
-    query = """
-        UPDATE panda_ai_roadmap
-        SET name = :name, description = :description, tags = :tags, votes = :votes, reviewed = :reviewed, email = :email
-        WHERE roadmap_id = :roadmap_id
-    """
-    values = {
-        "roadmap_id": roadmap_id,
-        "name": roadmap.name,
-        "description": roadmap.description,
-        "tags": json.dumps(roadmap.tags), # convert tags list to JSON string
-        "votes": roadmap.votes,
-        "reviewed": roadmap.reviewed,
-        "email": roadmap.email,
-    }
+@router.get("/user-stats")
+async def get_user_stats_route(session: SessionContainer = Depends(verify_session())):
     try:
-        await database.execute(query=query, values=values)
-        return {"message": "Roadmap updated successfully"}
+        topline_user = await topline_user_stats()
+        daily_user = await users_by_day_stats()
+        topline_onboarding = await topline_onboarding_stats()
+        daily_onboarding = await onboarding_by_day_stats()
+        topline_chats = await topline_chat_stats()
+        daily_chats = await chat_by_day_stats()
+        topline_entities = await topline_entity_stats()
+        daily_entities = await entity_by_day_stats()
+
+        if topline_user is not None and daily_user is not None and topline_onboarding is not None and daily_onboarding is not None and topline_chats is not None and daily_chats is not None and topline_entities is not None and daily_entities is not None:
+            return {
+                "topline_user_stats": topline_user,
+                "users_by_day_stats": daily_user,
+                "topline_onboarding_stats": topline_onboarding,
+                "onboarding_by_day_stats": daily_onboarding,
+                "topline_chat_stats": topline_chats,
+                "chats_by_day_stats": daily_chats,
+                "topline_entity_stats": topline_entities,
+                "entities_created_by_day_stats": daily_entities
+            }
+        else:
+            raise HTTPException(status_code=404, detail="Item not found")
+    except ValidationError as e:
+        logger.error(f"ValidationError in add_item_route: {e}, details: {e.errors()}")
+        return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
     except Exception as e:
-        logger.error(f"Error in update_roadmap: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
-
-async def add_roadmap_item(name: str, description: str):
-
-    # Insert new idea into the database
-    query = """
-        INSERT INTO panda_ai_roadmap (name, description, tags, votes, reviewed, email)
-        VALUES (:name, :description, '["newly added"]'::jsonb, 0, false, 'admin@mypanda.ai');"""
-    await database.execute(query=query, values={"name": name, "description": description})
-
-    # Get the ID of the newly inserted item
-    query = """
-        SELECT roadmap_id FROM panda_ai_roadmap
-        WHERE description = :description
-        ORDER BY roadmap_id DESC
-        LIMIT 1;"""
-    result = await database.fetch_one(query=query, values={"description": description})
-
-    return {"message": "Roadmap item successfully added to database", "roadmap_id": result["roadmap_id"]}
+        logger.error(f"Error in add_item_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)

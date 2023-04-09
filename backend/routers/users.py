@@ -133,6 +133,20 @@ def update_password_route(oldPassword: str, newPassword: str, session: SessionCo
     except Exception as e:
         logger.error(f"Error in update_password_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@router.post("/set-onboarded") 
+async def set_onboarded_route(userId: str, session: SessionContainer = Depends(verify_session())):
+    try:
+        response = await set_onboarded(userId)
+        if "error" in response:
+            raise HTTPException(status_code=500, detail=response["error"])
+        return {"message": "User onboarded successfully"}
+    except HTTPException as e:
+        logger.error(f"HTTPException in set_onboarded_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in set_onboarded_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
     
 
 # FUNCTIONS
@@ -440,6 +454,27 @@ def update_password(oldPassword: str, newPassword: str, session: SessionContaine
         session.sync_revoke_session()
 
         return {"message": "Password updated successfully"}
+
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        return response
+    
+    except Exception as e:
+        response = {"error": str(e)}
+        return response
+
+async def set_onboarded(user_id: str):
+    try:
+        query = """
+            UPDATE panda_ai_users 
+            SET onboarded = true , onboarded_at = NOW()
+            WHERE user_id = :user_id
+        """
+        values = {
+            "user_id": user_id
+        }
+        await database.execute(query=query, values=values)
+        return {"message": "User set as onboarded successfully"}
 
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}

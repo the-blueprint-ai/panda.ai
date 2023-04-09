@@ -69,3 +69,23 @@ async def update_faqs_on_db(faq: FAQsItem, session: SessionContainer = Depends(v
     
     # Return a success message
     return {"message": "FAQ data updated successfully."}
+
+async def add_faq_to_db(faq: FAQsItem, session: SessionContainer = Depends(verify_session())):
+    table = dynamodb.Table('panda-ai-faqs')
+    
+    # Add the FAQ to the table
+    response = table.put_item(
+        Item={
+            'title': faq.title,
+            'question': faq.question,
+            'answer': faq.answer,
+            'visible': faq.visible,
+        }
+    )
+    
+    # Check if the update was successful
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        raise HTTPException(status_code=500, detail="Error updating FAQ data.")
+    
+    # Return a success message
+    return {"message": "FAQ added successfully."}

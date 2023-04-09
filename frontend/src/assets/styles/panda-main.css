@@ -657,6 +657,7 @@ span.typed-text {
   width: 30px;
   margin-left: 5px;
   margin-right: 30px;
+  cursor: pointer;
 }
 .footerMenus {
   display: flex;
@@ -722,25 +723,25 @@ span.typed-text {
 #emailGood {
   width: 25px;
   margin-top: 6px;
-  margin-left: 325px;
+  margin-left: 140px;
   position: absolute;
 }
 #emailBad {
   width: 25px;
   margin-top: 6px;
-  margin-left: 325px;
+  margin-left: 140px;
   position: absolute;
 }
 #passwordGood {
   width: 25px;
   margin-top: 6px;
-  margin-left: 325px;
+  margin-left: 140px;
   position: absolute;
 }
 #passwordBad {
   width: 25px;
   margin-top: 6px;
-  margin-left: 325px;
+  margin-left: 140px;
   position: absolute;
 }
 .emailSentContainer h2 {
@@ -1640,6 +1641,7 @@ span.typed-text {
   padding: 20px;
   text-align: left;
   flex-wrap: wrap;
+  overflow: scroll;
 }
 .userDataContent h2 {
   margin: 0;
@@ -1685,6 +1687,9 @@ span.typed-text {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.entitiesData {
+  overflow: scroll;
 }
 .userDataContent button {
   margin-top: 30px;
@@ -2218,6 +2223,13 @@ span.typed-text {
   text-align: center;
   margin-bottom: 0px;
 }
+.roadmapSuccess {
+  position:absolute;
+  display: flex;
+  margin-top: 150px;
+  margin-left: 37%;
+  color: #FFCB4C;
+}
 .roadmapAdmin table {
   border-collapse: collapse;
   width: 100%;
@@ -2251,10 +2263,11 @@ span.typed-text {
   height: 100px;
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 50px;
 }
 .newRoadmapName {
-  margin-left: 370px;
+  margin-left: 0px;
   width: 210px;
 }
 .newRoadmapName input {
@@ -2297,26 +2310,26 @@ span.typed-text {
   height: 100px;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   margin-bottom: 50px;
 }
 .newFAQTitle {
-  width: 110px;
+  width: 140px;
   margin-right: 5px;
 }
 .newFAQTitle input {
   width: 75%;
 }
 .newFAQQuestion {
-  width: 390px;
+  width: 400px;
   margin-right: 5px;
 }
 .newFAQQuestion input {
   width: 93%;
 }
 .newFAQAnswer {
-  width: 1340px;
+  width: 900px;
 }
 .newFAQItem input {
   height: 30px;
@@ -2333,11 +2346,27 @@ span.typed-text {
   display: flex;
 }
 .newFAQItemSave {
-  width: 100%;
+  margin-top: 40px;
+  margin-left: 50px;
   display: flex;
   justify-content: center;
 }
-.faqsAdmin table {
+.faqSuccess {
+  position:absolute;
+  display: flex;
+  margin-top: 175px;
+  margin-left: 0%;
+  color: #FFCB4C;
+}
+.faqTableContainer {
+  display: flex;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  margin-top: 30px;
+  overflow: scroll;
+}
+.faqTableContainer table {
   border-collapse: collapse;
   width: 100%;
   border: 1px solid #C8C8C8;
@@ -2347,15 +2376,6 @@ span.typed-text {
 }
 #saveFAQButton {
   margin-top: 20px;
-}
-.faqsAdmin table {
-  border-collapse: collapse;
-  width: 100%;
-  margin-top: 30px;
-  border: 1px solid #C8C8C8;
-  background-color: #FFFFFF;
-  color: #000000;
-  font-family: Arial, Helvetica, sans-serif;
 }
 .faqsAdmin th {
   border: 1px solid #C8C8C8;

@@ -96,8 +96,18 @@ export default defineComponent({
     ...mapMutations("imageUploadStore", {
       setSuccess: "setSuccess",
     }),
-    getRandomChat(daypart = '', first_name = '', last_name = '', username = '') {
-      const chatFunctions = [privatePanda, piratePanda, streetPanda, pandaWeather];
+    getRandomChat(
+      daypart = "",
+      first_name = "",
+      last_name = "",
+      username = ""
+    ) {
+      const chatFunctions = [
+        privatePanda,
+        piratePanda,
+        streetPanda,
+        pandaWeather,
+      ];
       if (!this.getRandomChat.previousFunction) {
         // if no previous function has been selected, select a random one
         this.chatIndex = this.getRandomChat.previousFunction =
@@ -106,7 +116,12 @@ export default defineComponent({
         const functionPrefix = "function ";
         this.chatName = this.parts[0].substring(functionPrefix.length);
       }
-      const chat = this.getRandomChat.previousFunction(daypart, first_name, last_name, username);
+      const chat = this.getRandomChat.previousFunction(
+        daypart,
+        first_name,
+        last_name,
+        username
+      );
       return chat;
     },
     getDaypart() {
@@ -124,8 +139,22 @@ export default defineComponent({
     randomChat(chat) {
       return chat[Math.floor(Math.random() * chat.length)];
     },
-    goToAccount() {
-      this.$router.push("/auth/" + this.userId + "/account");
+    async finishOnboarding(userId) {
+      try {
+        const url = import.meta.env.VITE_APP_API_URL + "/users/set-onboarded?userId=" + userId;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+        console.log(data.message);
+        this.$router.push("/auth/" + userId + "/account");
+      } catch (error) {
+        console.error(error);
+      }
     },
     startMessage() {
       this.setIsDisabledValue(true);
@@ -160,7 +189,11 @@ export default defineComponent({
         setTimeout(
           () =>
             this.addToChatHistory(
-              this.getRandomChat(this.daypart, this.first_name, this.last_name)[5]
+              this.getRandomChat(
+                this.daypart,
+                this.first_name,
+                this.last_name
+              )[5]
             ),
           1200
         );
@@ -215,18 +248,18 @@ export default defineComponent({
             ),
           60
         );
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[12]), 320);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[13]), 640);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[14]), 960);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[15]), 1280);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[12]), 3200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[13]), 6400);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[14]), 9600);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[15]), 12800);
         setTimeout(() => this.addToChatHistory(this.getRandomChat()[16]), 1600);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[17]), 1920);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[18]), 2240);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[19]), 2560);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[20]), 2880);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[21]), 3200);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[22]), 3520);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[23]), 3840);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[17]), 19200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[18]), 22400);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[19]), 25600);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[20]), 28800);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[21]), 32000);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[22]), 35200);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[23]), 38400);
         setTimeout(
           () =>
             saveUserChatHistory(
@@ -235,12 +268,11 @@ export default defineComponent({
             ),
           3841
         );
-        setTimeout(() => this.goToAccount(), 4160);
         setTimeout(() => this.setSuccess(""), 3200);
+        setTimeout(() => this.finishOnboarding(this.userId), 4160);
         setTimeout(() => this.setIsDisabledValue(false), 4160);
       }
       this.messageToSend = "";
-      // Add code to update the chat history database
     },
     removeMessage(chat) {
       this.removeFromChatHistory(1);
@@ -256,9 +288,10 @@ export default defineComponent({
       } else {
         this.setUsernameValue("");
         this.removeFromChatHistory(4);
+        this.setImageDropValue("");
+        this.setIsDisabledValue(false);
       }
       this.messageToSend = "";
-      // Add code to update the chat history database
     },
   },
   components: {
@@ -307,7 +340,6 @@ export default defineComponent({
                   Send
                 </button>
                 <button
-                  :disabled="isDisabled"
                   class="chatButton"
                   id="undoButton"
                   @click="removeMessage()"

@@ -89,10 +89,10 @@ async def add_roadmap_idea_route(name: str, description: str, session: SessionCo
         else:
             raise HTTPException(status_code=404, detail="Item not found")
     except ValidationError as e:
-        logger.error(f"ValidationError in add_item_route: {e}, details: {e.errors()}")
+        logger.error(f"ValidationError in add_roadmap_idea_route: {e}, details: {e.errors()}")
         return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
     except Exception as e:
-        logger.error(f"Error in add_item_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in add_roadmap_idea_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.get("/user-stats")
@@ -121,8 +121,8 @@ async def get_user_stats_route(session: SessionContainer = Depends(verify_sessio
         else:
             raise HTTPException(status_code=404, detail="Item not found")
     except ValidationError as e:
-        logger.error(f"ValidationError in add_item_route: {e}, details: {e.errors()}")
+        logger.error(f"ValidationError in get_user_stats_route: {e}, details: {e.errors()}")
         return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
     except Exception as e:
-        logger.error(f"Error in add_item_route: {e}, type: {type(e)}, args: {e.args}")
+        logger.error(f"Error in get_user_stats_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)

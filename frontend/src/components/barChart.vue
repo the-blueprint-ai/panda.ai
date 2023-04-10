@@ -1,5 +1,7 @@
 <script>
+import { DateTime } from "luxon";
 import { Bar } from "vue-chartjs";
+import { generateDateRange } from "../composables/generateDateRange.js";
 import {
   Chart as ChartJS,
   Title,
@@ -20,10 +22,17 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
+  props: {
+    dataByDay: {
+      type: Object,
+      required: true,
+    },
+    axisName: String,
+  },
   data() {
     return {
       chartData: {
-        labels: ["January", "February", "March"],
+        labels: [],
         datasets: [
           {
             label: "Test Data",
@@ -32,7 +41,7 @@ export default {
             // borderColor: "#FFFFFF",
             hoverBorderColor: "#000000",
             borderWidth: 1,
-            data: [40, 20, 12],
+            data: [],
           },
         ],
       },
@@ -52,10 +61,10 @@ export default {
           y: {
             title: {
               display: true,
-              text: "Cumulative",
+              text: "",
               padding: 16,
               font: {
-                family: 'Monaco',
+                family: "Monaco",
                 size: 18,
               },
             },
@@ -64,6 +73,7 @@ export default {
               display: false,
             },
             ticks: {
+              stepSize: 1,
               // display: false,
             },
           },
@@ -80,8 +90,45 @@ export default {
       },
     };
   },
-  components: { Bar },
+  watch: {
+    dataByDay: {
+      immediate: true,
+      handler(newData) {
+        if (newData) {
+          const startDate = DateTime.fromISO(newData[0].date);
+          const endDate = DateTime.fromISO(newData[newData.length - 1].date);
+          const dateRange = generateDateRange(startDate, endDate);
+
+          this.chartData.labels = dateRange.map((date) =>
+            date.toFormat("dd-MM-yyyy")
+          );
+          this.chartData.datasets[0].data = dateRange.map((date) => {
+            const foundData = newData.find(
+              (item) =>
+                DateTime.fromISO(item.date).toFormat("dd-MM-yyyy") ===
+                date.toFormat("dd-MM-yyyy")
+            );
+            return foundData ? foundData.volume : 0;
+          });
+        } else {
+          this.chartData.labels = [];
+          this.chartData.datasets[0].data = [];
+        }
+      },
+    },
+    axisName: {
+      immediate: true,
+      handler(newData) {
+        if (newData) {
+          this.chartOptions.scales.y.title.text = newData;
+        } else {
+          this.chartOptions.scales.y.title.text = "";
+        }
+      },
+    },
+  },
   computed: {},
+  components: { Bar },
 };
 </script>
 

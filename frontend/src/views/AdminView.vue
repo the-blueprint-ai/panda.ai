@@ -19,6 +19,28 @@ export default defineComponent({
         weeklyUsers: 0,
         monthlyUsers: 0,
       },
+      onboardingStats: {
+        totalOnboards: 0,
+        dailyOnboards: 0,
+        weeklyOnboards: 0,
+        monthlyOnboards: 0,
+      },
+      chatStats: {
+        totalChats: 0,
+        dailyChats: 0,
+        weeklyChats: 0,
+        monthlyChats: 0,
+      },
+      entityStats: {
+        totalEntities: 0,
+        dailyEntities: 0,
+        weeklyEntities: 0,
+        monthlyEntities: 0,
+      },
+      usersByDay: {},
+      onboardingByDay: {},
+      chatsByDay: {},
+      entitiesByDay: {},
       updating: false,
       editedData: {},
       newRoadmapName: "",
@@ -32,15 +54,58 @@ export default defineComponent({
   },
   watch: {},
   async mounted() {
-    const userStats = await getUserStats(this.$store);
-    this.userStats = {
-      totalUsers: userStats[0][0].total_users,
-      dailyUsers: userStats[0][0].daily_users,
-      weeklyUsers: userStats[0][0].weekly_users,
-      monthlyUsers: userStats[0][0].monthly_users,
-    };
     await getRoadmap(this.$store, "admin");
     await getFAQs(this.$store);
+    const {
+      totalUsers,
+      dailyUsers,
+      weeklyUsers,
+      monthlyUsers,
+      totalOnboards,
+      dailyOnboards,
+      weeklyOnboards,
+      monthlyOnboards,
+      totalChats,
+      dailyChats,
+      weeklyChats,
+      monthlyChats,
+      totalEntities,
+      dailyEntities,
+      weeklyEntities,
+      monthlyEntities,
+      usersByDay,
+      onboardingByDay,
+      chatsByDay,
+      entitiesByDay,
+    } = await getUserStats(this.$store);
+    this.userStats = {
+      totalUsers,
+      dailyUsers,
+      weeklyUsers,
+      monthlyUsers,
+    };
+    this.onboardingStats = {
+      totalOnboards,
+      dailyOnboards,
+      weeklyOnboards,
+      monthlyOnboards,
+    };
+    this.chatStats = {
+      totalChats,
+      dailyChats,
+      weeklyChats,
+      monthlyChats,
+    };
+    this.entityStats = {
+      totalEntities,
+      dailyEntities,
+      weeklyEntities,
+      monthlyEntities,
+    };
+    this.usersByDay = usersByDay;
+    this.onboardingByDay = onboardingByDay;
+    this.chatsByDay = chatsByDay;
+    this.entitiesByDay = entitiesByDay;
   },
   computed: {
     ...mapGetters("roadmapStore", {
@@ -59,14 +124,6 @@ export default defineComponent({
       getStoreToplineEntitiesStats: "getStoreToplineEntitiesStats",
       getStoreDailyEntitiesStats: "getStoreDailyEntitiesStats",
     }),
-    userStats() {
-      return {
-        totalUsers: this.getStoreToplineUsersStats[0][0].total_users,
-        dailyUsers: this.getStoreToplineUsersStats[0][0].total_users,
-        weeklyUsers: this.getStoreToplineUsersStats[0][0].total_users,
-        monthlyUsers: this.getStoreToplineUsersStats[0][0].total_users,
-      };
-    },
     roadmapData() {
       return this.getRoadmapData || [];
     },
@@ -318,119 +375,158 @@ export default defineComponent({
         <div class="adminContent">
           <div v-if="tab === 'trending'" class="trendingAdmin">
             <div class="usersTopLine">
-              <div class="displayNumber" id="totalUsersRegistered">
+              <div class="displayNumber">
                 <h2>Top Entities</h2>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
+              <div class="displayNumber">
                 <h2>Top Topics</h2>
               </div>
-            </div>
-            <div class="usersChart">
-              <BarChart />
-            </div>
-            <div class="usersChart">
-              <BarChart />
+              <div class="displayNumber">
+                <h2>Top 10 chatters</h2>
+              </div>
+              <div class="displayNumber">
+                <h2>Top 10 entity creators</h2>
+              </div>
+              <div class="displayNumber">
+                <h2>Top 10 entity updaters</h2>
+              </div>
             </div>
           </div>
           <div v-if="tab === 'users'" class="usersAdmin">
             <div class="usersTopLine">
-              <div class="displayNumber" id="totalUsersRegistered">
+              <div class="displayNumber">
                 <h1 v-text="userStats.totalUsers"></h1>
-                <p># Total Users Registered</p>
+                <p># Total Users</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
+              <div class="displayNumber">
                 <h1 v-text="userStats.dailyUsers"></h1>
-                <p># Daily Active Users</p>
+                <p># Daily New Users</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
+              <div class="displayNumber">
                 <h1 v-text="userStats.weeklyUsers"></h1>
-                <p># Weekly Active Users</p>
+                <p># Weekly New Users</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
+              <div class="displayNumber">
                 <h1 v-text="userStats.monthlyUsers"></h1>
-                <p># Monthly Active Users</p>
+                <p># Monthly New Users</p>
               </div>
             </div>
             <div class="usersChart">
-              <BarChart />
-            </div>
-            <div class="usersChart">
-              <BarChart />
+              <BarChart
+                v-if="this.usersByDay.length > 0"
+                :data-by-day="this.usersByDay"
+                :axis-name="'# New Users'"
+              />
             </div>
           </div>
           <div v-if="tab === 'onboarding'" class="onboardingAdmin">
             <div class="usersTopLine">
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>2</h1>
+              <div class="displayNumber">
+                <h1 v-text="onboardingStats.totalOnboards"></h1>
                 <p># Total Users Onboarded</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>3</h1>
+              <div class="displayNumber">
+                <h1 v-text="onboardingStats.dailyOnboards"></h1>
                 <p># Daily Onboards</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>4</h1>
+              <div class="displayNumber">
+                <h1 v-text="onboardingStats.weeklyOnboards"></h1>
                 <p># Weekly Onboards</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>5</h1>
+              <div class="displayNumber">
+                <h1 v-text="onboardingStats.monthlyOnboards"></h1>
                 <p># Monthly Onboards</p>
               </div>
             </div>
             <div class="usersChart">
-              <BarChart />
-            </div>
-            <div class="usersChart">
-              <BarChart />
+              <BarChart
+                v-if="this.onboardingByDay.length > 0"
+                :data-by-day="this.onboardingByDay"
+                :axis-name="'# New Onboards'"
+              />
             </div>
           </div>
           <div v-if="tab === 'chats'" class="chatsAdmin">
             <div class="usersTopLine">
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>2</h1>
-                <p># Total Chats Started</p>
+              <div class="displayNumber">
+                <h1 v-text="chatStats.totalChats"></h1>
+                <p># Total Chats</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>3</h1>
-                <p># Daily Entites Started</p>
+              <div class="displayNumber">
+                <h1 v-text="chatStats.dailyChats"></h1>
+                <p># Daily Chats</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
+              <div class="displayNumber">
+                <h1 v-text="chatStats.weeklyChats"></h1>
+                <p># Chats This Week</p>
+              </div>
+              <div class="displayNumber">
+                <h1 v-text="chatStats.monthlyChats"></h1>
+                <p># Chats This Month</p>
+              </div>
+            </div>
+            <div class="usersChart">
+              <BarChart
+                v-if="this.chatsByDay.length > 0"
+                :data-by-day="this.chatsByDay"
+              />
+            </div>
+            <div class="usersBottomLine">
+              <div class="displayNumber">
                 <h1>4</h1>
-                <p># Weekly Entites Started</p>
+                <p>Static</p>
+                <p>Average chat length (msgs)</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>5</h1>
-                <p># Monthly Entites Started</p>
+              <div class="displayNumber">
+                <h1>4</h1>
+                <p>Static</p>
+                <p>Average chat length (time)</p>
               </div>
-            </div>
-            <div class="usersChart">
-              <BarChart />
-            </div>
-            <div class="usersChart">
-              <BarChart />
             </div>
           </div>
           <div v-if="tab === 'entities'" class="entitiesAdmin">
             <div class="usersTopLine">
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>2</h1>
+              <div class="displayNumber">
+                <h1 v-text="entityStats.totalEntities"></h1>
                 <p># Total Entities Created</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>3</h1>
-                <p># Daily Entites Created</p>
+              <div class="displayNumber">
+                <h1 v-text="entityStats.dailyEntities"></h1>
+                <p># Daily Entities Created</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>4</h1>
-                <p># Weekly Entites Created</p>
+              <div class="displayNumber">
+                <h1 v-text="entityStats.weeklyEntities"></h1>
+                <p># Weekly Entities Created</p>
               </div>
-              <div class="displayNumber" id="totalUsersRegistered">
-                <h1>5</h1>
-                <p># Monthly Entites Created</p>
+              <div class="displayNumber">
+                <h1 v-text="entityStats.monthlyEntities"></h1>
+                <p># Monthly Entities Created</p>
               </div>
             </div>
             <div class="usersChart">
-              <BarChart />
+              <BarChart
+                v-if="this.entitiesByDay.length > 0"
+                :data-by-day="this.entitiesByDay"
+                :axis-name="'# New Entities'"
+              />
+            </div>
+            <div class="usersBottomLine">
+              <div class="displayNumber">
+                <h1 v-text="entityStats.totalEntities"></h1>
+                <p># Total Entities Updated</p>
+              </div>
+              <div class="displayNumber">
+                <h1 v-text="entityStats.dailyEntities"></h1>
+                <p># Daily Entities Updated</p>
+              </div>
+              <div class="displayNumber">
+                <h1 v-text="entityStats.weeklyEntities"></h1>
+                <p># Weekly Entities Updated</p>
+              </div>
+              <div class="displayNumber">
+                <h1 v-text="entityStats.monthlyEntities"></h1>
+                <p># Monthly Entities Updated</p>
+              </div>
             </div>
             <div class="usersChart">
               <BarChart />
@@ -470,7 +566,9 @@ export default defineComponent({
                 </button>
               </div>
             </div>
-            <p v-if="roadmapAdded" class="roadmapSuccess" style="color: green; ">new roadmap item saved to database</p>
+            <p v-if="roadmapAdded" class="roadmapSuccess" style="color: green">
+              new roadmap item saved to database
+            </p>
             <table class="roadmapTable" :key="roadmapData.length">
               <thead>
                 <tr>
@@ -617,7 +715,9 @@ export default defineComponent({
                 </button>
               </div>
             </div>
-            <p v-if="faqAdded" class="faqSuccess" style="color: green; ">new faq saved to database</p>
+            <p v-if="faqAdded" class="faqSuccess" style="color: green">
+              new faq saved to database
+            </p>
             <div class="faqTableContainer">
               <table class="faqTable">
                 <thead>

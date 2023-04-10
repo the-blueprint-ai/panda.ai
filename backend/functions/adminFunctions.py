@@ -6,7 +6,7 @@ import logging
 import boto3
 import json
 import pytz
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, time, timedelta, timezone
 from typing import List
 from collections import defaultdict
 
@@ -93,7 +93,7 @@ async def topline_user_stats():
         return None
     
 async def users_by_day_stats():
-    query = "SELECT DATE_TRUNC('day', created_at) AS registration_date, COUNT(*) AS daily_users FROM panda_ai_users GROUP BY DATE_TRUNC('day', created_at) ORDER BY registration_date;"
+    query = "SELECT DATE_TRUNC('day', created_at) AS date, COUNT(*) AS volume FROM panda_ai_users GROUP BY DATE_TRUNC('day', created_at) ORDER BY date;"
     results = await database.fetch_all(query=query)
 
     if results:
@@ -111,7 +111,7 @@ async def topline_onboarding_stats():
         return None
     
 async def onboarding_by_day_stats():
-    query = "SELECT DATE_TRUNC('day', onboarded_at) AS registration_date, COUNT(*) AS daily_users FROM panda_ai_users WHERE onboarded = true GROUP BY DATE_TRUNC('day', onboarded_at) ORDER BY registration_date;"
+    query = "SELECT DATE_TRUNC('day', onboarded_at) AS date, COUNT(*) AS volume FROM panda_ai_users WHERE onboarded = true GROUP BY DATE_TRUNC('day', onboarded_at) ORDER BY date;"
     results = await database.fetch_all(query=query)
 
     if results:
@@ -129,7 +129,7 @@ async def topline_chat_stats():
         return None
     
 async def chat_by_day_stats():
-    query = "SELECT DATE_TRUNC('day', created_at) AS chat_date, COUNT(*) AS daily_chats FROM panda_ai_user_chat_history GROUP BY DATE_TRUNC('day', created_at) ORDER BY chat_date;"
+    query = "SELECT DATE_TRUNC('day', created_at) AS date, COUNT(*) AS volume FROM panda_ai_user_chat_history GROUP BY DATE_TRUNC('day', created_at) ORDER BY date;"
     results = await database.fetch_all(query=query)
 
     if results:
@@ -192,7 +192,16 @@ async def entity_by_day_stats():
         date_only = created_at.date()
         daily_entities[date_only] += 1
 
-    # Convert the defaultdict to a sorted list of tuples (date, count)
-    entity_by_day_stats = sorted(daily_entities.items(), key=lambda x: x[0])
+    # Convert the defaultdict to a sorted list of dictionaries with date and volume keys
+    entity_by_day_stats = sorted(
+        [
+            {
+                "date": datetime.combine(k, time(0, 0, 0, tzinfo=timezone.utc)).isoformat(),
+                "volume": v
+            }
+            for k, v in daily_entities.items()
+        ],
+        key=lambda x: x["date"],
+    )
 
     return entity_by_day_stats

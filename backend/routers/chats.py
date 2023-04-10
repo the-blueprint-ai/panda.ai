@@ -7,6 +7,7 @@ from config import settings
 from fastapi.responses import JSONResponse
 from cryptography.fernet import Fernet
 from pydantic import Json, BaseModel, ValidationError
+from datetime import datetime
 import logging
 import json
 from typing import Any
@@ -110,14 +111,16 @@ async def save_user_chat_history(user_id: str, chat_script: Json[Any]):
     return {"message": "Data saved successfully", "chat_id": chat_id}
 
 async def update_user_chat_history(chat_id: int, chat_script: Json[Any]):
+    timestamp = datetime.now()
     query = """
         UPDATE panda_ai_user_chat_history
-        SET chat_script = :chat_script
+        SET chat_script = :chat_script, updated_at = :updated_at
         WHERE chat_id = :chat_id
     """
     values = {
         "chat_id": chat_id,
-        "chat_script": json.dumps(chat_script)  # Convert the list of dictionaries to a JSON string
+        "chat_script": json.dumps(chat_script),  # Convert the list of dictionaries to a JSON string
+        "updated_at": timestamp
     }
     await database.execute(query=query, values=values)
     return {"message": "Chat history updated successfully"}

@@ -81,11 +81,20 @@ export default defineComponent({
       this.setIsDisabled(false);
       this.focusInput();
     },
-    async submitMessage() {
-      this.addToChatStoreChatHistory({ user: "user", message: this.messageToSend });
+    async submitMessage(username) {
+      this.addToChatStoreChatHistory({
+        user: username,
+        message: this.messageToSend,
+      });
       const waitForResponse = async () => {
         return new Promise((resolve) => {
-          const pandaResponse = pandaChat(this.userId, this.first_name, this.last_name, this.username, this.messageToSend);
+          const pandaResponse = pandaChat(
+            this.userId,
+            this.first_name,
+            this.last_name,
+            this.username,
+            this.messageToSend
+          );
           resolve(pandaResponse);
         });
       };
@@ -103,7 +112,10 @@ export default defineComponent({
       if (this.chat_id === null) {
         // Save chat history for the first time
         try {
-          const savedChatId = await saveUserChatHistory(this.userId, chatHistory);
+          const savedChatId = await saveUserChatHistory(
+            this.userId,
+            chatHistory
+          );
           this.chat_id = savedChatId;
         } catch (error) {
           console.error("Failed to save chat history:", error);
@@ -153,7 +165,7 @@ export default defineComponent({
               <chatMessage
                 v-for="(item, index) in chatHistory"
                 :message="item"
-                :class="item.user + 'Chat'"
+                :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
                 :key="item.user + '-' + index"
                 :search-term="currentSearchTerm"
                 :is-disabled="this.isDisabled"
@@ -166,7 +178,7 @@ export default defineComponent({
                   :disabled="isDisabled"
                   class="input"
                   v-model="messageToSend"
-                  @keydown.enter.stop.prevent="submitMessage()"
+                  @keydown.enter.stop.prevent="submitMessage(this.username)"
                   id="userInput"
                   name="userInput"
                   placeholder="enter your message here"
@@ -176,7 +188,7 @@ export default defineComponent({
                   :disabled="isDisabled"
                   class="chatButton"
                   id="sendButton"
-                  @click="submitMessage()"
+                  @click="submitMessage(this.username)"
                 >
                   Send
                 </button>

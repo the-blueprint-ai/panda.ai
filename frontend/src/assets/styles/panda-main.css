@@ -2175,6 +2175,7 @@ span.typed-text {
   align-items: flex-start;
   text-align: left;
   padding: 40px;
+  overflow: scroll;
 }
 .usersAdmin, .trendingAdmin, .onboardingAdmin, .chatsAdmin, .entitiesAdmin {
   display: flex;
@@ -2184,6 +2185,10 @@ span.typed-text {
   align-items: center;
 }
 .usersTopLine {
+  display: flex;
+  flex-direction: row;
+}
+.usersBottomLine {
   display: flex;
   flex-direction: row;
 }
@@ -2212,6 +2217,7 @@ span.typed-text {
   justify-content: center;
   margin-top: 50px;
   margin-left: -80px;
+  margin-bottom: 80px;
 }
 .roadmapAdmin {
   display: flex;

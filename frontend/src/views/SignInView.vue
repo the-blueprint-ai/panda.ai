@@ -48,8 +48,10 @@ export default defineComponent({
         } else {
           await this.getSession;
           let userId = await Session.getUserId();
-          this.loading = false;
-          this.$router.push("/auth/" + userId + "/chat");
+          if (userId) {
+            this.loading = false;
+            this.$router.push("/auth/" + userId + "/chat");
+          }
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {

@@ -83,7 +83,9 @@ export default {
         <router-link to="/">
           <img class="logo" src="../../src/assets/panda.png" width="50" />
         </router-link>
-        <p>panda.ai</p>
+        <router-link to="/">
+          <p>panda.ai</p>
+        </router-link>
       </div>
       <div class="menu-items">
         <div class="menu-icon">

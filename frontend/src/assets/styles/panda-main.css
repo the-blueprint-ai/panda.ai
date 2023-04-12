@@ -79,8 +79,13 @@ span {
 }
 .brandHolder {
   display: flex;
+  flex-direction: row;
   align-items: center;
   margin-right: 30px;
+}
+.brandHolder a {
+  text-decoration: none;
+  color: #000000;
 }
 .logo {
   margin: 20px;
@@ -169,11 +174,13 @@ span {
   flex-grow: 4;
 }
 .menu-icon {
+  width: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-left: 10px;
-  margin-right: 40px;
+  margin-right: 20px;
+  padding: 10px;
 }
 .menu-icon p {
   margin: 0px;
@@ -185,7 +192,8 @@ span {
   margin: 0px;
 }
 .menu-icon:hover {
-  text-decoration: underline;
+  background-color: #FFCB4C;
+  border-radius: 10px;
 }
 .account-items {
   display: flex;

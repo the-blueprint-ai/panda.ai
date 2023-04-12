@@ -21,7 +21,6 @@ app.use(
   VueGtag,
   {
     appName: 'panda.ai',
-    pageTrackerScreenviewEnabled: true,
     config: { id: "G-HS1DM7DQXW" },
   },
   router

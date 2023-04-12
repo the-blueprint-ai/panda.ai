@@ -25,6 +25,7 @@
     "typewriter-vue": "^0.5.19",
     "vue": "^3.2.38",
     "vue-chartjs": "^5.2.0",
+    "vue-gtag": "^2.0.1",
     "vue-router": "^4.1.5",
     "vuex": "^4.0.2"
   },

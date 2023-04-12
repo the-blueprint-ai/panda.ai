@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 import { RouterView } from "vue-router";
 import { mapState } from "vuex";
 

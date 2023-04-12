@@ -1,6 +1,6 @@
 # 🐼 panda.ai
 
-This template should help get you started developing with Vue 3 in Vite.
+[![amplifybutton](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/username/repository)
 
 ## Recommended IDE Setup
 

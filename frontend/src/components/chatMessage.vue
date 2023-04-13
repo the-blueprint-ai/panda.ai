@@ -38,9 +38,9 @@ export default {
   methods: {
     messageImage() {
       if (this.message.user == "panda") {
-        return "/src/assets/panda.png";
+        return this.pandaImage;
       } else if (!this.avatar) {
-        return "/src/assets/user.png";
+        return this.userImage;
       } else if (this.avatar) {
         return this.avatar;
       }

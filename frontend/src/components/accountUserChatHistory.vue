@@ -154,7 +154,7 @@ export default {
         <chatMessage
           v-for="(contentItem, contentIndex) in selectedChat.content"
           :message="contentItem"
-          :class="contentItem.user + 'Chat'"
+          :class="contentItem.user === 'panda' ? 'pandaChat' : 'userChat'"
           :key="contentIndex"
           :searchTerm="chatHistorySearch"
           :is-disabled="this.isDisabled"

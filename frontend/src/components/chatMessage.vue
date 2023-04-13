@@ -3,12 +3,20 @@ export default {
   data() {
     return {
       isDisabled: true,
+      pandaImage: "",
+      userImage: "",
     };
   },
   props: {
     message: Object,
     searchTerm: String,
     // isDisabled: Boolean,
+  },
+  async created() {
+    const pandaImageModule = await import("../assets/panda.png");
+    this.pandaImage = pandaImageModule.default;
+    const userImageModule = await import("../assets/user.png");
+    this.userImage = userImageModule.default;
   },
   computed: {
     avatar() {

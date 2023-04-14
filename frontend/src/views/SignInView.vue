@@ -113,7 +113,7 @@ export default defineComponent({
               autocomplete="email"
             />
           </form>
-          <button @click="signInClicked(this.email, this.password)">
+          <button class="signInButton" @click="signInClicked(this.email, this.password)">
             <SpinnerComponent
               :loading="this.loading"
               :button-text="this.buttonText"

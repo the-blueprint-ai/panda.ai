@@ -849,6 +849,9 @@ span.typed-text {
   margin-top: 10px;
   background-color: #FFFFFF;
 }
+.signInButton {
+  color: #000000;
+}
 .thirdPartySignIn {
   width: 100%;
   margin: 20px;

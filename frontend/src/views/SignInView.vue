@@ -87,8 +87,8 @@ export default defineComponent({
         <div class="signInContainerTitle">
           <img src="../assets/panda.png" />
           <h2>SIGN IN</h2>
-          <h3>NOT REGISTERED YET?</h3>
-          <p @click="toSignUp()">SIGN UP</p>
+          <!-- <h3>NOT REGISTERED YET?</h3>
+          <p @click="toSignUp()">SIGN UP</p> -->
         </div>
         <div class="signInBar"></div>
         <div class="emailPassword">

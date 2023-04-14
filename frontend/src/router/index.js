@@ -58,11 +58,11 @@ const router = createRouter({
       name: "signin",
       component: SignInView,
     },
-    {
-      path: "/signup",
-      name: "signup",
-      component: SignUpView,
-    },
+    // {
+    //   path: "/signup",
+    //   name: "signup",
+    //   component: SignUpView,
+    // },
     {
       path: "/password-reset",
       name: "passwordreset",

@@ -179,9 +179,9 @@ export default {
           @click="openClose"
         />
         <div v-else>
-          <button class="authButton-signup" @click="redirectToSignUp">
+          <!-- <button class="authButton-signup" @click="redirectToSignUp">
             Sign up
-          </button>
+          </button> -->
           <button class="authButton-login" @click="redirectToSignIn">
             Sign In
           </button>

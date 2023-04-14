@@ -136,7 +136,7 @@ export default defineComponent({
     },
     async onLogout() {
       await Session.signOut();
-      window.location.href = "http://localhost:3000/";
+      this.$router.push("/");
     },
     triggerBannerUpload() {
       this.$refs.bannerInput.click();

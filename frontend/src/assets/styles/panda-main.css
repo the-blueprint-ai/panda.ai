@@ -116,6 +116,7 @@ span {
   width: 200px;
 }
 .dropdown-menu:link {
+  color:#000000;
   text-decoration: none;
 }
 .dropdown-button-top {
@@ -143,6 +144,7 @@ span {
   text-transform: uppercase;
 }
 .dropdown-links a:link {
+  color:#000000;
   text-decoration: none;
 }
 .dropdown-button:hover {

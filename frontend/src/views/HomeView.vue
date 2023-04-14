@@ -6,7 +6,9 @@ import navFooter from "../components/navFooter.vue";
 
 export default defineComponent({
   data: () => {
-    return {};
+    return {
+      typingTimeout: null,
+    };
   },
   computed: {
     ...mapGetters("userStore", {
@@ -24,27 +26,33 @@ export default defineComponent({
     }),
   },
   async mounted() {
-    setTimeout(this.typeText, this.newTextDelay + 200);
-    try {
-      await this.getSession();
-      if (this.session) {
-        await this.getUserInfo();
-      }
-    } catch (error) {
-      console.error("Error in mounted hook:", error);
-    }
+    this.initHomePage();
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     ...mapMutations("typingStore", {
       setTypeValueValue: "setTypeValue",
       setTypeStatusValue: "setTypeStatus",
+      setDisplayTextArray: "setDisplayTextArray",
       setTypingSpeedValue: "setTypingSpeed",
       setNewTextDelayValue: "setNewTextDelay",
       setDisplayTextArrayValue: "setDisplayTextArray",
       setDisplayTextArrayIndexValue: "setDisplayTextArrayIndex",
       setCharIndexValue: "setCharIndex",
     }),
+    async initHomePage() {
+      this.setCharIndexValue(0);
+      this.setTypeValueValue("");
+      setTimeout(this.typeText, this.newTextDelay + 200);
+      try {
+        await this.getSession();
+        if (this.session) {
+          await this.getUserInfo();
+        }
+      } catch (error) {
+        console.error("Error in initHomePage:", error);
+      }
+    },
     typeText() {
       if (
         this.charIndex <
@@ -58,12 +66,21 @@ export default defineComponent({
             )
         );
         this.setCharIndexValue(this.charIndex + 1);
-        setTimeout(this.typeText, this.typingSpeed);
+        this.typingTimeout = setTimeout(this.typeText, this.typingSpeed);
       } else {
         this.setTypeStatusValue(false);
-        setTimeout(this.newTextDelay);
+        this.typingTimeout = setTimeout(this.newTextDelay);
       }
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.initHomePage();
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.initHomePage();
+    next();
   },
   components: {
     navBar,
@@ -75,7 +92,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="body">
+    <div class="body" :key="mainKey">
       <img src="../../src/assets/panda.png" class="biglogo" width="200" />
       <h1>
         <span class="typed-text">{{ typeValue }}</span>

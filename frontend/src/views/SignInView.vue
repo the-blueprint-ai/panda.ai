@@ -121,7 +121,7 @@ export default defineComponent({
           </button>
           <h3 @click="toForgotPassword()">FORGOT PASSWORD?</h3>
         </div>
-        <div class="signInBar"></div>
+        <!-- <div class="signInBar"></div>
         <div class="signInOption"><p>OR</p></div>
         <div class="thirdPartySignIn">
           <div class="thirdPartyButton">
@@ -136,7 +136,7 @@ export default defineComponent({
           <div class="thirdPartyButton">
             <img src="../assets/icons/facebook.svg" />Continue With Facebook
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <navFooter></navFooter>

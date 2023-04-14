@@ -700,7 +700,7 @@ span.typed-text {
   cursor: pointer;
 }
 .signInContainer {
-  height: 950px;
+  /* height: 950px; */
   width: 500px;
   display: flex;
   flex-direction: column;

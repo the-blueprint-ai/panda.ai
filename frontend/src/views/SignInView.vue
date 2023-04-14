@@ -103,7 +103,7 @@ export default defineComponent({
             />
           </form>
           <h2>Password</h2>
-          <form>
+          <form @submit.prevent="signInClicked(this.email, this.password)">
             <input
               ref="password"
               v-model="this.password"

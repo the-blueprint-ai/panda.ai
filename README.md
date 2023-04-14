@@ -14,11 +14,11 @@ Welcome to 🐼 panda.ai, where we believe in the power of personalised AI exper
 
 At 🐼 panda.ai, we're not like other large digital platforms. We believe in putting the user first, which means giving you complete ownership and control of your data. It's a whole new approach to AI that emphasises data privacy and ethical practices.
 
-### POWERED BY OPENAI'S CHATGPT LLM 🔋
+## POWERED BY OPENAI'S CHATGPT LLM 🔋
 
 While we don't have any significant partnerships or collaborations to mention, it's worth noting that our AI is built on top of OpenAI's ChatGPT LLM, the technology foundation that powers 🐼 panda.ai's awesomeness.
 
-### OUR CORE VALUES 🦄
+## OUR CORE VALUES 🦄
 
 At 🐼 panda.ai, we live by three core values:
 1. CHALLENGING THE STATUS QUO 💪
@@ -27,6 +27,6 @@ At 🐼 panda.ai, we live by three core values:
 
 These values guide our mission to revolutionize the AI chatbot industry and provide users with a truly personalized and ethical AI experience.
 
-### OUR VISION FOR THE FUTURE 🔮
+## OUR VISION FOR THE FUTURE 🔮
 
 🐼 panda.ai aspires to provide a fully personalized AI assistant that caters to all of your digital needs. In the future, we aim to create a platform that not only understands each user individually but can also preempt and predict your needs, making your digital life more seamless and enjoyable.

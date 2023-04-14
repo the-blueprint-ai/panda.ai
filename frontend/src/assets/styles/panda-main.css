@@ -1,0 +1,2419 @@
+body {
+    margin: 0;
+}
+.body {
+  background-color: #000000;
+  text-align: center;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: center;
+  min-height: 78vh;
+  font-family: "Monaco";
+  padding-bottom: 30px;
+}
+h1 {
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-size: 4em;
+  font-weight: 100;
+}
+h2 {
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+h3 {
+  color: #FFFFFF;
+}
+span {
+  font-size: normal;
+}
+.bodyG {
+  background-color: #EFEFEF;
+  text-align: center;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: center;
+  min-height: 78vh;
+  font-family: "Monaco";
+}
+.bodyG h1 {
+  color: #000000;
+}
+.bodyG h2 {
+  color: #000000;
+}
+.bodyG h3 {
+    color: #000000;
+    margin-bottom: 20px;
+}
+.bodyG p {
+  color: #000000;
+}
+.navbar {
+  height: 100px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+.navbar-top {
+  height: 60px;
+  width: 97%;
+  padding: 10px;
+  background-color: #FFFFFF;
+  color: #000000;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  font-family: "Monaco";
+}
+.navbarbar {
+  height: 1px;
+  width: 97%;
+  margin: 0px;
+  display: flex;
+  background-color: #000000;
+}
+.brandHolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 30px;
+}
+.brandHolder a {
+  text-decoration: none;
+  color: #000000;
+}
+.logo {
+  margin: 20px;
+}
+.homesvg {
+  margin: 10px;
+  height: 32px;
+  width: 32px;
+}
+.downsvg {
+  margin: 5px;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+}
+.downsvg:hover {
+  transform: scale(1.2);
+}
+.dropdown-menu {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #FFFFFF;
+  border: 2px solid #FFCB4C;
+  border-radius: 8px;
+  margin-top: 330px;
+  width: 200px;
+}
+.dropdown-menu:link {
+  text-decoration: none;
+}
+.dropdown-button-top {
+  height: 50px;
+  width: 200px;
+  background-color: #FFFFFF;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  display: flex;
+  align-items: center;
+  border: none;
+  padding-left: 10px;
+  font-family: "Monaco";
+  text-transform: uppercase;
+}
+.dropdown-button {
+  height: 50px;
+  width: 200px;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  border: none;
+  padding-left: 10px;
+  font-family: "Monaco";
+  text-transform: uppercase;
+}
+.dropdown-links a:link {
+  text-decoration: none;
+}
+.dropdown-button:hover {
+  background-color: #FFCB4C;
+  cursor: pointer;
+}
+.dropdown-button-top:hover {
+  background-color: #FFCB4C;
+  cursor: pointer;
+}
+.dropdown-bar {
+  height: 1px;
+  width: 200px;
+  margin: 0px;
+  display: flex;
+  background-color: lightgray;
+}
+.dropdown-bottom {
+  background-color: lightgray;
+  height: 27px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  width: 200px;
+}
+.menu-items {
+  display: flex;
+  margin: 10px;
+  align-items: center;
+  flex-grow: 4;
+}
+.menu-icon {
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 20px;
+  padding: 10px;
+}
+.menu-icon p {
+  margin: 0px;
+  font-size: 0.8em;
+  text-align: center;
+  cursor: pointer;
+}
+.menu-icon img {
+  margin: 0px;
+}
+.menu-icon:hover {
+  background-color: #FFCB4C;
+  border-radius: 10px;
+}
+.account-items {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 10px;
+  align-items: center;
+}
+.user-icon {
+  width: 50px;
+  margin-left: 0px;
+  border-radius: 10px;
+}
+.user-icon:hover {
+  cursor: pointer;
+}
+.biglogo {
+  margin-top: 50px;
+}
+.mainContainer {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  background-color: #EFEFEF;
+  text-align: left;
+  display: flex;
+  border-radius: 15px;
+  flex-direction: row;
+  justify-content: top;
+  align-items: left;
+  width: 1400px;
+  height: 70vh;
+}
+.chatHistoryContainer {
+  background-color: #FFFFFF;
+  color:#000000;
+  text-align: left;
+  display: flex;
+  border-radius: 15px;
+  margin: 5px;
+  margin-right: 10px;
+  padding: 5px;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  width: 400px;
+}
+.chatHistoryContainer h2 {
+  color:#000000;
+}
+.chatHistory {
+  width: 390px;
+  margin-left: -30px;
+  height: 90%;
+  padding-left: 40px;
+  text-align: left;
+  overflow-y: scroll;
+}
+.chatHistory::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 5px;
+}
+.chatHistory::-webkit-scrollbar-track {
+  background: #FFFFFF;
+}
+.chatHistory::-webkit-scrollbar-thumb {
+  background: #FFCB4C;
+  border-radius: 10px;
+}
+.chatHistory::-webkit-scrollbar-track-piece {
+  background: #FFFFFF;
+}
+.mainChatContainer {
+  background-color: #FFFFFF;
+  text-align: left;
+  display: flex;
+  border: 3px solid #FFFFFF;
+  border-radius: 15px;
+  margin: 5px;
+  margin-left: 5px;
+  padding: 5px;
+  flex-direction: column;
+  flex-grow: 4;
+  justify-content: top;
+  align-items: left;
+}
+.chatContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  flex-grow: 4;
+  overflow: scroll;
+}
+.pandaChat {
+  background-color: #FFFFFF;
+  text-align: left;
+  display: flex;
+  margin: 5px;
+  width:fit-content;
+  flex-direction: row;
+  justify-content: left;
+  align-items: left;
+}
+.pandaChat.highlighted {
+  position: relative;
+  width: 99%;
+  background-color: #FFCB4C;
+  border-radius: 15px;
+}
+.userChat {
+  background-color: #FFFFFF;
+  text-align: left;
+  display: flex;
+  margin: 5px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: center;
+}
+.user.userChat {
+  background-color: #FFFFFF;
+  text-align: left;
+  display: flex;
+  margin: 5px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: center;
+}
+.userChat.highlighted {
+  background-color: #FFCB4C;
+  border-radius: 15px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: right;
+}
+.chatAvatar {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+}
+.userInputContainer {
+  height: 90px;
+  background: #FFFFFF;
+  color: #000000;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.userInput {
+  display: flex;
+  flex-grow: 4;
+  margin: 5px;
+  padding: 5px;
+  align-content: center;
+}
+.input {
+  width: 100%;
+  border: 3px solid #EFEFEF;
+  border-radius: 15px;
+  background: #FFFFFF;
+  color: #000000;
+  padding: 10px;
+  font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
+  font-size: large;
+  overflow: wrap;
+  resize: none;
+}
+.input:disabled {
+  cursor: not-allowed;
+  background-color: #C8C8C8;
+}
+.input:focus {
+  outline: none;
+}
+.input::placeholder {
+  color: #C8C8C8;
+}
+.chatMessage {
+  display: flex;
+  align-items: center;
+  width: 98%;
+  border-bottom: 1px solid #EFEFEF;
+}
+.message {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+  width:fit-content;
+  max-width: 820px;
+  /* border: 1px solid #000000; */
+  border-radius: 15px;
+  /* background-color: #FFFFFF; */
+  color: #000000;
+}
+.messageRating {
+  display: flex;
+  flex-grow: 5;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 7px;
+}
+.messageRating img {
+  height: 20px;
+  margin-right: 8px;
+  padding: 6px;
+}
+.messageRating img:hover {
+  cursor: pointer;
+  border-radius: 50%;
+}
+.thumbUp:hover {
+  background-color: green;
+  opacity: 70%;
+}
+.thumbDown:hover {
+  background-color: red;
+  opacity: 70%;
+}
+.user {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.1rem;
+}
+.chatButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 0px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 100px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.chatButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.chatButton:Hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
+}
+.userPageButton {
+  width: 200px;
+  height: 70px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.startNewChat {
+  cursor: pointer;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 1rem;
+  margin: 2rem;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 80%;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.startNewChat:Hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
+}
+.letsChat {
+  cursor: pointer;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 1rem;
+  margin: 2rem;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 200px;
+}
+.startNewChat:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+.authButton-login {
+  cursor: pointer;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+  transition: all 0.3s ease-in-out;
+  border: 3px solid #FFCB4C;
+  border-radius: 1rem;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  width: 100px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.authButton-login:hover {
+  background-color: #FFCB4C;
+  color: #000000;
+  border: 3px solid #FFCB4C;
+}
+.authButton-signup {
+  cursor: pointer;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+  transition: all 0.3s ease-in-out;
+  border: 3px solid #FFCB4C;
+  border-radius: 1rem;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  width: 100px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.authButton-signup:hover {
+  color: #000000;
+  border: 3px solid #FFCB4C;
+  transform: scale(1.1);
+}
+.spacer{
+  margin-top: 50px;
+}
+.blinking-cursor {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-left: 0px;
+  color: #FFFFFF;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+.blinking-cursor2 {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-left: -34px;
+  color: #FFFFFF;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+span.typed-text {
+  margin-left: 115px;
+}
+@keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-moz-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-webkit-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-ms-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-o-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+.navFooter {
+  height: 400px;
+  background-color: #FFFFFF;
+  color: #000000;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Monaco";
+}
+.footerbar {
+  height: 1px;
+  width: 97%;
+  margin: 0px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  background-color: #000000;
+}
+.footerContainer {
+  width: 97%;
+  display: flex;
+  flex-direction: row;
+}
+.brandSocialsHolder {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 3;
+  margin-left: 50px;
+}
+.footerBranding {
+  display: flex;
+  flex-direction:row;
+}
+.brandText h2 {
+  margin: 0;
+  margin-top: -5px;
+  font-size: 20px;
+  text-transform: lowercase;
+  color: #000000;
+}
+.brandText p {
+  margin: 0;
+  margin-top: 0px;
+  font-size: 16px;
+  text-transform: lowercase;
+  color: #000000;
+}
+.brandSocialsHolder h3 {
+  margin-top: 75px;
+  margin-left: 25px;
+  font-size: 16px;
+  color: #000000;
+}
+.socialsHolder {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+}
+.socialsHolder img {
+  width: 30px;
+  margin-left: 5px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+.footerMenus {
+  display: flex;
+  flex-grow: 4;
+  justify-content: flex-end;
+  align-content: space-around;
+  column-gap: 100px;
+  margin-left: 20px;
+  margin-right: 0px;
+  padding-top: 10px;
+}
+.singleMenu {
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: start;
+}
+.singleMenu h2 {
+  color: #000000;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+.singleMenu p {
+  font-size: 15px;
+  margin-top: 0px;
+  margin-left: 2px;
+  margin-bottom: 8px;
+}
+.singleMenu p:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.signInContainer {
+  /* height: 950px; */
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #000000;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.emailSentContainer {
+  height: 550px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #000000;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.emailSentContainer h2{
+  color: #FFFFFF;
+}
+#emailGood {
+  width: 25px;
+  margin-top: 6px;
+  margin-left: 140px;
+  position: absolute;
+}
+#emailBad {
+  width: 25px;
+  margin-top: 6px;
+  margin-left: 140px;
+  position: absolute;
+}
+#passwordGood {
+  width: 25px;
+  margin-top: 6px;
+  margin-left: 140px;
+  position: absolute;
+}
+#passwordBad {
+  width: 25px;
+  margin-top: 6px;
+  margin-left: 140px;
+  position: absolute;
+}
+.emailSentContainer h2 {
+  margin-top: 0px;
+  font-size: 28px;
+}
+.emailSentContainer h3 {
+  color: #FFCB4C;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.emailSentContainer h3:hover {
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.emailSentContainer img {
+  margin-bottom: 20px;
+}
+.emailSentContainer p {
+  width: 80%;
+  color:#FFFFFF;
+}
+#emailSentPanda {
+  width: 90px;
+}
+#emailSentEnvelope {
+  width: 60px;
+}
+.emailVerifiedContainer {
+  height: 300px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #000000;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.emailVerifiedContainer h2 {
+  color: #FFFFFF;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+.signInContainerTitle {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+}
+.signInContainerTitle img {
+  width: 70px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.signInContainerTitle h2 {
+  margin: 0px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 28px;
+  color: #FFFFFF;
+}
+.signInContainerTitle h3 {
+  margin: 0px;
+  margin-top: -15px;
+  text-align: center;
+  font-size: 18px;
+  color: #FFFFFF;
+}
+.signInContainerTitle p {
+  margin: 0px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #FFCB4C;
+}
+.signInContainerTitle p:hover {
+  cursor: pointer;
+}
+.signInBar {
+  height: 1px;
+  width: 95%;
+  margin-top: 10px;
+  background-color: #FFFFFF;
+}
+.thirdPartySignIn {
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.thirdPartyButton {
+  height: 35px;
+  width: 65%;
+  margin: 10px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 10px;
+  text-transform: uppercase;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.thirdPartyButton:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.thirdPartyButton img {
+  margin-left: 40px;
+  margin-right: 12px;
+  width: 20px;
+}
+.signInOption {
+  height: 50px;
+  width: 70px;
+  background-color: #000000;
+  margin: 0px;
+  padding: 0px;
+  margin-top: -15px;
+}
+.signInOption p {
+  margin: 0px;
+  padding: 0px;
+  background-color: #000000;
+  color: #FFFFFF;
+  font-size: 20px;
+}
+.emailPassword {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 75%;
+}
+.emailPassword h2 {
+  text-align: left;
+  font-size: 16px;
+}
+.emailPassword h3 {
+  margin-top: 20px;
+  margin-bottom: 33px;
+  text-align: center;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.emailPassword h3:hover {
+  color: #FFCB4C;
+  cursor: pointer;
+}
+.emailPassword h4 {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 16px;
+  color: #FFFFFF;
+}
+.emailPassword h5 {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 16px;
+  color: #FFCB4C;
+}
+.emailPassword h5:hover {
+  cursor: pointer;
+}
+.emailPassword h6 {
+  height: 10px;
+  margin-top: -10px;
+  margin-left: 0px;
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: red;
+}
+.emailPassword input {
+  height: 30px;
+  width: 80%;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 50px;
+  margin-bottom: 15px;
+  border: 2px solid #FFFFFF;
+  border-radius: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+}
+.emailPassword input:focus {
+  outline: none;
+}
+.emailPassword button {
+  height: 50px;
+  width: 97%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  background-color: #FFCB4C;
+  margin-bottom: 10px;
+  font-family: "Monaco";
+  font-size: 18px;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.emailPassword button:hover {
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.aboutContainer {
+  width: 1200px;
+  margin-top: 50px;
+  padding: 20px;
+  padding-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+}
+.aboutContainer h2 {
+  width: 100%;
+  margin: 0;
+  margin-bottom: 0px;
+  text-align: left;
+}
+.aboutContainer h3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 24px;
+}
+.aboutContainer p {
+  margin-bottom: 30px;
+}
+.aboutContainer ol {
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+.aboutContainer ol p {
+  margin-top: 5px;
+  text-transform: none;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+.aboutContainerLine {
+  height: 1px;
+  width: 100%;
+  margin: 0px;
+  margin-top: 15px;
+  margin-bottom: 40px;
+  display: flex;
+  background-color: #FFFFFF;
+}
+.aboutContainer a {
+  color:#FFFFFF
+}
+.aboutBox {
+  width: 550px;
+  margin-top: -10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 2px #FFFFFF;
+  border-radius: 10px;
+}
+.aboutBox ol {
+  margin-top: -25px;
+}
+.privacyPolicyContainer {
+  width: 1200px;
+  margin-top: 50px;
+  padding: 20px;
+  margin-bottom: 70px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+}
+.privacyPolicyContainer h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+}
+.privacyPolicyContainer h3 {
+  width: 100%;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 22px;
+}
+.privacyPolicyContainer a {
+  color: #FFFFFF;
+}
+.faqContainer {
+  width: 1000px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+}
+.faqContainer h1 {
+  margin-bottom: 0px;
+  text-align: center;
+  font-size: 38px;
+}
+.faqContainer input {
+  height: 40px;
+  width: 600px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  border: 2px #000000;
+  font-family: 'Monaco';
+  font-size: 18px;
+  outline: none;
+}
+.faqTitle {
+  width: 100%;
+}
+.faqTitle h2 {
+  margin-top: 50px;
+}
+.faqContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  background-color: #FFFFFF;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 18px;
+  font-family: 'Monaco';
+}
+.faqQuestion img {
+  margin-top: 4px;
+}
+.faqQuestion:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.faqAnswer {
+  padding: 10px;
+  margin-top: -20px;
+}
+.contactContainer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 70px;
+}
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.contactFormItem {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 520px;
+  align-items: center;
+}
+.contactFormItem h2 {
+  margin-right: 20px;
+}
+.contactFormItem input {
+  height: 40px;
+  width: 300px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  border: 2px #000000;
+  font-family: 'Monaco';
+  font-size: 18px;
+  outline: none;
+}
+.contactFormItemLong {
+  margin-bottom: 20px;
+}
+.messageInput {
+  margin-bottom: 20px;
+  height: 300px;
+  width: 500px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  border: 2px #000000;
+  font-family: 'Monaco';
+  font-size: 18px;
+  outline: none;
+}
+.chatButtonDisabled {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 0px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 100px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.dropzone {
+  height: fit-content;
+  height: 150px;
+  width: 98%;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  border: 2px dashed #000000;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+.imageInput[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: inherit;
+  min-height: 200px;
+  max-height: 400px;
+  cursor: pointer;
+}
+.dropImage {
+  height: 100px;
+  border-radius: 50px;
+  margin-right: 20px;
+}
+.cancelButton {
+  margin-top: -60px;
+  margin-left: 90px;
+  height: 25px;
+  position: absolute;
+  z-index: 100;
+  cursor: pointer;
+}
+.saveButton {
+  cursor: pointer;
+  color: #000000;
+  background-color: #ffcb4c;
+  border: none;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 0px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #ffcb4c;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 100px;
+  z-index: 100;
+}
+.accountWrapper {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+}
+.userBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 300px;
+  margin-top: 30px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.userBanner img {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.bannerCamera {
+  width: 1200px;
+  opacity: 0;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  transition: 0.5s ease;
+}
+.bannerCamera:hover {
+  transition-delay: 0.3s;
+  opacity: 1;
+  cursor: pointer;
+}
+.accountAvatarBackground {
+  display: flex;
+  height: 200px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #FFFFFF;
+  border: 7px solid #FFFFFF;
+  align-items: start;
+  position: relative;
+  margin-top: -115px;
+  margin-left: 50px;
+}
+.accountAvatar {
+  display: flex;
+  height: 200px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #FFFFFF;
+  border: 7px solid #FFFFFF;
+  align-items: start;
+  position: relative;
+  margin-top: -215px;
+  margin-left: 50px;
+}
+.avatarCamera {
+  display: flex;
+  width: 200px;
+  opacity: 0;
+  border: none;
+  border-radius: 40px;
+  align-items: start;
+  position: absolute;
+  margin-top: -207px;
+  margin-left: 57px;
+  transition: 0.5s ease;
+}
+.avatarCamera:hover {
+  transition-delay: 0.3s;
+  opacity: 1;
+  cursor: pointer;
+}
+.profilePanel {
+  display: flex;
+  flex-direction: row;
+  margin-top: -100px;
+  background-color: #FFFFFF;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.userDetails {
+  width: 250px;
+  min-width: 250px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding-top: 80px;
+  padding-left: 70px;
+  border-bottom-left-radius: 15px;
+}
+.userDetails h2 {
+  color: #000000;
+  text-transform: capitalize;
+  font-size: 30px;
+  text-align: left;
+}
+.userDetails h3 {
+  margin-top: -25px;
+  padding-left: 2px;
+  padding-bottom: 5px;
+  color: #000000;
+  font-size: 20px;
+}
+.userDetails p {
+  margin-top: -10px;
+  padding-left: 2px;
+  padding-bottom: 5px;
+  font-size: 15px;
+  text-align: left;
+}
+.userDetails .chatButton {
+  width: 170px;
+  margin-left: -5px;
+  margin-bottom: 30px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.aboutDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: left;
+  padding-top: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.aboutDetails h2 {
+  color: #000000;
+}
+.aboutDetails p {
+  margin-top: -20px;
+  margin-left: 2px;
+}
+.editUserDetails {
+  width: 50px;
+  padding-right: 50px;
+  display: flex;
+  flex-grow: 2;
+  justify-content: end;
+  align-items: start;
+  padding-top: 40px;
+  border-bottom-right-radius: 15px;
+}
+.profileEdit {
+  width: 30px;
+  opacity: 0.5;
+}
+.profileEdit:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+.accountDetailsWrapper {
+  height: 1000px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  background-color: #FFFFFF;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.accountDetailsMenu {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  background-color: #FFFFFF;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom: 1px solid lightgray;
+}
+.userChatHistoryMenuButton, .userIntegrationsMenuButton, .userSubscriptionMenuButton, .userDataMenuButton, .userSettingsMenuButton {
+  max-width: 180px;
+  display: flex;
+  margin-left: 30px;
+  margin-right: 30px;
+  background-color:#FFFFFF;
+  color: #000000;
+  border: none;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  font-family: Monaco;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: larger;
+}
+.userChatHistoryMenuButton:hover, .userIntegrationsMenuButton:hover, .userSubscriptionMenuButton:hover, .userDataMenuButton:hover, .userSettingsMenuButton:hover {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+  cursor: pointer;
+}
+.userChatHistoryMenuButton.active, .userIntegrationsMenuButton.active, .userSubscriptionMenuButton.active, .userDataMenuButton.active, .userSettingsMenuButton.active {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+  cursor: pointer;
+}
+.chatUserChatHistory{
+  height: 880px;
+  display: flex;
+}
+.chatUserChatHistoryDates {
+  min-width: 375px;
+  max-width: 375px;
+  padding-left: 5px;
+  text-align: left;
+  white-space: nowrap;
+}
+.chatUserChatHistorySearch {
+  margin-left: -5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+}
+.chatUserChatHistorySearchBox {
+  height: 30px;
+  width: 340px;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  padding: 5px;
+  border: 2px solid lightgray;
+  border-radius: 10px;
+  font-family: "Monaco";
+  font-size: 18px;
+  overflow: wrap;
+  resize: none;
+}
+.clearChatSearch {
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  display: inline-block;
+  margin-top: -51px;
+  margin-left: 325px;
+  border-radius: 50%;
+  background-color: #ffcb4c;
+}
+.clearAccountSearch {
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  display: inline-block;
+  margin-top: -51px;
+  margin-left: 245px;
+  border-radius: 50%;
+  background-color: #ffcb4c;
+}
+.clearChatSearch:hover {
+  cursor: pointer;
+  background-color: #ffffff;
+}
+.clearAccountSearch:hover {
+  cursor: pointer;
+  background-color: #ffffff;
+}
+.chatUserChatHistorySearchBox:focus {
+  outline: none;
+}
+.userChatHistory{
+  height: 948px;
+  display: flex;
+}
+.userChatHistoryDates {
+  min-width: 300px;
+  max-width: 300px;
+  padding-left: 15px;
+  text-align: left;
+  border-right: 1px solid lightgray;
+  white-space: nowrap;
+}
+.chatHistorySearch {
+  margin-left: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+}
+.chatHistorySearchBox {
+  height: 30px;
+  width: 270px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10x;
+  border: 2px solid lightgray;
+  border-radius: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  overflow: wrap;
+  resize: none;
+}
+
+.chatHistorySearchBox:focus {
+  outline: none;
+}
+.userChatHistoryContent {
+  min-width: 840px;
+  display: flex;
+  flex-direction: column-reverse;
+  text-align: left;
+  padding: 20px;
+  overflow: scroll;
+  color: #000000;
+}
+.chatHistoryDay {
+  margin-left: -35px;
+  padding-right: 10px;
+  list-style-type: none;
+  text-transform: uppercase;
+  color: #000000;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.chatHistoryDay:hover {
+  cursor: pointer;
+}
+.chatHistoryTimeTitle {
+  margin-top: 5px;
+  margin-left: -5px;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chatHistoryTitle {
+  padding-left: 5px;
+}
+.chatHistoryTitle:hover {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 17px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+  cursor: pointer;
+}
+.chatHistoryTitle.active {
+  background-image: linear-gradient(to right, #FFCB4C 100%, transparent 0%);
+  background-position-y: 17px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+  cursor: pointer;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.userIntegrations {
+  display: flex;
+  width: 1300px;
+  justify-content: center;
+}
+.userIntegrations h1 {
+  color: #000000;
+}
+.userSubscription {
+  display: flex;
+  width:1300px;
+  justify-content: center;
+}
+.userSubscription h1 {
+  color: #000000;
+}
+.userData {
+  display: flex;
+  width:1300px;
+  justify-content: flex-start;
+}
+.userDataTypes {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-right: 1px solid lightgray;
+}
+.userDataTypes h2 {
+  width: 230px;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  font-size: 20px;
+}
+.userDataTypes h2:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.userDataTypes h2 img {
+  height: 20px;
+  margin-right: 15px;
+}
+.userDataContent {
+  display: flex;
+  padding: 20px;
+  text-align: left;
+  flex-wrap: wrap;
+  overflow: scroll;
+}
+.userDataContent h2 {
+  margin: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.userDataContent p {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+.userDataContent table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0;
+  border: 1px solid #C8C8C8;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.userDataContent th {
+  border: 1px solid #C8C8C8;
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 15px;
+}
+.userDataContent td {
+  border: 1px solid #C8C8C8;
+  padding: 10px;
+}
+.userDataContent td:focus {
+  outline-color: #000000;
+}
+.userDataContent tr:nth-child(even) {
+  background-color: #EFEFEF;
+}
+.userDataContent tr:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.noEntityData {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.entitiesData {
+  overflow: scroll;
+}
+.userDataContent button {
+  margin-top: 30px;
+  width: 180px;
+}
+.userSettings {
+  display: flex;
+  flex-direction: column;
+  width:1300px;
+  align-items: center;
+}
+.userSettings h1 {
+  margin: 10px;
+  margin-top: 30px;
+  color: #000000;
+}
+.userSettings h2 {
+  color: #000000;
+}
+.userSettings button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+  margin-top: 30px;
+  margin-bottom: 0px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 220px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.emailDelete, .changePassword {
+  width: 300px;
+  height: 25px;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  border-bottom: 2px solid #000000;
+  outline: none;
+}
+#emailDeleteGood {
+  width: 25px;
+  margin-top: 140px;
+  margin-left: 270px;
+  position: absolute;
+}
+.overlay {
+  display: none;
+}
+.overlay.active {
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  background-color: rgba(255,255,255,0.90);
+  overflow: hidden;
+}
+.overlay h2 {
+  color: #000000;
+}
+.overlayContent {
+  display: flex;
+  z-index: 2;
+  flex-direction: column;
+  background-color: #C8C8C8;
+  border-radius: 25px;
+  height: 550px;
+  width: 600px;
+  border: 5px solid #FFCB4C;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.overlayTitle {
+  border-bottom: 2px solid #000000;
+}
+.overlayTitle p {
+  margin-top: -15px;
+}
+.overlayContent {
+  margin: 20px;
+}
+.overlayForm {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 0px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.overlayForm h1 {
+  margin: 0px;
+}
+.overlayFormInput{
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+  align-items: center;
+}
+.overlayFormInput p {
+  margin-right: 20px;
+  width: 110px;
+  text-align: right;
+}
+.overlayFormInput input {
+  width: 300px;
+  height: 25px;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  border-bottom: 2px solid #000000;
+  outline: none;
+}
+.overlayForm h6 {
+  color: red;
+  width: 100%;
+  margin-top: 3px;
+  margin-left: 65px;
+  text-align: center;
+}
+#loadingSpinner {
+  margin-top: -500px;
+  margin-bottom: 40px;
+}
+#loadingOverlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#emailAccountGood {
+  width: 25px;
+  margin-top: 0px;
+  margin-left: 410px;
+  position: absolute;
+}
+#emailAccountBad {
+  width: 25px;
+  margin-top: 0px;
+  margin-left: 410px;
+  position: absolute;
+}
+.overlayButtons {
+  display: flex;
+  justify-content: center;
+  margin-top: -20px;
+}
+.overlayCloseButton {
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 50%;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  height: 30px;
+  width: 30px;
+  margin-top: -25px;
+  margin-left: 570px;
+  position: absolute;
+  z-index: 3;
+}
+.roadmapTitle h1 {
+  font-size: 42px;
+}
+.roadmapTitle h2 {
+  text-transform: unset;
+  font-size: 20px;
+}
+.roadmapContainer {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.roadmapItem {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  border-radius: 15px;
+  background-color: #292929;
+  padding: 30px;
+}
+.roadmapItem-built {
+  border: 2px solid #FFCB4C;
+}
+.roadmapItemRow1 {
+  height: 65px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.roadmapItemRow2 {
+  min-height: 65px;
+  display: flex;
+  flex-grow: 10;
+  text-align: left;
+  align-items: center;
+}
+.roadmapItemRow3 {
+  height: 65px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.roadmapItemTitle {
+  margin-right: 40px;
+}
+.roadmapItemTitle h2 {
+  color: #FFFFFF;
+}
+.roadmapItemTags {
+  display: flex;
+  flex-direction: row;
+}
+.roadmapItemTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 150px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #997f30;
+  border: 1px solid #FFCB4C;
+  border-radius: 20px;
+  color: #FFCB4C;
+  font-size: 14px;
+}
+.roadmapItemTag p {
+  text-transform: uppercase;
+}
+.roadmapItemTag img {
+  height: 20px;
+  margin-left: 10px;
+}
+.roadmapItemDescription p {
+  color: #FFFFFF;
+}
+.roadmapItemVote button {
+  width: 200px;
+  height: 50px;
+  display: flex;
+  margin-left: -2px;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  font-size: large;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  box-shadow: 0px 15px 10px -15px grey;
+}
+.roadmapItemVote button:hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.roadmapItemVote button img {
+  height: 30px;
+  margin: 5px;
+}
+.roadmapItemVote button p {
+  margin: 10px;
+}
+#roadmapItemVotes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30px;
+  min-width: 30px;
+  margin: 10px;
+  background-color: #000000;
+  border-radius: 50%;
+  color: #FFCB4C;
+  font-size: 14px;
+}
+.roadmapItemSubmit {
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.roadmapItemSubmit input {
+  width: 400px;
+  height: 30px;
+  border-radius: 10px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  outline: none;
+}
+.roadmapItemSubmit button {
+  width: 120px;
+  height: 40px;
+  display: flex;
+  margin-left: 20px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  font-size: large;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  box-shadow: 0px 15px 10px -15px grey;
+}
+.roadmapItemSubmit button:hover {
+  border: 3px solid #FFCB4C;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.roadmapOverlay {
+  display: none;
+}
+.roadmapOverlay.active {
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  background-color: rgba(255,255,255,0.8);
+  overflow: hidden;
+}
+.roadmapOverlayContent {
+  display: flex;
+  z-index: 2;
+  flex-direction: column;
+  background-color: #000000;
+  border-radius: 25px;
+  height: 400px;
+  width: 600px;
+  padding: 20px;
+  border: 5px solid #FFCB4C;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.roadmapOverlayContent h1 {
+  margin: 0px;
+}
+.roadmapOverlayForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 0px;
+}
+.roadmapOverlayForm input {
+  width: 300px;
+  height: 25px;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: "Monaco";
+  font-size: 16px;
+  border-bottom: 2px solid #000000;
+  outline: none;
+}
+.roadmapOverlayButton {
+  height: 45px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 10px;
+  margin: 20px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 10px;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.roadmapOverlayCloseButton {
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 50%;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  height: 30px;
+  width: 30px;
+  margin-top: -45px;
+  margin-left: 595px;
+  position: absolute;
+  z-index: 3;
+}
+.adminPanel {
+  width: 100%;
+  height: 1260px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+.sidePanel {
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 10px;
+  padding-bottom: 40px;
+  background-color: #FFFFFF;
+}
+.sidePanel h2 {
+  width: 100%;
+  margin: 0;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.sidePanel p {
+  width: 180px;
+  text-align: start;
+  margin-top: 0px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 40px;
+  padding-right: 30px;
+}
+.sidePanel p img {
+  margin-right: 10px;
+}
+.sidePanel p:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.selected {
+  background-color: #FFCB4C;
+}
+.adminContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 40px;
+  overflow: scroll;
+}
+.usersAdmin, .trendingAdmin, .onboardingAdmin, .chatsAdmin, .entitiesAdmin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.usersTopLine {
+  display: flex;
+  flex-direction: row;
+}
+.usersBottomLine {
+  display: flex;
+  flex-direction: row;
+}
+.displayNumber {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 260px;
+  width: 260px;
+  padding: 20px;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  border-radius: 15px;
+  background-color: #FFFFFF;
+}
+.displayNumber h1 {
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 100px;
+}
+.usersChart {
+  width: 1360px;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  margin-top: 50px;
+  margin-left: -80px;
+  margin-bottom: 80px;
+}
+.roadmapAdmin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.roadmapAdmin h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0px;
+}
+.roadmapSuccess {
+  position:absolute;
+  display: flex;
+  margin-top: 150px;
+  margin-left: 37%;
+  color: #FFCB4C;
+}
+.roadmapAdmin table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: auto;
+  border: 1px solid #C8C8C8;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.roadmapAdmin th {
+  border: 1px solid #C8C8C8;
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 15px;
+}
+.roadmapAdmin td {
+  border: 1px solid #C8C8C8;
+  padding: 10px;
+}
+.roadmapAdmin td:focus {
+  outline-color: #000000;
+}
+.roadmapAdmin tr:nth-child(even) {
+  background-color: #EFEFEF;
+}
+.roadmapAdmin tr:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.newRoadmapItem, .newFAQItem {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+.newRoadmapName {
+  margin-left: 0px;
+  width: 210px;
+}
+.newRoadmapName input {
+  height: 30px;
+  width: 90%;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  font-family: "Monaco";
+  outline: none;
+}
+.newRoadmapDescription {
+  width: 810px;
+  margin-left: 20px;
+}
+.newRoadmapDescription input {
+  height: 30px;
+  width: 90%;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  font-family: "Monaco";
+  outline: none;
+}
+#saveRoadmapButton {
+  margin-top: 60px;
+  margin-left: -30px;
+}
+.centered {
+  text-align: center;
+}
+.faqsAdmin {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+}
+.newFAQItem {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.newFAQTitle {
+  width: 140px;
+  margin-right: 5px;
+}
+.newFAQTitle input {
+  width: 75%;
+}
+.newFAQQuestion {
+  width: 400px;
+  margin-right: 5px;
+}
+.newFAQQuestion input {
+  width: 93%;
+}
+.newFAQAnswer {
+  width: 900px;
+}
+.newFAQItem input {
+  height: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  font-family: "Monaco";
+  outline: none;
+}
+.newFAQAnswer input {
+  width: 100%;
+}
+.faqInput {
+  display: flex;
+}
+.newFAQItemSave {
+  margin-top: 40px;
+  margin-left: 50px;
+  display: flex;
+  justify-content: center;
+}
+.faqSuccess {
+  position:absolute;
+  display: flex;
+  margin-top: 175px;
+  margin-left: 0%;
+  color: #FFCB4C;
+}
+.faqTableContainer {
+  display: flex;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  margin-top: 30px;
+  overflow: scroll;
+}
+.faqTableContainer table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #C8C8C8;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#saveFAQButton {
+  margin-top: 20px;
+}
+.faqsAdmin th {
+  border: 1px solid #C8C8C8;
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 15px;
+}
+.faqsAdmin td {
+  border: 1px solid #C8C8C8;
+  padding: 10px;
+}
+.checkBox {
+  text-align: center;
+}
+.checkBox input {
+  accent-color: #000000;
+}
+.faqsAdmin td:focus {
+  outline-color: #000000;
+}
+.faqsAdmin tr:nth-child(even) {
+  background-color: #EFEFEF;
+}
+.faqsAdmin tr:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}

@@ -123,6 +123,7 @@ span {
   height: 50px;
   width: 200px;
   background-color: #FFFFFF;
+  color: #000000;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   display: flex;
@@ -478,6 +479,7 @@ span {
 .letsChat {
   cursor: pointer;
   background-color: #FFCB4C;
+  color: #000000;
   border: none;
   padding: 1rem;
   margin: 2rem;

@@ -27,7 +27,7 @@ class FAQsItem(BaseModel):
 
 
 # FUNCTIONS
-async def get_faqs(session: SessionContainer = Depends(verify_session())):
+async def get_faqs():
     table = dynamodb.Table('panda-ai-faqs')
     response = table.scan()
     items = response.get('Items', [])

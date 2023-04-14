@@ -62,6 +62,10 @@ const userStore = {
     setStoreUserChatHistory(state, value) {
       state.userChatHistory.push(value);
     },
+    refreshStoreUserChatHistory(state, value) {
+      state.userChatHistory = [];
+      state.userChatHistory.push(value);
+    },
     setStoreEntities(state, value) {
       state.entities.push(value);
     },

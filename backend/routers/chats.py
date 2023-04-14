@@ -97,14 +97,16 @@ async def get_user_chat_history(user_id: str):
         return None
 
 async def save_user_chat_history(user_id: str, chat_script: Json[Any]):
+    timestamp = datetime.now()
     query = """
-        INSERT INTO panda_ai_user_chat_history (user_id, chat_script)
-        VALUES (:user_id, :chat_script)
+        INSERT INTO panda_ai_user_chat_history (user_id, chat_script, updated_at)
+        VALUES (:user_id, :chat_script, :updated_at)
         RETURNING chat_id
     """
     values = {
         "user_id": user_id,
-        "chat_script": json.dumps(chat_script)  # Convert the list of dictionaries to a JSON string
+        "chat_script": json.dumps(chat_script),  # Convert the list of dictionaries to a JSON string
+        "updated_at": timestamp
     }
     chat_id = await database.execute(query=query, values=values)
     print("Data saved successfully")

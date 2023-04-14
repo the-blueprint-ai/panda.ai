@@ -54,6 +54,7 @@ export default defineComponent({
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
     this.emptyChatStoreHistory;
+    this.startNewChat();
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),

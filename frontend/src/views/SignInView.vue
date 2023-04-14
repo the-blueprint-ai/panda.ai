@@ -103,7 +103,7 @@ export default defineComponent({
             />
           </form>
           <h2>Password</h2>
-          <form>
+          <form @submit.prevent="signInClicked(this.email, this.password)">
             <input
               ref="password"
               v-model="this.password"
@@ -113,7 +113,7 @@ export default defineComponent({
               autocomplete="email"
             />
           </form>
-          <button @click="signInClicked(this.email, this.password)">
+          <button class="signInButton" @click="signInClicked(this.email, this.password)">
             <SpinnerComponent
               :loading="this.loading"
               :button-text="this.buttonText"

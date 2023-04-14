@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 
 export function getUserChatHistory(store, userId) {
-  const userChatHistory = async () => {
+  async function userChatHistory() {
     try {
       const url =
         import.meta.env.VITE_APP_API_URL + "/chats/get?user_id=" + userId;
@@ -52,14 +52,14 @@ export function getUserChatHistory(store, userId) {
           content: content,
         });
       }
-      store.commit("userStore/setStoreUserChatHistory", chatHistory);
+      store.commit("userStore/refreshStoreUserChatHistory", chatHistory);
       // Return the chat history
       return chatHistory;
     } catch (error) {
       console.log("An error occurred while saving the file:", error);
     }
-  };
-
+  }
+  userChatHistory();
   return {
     userChatHistory,
   };

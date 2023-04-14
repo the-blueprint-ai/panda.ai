@@ -2,6 +2,7 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions, mapGetters } from "vuex";
 import { getUserData } from "../composables/getUserData.js";
+import { watch } from "vue";
 
 export default {
   data() {
@@ -49,11 +50,12 @@ export default {
       await Session.signOut();
       window.location.href = ("http://localhost:3000/");
     },
-    openClose() {
+    openClose(event) {
+      // Update the openClose method to take the event object as a parameter
       var _this = this;
 
       const closeListener = (e) => {
-        if (_this.catchOutsideClick(e, _this.$refs.menu))
+        if (_this.catchOutsideClick(e, _this.$refs.avatar) && _this.catchOutsideClick(e, _this.$refs.caret))
           window.removeEventListener("click", closeListener),
             _this.setIsOpenValue(false);
       };
@@ -63,8 +65,10 @@ export default {
       this.setIsOpenValue(!this.isOpen);
     },
     catchOutsideClick(event, dropdown) {
-      // When user clicks menu — do nothing
-      if (dropdown == event.target) return false;
+      if (!dropdown) return false; // Add this line to check if dropdown is null
+
+      // When user clicks menu or a child of the menu — do nothing
+      if (dropdown == event.target || dropdown.contains(event.target)) return false;
 
       // When user clicks outside of the menu — close the menu
       if (this.isOpen && dropdown != event.target) return true;
@@ -130,13 +134,14 @@ export default {
         </div>
       </div>
       <div class="account-items">
-        <img
-          v-if="onboarded"
-          src="../../src/assets/icons/caret-down-fill.svg"
-          class="downsvg"
-          ref="menu"
-          @click="openClose"
-        />
+        <div @click="openClose">
+          <img
+            v-if="onboarded"
+            src="../../src/assets/icons/caret-down-fill.svg"
+            class="downsvg"
+            ref="caret"
+          />
+        </div>
         <div class="dropdown-menu" v-if="isOpen">
           <div class="dropdown-links">
             <router-link :to="'/auth/' + userId + '/chat'">
@@ -175,7 +180,7 @@ export default {
           v-if="onboarded"
           class="user-icon"
           v-bind:src="avatar"
-          ref="menu"
+          ref="avatar"
           @click="openClose"
         />
         <div v-else>

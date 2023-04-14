@@ -116,12 +116,14 @@ span {
   width: 200px;
 }
 .dropdown-menu:link {
+  color:#000000;
   text-decoration: none;
 }
 .dropdown-button-top {
   height: 50px;
   width: 200px;
   background-color: #FFFFFF;
+  color: #000000;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   display: flex;
@@ -135,6 +137,7 @@ span {
   height: 50px;
   width: 200px;
   background-color: #FFFFFF;
+  color: #000000;
   display: flex;
   align-items: center;
   border: none;
@@ -143,6 +146,7 @@ span {
   text-transform: uppercase;
 }
 .dropdown-links a:link {
+  color:#000000;
   text-decoration: none;
 }
 .dropdown-button:hover {
@@ -476,6 +480,7 @@ span {
 .letsChat {
   cursor: pointer;
   background-color: #FFCB4C;
+  color: #000000;
   border: none;
   padding: 1rem;
   margin: 2rem;
@@ -495,6 +500,7 @@ span {
 .authButton-login {
   cursor: pointer;
   background-color: #FFFFFF;
+  color: #000000;
   border: none;
   padding: 10px;
   margin: 10px;
@@ -514,6 +520,7 @@ span {
 .authButton-signup {
   cursor: pointer;
   background-color: #FFCB4C;
+  color: #000000;
   border: none;
   padding: 10px;
   margin: 10px;
@@ -842,6 +849,9 @@ span.typed-text {
   margin-top: 10px;
   background-color: #FFFFFF;
 }
+.signInButton {
+  color: #000000;
+}
 .thirdPartySignIn {
   width: 100%;
   margin: 20px;
@@ -892,6 +902,7 @@ span.typed-text {
   width: 75%;
 }
 .emailPassword h2 {
+  color: #FFFFFF;
   text-align: left;
   font-size: 16px;
 }
@@ -2307,6 +2318,7 @@ span.typed-text {
   outline: none;
 }
 #saveRoadmapButton {
+  color: #000000;
   margin-top: 60px;
   margin-left: -30px;
 }
@@ -2389,6 +2401,7 @@ span.typed-text {
   font-family: Arial, Helvetica, sans-serif;
 }
 #saveFAQButton {
+  color: #000000;
   margin-top: 20px;
 }
 .faqsAdmin th {

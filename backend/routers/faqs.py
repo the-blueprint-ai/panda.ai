@@ -26,8 +26,8 @@ class FAQsItem(BaseModel):
 
 # ROUTERS
 @router.get("/get")
-async def fetch_faqs(session: SessionContainer = Depends(verify_session())):
-    result = await get_faqs(session)
+async def fetch_faqs():
+    result = await get_faqs()
     return result
 
 @router.get("/delete")

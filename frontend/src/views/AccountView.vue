@@ -55,10 +55,7 @@ export default defineComponent({
     },
   },
   async mounted() {
-    await this.getSession();
     await this.getUserInfo();
-    const { userData } = getUserData(this.$store, this.userId);
-    userData(this.userId);
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
   },

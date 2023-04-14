@@ -12,6 +12,10 @@ SuperTokens.init(SuperTokensWebJSConfig);
 
 const app = createApp(App);
 
+router.afterEach((to, from) => {
+  store.commit("setIsOpen", false);
+});
+
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 

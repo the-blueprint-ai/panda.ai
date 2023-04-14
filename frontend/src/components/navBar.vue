@@ -2,6 +2,7 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions, mapGetters } from "vuex";
 import { getUserData } from "../composables/getUserData.js";
+import { watch } from "vue";
 
 export default {
   data() {
@@ -64,6 +65,8 @@ export default {
       this.setIsOpenValue(!this.isOpen);
     },
     catchOutsideClick(event, dropdown) {
+      if (!dropdown) return false; // Add this line to check if dropdown is null
+
       // When user clicks menu or a child of the menu — do nothing
       if (dropdown == event.target || dropdown.contains(event.target)) return false;
 

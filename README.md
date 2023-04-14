@@ -2,36 +2,31 @@
 
 [![amplifybutton](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/username/repository)
 
-This template should help get you started developing with Vue 3 in Vite.
+## ABOUT 🐼 PANDA.AI
 
-## Recommended IDE Setup
+Welcome to 🐼 panda.ai, where we believe in the power of personalised AI experiences and giving users complete control over their own data. Founded in 2023, we're on a mission to change the AI chatbot landscape by ensuring that our users have full ownership and control of their digital lives.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## THE PLATFORM 🐼
 
-## Customize configuration
+🐼 panda.ai is an artificial intelligence personal assistant designed to learn from you and adapt to your unique needs. As you interact with 🐼 panda.ai, it will evolve and grow, learning from your conversations, web browsing behaviour, social media activity, music preferences, and even your spending habits. Our goal is to create a highly personalised digital assistant that knows and understands each user individually.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## WHAT SETS US APART 🔐
 
-## Project Setup
+At 🐼 panda.ai, we're not like other large digital platforms. We believe in putting the user first, which means giving you complete ownership and control of your data. It's a whole new approach to AI that emphasises data privacy and ethical practices.
 
-```sh
-npm install
-```
+## POWERED BY OPENAI'S CHATGPT LLM 🔋
 
-### Compile and Hot-Reload for Development
+While we don't have any significant partnerships or collaborations to mention, it's worth noting that our AI is built on top of OpenAI's ChatGPT LLM, the technology foundation that powers 🐼 panda.ai's awesomeness.
 
-```sh
-npm run dev
-```
+## OUR CORE VALUES 🦄
 
-### Compile and Minify for Production
+At 🐼 panda.ai, we live by three core values:
+1. CHALLENGING THE STATUS QUO 💪
+2. CURIOSITY 🧐
+3. COLLABORATION 🤝
 
-```sh
-npm run build
-```
+These values guide our mission to revolutionize the AI chatbot industry and provide users with a truly personalized and ethical AI experience.
 
-### Lint with [ESLint](https://eslint.org/)
+## OUR VISION FOR THE FUTURE 🔮
 
-```sh
-npm run lint
-```
+🐼 panda.ai aspires to provide a fully personalized AI assistant that caters to all of your digital needs. In the future, we aim to create a platform that not only understands each user individually but can also preempt and predict your needs, making your digital life more seamless and enjoyable.

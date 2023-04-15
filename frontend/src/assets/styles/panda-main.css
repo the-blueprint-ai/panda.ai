@@ -252,20 +252,25 @@ span {
   height: 90%;
   padding-left: 40px;
   text-align: left;
+}
+.chatHistoryDateList {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 92%;
   overflow-y: scroll;
 }
-.chatHistory::-webkit-scrollbar {
+.chatHistoryDateList::-webkit-scrollbar {
   width: 7px;
   border-radius: 5px;
 }
-.chatHistory::-webkit-scrollbar-track {
+.chatHistoryDateList::-webkit-scrollbar-track {
   background: #FFFFFF;
 }
-.chatHistory::-webkit-scrollbar-thumb {
+.chatHistoryDateList::-webkit-scrollbar-thumb {
   background: #FFCB4C;
   border-radius: 10px;
 }
-.chatHistory::-webkit-scrollbar-track-piece {
+.chatHistoryDateList::-webkit-scrollbar-track-piece {
   background: #FFFFFF;
 }
 .mainChatContainer {

@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Optional
 import logging
 
-from functions.entityFunctions import get_user_entities, get_all_user_entities, delete_entity, add_entity, update_entity
+from functions.entityFunctions import get_user_entities, get_all_user_entities, delete_entity, add_entity, update_entity, get_most_relevant_entities
 
 
 # CONFIG

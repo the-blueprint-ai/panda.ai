@@ -92,7 +92,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="body" :key="mainKey">
+    <div class="body">
       <img src="../../src/assets/panda.png" class="biglogo" width="200" />
       <h1>
         <span class="typed-text">{{ typeValue }}</span>

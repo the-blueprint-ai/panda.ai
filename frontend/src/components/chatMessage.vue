@@ -5,6 +5,7 @@ export default {
       isDisabled: true,
       pandaImage: "",
       userImage: "",
+      thinkingImage: "",
     };
   },
   props: {
@@ -17,6 +18,8 @@ export default {
     this.pandaImage = pandaImageModule.default;
     const userImageModule = await import("../assets/user.png");
     this.userImage = userImageModule.default;
+    const thinkingImageModule = await import("../assets/thinking.png");
+    this.thinkingImage = thinkingImageModule.default;
   },
   computed: {
     avatar() {
@@ -37,7 +40,9 @@ export default {
   },
   methods: {
     messageImage() {
-      if (this.message.user == "panda") {
+      if (this.message.message == "Thinking...") {
+        return this.thinkingImage;
+      } else if (this.message.user == "panda") {
         return this.pandaImage;
       } else if (!this.avatar) {
         return this.userImage;

@@ -1,4 +1,5 @@
 <script>
+import { reactive, toRefs } from "vue";
 import { mapActions, mapMutations, mapGetters } from "vuex";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 
@@ -75,7 +76,7 @@ export default {
         .map((day) => {
           const filteredChats = day.chats.filter((chat) =>
             chat.content.some((contentItem) =>
-              contentItem.message.toLowerCase().includes(searchTerm)
+              contentItem && contentItem.message && contentItem.message.toLowerCase().includes(searchTerm)
             )
           );
 
@@ -107,16 +108,20 @@ export default {
     showSelectedChat(dayIndex, chatIndex) {
       this.setIsDisabled(true);
       const selectedDay = this.filteredChatData[dayIndex];
-      this.selectedChat = selectedDay.chats[chatIndex];
+      const chat = selectedDay.chats[chatIndex];
 
       const searchTerm = this.chatHistorySearch.trim().toLowerCase();
 
-      // Add highlighted property to each chat message
-      this.selectedChat.content.forEach((contentItem) => {
-        contentItem.highlighted = contentItem.message.toLowerCase().includes(searchTerm);
-      });
+      // Create a deep copy of the chat with the updated highlighted property
+      this.selectedChat = {
+        ...chat,
+        content: chat.content.map((contentItem) => ({
+          ...contentItem,
+          highlighted: contentItem.message.toLowerCase().includes(searchTerm),
+        })),
+      };
 
-      this.activeChat = this.selectedChat;
+      this.activeChat = reactive(this.selectedChat); // Make activeChat reactive
       this.emptyStoreChatHistory();
       this.addToStoreChatHistory(this.selectedChat.content);
     },

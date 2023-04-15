@@ -253,24 +253,44 @@ span {
   padding-left: 40px;
   text-align: left;
 }
-.chatHistoryDateList {
+.chatHistoryDateListChat {
   margin-top: 10px;
   margin-bottom: 10px;
   height: 92%;
   overflow-y: scroll;
 }
-.chatHistoryDateList::-webkit-scrollbar {
+.chatHistoryDateListAccount {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 90%;
+  overflow-y: scroll;
+}
+.chatHistoryDateListChat::-webkit-scrollbar {
   width: 7px;
   border-radius: 5px;
 }
-.chatHistoryDateList::-webkit-scrollbar-track {
+.chatHistoryDateListChat::-webkit-scrollbar-track {
   background: #FFFFFF;
 }
-.chatHistoryDateList::-webkit-scrollbar-thumb {
+.chatHistoryDateListChat::-webkit-scrollbar-thumb {
   background: #FFCB4C;
   border-radius: 10px;
 }
-.chatHistoryDateList::-webkit-scrollbar-track-piece {
+.chatHistoryDateListChat::-webkit-scrollbar-track-piece {
+  background: #FFFFFF;
+}
+.chatHistoryDateListAccount::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 5px;
+}
+.chatHistoryDateListAccount::-webkit-scrollbar-track {
+  background: #FFFFFF;
+}
+.chatHistoryDateListAccount::-webkit-scrollbar-thumb {
+  background: #FFCB4C;
+  border-radius: 10px;
+}
+.chatHistoryDateListAccount::-webkit-scrollbar-track-piece {
   background: #FFFFFF;
 }
 .mainChatContainer {

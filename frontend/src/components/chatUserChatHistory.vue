@@ -158,7 +158,7 @@ export default {
         src="../assets/icons/x-circle.svg"
         @click="clearSearch"
       />
-      <div class="chatHistoryDateList">
+      <div class="chatHistoryDateListChat">
         <ul>
           <li
             class="chatHistoryDay"

@@ -74,8 +74,11 @@ export default {
       return this.userChatHistory[0]
         .map((day) => {
           const filteredChats = day.chats.filter((chat) =>
-            chat.content.some((contentItem) =>
-              contentItem.message.toLowerCase().includes(searchTerm)
+            chat.content.some(
+              (contentItem) =>
+                contentItem &&
+                contentItem.message &&
+                contentItem.message.toLowerCase().includes(searchTerm)
             )
           );
 
@@ -121,7 +124,7 @@ export default {
         src="../assets/icons/x-circle.svg"
         @click="clearSearch"
       />
-      <div class="chatHistoryDateListAccount">
+      <div class="chatHistoryDateList">
         <ul>
           <li
             class="chatHistoryDay"

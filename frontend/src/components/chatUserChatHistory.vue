@@ -48,6 +48,8 @@ export default {
       },
     },
     chatHistorySearch: {
+      deep: true,
+      immediate: true,
       handler(newVal) {
         if (this.chatHistorySearch == "") {
           this.typing = false;

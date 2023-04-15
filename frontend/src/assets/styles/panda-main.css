@@ -328,6 +328,7 @@ span {
   width: 99%;
   background-color: #FFCB4C;
   border-radius: 15px;
+  border: none;
 }
 .userChat {
   background-color: #FFFFFF;
@@ -353,6 +354,7 @@ span {
   flex-direction: row-reverse;
   justify-content: right;
   align-items: right;
+  border: none;
 }
 .chatAvatar {
   width: 50px;

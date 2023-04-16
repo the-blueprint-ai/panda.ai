@@ -32,6 +32,7 @@ from botocore.exceptions import ClientError
 from functions.entityFunctions import get_most_relevant_entities
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
+YOUTUBE_API_KEY = settings.YOUTUBE_API_KEY
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -178,10 +179,47 @@ class WikipediaSearchTool(BaseTool):
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
         raise NotImplementedError("Wikipedia API does not support async")
+    
+class YouTubeSearchTool(BaseTool):
+    name = "YouTube"
+    description = "Use this when you want to search for videos. The input to this should be a single search term."
+
+    def _run(self, query: str) -> str:
+        # URL-encode the query parameter
+        encoded_query = quote(query)
+        url = ('https://www.googleapis.com/youtube/v3/search?maxResults=5&q='
+            f'{encoded_query}&key={YOUTUBE_API_KEY}')
+
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            try:
+                data = response.json()
+            except JSONDecodeError:
+                return "🐼 I'm so sorry! I can't find that YouTube video at the moment. Please try again later."
+
+            # Parse the data and return the desired value
+            ytVideoId = data['items'][0]['id']['videoId']
+
+            html = f"""
+    <div class="youTubeAnswer">
+        <h2>{query}</h2>
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+        """
+            return html
+        else:
+            # Handle the error or return a default value
+            return "No YouTube video available"
+
+    async def _arun(self, query: str) -> str:
+        """Use the tool asynchronously."""
+        raise NotImplementedError("YouTube API does not support async")
 
 search = SerpAPIWrapper(serpapi_api_key=settings.SERPAPI_API_KEY)
 news = NewsSearchTool()
 wikipedia = WikipediaSearchTool()
+youtube = YouTubeSearchTool()
 
 tools = [
     Tool(
@@ -199,6 +237,12 @@ tools = [
         name = "Wikipedia Search",
         func=wikipedia.run,
         description="Use this when you want to search wikipedia about things you have no knowledge of. Use this more than Internet Search if the question is about Wikipedia. The input to this should be a single search term.",
+        return_direct=True
+    ),
+        Tool(
+        name = "Video Search",
+        func=youtube.run,
+        description="Use this when you want to search for YouTube videos or movie trailers. Use this more than Internet Search if the question is about videos or trailers. The input to this should be a single search term.",
         return_direct=True
     )
 ]

@@ -40,6 +40,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str
     PRMPTLYR_API_KEY: str
     SERPAPI_API_KEY: str
+    GOOGLE_SEARCH_API_KEY: str
+    GOOGLE_MAPS_API_KEY: str
+    YOUTUBE_API_KEY: str
+    WOLFRAM_ALPHA_APPID: str
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     FACEBOOK_CLIENT_ID: str

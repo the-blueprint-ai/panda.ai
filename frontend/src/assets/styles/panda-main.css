@@ -468,6 +468,19 @@ span {
 .wikiAnswerSummary p {
   margin: 0px;
 }
+.youTubeAnswer {
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 30px;
+  border-radius: 20px;
+}
+.youTubeAnswer iframe {
+  border: 7px solid #FFFFFF;
+}
 .messageRating {
   display: flex;
   flex-grow: 5;

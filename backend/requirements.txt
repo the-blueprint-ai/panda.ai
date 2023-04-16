@@ -13,3 +13,6 @@ langchain
 promptlayer
 google-search-results
 sendgrid
+spacy
+numpy
+wolframalpha

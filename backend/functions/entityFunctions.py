@@ -3,13 +3,17 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
 from cryptography.fernet import Fernet
-from typing import Optional
+from typing import Optional, List
 import logging
 from pydantic import BaseModel
 from datetime import datetime
 import boto3
+import spacy
+from heapq import nlargest
+import numpy as np
 from boto3.dynamodb.conditions import Key, Attr
 
+nlp = spacy.load("en_core_web_md")
 
 # DATABASES
 dynamodb = boto3.resource(
@@ -52,7 +56,7 @@ async def get_user_entities(user_id: str, entity: str, session: SessionContainer
         return {"error": "Item not found"}
 
 
-async def get_all_user_entities(user_id: str, session: SessionContainer = Depends(verify_session())):
+async def get_all_user_entities(user_id: str):
     table = dynamodb.Table('panda-ai-entities')
     response = table.query(
         KeyConditionExpression=Key('userId').eq(user_id)
@@ -60,6 +64,73 @@ async def get_all_user_entities(user_id: str, session: SessionContainer = Depend
     items = response.get('Items', [])
 
     return items
+
+
+async def get_most_relevant_entities(user_id: str, message: str, top_n: int = 5):
+    all_entities = await get_all_user_entities(user_id)
+
+    if not all_entities:
+        return []
+
+    message_vector = nlp(message).vector
+
+    def cosine_similarity(a, b):
+        norm_a = np.linalg.norm(a)
+        norm_b = np.linalg.norm(b)
+        
+        # Handle cases where either norm is zero or very close to zero
+        if np.isclose(norm_a, 0, atol=1e-8) or np.isclose(norm_b, 0, atol=1e-8):
+            return 0.0
+
+        return np.dot(a, b) / (norm_a * norm_b)
+
+    entities_with_similarity = [
+        {
+            "entity": entity,
+            "similarity": cosine_similarity(
+                message_vector,
+                nlp(entity["entity"] + " " + entity.get("description", "")).vector
+            ),
+        }
+        for entity in all_entities
+    ]
+
+    # Boost similarity score if message contains entity name
+    boost = 0.5
+    for entity in entities_with_similarity:
+        if entity["entity"]["entity"].lower() in message.lower():
+            entity["similarity"] += boost
+
+    # Separate entities with direct name matches
+    direct_matches = [
+        entity
+        for entity in entities_with_similarity
+        if entity["entity"]["entity"].lower() in message.lower()
+    ]
+
+    # Remove direct matches from entities_with_similarity
+    entities_with_similarity = [
+        entity
+        for entity in entities_with_similarity
+        if entity not in direct_matches
+    ]
+
+    # Get the most relevant entities based on similarity scores
+    most_relevant_by_similarity = nlargest(top_n - len(direct_matches), entities_with_similarity, key=lambda x: x["similarity"])
+
+    # Combine direct matches and most relevant entities by similarity
+    most_relevant_entities = direct_matches + most_relevant_by_similarity
+
+    # Return a flat object with entity, description, and weight over 0.5
+    most_relevant_entities = [entity for entity in most_relevant_entities if entity["similarity"] > 0.5]
+    return [
+        {
+            "entity": entity["entity"]["entity"],
+            "description": entity["entity"].get("description", ""),
+            "weight": float(entity["similarity"]),
+        }
+        for entity in most_relevant_entities
+    ]
 
 
 async def get_all_entities(session: SessionContainer = Depends(verify_session())):

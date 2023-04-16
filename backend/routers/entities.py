@@ -35,7 +35,7 @@ async def fetch_user_entities(user_id: str, entity: str, session: SessionContain
 
 @router.get("/get-all")
 async def fetch_all_user_entities(user_id: str, session: SessionContainer = Depends(verify_session())):
-    result = await get_all_user_entities(user_id, session)
+    result = await get_all_user_entities(user_id)
     return result
 
 

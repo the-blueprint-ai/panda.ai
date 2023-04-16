@@ -1,4 +1,5 @@
 <script>
+import { reactive, toRefs } from "vue";
 import { mapActions, mapMutations, mapGetters } from "vuex";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 
@@ -47,6 +48,8 @@ export default {
       },
     },
     chatHistorySearch: {
+      deep: true,
+      immediate: true,
       handler(newVal) {
         if (this.chatHistorySearch == "") {
           this.typing = false;
@@ -74,8 +77,11 @@ export default {
       return this.userStoreChatHistory[0]
         .map((day) => {
           const filteredChats = day.chats.filter((chat) =>
-            chat.content.some((contentItem) =>
-              contentItem.message.toLowerCase().includes(searchTerm)
+            chat.content.some(
+              (contentItem) =>
+                contentItem &&
+                contentItem.message &&
+                contentItem.message.toLowerCase().includes(searchTerm)
             )
           );
 
@@ -107,16 +113,20 @@ export default {
     showSelectedChat(dayIndex, chatIndex) {
       this.setIsDisabled(true);
       const selectedDay = this.filteredChatData[dayIndex];
-      this.selectedChat = selectedDay.chats[chatIndex];
+      const chat = selectedDay.chats[chatIndex];
 
       const searchTerm = this.chatHistorySearch.trim().toLowerCase();
 
-      // Add highlighted property to each chat message
-      this.selectedChat.content.forEach((contentItem) => {
-        contentItem.highlighted = contentItem.message.toLowerCase().includes(searchTerm);
-      });
+      // Create a deep copy of the chat with the updated highlighted property
+      this.selectedChat = {
+        ...chat,
+        content: chat.content.map((contentItem) => ({
+          ...contentItem,
+          highlighted: contentItem.message.toLowerCase().includes(searchTerm),
+        })),
+      };
 
-      this.activeChat = this.selectedChat;
+      this.activeChat = reactive(this.selectedChat); // Make activeChat reactive
       this.emptyStoreChatHistory();
       this.addToStoreChatHistory(this.selectedChat.content);
     },
@@ -144,39 +154,46 @@ export default {
           placeholder="🐼 search chat history..."
         />
       </div>
-      <img v-if="typing" class="clearChatSearch" src="../assets/icons/x-circle.svg" @click="clearSearch" />
-      <ul>
-        <li
-          class="chatHistoryDay"
-          v-for="(item, index) in filteredChatData"
-          :key="index"
-        >
-          <span @click="toggleVisibility(index)">{{
-            visibilityStates[index] ? "- " : "+ "
-          }}</span>
-          <span @click="toggleVisibility(index)">{{ item.date }}</span>
-          <ul v-show="visibilityStates[index]">
-            <li
-              class="chatHistoryTimeTitle"
-              :class="{ active: activeChat === chat }"
-              v-for="(chat, chatIndex) in item.chats"
-              :key="chatIndex"
-            >
-              <span
-                class="chatHistoryTime"
-                @click="showSelectedChat(index, chatIndex)"
-                >{{ chat.time }}:</span
+      <img
+        v-if="typing"
+        class="clearChatSearch"
+        src="../assets/icons/x-circle.svg"
+        @click="clearSearch"
+      />
+      <div class="chatHistoryDateListChat">
+        <ul>
+          <li
+            class="chatHistoryDay"
+            v-for="(item, index) in filteredChatData"
+            :key="index"
+          >
+            <span @click="toggleVisibility(index)">{{
+              visibilityStates[index] ? "- " : "+ "
+            }}</span>
+            <span @click="toggleVisibility(index)">{{ item.date }}</span>
+            <ul v-show="visibilityStates[index]">
+              <li
+                class="chatHistoryTimeTitle"
+                :class="{ active: activeChat === chat }"
+                v-for="(chat, chatIndex) in item.chats"
+                :key="chatIndex"
               >
-              <span
-                class="chatHistoryTitle"
-                :class="{ active: chat === activeChat }"
-                @click="showSelectedChat(index, chatIndex)"
-                >{{ chat.title }}</span
-              >
-            </li>
-          </ul>
-        </li>
-      </ul>
+                <span
+                  class="chatHistoryTime"
+                  @click="showSelectedChat(index, chatIndex)"
+                  >{{ chat.time }}:</span
+                >
+                <span
+                  class="chatHistoryTitle"
+                  :class="{ active: chat === activeChat }"
+                  @click="showSelectedChat(index, chatIndex)"
+                  >{{ chat.title }}</span
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

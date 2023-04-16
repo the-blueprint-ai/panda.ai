@@ -18,6 +18,7 @@ export default defineComponent({
       chat_id: null,
       historyMenu: true,
       currentSearchTerm: null,
+      activeChat: null,
     };
   },
   watch: {},
@@ -60,6 +61,7 @@ export default defineComponent({
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     ...mapMutations("chatStore", {
       addToChatStoreChatHistory: "setChatStoreChatHistory",
+      removeChatHistory: "removeChatHistory",
       emptyStoreChatHistory: "emptyChatHistory",
       setIsDisabled: "setIsDisabled",
     }),
@@ -87,6 +89,14 @@ export default defineComponent({
         user: username,
         message: this.messageToSend,
       });
+      setTimeout(
+        () =>
+          this.addToChatStoreChatHistory({
+            user: "panda",
+            message: "Thinking...",
+          }),
+        1200
+      );
       const waitForResponse = async () => {
         return new Promise((resolve) => {
           const pandaResponse = pandaChat(
@@ -105,6 +115,7 @@ export default defineComponent({
       });
 
       const pandaResponse = await waitForResponse();
+      this.removeChatHistory(1);
       this.addToChatStoreChatHistory({ user: "panda", message: pandaResponse });
 
       // Add code to update the chat history database

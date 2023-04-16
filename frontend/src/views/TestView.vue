@@ -93,7 +93,10 @@ export default defineComponent({
       <h1>TESTING</h1>
       <div class="spacer"></div>
       <button class="chatButton">
-        <SpinnerComponent :loading="this.loading" :button-text=this.buttonText></SpinnerComponent>
+        <SpinnerComponent
+          :loading="this.loading"
+          :button-text="this.buttonText"
+        ></SpinnerComponent>
       </button>
       <div class="spacer"></div>
       <div class="spacer"></div>
@@ -102,6 +105,20 @@ export default defineComponent({
         <p v-for="(sentence, index) in sentences" :key="index">
           <span v-html="getCurrentText(index)"></span>
         </p>
+      </div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="youTubeAnswer">
+        <h2 style="color:black;">Guardians of the galaxy vol.3 trailer</h2>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube-nocookie.com/embed/u3V5KDHRQvk"
+          title=""
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
       </div>
     </div>
     <navFooter></navFooter>

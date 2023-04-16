@@ -92,7 +92,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="body" :key="mainKey">
+    <div class="body">
       <img src="../../src/assets/panda.png" class="biglogo" width="200" />
       <h1>
         <span class="typed-text">{{ typeValue }}</span>
@@ -107,7 +107,7 @@ export default defineComponent({
         <span class="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
       </h1>
       <div v-if="session">
-        <router-link :to="'/' + userId + '/chat'">
+        <router-link :to="'/auth/' + userId + '/chat'">
           <button class="letsChat">Let's Chat</button>
         </router-link>
       </div>

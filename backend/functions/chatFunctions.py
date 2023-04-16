@@ -18,6 +18,7 @@ from langchain.agents.loading import AGENT_TO_CLASS, load_agent
 from langchain.callbacks.base import BaseCallbackManager
 from langchain.schema import BaseLanguageModel
 from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
+from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from typing import Any, List, Optional, Sequence, Type, Union, Dict
 import promptlayer
 from config import settings
@@ -195,22 +196,21 @@ class YouTubeSearchTool(BaseTool):
         if response.status_code == 200:
             try:
                 data = response.json()
+                # Parse the data and return the desired value
+                ytVideoId = data['items'][0]['id']['videoId']
+                if ytVideoId:
+                            html = f"""
+                <div class="youTubeAnswer">
+                    <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><h2>{query}</h2></a>
+                    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                            """
+                            return html
+                else:
+                    # Handle the error or return a default value
+                    return "🐼 I'm so sorry! I couldn't find a YouTube video about that unfortunately."
             except JSONDecodeError:
                 return "🐼 I'm so sorry! I can't find that YouTube video at the moment. Please try again later."
-
-            # Parse the data and return the desired value
-            ytVideoId = data['items'][0]['id']['videoId']
-
-            html = f"""
-    <div class="youTubeAnswer">
-        <h2>{query}</h2>
-        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>
-        """
-            return html
-        else:
-            # Handle the error or return a default value
-            return "No YouTube video available"
 
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
@@ -220,12 +220,19 @@ search = SerpAPIWrapper(serpapi_api_key=settings.SERPAPI_API_KEY)
 news = NewsSearchTool()
 wikipedia = WikipediaSearchTool()
 youtube = YouTubeSearchTool()
+wolfram = WolframAlphaAPIWrapper(wolfram_alpha_appid = settings.WOLFRAM_ALPHA_APPID)
 
 tools = [
     Tool(
         name = "Internet Search",
         func=search.run,
         description="Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term."
+    ),
+    Tool(
+        name = "Maths",
+        func=wolfram.run,
+        description="Use this when you want need to do maths or make some calculations. Use this more than any other tool if the question is about maths or making calculations. The input to this should be numbers in a maths expression",
+        return_direct=True
     ),
     Tool(
         name = "Latest News Search",

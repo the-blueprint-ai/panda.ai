@@ -121,7 +121,8 @@ async def get_most_relevant_entities(user_id: str, message: str, top_n: int = 5)
     # Combine direct matches and most relevant entities by similarity
     most_relevant_entities = direct_matches + most_relevant_by_similarity
 
-    # Return a flat object with entity, description, and weight
+    # Return a flat object with entity, description, and weight over 0.5
+    most_relevant_entities = [entity for entity in most_relevant_entities if entity["similarity"] > 0.5]
     return [
         {
             "entity": entity["entity"]["entity"],

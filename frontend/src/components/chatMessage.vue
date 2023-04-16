@@ -39,6 +39,18 @@ export default {
     },
   },
   methods: {
+    formatMessage(message) {
+      // Regex pattern to match URLs not contained in <a> tags
+      const urlPattern = /(?<!<a\s+(?:[^>]*?\s+)?href=["'])(https?:\/\/[^\s/$.?#].[^\s]*)/gi;
+
+      // Replace URLs with clickable links
+      message = message.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
+
+      // Add line breaks after links
+      message = message.replace(/<a>/g, "<br><a>");
+
+      return message;
+    },
     messageImage() {
       if (this.message.message == "Thinking...") {
         return this.thinkingImage;
@@ -57,7 +69,7 @@ export default {
 <template>
   <div :class="['chatMessage', message.user, messageClass]">
     <img v-bind:src="messageImage()" class="chatAvatar" />
-    <p class="message">{{ message.message }}</p>
+    <p class="message" v-html="formatMessage(message.message)"></p>
     <span class="messageRating" v-if="message.user == 'panda' && !isDisabled">
       <img class="thumbUp" src="../assets/icons/hand-thumbs-up.svg" />
       <img class="thumbDown" src="../assets/icons/hand-thumbs-down.svg" />

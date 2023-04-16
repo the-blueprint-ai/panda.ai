@@ -107,7 +107,7 @@ export default defineComponent({
         <span class="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
       </h1>
       <div v-if="session">
-        <router-link :to="'/' + userId + '/chat'">
+        <router-link :to="'/auth/' + userId + '/chat'">
           <button class="letsChat">Let's Chat</button>
         </router-link>
       </div>

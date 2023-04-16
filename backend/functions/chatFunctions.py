@@ -18,12 +18,14 @@ from langchain.agents.loading import AGENT_TO_CLASS, load_agent
 from langchain.callbacks.base import BaseCallbackManager
 from langchain.schema import BaseLanguageModel
 from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
-from typing import Any, List, Optional, Sequence, Type, Union
+from typing import Any, List, Optional, Sequence, Type, Union, Dict
 import promptlayer
 from config import settings
 import logging
 import boto3
 import json
+import requests
+from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from functions.entityFunctions import get_most_relevant_entities
@@ -37,7 +39,7 @@ logger = logging.getLogger(__name__)
 PREFIX = """
 Assistant is a large language model called ""🐼 panda.ai"" and is trained on top of OpenAI's chatGPT. "🐼 panda.ai" was founded by Sean Betts in April 2023.
 
-"🐼 panda.ai" is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, "🐼 panda.ai" is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
+"🐼 panda.ai" uses they/them for pronouns and is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, "🐼 panda.ai" is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
 
 "🐼 panda.ai" is constantly learning and improving, and its capabilities are constantly evolving. One thing "🐼 panda.ai" can do is to learn and remember specific topics a user is interested in called entities, which "🐼 panda.ai" stores in it's memory. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions in the style of a knowledgable expert. Additionally, "🐼 panda.ai" is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
 
@@ -62,26 +64,79 @@ When you have a response to say to {human_prefix}, or if you do not need to use 
 ```
 {ai_prefix} thought: Do I need to use a tool? No
 {ai_prefix}: [your response here]
-```"""
+```
+"""
 
 SUFFIX = """Begin!
 Entity memories:
 {entities}
+
 Previous conversation history:
+{current_history}
 {chat_history}
+
 New input: {input}
 {agent_scratchpad}"""
 
 
 # TOOLS
+class NewsSearchTool(BaseTool):
+    name = "News"
+    description = "Use this when you want to get information about the top headlines of current news stories. The input should be a question in natural language that this API can answer."
+
+    def _run(self, query: str) -> Dict:
+        # URL-encode the query parameter
+        encoded_query = quote(query)
+
+        # Calculate the date range for the last week
+        today = datetime.today()
+        last_week = today - timedelta(days=5)
+        from_date = last_week.strftime('%Y-%m-%d')
+        to_date = today.strftime('%Y-%m-%d')
+
+        url = ('https://newsapi.org/v2/everything?'
+            f'q={encoded_query}&'
+            f'from={from_date}&'
+            f'to={to_date}&'
+            'language=en&'
+            'sortBy=popularity&'
+            'apiKey=27161a2559d247abb02c031f5e065837')
+        
+        response = requests.get(url)
+        json_response = response.json()
+
+        # Limit the results to the top 5 articles
+        top_5_articles = json_response['articles'][:5]
+        json_response['articles'] = top_5_articles
+
+        # Generate an HTML ordered list
+        html_list_items = []
+        for i, article in enumerate(top_5_articles):
+            source_name = article['source'].get('name') or article['source'].get('Name') or "Unknown"
+            html_list_items.append(f"<li><a href='{article['url']}' target='_blank'><strong>{article['title']}</strong> ({source_name})</a></li>")
+        html_list = "<ol>" + "".join(html_list_items) + "</ol>"
+        
+        return html_list
+
+    async def _arun(self, query: str) -> str:
+        """Use the tool asynchronously."""
+        raise NotImplementedError("News API does not support async")
+
 search = SerpAPIWrapper(serpapi_api_key=settings.SERPAPI_API_KEY)
+news = NewsSearchTool()
 
 tools = [
     Tool(
         name = "Internet Search",
         func=search.run,
-        description="useful for when you need to search the internet to answer questions about current events or the current state of the world. The input to this should be a single search term."
+        description="Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term."
     ),
+    Tool(
+        name = "Latest News Search",
+        func=news.run,
+        description=" Use this when you want to get information about the latest news, top news headlines or current news stories. Use this more than Internet Search if the question is about News. The input should be a question in natural language that this API can answer.",
+        return_direct=True
+    )
 ]
 
 
@@ -99,6 +154,8 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     entities = await get_most_relevant_entities(userid, message)
     formatted_entities = '\n'.join([f"{item['entity']}: {item['description']}" for item in entities])
 
+    chat_history = await get_user_chat_history(userid)
+
     MY_PREFIX = PREFIX.format(
         first_name=first_name,
         last_name=last_name,
@@ -107,6 +164,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     )
     MY_SUFFIX = SUFFIX.format(
         entities = formatted_entities,
+        current_history = "\n".join([f"{entry['user']}: {entry['message']}" if 'message' in entry else f"{entry['user']}:" for entry in reversed(chat_history[0]["chat_script"] if chat_history else [])]),
         chat_history = "{chat_history}",
         input = "{input}",
         agent_scratchpad = "{agent_scratchpad}",
@@ -193,7 +251,6 @@ async def save_entities(userid: str, message: str):
                 summarised_description = summary_llm(f"Summarise this for me and DO NOT leave out any details: {combined_description}")
 
                 new_description = summarised_description.replace("\n", "")
-                logging.info(f"New Description: {new_description}") 
 
                 response = table.update_item(
                     Key={
@@ -244,11 +301,11 @@ async def get_user_chat_history(user_id: str):
                 "chat_script": chat_script,
             })
 
-        # Check if the latest entry was created within the last 2 minutes
+        # Check if the latest entry was created within the last 5 minutes
         if chat_history[0] and chat_history[0]["updated_at"]:
             now = datetime.now(timezone.utc)
             time_difference = now - chat_history[0]["updated_at"]
-            if time_difference <= timedelta(minutes=2):
+            if time_difference <= timedelta(minutes=5):
                 return chat_history
             else:
                 return None

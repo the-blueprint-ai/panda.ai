@@ -226,7 +226,7 @@ span {
   flex-direction: row;
   justify-content: top;
   align-items: left;
-  width: 1400px;
+  width: 1300px;
   height: 70vh;
 }
 .chatHistoryContainer {
@@ -317,8 +317,8 @@ span {
   background-color: #FFFFFF;
   text-align: left;
   display: flex;
-  margin: 5px;
-  width:fit-content;
+  max-width: 795px;
+  padding-right: 50px;
   flex-direction: row;
   justify-content: left;
   align-items: left;
@@ -334,10 +334,11 @@ span {
   background-color: #FFFFFF;
   text-align: left;
   display: flex;
-  margin: 5px;
+  max-width: 785px;
+  padding-left: 60px;
   flex-direction: row-reverse;
   justify-content: right;
-  align-items: center;
+  align-items: right;
 }
 .user.userChat {
   background-color: #FFFFFF;
@@ -408,18 +409,29 @@ span {
 }
 .message {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: left;
   margin: 10px;
   padding-top: 10px;
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 15px;
   width:fit-content;
-  max-width: 820px;
-  /* border: 1px solid #000000; */
+  max-width: 750px;
   border-radius: 15px;
-  /* background-color: #FFFFFF; */
   color: #000000;
+}
+.message ol li {
+  margin-bottom: 10px;
+}
+.message a {
+  color: #000000;
+  text-decoration: none;
+  text-align: center;
+}
+.message a:hover {
+  color: #FFCB4C;
+  text-decoration: none;
 }
 .messageRating {
   display: flex;

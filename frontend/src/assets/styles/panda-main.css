@@ -478,7 +478,27 @@ span {
   padding: 30px;
   border-radius: 20px;
 }
+.youTubeAnswer h2:hover {
+  color: #FFCB4C;
+}
 .youTubeAnswer iframe {
+  border: 7px solid #FFFFFF;
+}
+.googleMapsAnswer {
+  width: 575px;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 30px;
+  border-radius: 20px;
+}
+.googleMapsAnswer h2:hover {
+  color: #FFCB4C;
+}
+.googleMapsAnswer iframe {
   border: 7px solid #FFFFFF;
 }
 .messageRating {

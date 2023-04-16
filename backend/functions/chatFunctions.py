@@ -34,6 +34,7 @@ from functions.entityFunctions import get_most_relevant_entities
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
 YOUTUBE_API_KEY = settings.YOUTUBE_API_KEY
+GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -189,7 +190,7 @@ class YouTubeSearchTool(BaseTool):
         # URL-encode the query parameter
         encoded_query = quote(query)
         url = ('https://www.googleapis.com/youtube/v3/search?maxResults=5&q='
-            f'{encoded_query}&key={YOUTUBE_API_KEY}')
+            f'{encoded_query}&key={YOUTUBE_API_KEY}&type=video&part=snippet')
 
         response = requests.get(url)
 
@@ -197,29 +198,56 @@ class YouTubeSearchTool(BaseTool):
             try:
                 data = response.json()
                 # Parse the data and return the desired value
-                ytVideoId = data['items'][0]['id']['videoId']
+                ytVideoId = None
+                for item in data['items']:
+                    if 'videoId' in item['id']:
+                        ytVideoId = item['id']['videoId']
+                        break
+
                 if ytVideoId:
-                            html = f"""
-                <div class="youTubeAnswer">
-                    <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><h2>{query}</h2></a>
-                    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </div>
-                            """
-                            return html
+                    html = f"""
+    <div class="youTubeAnswer">
+        <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><h2>{query} VIDEO</h2></a>
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+                    """
+                    return html
                 else:
                     # Handle the error or return a default value
                     return "🐼 I'm so sorry! I couldn't find a YouTube video about that unfortunately."
             except JSONDecodeError:
                 return "🐼 I'm so sorry! I can't find that YouTube video at the moment. Please try again later."
-
+            
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
         raise NotImplementedError("YouTube API does not support async")
+
+class GoogleMapsSearchTool(BaseTool):
+    name = "Google Maps"
+    description = "Use this when you want to search for a location or get a map. The input to this should be a single search term."
+
+    def _run(self, query: str) -> str:
+        # URL-encode the query parameter
+        encoded_query = quote(query)
+        url = "https://www.google.com/maps/embed/v1/place?"f"key={GOOGLE_MAPS_API_KEY}&q={encoded_query}"
+
+        return f"""
+            <div class="googleMapsAnswer">
+                <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank"><h2>{query} MAP</h2></a>
+                <iframe width="560" height="315" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src={url} allowfullscreen></iframe>
+            </div>
+                """
+            
+    async def _arun(self, query: str) -> str:
+        """Use the tool asynchronously."""
+        raise NotImplementedError("YouTube API does not support async")
+            
 
 search = SerpAPIWrapper(serpapi_api_key=settings.SERPAPI_API_KEY)
 news = NewsSearchTool()
 wikipedia = WikipediaSearchTool()
 youtube = YouTubeSearchTool()
+maps = GoogleMapsSearchTool()
 wolfram = WolframAlphaAPIWrapper(wolfram_alpha_appid = settings.WOLFRAM_ALPHA_APPID)
 
 tools = [
@@ -246,10 +274,16 @@ tools = [
         description="Use this when you want to search wikipedia about things you have no knowledge of. Use this more than Internet Search if the question is about Wikipedia. The input to this should be a single search term.",
         return_direct=True
     ),
-        Tool(
+    Tool(
         name = "Video Search",
         func=youtube.run,
         description="Use this when you want to search for YouTube videos or movie trailers. Use this more than Internet Search if the question is about videos or trailers. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Location Search",
+        func=maps.run,
+        description="Use this when you want to search for a location or get a map. Use this more than any other tool if the question is about locations or maps. The input to this should be a single search term.",
         return_direct=True
     )
 ]

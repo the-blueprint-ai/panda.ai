@@ -40,16 +40,31 @@ export default {
   },
   methods: {
     formatMessage(message) {
-      // Regex pattern to match URLs not contained in <a>, <img>, or <iframe> tags
-      const urlPattern = /(?<!<a\s+(?:[^>]*?\s+)?href=["'])(?<!<img\s+(?:[^>]*?\s+)?src=["'])(?<!<iframe\s+(?:[^>]*?\s+)?src=["'])(https?:\/\/[^\s/$.?#].[^\s]*)/gi;
+      const urlPattern = /(https?:\/\/[^\s/$.?#].[^\s]*)/gi;
 
-      // Replace URLs with clickable links
-      message = message.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
+      // Create a temporary DOM element to parse and manipulate the message HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = message;
 
-      // Add line breaks after links
-      message = message.replace(/<a>/g, "<br><a>");
+      // Iterate through all text nodes within the temporary DOM element
+      function traverseTextNodes(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          // Replace URLs with clickable links in the text node's content
+          node.textContent = node.textContent.replace(urlPattern, (match) => {
+            return `<a href="${match}" target="_blank">${match}</a>`;
+          });
+        } else {
+          // Continue traversing child nodes
+          for (const child of node.childNodes) {
+            traverseTextNodes(child);
+          }
+        }
+      }
 
-      return message;
+      traverseTextNodes(tempDiv);
+
+      // Return the modified HTML
+      return tempDiv.innerHTML;
     },
     messageImage() {
       if (this.message.message == "Thinking...") {

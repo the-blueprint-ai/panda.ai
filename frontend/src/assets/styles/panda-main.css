@@ -433,6 +433,41 @@ span {
   color: #FFCB4C;
   text-decoration: none;
 }
+.newsAnswer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 30px;
+  border-radius: 20px;
+}
+.wikiAnswer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 30px;
+  border-radius: 20px;
+}
+.wikiAnswerImage {
+  max-height: 400px;
+  max-width: 600px;
+  border: 7px solid #FFFFFF;
+}
+.wikiAnswerImage:hover {
+  border: 7px solid #FFCB4C;
+}
+.wikiAnswerTitle {
+  text-align: center;
+}
+.wikiAnswerSummary {
+  margin: 0px;
+}
+.wikiAnswerSummary p {
+  margin: 0px;
+}
 .messageRating {
   display: flex;
   flex-grow: 5;
@@ -2215,6 +2250,9 @@ span.typed-text {
   padding-bottom: 15px;
   padding-left: 40px;
   padding-right: 30px;
+}
+.sidePanel img {
+  width: 16px;
 }
 .sidePanel p img {
   margin-right: 10px;

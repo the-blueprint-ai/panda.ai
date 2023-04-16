@@ -40,8 +40,8 @@ export default {
   },
   methods: {
     formatMessage(message) {
-      // Regex pattern to match URLs not contained in <a> tags
-      const urlPattern = /(?<!<a\s+(?:[^>]*?\s+)?href=["'])(https?:\/\/[^\s/$.?#].[^\s]*)/gi;
+      // Regex pattern to match URLs not contained in <a> or <img> tags
+      const urlPattern = /(?<!<a\s+(?:[^>]*?\s+)?href=["'])(?<!<img\s+(?:[^>]*?\s+)?src=["'])(https?:\/\/[^\s/$.?#].[^\s]*)/gi;
 
       // Replace URLs with clickable links
       message = message.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');

@@ -25,6 +25,7 @@ import logging
 import boto3
 import json
 import requests
+from requests.exceptions import JSONDecodeError
 from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
@@ -114,16 +115,73 @@ class NewsSearchTool(BaseTool):
         for i, article in enumerate(top_5_articles):
             source_name = article['source'].get('name') or article['source'].get('Name') or "Unknown"
             html_list_items.append(f"<li><a href='{article['url']}' target='_blank'><strong>{article['title']}</strong> ({source_name})</a></li>")
-        html_list = "<ol>" + "".join(html_list_items) + "</ol>"
+        html_list = f"<div class='newsAnswer'><h2 class='newsTitle'>{query}</h2><ol>" + "".join(html_list_items) + "</ol></div>"
         
         return html_list
 
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
         raise NotImplementedError("News API does not support async")
+    
+class WikipediaSearchTool(BaseTool):
+    name = "Wikipedia"
+    description = "Use this when you want to search wikipedia about things you have no knowledge of. The input to this should be a single search term."
+
+    def get_wiki_image(self, query, response):
+        data = response.json()
+
+        if data.get('originalimage') and data['originalimage'].get('source'):
+            return data['originalimage']['source']
+
+        url = f'https://en.wikipedia.org/api/rest_v1/page/media-list/{query}'
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            # Parse the data and return the desired value
+            return data['items'][0]['srcset'][0]['src']
+        else:
+            # Handle the error or return a default value
+            return None
+
+    def _run(self, query: str) -> str:
+        queryUnderscored = query.replace(" ", "_")
+        url = ('https://en.wikipedia.org/api/rest_v1/page/summary/'
+            f'{queryUnderscored}?redirect=false')
+
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            try:
+                data = response.json()
+            except JSONDecodeError:
+                return "🐼 I'm so sorry! The Wikipedia entry is unavailable at the moment. Please try again later."
+
+            # Parse the data and return the desired value
+            wikiTitle = data.get('title', 'No title available')
+            wikiURL = data['content_urls']['desktop']['page']
+            wikiExtract = data.get('extract', 'No summary available')
+            wikiImage = self.get_wiki_image(queryUnderscored, response)
+
+            html = f"""
+    <div class="wikiAnswer">
+        <a href="{wikiURL}" target="_blank"><img class="wikiAnswerImage" src="{wikiImage}" /></a>
+        <h2 class="wikiAnswerTitle"><a href="{wikiURL}" target="_blank">{wikiTitle}</a></h2>
+        <p class="wikiAnswerSummary">{wikiExtract}</p>
+    </div>
+        """
+            return html
+        else:
+            # Handle the error or return a default value
+            return "No Wikipedia entry available"
+
+    async def _arun(self, query: str) -> str:
+        """Use the tool asynchronously."""
+        raise NotImplementedError("Wikipedia API does not support async")
 
 search = SerpAPIWrapper(serpapi_api_key=settings.SERPAPI_API_KEY)
 news = NewsSearchTool()
+wikipedia = WikipediaSearchTool()
 
 tools = [
     Tool(
@@ -135,6 +193,12 @@ tools = [
         name = "Latest News Search",
         func=news.run,
         description=" Use this when you want to get information about the latest news, top news headlines or current news stories. Use this more than Internet Search if the question is about News. The input should be a question in natural language that this API can answer.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Wikipedia Search",
+        func=wikipedia.run,
+        description="Use this when you want to search wikipedia about things you have no knowledge of. Use this more than Internet Search if the question is about Wikipedia. The input to this should be a single search term.",
         return_direct=True
     )
 ]

@@ -340,6 +340,15 @@ export default defineComponent({
           </p>
           <p
             :class="{
+              selected: tab === 'promptlayer',
+              unselected: tab !== 'promptlayer',
+            }"
+            @click="adminTabSelector('promptlayer')"
+          >
+            <img src="../assets/icons/cake.png" />PROMPTLAYER
+          </p>
+          <p
+            :class="{
               selected: tab === 'analytics',
               unselected: tab !== 'analytics',
             }"
@@ -531,6 +540,10 @@ export default defineComponent({
             <div class="usersChart">
               <BarChart />
             </div>
+          </div>
+          <div v-if="tab === 'promptlayer'" class="promptlayerAdmin">
+            <h2>PromptLayer</h2>
+            <p>Coming soon...</p>
           </div>
           <div v-if="tab === 'analytics'" class="analyticsAdmin">
             <h2>panda.ai Site Analytics</h2>

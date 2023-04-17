@@ -5,7 +5,6 @@ from langchain import ConversationChain, PromptTemplate
 from langchain.llms import PromptLayerOpenAI
 from langchain.memory import ConversationEntityMemory, ConversationBufferMemory
 from langchain.agents import Tool
-from langchain.utilities import SerpAPIWrapper
 from langchain.agents import AgentType
 from langchain.agents.agent import Agent
 from langchain.agents.conversational.base import ConversationalAgent
@@ -25,6 +24,7 @@ from config import settings
 import logging
 import boto3
 import json
+import random
 import requests
 from requests.exceptions import JSONDecodeError
 from urllib.parse import quote
@@ -34,6 +34,8 @@ from functions.entityFunctions import get_most_relevant_entities
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
 YOUTUBE_API_KEY = settings.YOUTUBE_API_KEY
+GOOGLE_SEARCH_API_KEY = settings.GOOGLE_SEARCH_API_KEY
+GOOGLE_SEARCH_ENGINE_ID = settings.GOOGLE_SEARCH_ENGINE_ID
 GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
 
 logging.basicConfig(level=logging.INFO)
@@ -125,7 +127,8 @@ class NewsSearchTool(BaseTool):
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
         raise NotImplementedError("News API does not support async")
-    
+
+
 class WikipediaSearchTool(BaseTool):
     name = "Wikipedia"
     description = "Use this when you want to search wikipedia about things you have no knowledge of. The input to this should be a single search term."
@@ -182,6 +185,7 @@ class WikipediaSearchTool(BaseTool):
         """Use the tool asynchronously."""
         raise NotImplementedError("Wikipedia API does not support async")
     
+
 class YouTubeSearchTool(BaseTool):
     name = "YouTube"
     description = "Use this when you want to search for videos. The input to this should be a single search term."
@@ -222,6 +226,7 @@ class YouTubeSearchTool(BaseTool):
         """Use the tool asynchronously."""
         raise NotImplementedError("YouTube API does not support async")
 
+
 class GoogleMapsSearchTool(BaseTool):
     name = "Google Maps"
     description = "Use this when you want to search for a location or get a map. The input to this should be a single search term."
@@ -241,12 +246,116 @@ class GoogleMapsSearchTool(BaseTool):
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
         raise NotImplementedError("YouTube API does not support async")
+
+
+class GoogleImageSearchTool(BaseTool):
+    name = "Google Images"
+    description = "Use this when you want to search for images. The input to this should be a single search term."
+
+    def _run(self, query: str) -> str:
+        # URL-encode the query parameter
+        encoded_query = quote(query)
+
+        url = 'https://customsearch.googleapis.com/customsearch/v1'
+        params = {
+            'key': GOOGLE_SEARCH_API_KEY,
+            'cx': GOOGLE_SEARCH_ENGINE_ID,
+            'q': encoded_query,
+            'searchType': 'image'
+        }
+
+        response = requests.get(url, params=params)
+
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                # Parse the data and return the desired value
+                results = data['items']
+
+                # Get a random sample of 6 items
+                random_items = random.sample(results, 6)
+
+                # Generate HTML for 5 random items
+                html_items = ''
+                for idx, item in enumerate(random_items):
+                    html_items += f'<a href="{item["image"]["contextLink"]}" target="_blank"><img src="{item["link"]}" alt="{item["title"]}" /></a>'
+
+                html = f"""
+        <div class="googleImageAnswer">
+            <div class="googleImageAnswerHeading">
+                <a href="https://www.google.com/search?q={encoded_query}&tbm=isch" target="_blank"><h2>{query} IMAGES</h2></a>
+            </div>
+            <div class="googleImageAnswerImages">
+                {html_items}
+            </div>
+        </div>
+                        """
+                return html
+
+            except JSONDecodeError:
+                return "🐼 I'm so sorry! I can't find respond to that image search at the moment. Please try again later."
+            
+    async def _arun(self, query: str) -> str:
+        """Use the tool asynchronously."""
+        raise NotImplementedError("Google search API does not support async")
+
+
+class GoogleSearchTool(BaseTool):
+    name = "Google Search"
+    description = "Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term."
+
+    def _run(self, query: str) -> str:
+        # URL-encode the query parameter
+        encoded_query = quote(query)
+
+        url = 'https://customsearch.googleapis.com/customsearch/v1'
+        params = {
+            'key': GOOGLE_SEARCH_API_KEY,
+            'cx': GOOGLE_SEARCH_ENGINE_ID,
+            'q': encoded_query
+        }
+
+        response = requests.get(url, params=params)
+
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                # Parse the data and return the desired value
+                results = data['items']
+                # Generate HTML for the first 5 items
+                html_items = ''
+                for idx, item in enumerate(results[:5]):
+                    image_src = item["pagemap"]["cse_image"][0]["src"] if "cse_image" in item["pagemap"] and item["pagemap"]["cse_image"] else None
+                    html_items += f'<div class="googleSearchItem"><div class="googleSearchItemTitle"><a href="{item["link"]}" target="_blank"><h2>{item["title"]}</h2></a></div><div class="googleSearchItemContent">'
+                    if image_src:
+                        html_items += f'<a href="{item["link"]}" target="_blank"><img src="{image_src}" alt="{item["title"]}" /></a>'
+                    html_items += f'<p>{item["snippet"]}</p></div></div>'
+
+                html = f"""
+        <div class="googleSearchAnswer">
+            <div class="googleSearchResultsHeading">
+                <a href="https://www.google.com/search?q={encoded_query}" target="_blank"><h2>{query} SEARCH RESULTS</h2></a>
+            </div>
+            <div class="googleSearchAnswerResults">
+                {html_items}
+            </div>
+        </div>
+                        """
+                return html
+
+            except JSONDecodeError:
+                return "🐼 I'm so sorry! I can't find respond to that search at the moment. Please try again later."
+            
+    async def _arun(self, query: str) -> str:
+        """Use the tool asynchronously."""
+        raise NotImplementedError("Google search API does not support async")
             
 
-search = SerpAPIWrapper(serpapi_api_key=settings.SERPAPI_API_KEY)
+search = GoogleSearchTool()
 news = NewsSearchTool()
 wikipedia = WikipediaSearchTool()
 youtube = YouTubeSearchTool()
+images = GoogleImageSearchTool()
 maps = GoogleMapsSearchTool()
 wolfram = WolframAlphaAPIWrapper(wolfram_alpha_appid = settings.WOLFRAM_ALPHA_APPID)
 
@@ -254,7 +363,8 @@ tools = [
     Tool(
         name = "Internet Search",
         func=search.run,
-        description="Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term."
+        description="Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term.",
+        return_direct=True
     ),
     Tool(
         name = "Maths",
@@ -278,6 +388,12 @@ tools = [
         name = "Video Search",
         func=youtube.run,
         description="Use this when you want to search for YouTube videos or movie trailers. Use this more than Internet Search if the question is about videos or trailers. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Image Search",
+        func=images.run,
+        description="Use this when you want to search for images. Use this more than any other tool if the question is about images. The input to this should be a single search term.",
         return_direct=True
     ),
     Tool(
@@ -349,12 +465,13 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
         agent=pandaAgent,
         agent_kwargs={"prefix": MY_PREFIX, "suffix": MY_SUFFIX, "format_instructions": MY_FORMAT_INSTRUCTIONS, "ai_prefix": "🐼 panda.ai", "human_prefix": f"{username}"}, verbose=True, memory=memory
     )
-    response = agent_chain.run(input=f"{ message }")
-
-    if response:
+    try:
+        response = agent_chain.run(input=f"{ message }")
         return JSONResponse(content={"response": response})
-    else:
-        raise HTTPException(status_code=400, detail="An error occurred while processing the request.")
+
+    except Exception as e:
+        logging.error(f"Error while running agent_chain: {e}")
+        return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later 🐼"})
 
 
 async def save_entities(userid: str, message: str):

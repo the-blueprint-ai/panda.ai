@@ -110,7 +110,7 @@ export default defineComponent({
               type="password"
               placeholder="sKad00sh"
               @keyup.enter="signInClicked(this.email, this.password)"
-              autocomplete="email"
+              autocomplete="password"
             />
           </form>
           <button class="signInButton" @click="signInClicked(this.email, this.password)">

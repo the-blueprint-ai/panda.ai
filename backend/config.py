@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     PRMPTLYR_API_KEY: str
     SERPAPI_API_KEY: str
     GOOGLE_SEARCH_API_KEY: str
+    GOOGLE_SEARCH_ENGINE_ID: str
     GOOGLE_MAPS_API_KEY: str
     YOUTUBE_API_KEY: str
     WOLFRAM_ALPHA_APPID: str

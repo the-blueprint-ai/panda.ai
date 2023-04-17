@@ -12,6 +12,7 @@ export default defineComponent({
       email: "",
       roadmapSuggestion: "",
       newIdeaId: 0,
+      displayBuiltItemsCount: 5,
     };
   },
   async mounted() {
@@ -25,7 +26,12 @@ export default defineComponent({
       return this.getRoadmapData || [];
     },
     builtItems() {
-      return this.roadmapData.filter((item) => item.tags.includes("built"));
+      return this.roadmapData
+        .filter((item) => item.tags.includes("built"))
+        .reverse();
+    },
+    displayedBuiltItems() {
+      return this.builtItems.slice(0, this.displayBuiltItemsCount);
     },
     notBuiltItems() {
       return this.roadmapData.filter((item) => !item.tags.includes("built"));
@@ -37,6 +43,12 @@ export default defineComponent({
   methods: {
     activateOverlay() {
       this.roadmapOverlay = !this.roadmapOverlay;
+    },
+    showMoreItems() {
+      this.displayBuiltItemsCount += 5;
+    },
+    showLessItems() {
+      this.displayBuiltItemsCount = 5;
     },
     async addIdea(idea) {
       try {
@@ -200,7 +212,7 @@ export default defineComponent({
           <h2>Built Features</h2>
           <div
             class="roadmapItem"
-            v-for="item in builtItems"
+            v-for="item in displayedBuiltItems"
             :key="item.name"
             :class="{ 'roadmapItem-built': item.tags.includes('built') }"
           >
@@ -212,13 +224,6 @@ export default defineComponent({
                 <div class="roadmapItemTag" v-if="item.tags.includes('built')">
                   <p>built</p>
                   <img src="../assets/icons/check-circle-fill.svg" />
-                </div>
-                <div
-                  class="roadmapItemTag"
-                  v-if="item.tags.includes('in progress')"
-                >
-                  <p>in progress</p>
-                  <img src="../assets/icons/fast-forward-circle-fill.svg" />
                 </div>
                 <div
                   class="roadmapItemTag"
@@ -234,18 +239,11 @@ export default defineComponent({
                 <p>{{ item.description }}</p>
               </div>
             </div>
-            <div v-if="!item.tags.includes('built')" class="roadmapItemRow3">
-              <div class="roadmapItemVote">
-                <button>
-                  <img src="../assets/icons/arrow-up-circle-fill.svg" />
-                  <p>Upvote</p>
-                  <p id="roadmapItemVotes">{{ item.votes }}</p>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
+      <button class="roadmapMoreButton" v-if="displayBuiltItemsCount < builtItems.length" @click="showMoreItems">SEE MORE...</button>
+      <button class="roadmapMoreButton" v-if="displayBuiltItemsCount == builtItems.length" @click="showLessItems">SEE LESS...</button>
       <div
         id="roadmapOverlay"
         class="roadmapOverlay"

@@ -244,6 +244,8 @@ export default defineComponent({
         await getRoadmap(this.$store, "admin");
         this.roadmapData;
         this.roadmapAdded = true;
+        this.newRoadmapName = "";
+        this.newRoadmapDescription = "";
         setTimeout(() => {
           this.roadmapAdded = false;
         }, 5000);
@@ -272,6 +274,9 @@ export default defineComponent({
         await getFAQs(this.$store);
         this.faqsData;
         this.faqAdded = true;
+        this.newFAQTitle = "";
+        this.newFAQQuestion = "";
+        this.newFAQAnswer = "";
         setTimeout(() => {
           this.faqAdded = false;
         }, 5000);
@@ -554,14 +559,36 @@ export default defineComponent({
             <div class="newRoadmapItem">
               <div class="newRoadmapName">
                 <p>Name</p>
-                <form>
+                <form
+                  @submit.prevent="
+                    saveRoadmapItem(
+                      this.newRoadmapName,
+                      this.newRoadmapDescription
+                    )
+                  "
+                >
                   <input v-model="newRoadmapName" />
                 </form>
               </div>
               <div class="newRoadmapDescription">
                 <p>Description</p>
-                <form>
-                  <input v-model="newRoadmapDescription" />
+                <form
+                  @submit.prevent="
+                    saveRoadmapItem(
+                      this.newRoadmapName,
+                      this.newRoadmapDescription
+                    )
+                  "
+                >
+                  <input
+                    v-model="newRoadmapDescription"
+                    @keyup.enter="
+                      saveRoadmapItem(
+                        this.newRoadmapName,
+                        this.newRoadmapDescription
+                      )
+                    "
+                  />
                 </form>
               </div>
               <div class="newRoadmapItemSave">
@@ -698,10 +725,18 @@ export default defineComponent({
                 </div>
                 <div class="newFAQAnswer">
                   <p>Answer</p>
-                  <form>
+                  <form
+                    @keyup.enter.prevent="
+                      saveFAQItem(
+                        this.newFAQTitle,
+                        this.newFAQQuestion,
+                        this.newFAQAnswer
+                      )
+                    "
+                  >
                     <input
                       v-model="newFAQAnswer"
-                      @keyup.enter.prevent="
+                      @keyup.enter="
                         saveFAQItem(
                           this.newFAQTitle,
                           this.newFAQQuestion,

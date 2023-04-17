@@ -441,6 +441,7 @@ span {
   background-color: #EFEFEF;
   padding: 30px;
   border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .wikiAnswer {
   display: flex;
@@ -450,6 +451,7 @@ span {
   background-color: #EFEFEF;
   padding: 30px;
   border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .wikiAnswerImage {
   max-height: 400px;
@@ -477,6 +479,7 @@ span {
   background-color: #EFEFEF;
   padding: 30px;
   border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .youTubeAnswer h2:hover {
   color: #FFCB4C;
@@ -494,6 +497,7 @@ span {
   background-color: #EFEFEF;
   padding: 30px;
   border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .googleMapsAnswer h2:hover {
   color: #FFCB4C;
@@ -2163,6 +2167,28 @@ span.typed-text {
   border: 3px solid #FFCB4C;
   background-color: #FFFFFF;
   cursor: pointer;
+}
+.roadmapMoreButton {
+  height: 50px;
+  width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  padding: 10px;
+  margin: 20px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 15px;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.roadmapMoreButton:hover {
+  background-color: #FFFFFF;
+  border: 5px solid #FFCB4C;
 }
 .roadmapOverlay {
   display: none;

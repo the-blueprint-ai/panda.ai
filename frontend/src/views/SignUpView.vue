@@ -214,7 +214,7 @@ export default defineComponent({
             id="passwordBad"
             src="../assets/icons/shield-fill-exclamation.svg"
           />
-          <form>
+          <form @submit.prevent="signUpClicked(this.$store, this.email, this.password)">
             <input
               ref="password"
               v-model="password"

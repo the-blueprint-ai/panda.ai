@@ -55,7 +55,7 @@ span {
 }
 .navbar {
   height: 100px;
-  display:flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -227,6 +227,19 @@ span {
   justify-content: top;
   align-items: left;
   width: 1300px;
+  height: 70vh;
+}
+.onboardingContainer {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  background-color: #EFEFEF;
+  text-align: left;
+  display: flex;
+  border-radius: 15px;
+  flex-direction: row;
+  justify-content: top;
+  align-items: left;
+  width: 880px;
   height: 70vh;
 }
 .chatHistoryContainer {
@@ -553,6 +566,7 @@ span {
   color: #FFCB4C;
 }
 .googleSearchItem {
+  width: 550px;
   background-color: #FFFFFF;
   padding: 15px;
   margin-bottom: 20px;
@@ -580,6 +594,10 @@ span {
 }
 .googleSearchItemContent p {
   margin-left: 15px;
+  word-wrap: break-word;
+}
+.googleSearchItemContent text{
+  color: #FFCB4C
 }
 .messageRating {
   display: flex;

@@ -23,10 +23,15 @@ export default defineComponent({
       lastTypedIndex: -1,
       loading: true,
       buttonText: "SEND",
+      isMobile: false,
     };
   },
   mounted() {
     this.typeSentence();
+    this.isMobile = window.innerWidth <= 768;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 768;
+    });
   },
   methods: {
     getCurrentText(index) {
@@ -92,14 +97,6 @@ export default defineComponent({
     <div class="body">
       <h1>TESTING</h1>
       <div class="spacer"></div>
-      <button class="chatButton">
-        <SpinnerComponent
-          :loading="this.loading"
-          :button-text="this.buttonText"
-        ></SpinnerComponent>
-      </button>
-      <div class="spacer"></div>
-      <div class="spacer"></div>
       <button @click="addSentences">Add sentences</button>
       <div id="app">
         <p v-for="(sentence, index) in sentences" :key="index">
@@ -108,17 +105,9 @@ export default defineComponent({
       </div>
       <div class="spacer"></div>
       <div class="spacer"></div>
-      <div class="youTubeAnswer">
-        <h2 style="color:black;">Guardians of the galaxy vol.3 trailer</h2>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube-nocookie.com/embed/u3V5KDHRQvk"
-          title=""
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
+      <div>
+        <h2 v-if="isMobile">IS DESKTOP</h2>
+        <h2 v-else>IS MOBILE</h2>
       </div>
     </div>
     <navFooter></navFooter>

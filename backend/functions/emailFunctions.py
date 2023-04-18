@@ -3,10 +3,10 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
 import logging
-from pydantic import BaseModel
 import os
-import sendgrid
-from sendgrid.helpers.mail import Mail, Email, To, Content
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from python_http_client.exceptions import HTTPError
 
 
 logging.basicConfig(level=logging.INFO)
@@ -14,20 +14,23 @@ logger = logging.getLogger(__name__)
 
 
 # FUNCTIONS
-async def email_send():
-    sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
-    from_email = Email("contact@mypanda.ai")  # Change to your verified sender
-    to_email = To("seanbetts@icloud.com")  # Change to your recipient
-    subject = "Sending with SendGrid is Fun"
-    content = Content("text/plain", "and easy to do anywhere, even with Python")
-    mail = Mail(from_email, to_email, subject, content)
+async def email_send(from_email: str, to_emails: str, subject: str, html_content: str):
+    message = Mail(
+    from_email=from_email,
+    to_emails=to_emails,
+    subject=subject,
+    html_content=html_content)
 
-    # Get a JSON-ready representation of the Mail object
-    mail_json = mail.get()
+    try:
+        sg = SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
 
-    # Send an HTTP POST request to /mail/send
-    response = sg.client.mail.send.post(request_body=mail_json)
-    print(response.status_code)
-    print(response.headers)
+        # Send an HTTP POST request to /mail/send
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
 
-    return{"Email sent successfully"}
+        return{"Email sent successfully"}
+    
+    except HTTPError as e:
+        print(e.to_dict)

@@ -325,7 +325,11 @@ class GoogleSearchTool(BaseTool):
                 # Generate HTML for the first 5 items
                 html_items = ''
                 for idx, item in enumerate(results[:5]):
-                    image_src = item["pagemap"]["cse_image"][0]["src"] if "cse_image" in item["pagemap"] and item["pagemap"]["cse_image"] else None
+                    if "pagemap" in item:
+                        image_src = item["pagemap"]["cse_image"][0]["src"] if "cse_image" in item["pagemap"] and item["pagemap"]["cse_image"] else None
+                    else:
+                        image_src = None
+
                     html_items += f'<div class="googleSearchItem"><div class="googleSearchItemTitle"><a href="{item["link"]}" target="_blank"><h2>{item["title"]}</h2></a></div><div class="googleSearchItemContent">'
                     if image_src:
                         html_items += f'<a href="{item["link"]}" target="_blank"><img src="{image_src}" alt="{item["title"]}" /></a>'

@@ -308,7 +308,7 @@ export default defineComponent({
     <navBar></navBar>
     <div class="bodyG">
       <div v-if="session">
-        <div class="mainContainer">
+        <div class="onboardingContainer">
           <div class="mainChatContainer">
             <div class="chatContainer" id="chatContainer">
               <chatMessage

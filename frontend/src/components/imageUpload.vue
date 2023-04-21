@@ -182,7 +182,3 @@ export default {
     </button>
   </div>
 </template>
-
-<style>
-@import "../assets/styles/panda-main.css";
-</style>

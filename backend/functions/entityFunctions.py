@@ -66,7 +66,7 @@ async def get_all_user_entities(user_id: str):
     return items
 
 
-async def get_most_relevant_entities(user_id: str, message: str, top_n: int = 5):
+async def get_most_relevant_entities(user_id: str, message: str, top_n: int = 3):
     all_entities = await get_all_user_entities(user_id)
 
     if not all_entities:

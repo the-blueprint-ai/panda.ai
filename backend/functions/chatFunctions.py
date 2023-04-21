@@ -24,19 +24,13 @@ from config import settings
 import logging
 import boto3
 import json
-import random
-import requests
-from requests.exceptions import JSONDecodeError
 from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from functions.entityFunctions import get_most_relevant_entities
+from functions.toolFunctions import NewsSearchTool, WikipediaSearchTool, YouTubeSearchTool, GoogleMapsSearchTool, GoogleImageSearchTool, GoogleSearchTool, SpotifySearchTool, TMDBSearchTool
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
-YOUTUBE_API_KEY = settings.YOUTUBE_API_KEY
-GOOGLE_SEARCH_API_KEY = settings.GOOGLE_SEARCH_API_KEY
-GOOGLE_SEARCH_ENGINE_ID = settings.GOOGLE_SEARCH_ENGINE_ID
-GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -53,13 +47,13 @@ Overall, "🐼 panda.ai" is a powerful tool that can help with a wide range of t
 
 The user "🐼 panda.ai" is speaking to is a human and their first name is {first_name}, their surname is {last_name} and their username is {username}.
 
-Today's date is {date}. If you're asked what the time is say that you don't know. Do not ever refer to the user as "the human".
+Today's date is {date}.
 
 TOOLS:
 ------
 🐼 panda.ai has access to the following tools:"""
 
-FORMAT_INSTRUCTIONS = """To use a tool, please use the following format:
+FORMAT_INSTRUCTIONS = """To use a tool, ignore any entities and please use the following format:
 ```
 Thought: Do I need to use a tool? Yes
 Action: the action to take, should be one of [{tool_names}]
@@ -74,7 +68,7 @@ When you have a response to say to {human_prefix}, or if you do not need to use 
 """
 
 SUFFIX = """Begin!
-Entity memories:
+Entity memories. These should be ignored when using a tool:
 {entities}
 
 Previous conversation history:
@@ -83,276 +77,6 @@ Previous conversation history:
 
 New input: {input}
 {agent_scratchpad}"""
-
-
-# TOOLS
-class NewsSearchTool(BaseTool):
-    name = "News"
-    description = "Use this when you want to get information about the top headlines of current news stories. The input should be a question in natural language that this API can answer."
-
-    def _run(self, query: str) -> Dict:
-        # URL-encode the query parameter
-        encoded_query = quote(query)
-
-        # Calculate the date range for the last week
-        today = datetime.today()
-        last_week = today - timedelta(days=5)
-        from_date = last_week.strftime('%Y-%m-%d')
-        to_date = today.strftime('%Y-%m-%d')
-
-        url = ('https://newsapi.org/v2/everything?'
-            f'q={encoded_query}&'
-            f'from={from_date}&'
-            f'to={to_date}&'
-            'language=en&'
-            'sortBy=popularity&'
-            'apiKey=27161a2559d247abb02c031f5e065837')
-        
-        response = requests.get(url)
-        json_response = response.json()
-
-        # Limit the results to the top 5 articles
-        top_5_articles = json_response['articles'][:5]
-        json_response['articles'] = top_5_articles
-
-        # Generate an HTML ordered list
-        html_list_items = []
-        for i, article in enumerate(top_5_articles):
-            source_name = article['source'].get('name') or article['source'].get('Name') or "Unknown"
-            html_list_items.append(f"<li><a href='{article['url']}' target='_blank'><strong>{article['title']}</strong> ({source_name})</a></li>")
-        html_list = f"<div class='newsAnswer'><h2 class='newsTitle'>{query}</h2><ol>" + "".join(html_list_items) + "</ol></div>"
-        
-        return html_list
-
-    async def _arun(self, query: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("News API does not support async")
-
-
-class WikipediaSearchTool(BaseTool):
-    name = "Wikipedia"
-    description = "Use this when you want to search wikipedia about things you have no knowledge of. The input to this should be a single search term."
-
-    def get_wiki_image(self, query, response):
-        data = response.json()
-
-        if data.get('originalimage') and data['originalimage'].get('source'):
-            return data['originalimage']['source']
-
-        url = f'https://en.wikipedia.org/api/rest_v1/page/media-list/{query}'
-        response = requests.get(url)
-        
-        if response.status_code == 200:
-            data = response.json()
-            # Parse the data and return the desired value
-            return data['items'][0]['srcset'][0]['src']
-        else:
-            # Handle the error or return a default value
-            return None
-
-    def _run(self, query: str) -> str:
-        queryUnderscored = query.replace(" ", "_")
-        url = ('https://en.wikipedia.org/api/rest_v1/page/summary/'
-            f'{queryUnderscored}?redirect=false')
-
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            try:
-                data = response.json()
-            except JSONDecodeError:
-                return "🐼 I'm so sorry! The Wikipedia entry is unavailable at the moment. Please try again later."
-
-            # Parse the data and return the desired value
-            wikiTitle = data.get('title', 'No title available')
-            wikiURL = data['content_urls']['desktop']['page']
-            wikiExtract = data.get('extract', 'No summary available')
-            wikiImage = self.get_wiki_image(queryUnderscored, response)
-
-            html = f"""
-    <div class="wikiAnswer">
-        <a href="{wikiURL}" target="_blank"><img class="wikiAnswerImage" src="{wikiImage}" /></a>
-        <h2 class="wikiAnswerTitle"><a href="{wikiURL}" target="_blank">{wikiTitle}</a></h2>
-        <p class="wikiAnswerSummary">{wikiExtract}</p>
-    </div>
-        """
-            return html
-        else:
-            # Handle the error or return a default value
-            return "No Wikipedia entry available"
-
-    async def _arun(self, query: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("Wikipedia API does not support async")
-    
-
-class YouTubeSearchTool(BaseTool):
-    name = "YouTube"
-    description = "Use this when you want to search for videos. The input to this should be a single search term."
-
-    def _run(self, query: str) -> str:
-        # URL-encode the query parameter
-        encoded_query = quote(query)
-        url = ('https://www.googleapis.com/youtube/v3/search?maxResults=5&q='
-            f'{encoded_query}&key={YOUTUBE_API_KEY}&type=video&part=snippet')
-
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            try:
-                data = response.json()
-                # Parse the data and return the desired value
-                ytVideoId = None
-                for item in data['items']:
-                    if 'videoId' in item['id']:
-                        ytVideoId = item['id']['videoId']
-                        break
-
-                if ytVideoId:
-                    html = f"""
-    <div class="youTubeAnswer">
-        <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><h2>{query} VIDEO</h2></a>
-        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>
-                    """
-                    return html
-                else:
-                    # Handle the error or return a default value
-                    return "🐼 I'm so sorry! I couldn't find a YouTube video about that unfortunately."
-            except JSONDecodeError:
-                return "🐼 I'm so sorry! I can't find that YouTube video at the moment. Please try again later."
-            
-    async def _arun(self, query: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("YouTube API does not support async")
-
-
-class GoogleMapsSearchTool(BaseTool):
-    name = "Google Maps"
-    description = "Use this when you want to search for a location or get a map. The input to this should be a single search term."
-
-    def _run(self, query: str) -> str:
-        # URL-encode the query parameter
-        encoded_query = quote(query)
-        url = "https://www.google.com/maps/embed/v1/place?"f"key={GOOGLE_MAPS_API_KEY}&q={encoded_query}"
-
-        return f"""
-            <div class="googleMapsAnswer">
-                <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank"><h2>{query} MAP</h2></a>
-                <iframe width="560" height="315" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src={url} allowfullscreen></iframe>
-            </div>
-                """
-            
-    async def _arun(self, query: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("YouTube API does not support async")
-
-
-class GoogleImageSearchTool(BaseTool):
-    name = "Google Images"
-    description = "Use this when you want to search for images. The input to this should be a single search term."
-
-    def _run(self, query: str) -> str:
-        # URL-encode the query parameter
-        encoded_query = quote(query)
-
-        url = 'https://customsearch.googleapis.com/customsearch/v1'
-        params = {
-            'key': GOOGLE_SEARCH_API_KEY,
-            'cx': GOOGLE_SEARCH_ENGINE_ID,
-            'q': encoded_query,
-            'searchType': 'image'
-        }
-
-        response = requests.get(url, params=params)
-
-        if response.status_code == 200:
-            try:
-                data = response.json()
-                # Parse the data and return the desired value
-                results = data['items']
-
-                # Get a random sample of 6 items
-                random_items = random.sample(results, 6)
-
-                # Generate HTML for 5 random items
-                html_items = ''
-                for idx, item in enumerate(random_items):
-                    html_items += f'<a href="{item["image"]["contextLink"]}" target="_blank"><img src="{item["link"]}" alt="{item["title"]}" /></a>'
-
-                html = f"""
-        <div class="googleImageAnswer">
-            <div class="googleImageAnswerHeading">
-                <a href="https://www.google.com/search?q={encoded_query}&tbm=isch" target="_blank"><h2>{query} IMAGES</h2></a>
-            </div>
-            <div class="googleImageAnswerImages">
-                {html_items}
-            </div>
-        </div>
-                        """
-                return html
-
-            except JSONDecodeError:
-                return "🐼 I'm so sorry! I can't find respond to that image search at the moment. Please try again later."
-            
-    async def _arun(self, query: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("Google search API does not support async")
-
-
-class GoogleSearchTool(BaseTool):
-    name = "Google Search"
-    description = "Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term."
-
-    def _run(self, query: str) -> str:
-        # URL-encode the query parameter
-        encoded_query = quote(query)
-
-        url = 'https://customsearch.googleapis.com/customsearch/v1'
-        params = {
-            'key': GOOGLE_SEARCH_API_KEY,
-            'cx': GOOGLE_SEARCH_ENGINE_ID,
-            'q': encoded_query
-        }
-
-        response = requests.get(url, params=params)
-
-        if response.status_code == 200:
-            try:
-                data = response.json()
-                # Parse the data and return the desired value
-                results = data['items']
-                # Generate HTML for the first 5 items
-                html_items = ''
-                for idx, item in enumerate(results[:5]):
-                    if "pagemap" in item:
-                        image_src = item["pagemap"]["cse_image"][0]["src"] if "cse_image" in item["pagemap"] and item["pagemap"]["cse_image"] else None
-                    else:
-                        image_src = None
-
-                    html_items += f'<div class="googleSearchItem"><div class="googleSearchItemTitle"><a href="{item["link"]}" target="_blank"><h2>{item["title"]}</h2></a></div><div class="googleSearchItemContent">'
-                    if image_src:
-                        html_items += f'<a href="{item["link"]}" target="_blank"><img src="{image_src}" alt="{item["title"]}" /></a>'
-                    html_items += f'<p>{item["snippet"]}</p></div></div>'
-
-                html = f"""
-        <div class="googleSearchAnswer">
-            <div class="googleSearchResultsHeading">
-                <a href="https://www.google.com/search?q={encoded_query}" target="_blank"><h2>{query} SEARCH RESULTS</h2></a>
-            </div>
-            <div class="googleSearchAnswerResults">
-                {html_items}
-            </div>
-        </div>
-                        """
-                return html
-
-            except JSONDecodeError:
-                return "🐼 I'm so sorry! I can't find respond to that search at the moment. Please try again later."
-            
-    async def _arun(self, query: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("Google search API does not support async")
             
 
 search = GoogleSearchTool()
@@ -361,6 +85,8 @@ wikipedia = WikipediaSearchTool()
 youtube = YouTubeSearchTool()
 images = GoogleImageSearchTool()
 maps = GoogleMapsSearchTool()
+music = SpotifySearchTool()
+movie = TMDBSearchTool()
 wolfram = WolframAlphaAPIWrapper(wolfram_alpha_appid = settings.WOLFRAM_ALPHA_APPID)
 
 tools = [
@@ -401,9 +127,21 @@ tools = [
         return_direct=True
     ),
     Tool(
-        name = "Location Search",
+        name = "Music Search",
+        func= music.run,
+        description="Use this when you want to search for music. Use this more than any other tool if the question is about music. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Movie & TV Search",
+        func= movie.run,
+        description="Use this when you want to search for a movie, tv show or actor. Use this more than any other tool if the question is about movies, tv shows or actors. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Map & Location Search",
         func=maps.run,
-        description="Use this when you want to search for a location or get a map. Use this more than any other tool if the question is about locations or maps. The input to this should be a single search term.",
+        description="Use this when you want to search for a map or get a location. Use this more than any other tool if the question is about locations or maps. The input to this should be a single search term.",
         return_direct=True
     )
 ]
@@ -466,6 +204,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     agent_chain = initialize_agent(
         tools,
         llm,
+        # return_intermediate_steps=True,
         agent=pandaAgent,
         agent_kwargs={"prefix": MY_PREFIX, "suffix": MY_SUFFIX, "format_instructions": MY_FORMAT_INSTRUCTIONS, "ai_prefix": "🐼 panda.ai", "human_prefix": f"{username}"}, verbose=True, memory=memory
     )
@@ -485,7 +224,7 @@ async def save_entities(userid: str, message: str):
     
     conversation = ConversationChain(
         llm=entity_llm, 
-        verbose=False,
+        verbose=True,
         prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE,
         memory=memory
     )
@@ -564,15 +303,17 @@ async def get_user_chat_history(user_id: str):
             updated_at = result["updated_at"]
             chat_script = json.loads(result["chat_script"]) # Convert the JSON string back to a list of dictionaries
 
-            chat_history.append({
-                "user_id": user_id,
-                "created_at": created_at,
-                "updated_at": updated_at,
-                "chat_script": chat_script,
-            })
+            # Check if chat_script contains </div>
+            if "</div>" not in str(chat_script):
+                chat_history.append({
+                    "user_id": user_id,
+                    "created_at": created_at,
+                    "updated_at": updated_at,
+                    "chat_script": chat_script,
+                })
 
         # Check if the latest entry was created within the last 5 minutes
-        if chat_history[0] and chat_history[0]["updated_at"]:
+        if chat_history and chat_history[0]["updated_at"]:
             now = datetime.now(timezone.utc)
             time_difference = now - chat_history[0]["updated_at"]
             if time_difference <= timedelta(minutes=5):

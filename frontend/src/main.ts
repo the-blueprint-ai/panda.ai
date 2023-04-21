@@ -4,7 +4,7 @@ import router from "./router";
 import store from "./store";
 import VueGtag from "vue-gtag";
 import SuperTokens from "supertokens-web-js";
-import "./assets/styles/panda-main.css";
+import "@/assets/styles/panda-global.scss";
 import { SuperTokensWebJSConfig } from "./config";
 import axios from "axios";
 

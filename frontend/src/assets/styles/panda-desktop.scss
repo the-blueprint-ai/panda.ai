@@ -430,6 +430,7 @@ span {
   padding-right: 15px;
   padding-bottom: 15px;
   width:fit-content;
+  word-wrap: break-word;
   max-width: 750px;
   border-radius: 15px;
   color: #000000;
@@ -445,6 +446,35 @@ span {
 .message a:hover {
   color: #FFCB4C;
   text-decoration: none;
+}
+.seeMoreButton{ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.seeMore {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 10px;
+  margin: 15px;
+  margin-top: 30px;
+  margin-bottom: 5px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: large;
+  font-family: "Monaco";
+  width: 350px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.seeMore:Hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
 }
 .newsAnswer {
   display: flex;
@@ -515,7 +545,7 @@ span {
 .googleMapsAnswer h2:hover {
   color: #FFCB4C;
 }
-.googleMapsAnswer iframe {
+.googleMapsAnswerMap {
   border: 7px solid #FFFFFF;
 }
 .googleImageAnswer {
@@ -545,6 +575,9 @@ span {
   height: 100%;
   max-width: 100%;
   object-fit: cover;
+}
+.googleImageAnswerImages img:hover {
+  opacity: 50%;
 }
 .googleSearchAnswer {
   width: 575px;
@@ -593,11 +626,80 @@ span {
   object-fit: cover;
 }
 .googleSearchItemContent p {
+  overflow: hidden;
   margin-left: 15px;
   word-wrap: break-word;
 }
 .googleSearchItemContent text{
   color: #FFCB4C
+}
+.spotifyMusicAnswer {
+  width: 575px;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.tmdbAnswer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.tmdbAnswerHeading {
+  width: 100%;
+}
+.tmdbAnswerHeading h2 {
+  width: 100%;
+  text-align: left;
+}
+.tmdbAnswerHeading h2:hover {
+  cursor: pointer;
+  color: #FFCB4C;
+}
+.tmdbAnswerContent {
+  display: flex;
+  flex-direction: row;
+}
+.tmdbAnswerContentImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tmdbAnswerContentImage img {
+  max-width: 200px;
+  margin-right: 20px;
+}
+.tmdbAnswerContentImage img:hover {
+  cursor: pointer;
+  opacity: 50%;
+}
+.tmdbAnswerContentDetails {
+  display: flex;
+  align-items: center;
+}
+.tmdbAnswerContentOverviewInfo {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.tmdbAnswerContentOverviewInfoReleaseDate p {
+  margin-top: -15px;
+}
+.tmdbAnswerContentOverviewInfoRating {
+  margin-right: 50px;
+}
+.tmdbAnswerContentOverviewInfoRating p {
+  margin-top: -15px;
 }
 .messageRating {
   display: flex;
@@ -666,13 +768,13 @@ span {
   cursor: pointer;
   background-color: #FFCB4C;
   border: none;
-  padding: 1rem;
-  margin: 2rem;
+  padding: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
   transition: all 0.3s ease-in-out;
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
+  color: #000000;
   font-size: large;
   font-family: "Monaco";
   width: 80%;
@@ -2659,4 +2761,9 @@ span.typed-text {
 .faqsAdmin tr:hover {
   cursor: pointer;
   background-color: #FFCB4C;
+}
+.signUpForm iframe {
+  border: none;
+  height: 580px;
+  width: 580px;
 }

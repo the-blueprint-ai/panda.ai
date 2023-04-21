@@ -345,6 +345,15 @@ export default defineComponent({
           </p>
           <p
             :class="{
+              selected: tab === 'tools',
+              unselected: tab !== 'tools',
+            }"
+            @click="adminTabSelector('tools')"
+          >
+            <img src="../assets/icons/tools.svg" />TOOLS
+          </p>
+          <p
+            :class="{
               selected: tab === 'promptlayer',
               unselected: tab !== 'promptlayer',
             }"
@@ -403,6 +412,11 @@ export default defineComponent({
               </div>
               <div class="displayNumber">
                 <h2>Top 10 entity updaters</h2>
+              </div>
+            </div>
+            <div class="usersTopLine">
+              <div class="displayNumber">
+                <h2>Top Tools</h2>
               </div>
             </div>
           </div>
@@ -545,6 +559,10 @@ export default defineComponent({
             <div class="usersChart">
               <BarChart />
             </div>
+          </div>
+          <div v-if="tab === 'tools'" class="toolsAdmin">
+            <h2>Tools</h2>
+            <p>Coming soon...</p>
           </div>
           <div v-if="tab === 'promptlayer'" class="promptlayerAdmin">
             <h2>PromptLayer</h2>
@@ -827,7 +845,3 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
-
-<style>
-@import "../assets/styles/panda-main.css";
-</style>

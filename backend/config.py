@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     SPTKNS_CONNECTION_URI: str
     SPTKNS_API_KEY: str
     SPTKNS_DASHBOARD_API_KEY: str
+    MAILCHIMP_API_KEY: str
     SENDGRID_API_KEY: str
     OPENAI_ORGANISATION: str
     OPENAI_API_KEY: str
@@ -44,6 +45,12 @@ class Settings(BaseSettings):
     GOOGLE_MAPS_API_KEY: str
     YOUTUBE_API_KEY: str
     GOOGLE_GEOCODING_API_KEY: str
+    TMDB_API_KEY: str
+    SPOTIFY_TOKEN_URL: str
+    SPOTIFY_SEARCH_URL: str
+    SPOTIFY_EMBED_URL: str
+    SPOTIFY_CLIENT_ID: str
+    SPOTIFY_CLIENT_SECRET: str
     WOLFRAM_ALPHA_APPID: str
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str

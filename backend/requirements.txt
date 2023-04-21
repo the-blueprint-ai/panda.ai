@@ -16,3 +16,4 @@ sendgrid
 spacy
 numpy
 wolframalpha
+mailchimp_transactional

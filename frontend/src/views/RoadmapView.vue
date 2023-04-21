@@ -118,7 +118,7 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div class="body">
-      <div>
+      <div class="roadmap">
         <h1>🐼</h1>
         <div class="roadmapTitle">
           <h1>panda.ai Product Roadmap</h1>
@@ -284,7 +284,3 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
-
-<style scoped>
-@import "../assets/styles/panda-main.css";
-</style>

@@ -83,7 +83,10 @@ export default {
 <template>
   <div class="navbar">
     <div class="navbar-top">
-      <div class="brandHolder">
+      <div class="hamburgerMenu">
+        <img class="mobileMenu" src="../../src/assets/icons/list.svg" width="50" />
+      </div>
+      <div class="brandHolderTop">
         <router-link to="/">
           <img class="logo" src="../../src/assets/panda.png" width="50" />
         </router-link>

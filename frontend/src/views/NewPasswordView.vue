@@ -131,7 +131,3 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
-
-<style>
-@import "../assets/styles/panda-main.css";
-</style>

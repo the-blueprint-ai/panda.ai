@@ -1,22 +1,48 @@
+/* reset.css */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
 body {
     margin: 0;
 }
 .body {
+  width: 101%;
   background-color: #000000;
   text-align: center;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  justify-content: left;
+  justify-content: flex-start;
   align-items: center;
   min-height: 78vh;
   font-family: "Monaco";
   padding-bottom: 30px;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 h1 {
   color: #FFFFFF;
   text-transform: uppercase;
-  font-size: 4em;
+  margin-top: 20px;
+  margin-left: -100px;
+  font-size: 26px;
   font-weight: 100;
 }
 h2 {
@@ -29,16 +55,93 @@ h3 {
 span {
   font-size: normal;
 }
+.spacer{
+  margin-top: 50px;
+}
+.blinking-cursor {
+  font-size: 26px;
+  font-weight: bold;
+  margin-left: 10px;
+  color: #FFFFFF;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+.blinking-cursor2 {
+  font-size: 26px;
+  font-weight: bold;
+  margin-left: -17px;
+  color: #FFFFFF;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+span.typed-text {
+  margin-left: 115px;
+}
+@keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-moz-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-webkit-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-ms-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-o-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
 .bodyG {
+  width: 101%;
   background-color: #EFEFEF;
   text-align: center;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  justify-content: left;
+  justify-content: flex-start;
   align-items: center;
   min-height: 78vh;
   font-family: "Monaco";
+  padding-bottom: 10px;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 .bodyG h1 {
   color: #000000;
@@ -53,8 +156,11 @@ span {
 .bodyG p {
   color: #000000;
 }
+.page404 {
+    width: 300px;
+}
 .navbar {
-  height: 100px;
+  height: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,8 +173,11 @@ span {
   color: #000000;
   display:flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   font-family: "Monaco";
+}
+.mobileMenu {
+    margin-top: 5px;
 }
 .navbarbar {
   height: 1px;
@@ -77,15 +186,41 @@ span {
   display: flex;
   background-color: #000000;
 }
-.brandHolder {
+.brandHolderTop {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  margin-right: 30px;
+  margin-top: -20px;
+  margin-left: -25px;
 }
-.brandHolder a {
+.brandHolderTop img {
+    width: 40px;
+}
+.brandHolderTop p{
+    margin-top: -23px;
+    font-size: 14px;
+}
+.brandHolderTop a {
   text-decoration: none;
   color: #000000;
+}
+.brandHolderBottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -20px;
+    margin-left: 0px;
+    }
+.brandHolderBottom img {
+    width: 40px;
+}
+.brandHolderBottom p{
+    margin-top: -23px;
+    font-size: 14px;
+}
+.brandHolderBottom a {
+    text-decoration: none;
+    color: #000000;
 }
 .logo {
   margin: 20px;
@@ -96,24 +231,13 @@ span {
   width: 32px;
 }
 .downsvg {
-  margin: 5px;
-  height: 16px;
-  width: 16px;
-  cursor: pointer;
+  display: none;
 }
 .downsvg:hover {
   transform: scale(1.2);
 }
 .dropdown-menu {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  background-color: #FFFFFF;
-  border: 2px solid #FFCB4C;
-  border-radius: 8px;
-  margin-top: 330px;
-  width: 200px;
+  display: none;
 }
 .dropdown-menu:link {
   color:#000000;
@@ -172,14 +296,14 @@ span {
   width: 200px;
 }
 .menu-items {
-  display: flex;
+  display: none;
   margin: 10px;
   align-items: center;
   flex-grow: 4;
 }
 .menu-icon {
   width: 50px;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   margin-left: 10px;
@@ -206,19 +330,19 @@ span {
   align-items: center;
 }
 .user-icon {
-  width: 50px;
-  margin-left: 0px;
-  border-radius: 10px;
+  display: none;
 }
 .user-icon:hover {
   cursor: pointer;
 }
 .biglogo {
-  margin-top: 50px;
+  margin-top: 10px;
+  width: 110px;
 }
 .mainContainer {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  width: 98%;
+  height: 87vh;
+  margin: 2px;
   background-color: #EFEFEF;
   text-align: left;
   display: flex;
@@ -226,12 +350,13 @@ span {
   flex-direction: row;
   justify-content: top;
   align-items: left;
-  width: 1300px;
-  height: 70vh;
+  font-size: 14px;
+  overflow-x: hidden;
 }
 .onboardingContainer {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  width: 97%;
+  height: 87vh;
+  margin: 5px;
   background-color: #EFEFEF;
   text-align: left;
   display: flex;
@@ -239,116 +364,48 @@ span {
   flex-direction: row;
   justify-content: top;
   align-items: left;
-  width: 880px;
-  height: 70vh;
+  font-size: 14px;
+  overflow-x: hidden;
 }
 .chatHistoryContainer {
-  background-color: #FFFFFF;
-  color:#000000;
-  text-align: left;
-  display: flex;
-  border-radius: 15px;
-  margin: 5px;
-  margin-right: 10px;
-  padding: 5px;
-  flex-direction: column;
-  justify-content: top;
-  align-items: center;
-  width: 400px;
-}
-.chatHistoryContainer h2 {
-  color:#000000;
-}
-.chatHistory {
-  width: 390px;
-  margin-left: -30px;
-  height: 90%;
-  padding-left: 40px;
-  text-align: left;
-}
-.chatHistoryDateListChat {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  height: 92%;
-  overflow-y: scroll;
-}
-.chatHistoryDateListAccount {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  height: 90%;
-  overflow-y: scroll;
-}
-.chatHistoryDateListChat::-webkit-scrollbar {
-  width: 7px;
-  border-radius: 5px;
-}
-.chatHistoryDateListChat::-webkit-scrollbar-track {
-  background: #FFFFFF;
-}
-.chatHistoryDateListChat::-webkit-scrollbar-thumb {
-  background: #FFCB4C;
-  border-radius: 10px;
-}
-.chatHistoryDateListChat::-webkit-scrollbar-track-piece {
-  background: #FFFFFF;
-}
-.chatHistoryDateListAccount::-webkit-scrollbar {
-  width: 7px;
-  border-radius: 5px;
-}
-.chatHistoryDateListAccount::-webkit-scrollbar-track {
-  background: #FFFFFF;
-}
-.chatHistoryDateListAccount::-webkit-scrollbar-thumb {
-  background: #FFCB4C;
-  border-radius: 10px;
-}
-.chatHistoryDateListAccount::-webkit-scrollbar-track-piece {
-  background: #FFFFFF;
+  display: none;
 }
 .mainChatContainer {
+  width: 95%;
   background-color: #FFFFFF;
   text-align: left;
   display: flex;
   border: 3px solid #FFFFFF;
   border-radius: 15px;
   margin: 5px;
-  margin-left: 5px;
   padding: 5px;
   flex-direction: column;
   flex-grow: 4;
   justify-content: top;
   align-items: left;
+  overflow-x: hidden;
 }
 .chatContainer {
   display: flex;
   flex-direction: column-reverse;
   flex-grow: 4;
   overflow: scroll;
+  overflow-x: hidden;
 }
 .pandaChat {
   background-color: #FFFFFF;
   text-align: left;
   display: flex;
-  max-width: 795px;
-  padding-right: 50px;
+  padding-right: 0px;
   flex-direction: row;
   justify-content: left;
   align-items: left;
-}
-.pandaChat.highlighted {
-  position: relative;
-  width: 99%;
-  background-color: #FFCB4C;
-  border-radius: 15px;
-  border: none;
 }
 .userChat {
   background-color: #FFFFFF;
   text-align: left;
   display: flex;
-  max-width: 785px;
-  padding-left: 60px;
+  padding-left: 0px;
   flex-direction: row-reverse;
   justify-content: right;
   align-items: right;
@@ -362,14 +419,6 @@ span {
   justify-content: right;
   align-items: center;
 }
-.userChat.highlighted {
-  background-color: #FFCB4C;
-  border-radius: 15px;
-  flex-direction: row-reverse;
-  justify-content: right;
-  align-items: right;
-  border: none;
-}
 .chatAvatar {
   width: 50px;
   height: 50px;
@@ -378,29 +427,29 @@ span {
   border-radius: 10px;
 }
 .userInputContainer {
-  height: 90px;
+  height: 80px;
   background: #FFFFFF;
   color: #000000;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 .userInput {
   display: flex;
   flex-grow: 4;
-  margin: 5px;
-  padding: 5px;
-  align-content: center;
+  margin: 0px;
+  padding: 0px;
 }
 .input {
-  width: 100%;
+  flex-grow: 4;
   border: 3px solid #EFEFEF;
   border-radius: 15px;
   background: #FFFFFF;
   color: #000000;
-  padding: 10px;
+  padding: 5px;
   font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
-  font-size: large;
+  font-size: 14px;
   overflow: wrap;
   resize: none;
 }
@@ -417,25 +466,25 @@ span {
 .chatMessage {
   display: flex;
   align-items: center;
-  width: 98%;
   border-bottom: 1px solid #EFEFEF;
 }
 .message {
   display: flex;
   flex-direction: column;
   align-items: left;
-  margin: 10px;
-  padding-top: 10px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 15px;
+  margin: 5px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
   width:fit-content;
+  word-wrap: break-word;
   max-width: 750px;
   border-radius: 15px;
   color: #000000;
 }
 .message ol li {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .message a {
   color: #000000;
@@ -446,87 +495,144 @@ span {
   color: #FFCB4C;
   text-decoration: none;
 }
+.seeMoreButton{ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.seeMore {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 5px;
+  margin: 10px;
+  margin-top: 20px;
+  margin-bottom: -5px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: 14px;
+  font-family: "Monaco";
+  width: 180px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.seeMore:Hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
+}
 .newsAnswer {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 10px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
+.newsAnswer ol {
+    margin-left: 25px;
+}
+.newsTitle {
+  margin-bottom: 10px;
+}
 .wikiAnswer {
+  width: 68vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 10px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .wikiAnswerImage {
-  max-height: 400px;
-  max-width: 600px;
-  border: 7px solid #FFFFFF;
+  max-height: 200px;
+  max-width: 300px;
+  border: 5px solid #FFFFFF;
 }
 .wikiAnswerImage:hover {
-  border: 7px solid #FFCB4C;
+  border: 5px solid #FFCB4C;
 }
 .wikiAnswerTitle {
   text-align: center;
+  margin-bottom: 10px;
 }
 .wikiAnswerSummary {
   margin: 0px;
+  word-wrap: break-word;
 }
 .wikiAnswerSummary p {
   margin: 0px;
+  word-wrap: break-word;
 }
 .youTubeAnswer {
+  width: 68vw;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 5px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
+.youTubeAnswer h2 {
+  margin-bottom: 10px;
+  }
 .youTubeAnswer h2:hover {
   color: #FFCB4C;
 }
 .youTubeAnswer iframe {
-  border: 7px solid #FFFFFF;
+  height: 32vw;
+  width: 95%;
+  border: 5px solid #FFFFFF;
+  margin-bottom: 5px;
 }
 .googleMapsAnswer {
-  width: 575px;
+  width: 68vw;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 10px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
+.googleMapsAnswer h2 {
+    margin-bottom: 10px;
+  }
 .googleMapsAnswer h2:hover {
   color: #FFCB4C;
 }
-.googleMapsAnswer iframe {
-  border: 7px solid #FFFFFF;
+.googleMapsAnswerMap {
+  width: 66vw;
+  border: 5px solid #FFFFFF;
+}
+.googleMapsAnswerMap iframe {
+  width: 66vw;
 }
 .googleImageAnswer {
-  width: 575px;
+  width: 68vw;
   display: flex;
   flex-direction: column;
   background-color: #EFEFEF;
-  padding: 20px;
+  padding: 10px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
+.googleImageAnswerHeading h2 {
+    margin-bottom: 10px;
+  }
 .googleImageAnswerHeading h2:hover {
   cursor: pointer;
   color: #FFCB4C;
@@ -535,10 +641,10 @@ span {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: auto;
-  grid-gap: 10px;
+  grid-gap: 5px;
   align-items: stretch;
   justify-items: stretch;
-  padding: 10px;
+  padding: 5px;
   background-color: #FFFFFF;
 }
 .googleImageAnswerImages img {
@@ -546,30 +652,34 @@ span {
   max-width: 100%;
   object-fit: cover;
 }
+.googleImageAnswerImages img:hover {
+  opacity: 50%;
+}
 .googleSearchAnswer {
-  width: 575px;
+  width: 70vw;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 20px;
+  padding: 5px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .googleSearchResultsHeading h2 {
   margin-top: 0px;
+  margin-bottom: 10px;
 }
 .googleSearchResultsHeading h2:hover {
   cursor: pointer;
   color: #FFCB4C;
 }
 .googleSearchItem {
-  width: 550px;
+  width: 66vw;
   background-color: #FFFFFF;
-  padding: 15px;
-  margin-bottom: 20px;
+  padding: 5px;
+  margin-bottom: 10px;
   border-radius: 10px;
 }
 .googleSearchItemTitle h2 {
@@ -583,6 +693,7 @@ span {
 }
 .googleSearchItemContent {
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding-top: 10px;
 }
@@ -593,11 +704,70 @@ span {
   object-fit: cover;
 }
 .googleSearchItemContent p {
+  overflow: hidden;
   margin-left: 15px;
   word-wrap: break-word;
 }
 .googleSearchItemContent text{
   color: #FFCB4C
+}
+.spotifyMusicAnswer {
+  width: 67vw;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.tmdbAnswer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px;
+  background-color: #EFEFEF;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.tmdbAnswerHeading {
+  width: 100%;
+}
+.tmdbAnswerHeading h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.tmdbAnswerHeading h2:hover {
+  cursor: pointer;
+  color: #FFCB4C;
+}
+.tmdbAnswerContent {
+  display: flex;
+  flex-direction: column;
+}
+.tmdbAnswerContentImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tmdbAnswerContentImage img {
+  max-width: 100px;
+  margin-bottom: 10px;
+}
+.tmdbAnswerContentImage img:hover {
+  cursor: pointer;
+  opacity: 50%;
+}
+.tmdbAnswerContentDetails {
+  display: flex;
+  align-items: center;
+}
+.tmdbAnswerContentOverviewInfo {
+  display: none;
 }
 .messageRating {
   display: flex;
@@ -644,9 +814,9 @@ span {
   transition: all 0.5s ease-in-out;
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
-  font-size: large;
+  font-size: 14px;
   font-family: "Monaco";
-  width: 100px;
+  width: 70px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .chatButton:disabled {
@@ -657,6 +827,9 @@ span {
   border: 5px solid #FFCB4C;
   background-color: #FFFFFF;
 }
+#undoButton {
+    display: none;
+}
 .userPageButton {
   width: 200px;
   height: 70px;
@@ -666,13 +839,13 @@ span {
   cursor: pointer;
   background-color: #FFCB4C;
   border: none;
-  padding: 1rem;
-  margin: 2rem;
+  padding: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
   transition: all 0.3s ease-in-out;
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
+  color: #000000;
   font-size: large;
   font-family: "Monaco";
   width: 80%;
@@ -687,35 +860,24 @@ span {
   background-color: #FFCB4C;
   color: #000000;
   border: none;
-  padding: 1rem;
-  margin: 2rem;
-  margin-top: 15px;
+  padding: 10px;
+  margin: 10px;
+  margin-top: 50px;
   margin-bottom: 15px;
   transition: all 0.3s ease-in-out;
   border: 2px solid #FFCB4C;
   border-radius: 1rem;
-  font-size: large;
+  font-size: 16px;
   font-family: "Monaco";
-  width: 200px;
+  height: 60px;
+  width: 180px;
 }
 .startNewChat:disabled {
   cursor: not-allowed;
   opacity: 0.8;
 }
 .authButton-login {
-  cursor: pointer;
-  background-color: #FFFFFF;
-  color: #000000;
-  border: none;
-  padding: 10px;
-  margin: 10px;
-  transition: all 0.3s ease-in-out;
-  border: 3px solid #FFCB4C;
-  border-radius: 1rem;
-  font-family: "Monaco";
-  text-transform: uppercase;
-  width: 100px;
-  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  display: none;
 }
 .authButton-login:hover {
   background-color: #FFCB4C;
@@ -723,100 +885,15 @@ span {
   border: 3px solid #FFCB4C;
 }
 .authButton-signup {
-  cursor: pointer;
-  background-color: #FFCB4C;
-  color: #000000;
-  border: none;
-  padding: 10px;
-  margin: 10px;
-  transition: all 0.3s ease-in-out;
-  border: 3px solid #FFCB4C;
-  border-radius: 1rem;
-  font-family: "Monaco";
-  text-transform: uppercase;
-  width: 100px;
-  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  display: none;
 }
 .authButton-signup:hover {
   color: #000000;
   border: 3px solid #FFCB4C;
   transform: scale(1.1);
 }
-.spacer{
-  margin-top: 50px;
-}
-.blinking-cursor {
-  font-size: 4rem;
-  font-weight: bold;
-  margin-left: 0px;
-  color: #FFFFFF;
-  -webkit-animation: 1s blink step-end infinite;
-  -moz-animation: 1s blink step-end infinite;
-  -ms-animation: 1s blink step-end infinite;
-  -o-animation: 1s blink step-end infinite;
-  animation: 1s blink step-end infinite;
-}
-.blinking-cursor2 {
-  font-size: 4rem;
-  font-weight: bold;
-  margin-left: -34px;
-  color: #FFFFFF;
-  -webkit-animation: 1s blink step-end infinite;
-  -moz-animation: 1s blink step-end infinite;
-  -ms-animation: 1s blink step-end infinite;
-  -o-animation: 1s blink step-end infinite;
-  animation: 1s blink step-end infinite;
-}
-span.typed-text {
-  margin-left: 115px;
-}
-@keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-moz-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-webkit-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-ms-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-o-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
 .navFooter {
-  height: 400px;
+  height: 280px;
   background-color: #FFFFFF;
   color: #000000;
   display:flex;
@@ -840,9 +917,11 @@ span.typed-text {
 }
 .brandSocialsHolder {
   display: flex;
+  width: 100%;
+  align-items: center;
   flex-direction: column;
   flex-grow: 3;
-  margin-left: 50px;
+  margin-left: 0px;
 }
 .footerBranding {
   display: flex;
@@ -863,13 +942,14 @@ span.typed-text {
   color: #000000;
 }
 .brandSocialsHolder h3 {
-  margin-top: 75px;
-  margin-left: 25px;
+  margin-top: 15px;
+  margin-left: 0px;
   font-size: 16px;
   color: #000000;
 }
 .socialsHolder {
   display: flex;
+  margin-left: 30px;
   flex-direction: row;
   padding: 20px;
 }
@@ -880,14 +960,7 @@ span.typed-text {
   cursor: pointer;
 }
 .footerMenus {
-  display: flex;
-  flex-grow: 4;
-  justify-content: flex-end;
-  align-content: space-around;
-  column-gap: 100px;
-  margin-left: 20px;
-  margin-right: 0px;
-  padding-top: 10px;
+  display: none;
 }
 .singleMenu {
   width: 150px;
@@ -912,13 +985,12 @@ span.typed-text {
   cursor: pointer;
 }
 .signInContainer {
-  /* height: 950px; */
-  width: 500px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
   padding: 10px;
   border-radius: 20px;
   background-color: #000000;
@@ -1011,29 +1083,27 @@ span.typed-text {
   font-size: 28px;
 }
 .signInContainerTitle {
-  height: 200px;
+  height: 100px;
   display: flex;
   flex-direction: column;
-  padding: 0px;
+  padding-top: 15px;
   justify-content: center;
   align-items: center;
   color: #FFFFFF;
 }
 .signInContainerTitle img {
-  width: 70px;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  display: none;
 }
 .signInContainerTitle h2 {
   margin: 0px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   text-align: center;
   font-size: 28px;
   color: #FFFFFF;
 }
 .signInContainerTitle h3 {
   margin: 0px;
-  margin-top: -15px;
+  margin-top: 10px;
   text-align: center;
   font-size: 18px;
   color: #FFFFFF;
@@ -1055,6 +1125,7 @@ span.typed-text {
   background-color: #FFFFFF;
 }
 .signInButton {
+  margin-left: 12px;
   color: #000000;
 }
 .thirdPartySignIn {
@@ -1076,13 +1147,14 @@ span.typed-text {
   border-radius: 10px;
   text-transform: uppercase;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
+  font-size: 10px;
 }
 .thirdPartyButton:hover {
   cursor: pointer;
   background-color: #FFCB4C;
 }
 .thirdPartyButton img {
-  margin-left: 40px;
+  margin-left: 10px;
   margin-right: 12px;
   width: 20px;
 }
@@ -1104,6 +1176,7 @@ span.typed-text {
 .emailPassword {
   margin-top: 10px;
   margin-bottom: 20px;
+  margin-left: -15px;
   width: 75%;
 }
 .emailPassword h2 {
@@ -1114,6 +1187,7 @@ span.typed-text {
 .emailPassword h3 {
   margin-top: 20px;
   margin-bottom: 33px;
+  margin-left: 15px;
   text-align: center;
   font-size: 20px;
   color: #FFFFFF;
@@ -1125,6 +1199,7 @@ span.typed-text {
 .emailPassword h4 {
   margin-top: 5px;
   margin-bottom: 0px;
+  margin-left: 15px;
   text-align: center;
   font-size: 16px;
   color: #FFFFFF;
@@ -1132,6 +1207,7 @@ span.typed-text {
 .emailPassword h5 {
   margin-top: 5px;
   margin-bottom: 0px;
+  margin-left: 15px;
   text-align: center;
   font-size: 16px;
   color: #FFCB4C;
@@ -1171,7 +1247,8 @@ span.typed-text {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 10px;
+  margin-left: 15px;
   background-color: #FFCB4C;
   margin-bottom: 10px;
   font-family: "Monaco";
@@ -1185,21 +1262,20 @@ span.typed-text {
   cursor: pointer;
 }
 .aboutContainer {
-  width: 1200px;
-  margin-top: 50px;
+  min-width: 300px;
+  width: 90%;
+  margin-top: 20px;
   padding: 20px;
-  padding-bottom: 50px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   text-align: left;
 }
 .aboutContainer h2 {
-  width: 100%;
   margin: 0;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
   text-align: left;
+  font-size: 22px;
 }
 .aboutContainer h3 {
   display: flex;
@@ -1216,6 +1292,7 @@ span.typed-text {
   text-transform: uppercase;
   font-size: 20px;
   margin-bottom: 0px;
+  margin-left: 50px;
 }
 .aboutContainer ol p {
   margin-top: 5px;
@@ -1236,22 +1313,24 @@ span.typed-text {
   color:#FFFFFF
 }
 .aboutBox {
-  width: 550px;
+  min-width: 300px;
   margin-top: -10px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
   margin-bottom: 20px;
   padding-top: 15px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
   border: 2px #FFFFFF;
   border-radius: 10px;
 }
 .aboutBox ol {
   margin-top: -25px;
+  margin-left: 30px;
+  font-size: 15px;
 }
 .privacyPolicyContainer {
-  width: 1200px;
+  min-width: 300px;
   margin-top: 50px;
   padding: 20px;
   margin-bottom: 70px;
@@ -1271,14 +1350,22 @@ span.typed-text {
   text-align: left;
   text-transform: uppercase;
   font-size: 22px;
+  color: #FFCB4C;
 }
 .privacyPolicyContainer a {
   color: #FFFFFF;
 }
+.privacyPolicyContainer ol li {
+    list-style: none;
+}
+.privacyPolicyContainer ol li h3 {
+    color: #FFCB4C;
+    list-style: none;
+}
 .faqContainer {
-  width: 1000px;
-  padding: 20px;
-  margin-bottom: 20px;
+  max-width: 700px;
+  padding: 10px;
+  margin: 10px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -1287,13 +1374,13 @@ span.typed-text {
   text-align: left;
 }
 .faqContainer h1 {
-  margin-bottom: 0px;
+  margin: 0px;
   text-align: center;
-  font-size: 38px;
+  font-size: 30px;
 }
 .faqContainer input {
   height: 40px;
-  width: 600px;
+  width: 70%;
   margin-top: 20px;
   margin-bottom: 30px;
   padding-left: 10px;
@@ -1301,14 +1388,16 @@ span.typed-text {
   border-radius: 5px;
   border: 2px #000000;
   font-family: 'Monaco';
-  font-size: 18px;
+  font-size: 14px;
   outline: none;
 }
 .faqTitle {
   width: 100%;
 }
 .faqTitle h2 {
-  margin-top: 50px;
+  font-size: 24px;
+  margin-top: 30px;
+  margin-bottom: 10px;
 }
 .faqContent {
   display: flex;
@@ -1345,18 +1434,31 @@ span.typed-text {
 .contactContainer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 70px;
+  margin-bottom: 10px;
+}
+.contactContainer h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.contactContainer p {
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .contactForm {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+.contactFormItemContainer {
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 .contactFormItem {
-  width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-right: 520px;
   align-items: center;
 }
 .contactFormItem h2 {
@@ -1364,7 +1466,7 @@ span.typed-text {
 }
 .contactFormItem input {
   height: 40px;
-  width: 300px;
+  width: 200px;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
@@ -1376,10 +1478,13 @@ span.typed-text {
 .contactFormItemLong {
   margin-bottom: 20px;
 }
+.contactFormItemLong h2 {
+    margin-top: 20px;
+  }
 .messageInput {
   margin-bottom: 20px;
   height: 300px;
-  width: 500px;
+  width: 300px;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
@@ -2097,34 +2202,54 @@ span.typed-text {
   position: absolute;
   z-index: 3;
 }
+.roadmap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.roadmap h1 {
+    margin: 10px;
+}
 .roadmapTitle h1 {
-  font-size: 42px;
+  font-size: 22px;
 }
 .roadmapTitle h2 {
   text-transform: unset;
-  font-size: 20px;
+  font-size: 16px;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .roadmapContainer {
-  max-width: 900px;
+  max-width: 500px;
+  margin-left: 20px;
+  margin-right: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 20px;
 }
+.roadmapContainer h2 {
+    font-size: 22px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
 .roadmapItem {
-  width: 90%;
+  width: 85%;
   display: flex;
   flex-direction: column;
-  margin: 15px;
+  align-items: center;
+  margin: 5px;
   border-radius: 15px;
   background-color: #292929;
-  padding: 30px;
+  padding: 20px;
 }
 .roadmapItem-built {
   border: 2px solid #FFCB4C;
 }
 .roadmapItemRow1 {
-  height: 65px;
+  height: 45px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -2137,19 +2262,21 @@ span.typed-text {
   align-items: center;
 }
 .roadmapItemRow3 {
-  height: 65px;
+  min-height: 65px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 .roadmapItemTitle {
-  margin-right: 40px;
+  margin-right: 0px;
 }
 .roadmapItemTitle h2 {
   color: #FFFFFF;
+  font-size: 20px;
+  margin-top: -10px;
 }
 .roadmapItemTags {
-  display: flex;
+  display: none;
   flex-direction: row;
 }
 .roadmapItemTag {
@@ -2175,13 +2302,14 @@ span.typed-text {
 }
 .roadmapItemDescription p {
   color: #FFFFFF;
+  text-align: center;
+  margin-top: -20px;
 }
 .roadmapItemVote button {
   width: 200px;
   height: 50px;
+  margin-top: 20px;
   display: flex;
-  margin-left: -2px;
-  justify-content: space-between;
   align-items: center;
   cursor: pointer;
   color: #000000;
@@ -2221,27 +2349,29 @@ span.typed-text {
   font-size: 14px;
 }
 .roadmapItemSubmit {
-  height: 30px;
+    margin-top: 30px;
+  height: 120px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
 }
 .roadmapItemSubmit input {
-  width: 400px;
+  width: 280px;
   height: 30px;
   border-radius: 10px;
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
   font-family: "Monaco";
-  font-size: 16px;
+  font-size: 13px;
   outline: none;
 }
 .roadmapItemSubmit button {
   width: 120px;
   height: 40px;
   display: flex;
-  margin-left: 20px;
+  margin-top: 20px;
+  margin-left: 0px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -2264,7 +2394,7 @@ span.typed-text {
 }
 .roadmapMoreButton {
   height: 50px;
-  width: 600px;
+  width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2290,7 +2420,7 @@ span.typed-text {
 .roadmapOverlay.active {
   display: flex;
   justify-content: center;
-  padding-top: 200px;
+  padding-top: 100px;
   height: 100%;
   width: 100%;
   position: fixed;
@@ -2307,7 +2437,7 @@ span.typed-text {
   background-color: #000000;
   border-radius: 25px;
   height: 400px;
-  width: 600px;
+  width: 300px;
   padding: 20px;
   border: 5px solid #FFCB4C;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
@@ -2317,14 +2447,14 @@ span.typed-text {
 }
 .roadmapOverlayForm {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 20px;
   margin-left: 0px;
 }
 .roadmapOverlayForm input {
-  width: 300px;
+  width: 280px;
   height: 25px;
   border-radius: 10px;
   padding: 10px;
@@ -2366,8 +2496,8 @@ span.typed-text {
   box-shadow: 0px 15px 10px -15px #C8C8C8;
   height: 30px;
   width: 30px;
-  margin-top: -45px;
-  margin-left: 595px;
+  margin-top: -50px;
+  margin-left: 280px;
   position: absolute;
   z-index: 3;
 }
@@ -2659,4 +2789,9 @@ span.typed-text {
 .faqsAdmin tr:hover {
   cursor: pointer;
   background-color: #FFCB4C;
+}
+.signUpForm iframe {
+  border: none;
+  height: 580px;
+  width: 580px;
 }

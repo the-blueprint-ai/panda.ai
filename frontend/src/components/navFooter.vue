@@ -28,7 +28,7 @@ export default {
     <div class="footerContainer">
       <div class="brandSocialsHolder">
         <div class="footerBranding">
-          <div class="brandHolder">
+          <div class="brandHolderBottom">
             <router-link to="/">
               <img class="logo" src="../../src/assets/panda.png" width="50" />
             </router-link>

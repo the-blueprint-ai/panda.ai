@@ -1,17 +1,22 @@
-export async function saveEmail(userId, email) {
+export async function sendEmail(from_email, to_emails, subject, html_content) {
   return new Promise((resolve, reject) => {
-    const saveData = async () => {
+    const send = async () => {
       try {
         const url =
           import.meta.env.VITE_APP_API_URL +
-          "/users/save?user_id=" +
-          userId +
-          "&email=" +
-          email;
+          "/email/send?from_email=" +
+          from_email +
+          "&to_emails=" +
+          to_emails +
+          "&subject=" +
+          subject +
+          "&html_content=" +
+          html_content;
 
         const res = await fetch(url, {
           method: "POST",
         });
+        console.log("sendEmail not called here");
         // Check if the response status indicates an error
         if (!res.ok) {
           const errorResponse = await res.json();
@@ -22,11 +27,15 @@ export async function saveEmail(userId, email) {
         resolve(); // Resolve the promise when the request is successful
       } catch (error) {
         // Handle the error
-        console.error("An error occurred while saving the email:", error);
+        console.error("An error occurred while sending the email:", error);
         reject(error); // Reject the promise with the error
       }
     };
 
-    saveData();
+    send().catch((error) => {
+      // Handle the error
+      console.error("An error occurred while sending the email:", error);
+      reject(error); // Reject the promise with the error
+    });
   });
 }

@@ -53,7 +53,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style>
-@import "../assets/styles/panda-main.css";
-</style>

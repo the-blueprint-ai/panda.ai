@@ -93,13 +93,15 @@ export default defineComponent({
           get in touch with us using the form below:
         </p>
         <div class="contactForm">
-          <div class="contactFormItem">
-            <h2>Email:</h2>
-            <input v-model="email" class="emailInput" />
-          </div>
-          <div class="contactFormItem">
-            <h2>Confirm Email:</h2>
-            <input v-model="confirmedEmail" class="emailInput" />
+          <div class="contactFormItemContainer">
+            <div class="contactFormItem">
+              <h2>Email:</h2>
+              <input v-model="email" class="emailInput" />
+            </div>
+            <div class="contactFormItem">
+              <h2>Confirm Email:</h2>
+              <input v-model="confirmedEmail" class="emailInput" />
+            </div>
           </div>
           <div class="contactFormItemLong">
             <h2>Please enter your message:</h2>
@@ -118,7 +120,3 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
-
-<style>
-@import "../assets/styles/panda-main.css";
-</style>

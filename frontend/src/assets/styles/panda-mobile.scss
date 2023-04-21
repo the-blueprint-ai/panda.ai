@@ -135,11 +135,11 @@ span.typed-text {
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  justify-content: left;
+  justify-content: flex-start;
   align-items: center;
   min-height: 78vh;
   font-family: "Monaco";
-  padding-bottom: 30px;
+  padding-bottom: 10px;
   word-wrap: break-word;
   overflow: hidden;
 }
@@ -340,7 +340,7 @@ span.typed-text {
   width: 110px;
 }
 .mainContainer {
-  width: 95%;
+  width: 98%;
   height: 87vh;
   margin: 2px;
   background-color: #EFEFEF;
@@ -354,7 +354,9 @@ span.typed-text {
   overflow-x: hidden;
 }
 .onboardingContainer {
-  margin: 20px;
+  width: 97%;
+  height: 87vh;
+  margin: 5px;
   background-color: #EFEFEF;
   text-align: left;
   display: flex;
@@ -362,6 +364,8 @@ span.typed-text {
   flex-direction: row;
   justify-content: top;
   align-items: left;
+  font-size: 14px;
+  overflow-x: hidden;
 }
 .chatHistoryContainer {
   display: none;
@@ -445,7 +449,7 @@ span.typed-text {
   color: #000000;
   padding: 5px;
   font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
-  font-size: 15px;
+  font-size: 14px;
   overflow: wrap;
   resize: none;
 }
@@ -495,6 +499,7 @@ span.typed-text {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
 }
 .seeMore {
   display: flex;
@@ -530,7 +535,14 @@ span.typed-text {
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
+.newsAnswer ol {
+    margin-left: 25px;
+}
+.newsTitle {
+  margin-bottom: 10px;
+}
 .wikiAnswer {
+  width: 68vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -550,15 +562,18 @@ span.typed-text {
 }
 .wikiAnswerTitle {
   text-align: center;
+  margin-bottom: 10px;
 }
 .wikiAnswerSummary {
   margin: 0px;
+  word-wrap: break-word;
 }
 .wikiAnswerSummary p {
   margin: 0px;
+  word-wrap: break-word;
 }
 .youTubeAnswer {
-  width: 62vw;
+  width: 68vw;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
@@ -582,25 +597,32 @@ span.typed-text {
   margin-bottom: 5px;
 }
 .googleMapsAnswer {
-  width: 62vw;
+  width: 68vw;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 10px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
+.googleMapsAnswer h2 {
+    margin-bottom: 10px;
+  }
 .googleMapsAnswer h2:hover {
   color: #FFCB4C;
 }
 .googleMapsAnswerMap {
+  width: 66vw;
   border: 5px solid #FFFFFF;
 }
+.googleMapsAnswerMap iframe {
+  width: 66vw;
+}
 .googleImageAnswer {
-  width: 62vw;
+  width: 68vw;
   display: flex;
   flex-direction: column;
   background-color: #EFEFEF;
@@ -634,7 +656,7 @@ span.typed-text {
   opacity: 50%;
 }
 .googleSearchAnswer {
-  width: 62vw;
+  width: 70vw;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
@@ -654,7 +676,7 @@ span.typed-text {
   color: #FFCB4C;
 }
 .googleSearchItem {
-  width: 58vw;
+  width: 66vw;
   background-color: #FFFFFF;
   padding: 5px;
   margin-bottom: 10px;
@@ -697,7 +719,7 @@ span.typed-text {
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 20px;
+  padding: 10px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -804,6 +826,9 @@ span.typed-text {
 .chatButton:Hover {
   border: 5px solid #FFCB4C;
   background-color: #FFFFFF;
+}
+#undoButton {
+    display: none;
 }
 .userPageButton {
   width: 200px;

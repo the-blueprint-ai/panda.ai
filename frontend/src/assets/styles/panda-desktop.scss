@@ -563,22 +563,24 @@ span.typed-text {
   background-color: #FFFFFF;
 }
 .newsAnswer {
+  width: 650px;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 20px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .wikiAnswer {
+  width: 650px;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 20px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -600,13 +602,14 @@ span.typed-text {
   margin: 0px;
 }
 .youTubeAnswer {
+  width: 650px;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 20px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -617,14 +620,14 @@ span.typed-text {
   border: 7px solid #FFFFFF;
 }
 .googleMapsAnswer {
-  width: 575px;
+  width: 650px;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 20px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -635,7 +638,7 @@ span.typed-text {
   border: 7px solid #FFFFFF;
 }
 .googleImageAnswer {
-  width: 575px;
+  width: 650px;
   display: flex;
   flex-direction: column;
   background-color: #EFEFEF;
@@ -666,7 +669,7 @@ span.typed-text {
   opacity: 50%;
 }
 .googleSearchAnswer {
-  width: 575px;
+  width: 650px;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
@@ -685,7 +688,7 @@ span.typed-text {
   color: #FFCB4C;
 }
 .googleSearchItem {
-  width: 550px;
+  width: 620px;
   background-color: #FFFFFF;
   padding: 15px;
   margin-bottom: 20px;
@@ -720,7 +723,7 @@ span.typed-text {
   color: #FFCB4C
 }
 .spotifyMusicAnswer {
-  width: 575px;
+  width: 650px;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
@@ -732,12 +735,13 @@ span.typed-text {
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .tmdbAnswer {
+  width: 650px;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0px;
   background-color: #EFEFEF;
-  padding: 30px;
+  padding: 20px;
   border-radius: 20px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -2810,7 +2814,10 @@ span.typed-text {
     display: none;
   }
   .mainContainer {
-  max-width: 900px;
+    max-width: 900px;
+  }
+  .onboardingContainer {
+    max-width: 580px;
   }
   .chatHistoryContainer {
     width: 300px;
@@ -2850,7 +2857,7 @@ span.typed-text {
     padding: 20px;
   }
   .googleSearchItem {
-    width: 360px;
+    width: 380px;
   }
   .googleSearchItemContent {
     flex-direction: column;
@@ -2891,6 +2898,10 @@ span.typed-text {
     max-width: 700px;
     font-size: 14px;
     }
+  .onboardingContainer {
+    max-width: 580px;
+    font-size: 14px;
+  }
   .chatHistoryContainer {
     display: none;
   }

@@ -16,7 +16,7 @@ body {
 h1 {
   color: #FFFFFF;
   text-transform: uppercase;
-  font-size: 4em;
+  font-size: 60px;
   font-weight: 100;
 }
 h2 {
@@ -28,6 +28,79 @@ h3 {
 }
 span {
   font-size: normal;
+}
+.spacer{
+  margin-top: 50px;
+}
+.blinking-cursor {
+  font-size: 60px;
+  font-weight: bold;
+  margin-left: 0px;
+  color: #FFFFFF;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+.blinking-cursor2 {
+  font-size: 60px;
+  font-weight: bold;
+  margin-left: -32px;
+  color: #FFFFFF;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+span.typed-text {
+  margin-left: 115px;
+}
+@keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-moz-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-webkit-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-ms-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
+}
+@-o-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: #FFFFFF;
+  }
 }
 .bodyG {
   background-color: #EFEFEF;
@@ -70,6 +143,9 @@ span {
   justify-content: center;
   font-family: "Monaco";
 }
+.mobileMenu {
+  display: none;
+}
 .navbarbar {
   height: 1px;
   width: 97%;
@@ -77,13 +153,23 @@ span {
   display: flex;
   background-color: #000000;
 }
-.brandHolder {
+.brandHolderTop {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-right: 30px;
 }
-.brandHolder a {
+.brandHolderTop a {
+  text-decoration: none;
+  color: #000000;
+}
+.brandHolderBottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 30px;
+}
+.brandHolderBottom a {
   text-decoration: none;
   color: #000000;
 }
@@ -844,79 +930,6 @@ span {
   border: 3px solid #FFCB4C;
   transform: scale(1.1);
 }
-.spacer{
-  margin-top: 50px;
-}
-.blinking-cursor {
-  font-size: 4rem;
-  font-weight: bold;
-  margin-left: 0px;
-  color: #FFFFFF;
-  -webkit-animation: 1s blink step-end infinite;
-  -moz-animation: 1s blink step-end infinite;
-  -ms-animation: 1s blink step-end infinite;
-  -o-animation: 1s blink step-end infinite;
-  animation: 1s blink step-end infinite;
-}
-.blinking-cursor2 {
-  font-size: 4rem;
-  font-weight: bold;
-  margin-left: -34px;
-  color: #FFFFFF;
-  -webkit-animation: 1s blink step-end infinite;
-  -moz-animation: 1s blink step-end infinite;
-  -ms-animation: 1s blink step-end infinite;
-  -o-animation: 1s blink step-end infinite;
-  animation: 1s blink step-end infinite;
-}
-span.typed-text {
-  margin-left: 115px;
-}
-@keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-moz-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-webkit-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-ms-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
-@-o-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #FFFFFF;
-  }
-}
 .navFooter {
   height: 400px;
   background-color: #FFFFFF;
@@ -1287,7 +1300,7 @@ span.typed-text {
   cursor: pointer;
 }
 .aboutContainer {
-  width: 1200px;
+  max-width: 1200px;
   margin-top: 50px;
   padding: 20px;
   padding-bottom: 50px;
@@ -1353,7 +1366,7 @@ span.typed-text {
   margin-top: -25px;
 }
 .privacyPolicyContainer {
-  width: 1200px;
+  max-width: 1200px;
   margin-top: 50px;
   padding: 20px;
   margin-bottom: 70px;
@@ -1373,14 +1386,15 @@ span.typed-text {
   text-align: left;
   text-transform: uppercase;
   font-size: 22px;
+  color: #FFCB4C;
 }
 .privacyPolicyContainer a {
   color: #FFFFFF;
 }
 .faqContainer {
-  width: 1000px;
+  max-width: 1000px;
   padding: 20px;
-  margin-bottom: 20px;
+  margin: 20px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -1395,7 +1409,8 @@ span.typed-text {
 }
 .faqContainer input {
   height: 40px;
-  width: 600px;
+  width: 70%;
+  max-width: 600px;
   margin-top: 20px;
   margin-bottom: 30px;
   padding-left: 10px;
@@ -1449,16 +1464,26 @@ span.typed-text {
   flex-direction: column;
   margin-bottom: 70px;
 }
+.contactContainer p {
+  max-width: 800px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 .contactForm {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.contactFormItem {
-  width: 100%;
+.contactFormItemContainer {
+  max-width: 550px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contactFormItem {
+  display: flex;
+  margin-left: -30px;
   justify-content: flex-end;
-  margin-right: 520px;
   align-items: center;
 }
 .contactFormItem h2 {
@@ -2766,4 +2791,125 @@ span.typed-text {
   border: none;
   height: 580px;
   width: 580px;
+}
+
+@media screen and (max-width: 1284px) {
+  .brandSocialsHolder {
+    width: 100%;
+    align-items: center;
+    margin-left: 0px;
+  }
+  .brandSocialsHolder h3 {
+    margin-top: 15px;
+    margin-left: -15px;
+  }
+  .socialsHolder {
+    margin-left: 10px;
+  }
+  .footerMenus {
+    display: none;
+  }
+  .mainContainer {
+  max-width: 900px;
+  }
+  .chatHistoryContainer {
+    width: 300px;
+  }
+  .chatUserChatHistorySearch {
+    width: 275px;
+    margin-left: 45px;
+  }
+  .chatUserChatHistorySearchBox {
+    width: 260px;
+    font-size: 14px;
+  }
+  .clearChatSearch {
+    margin-top: -51px;
+    margin-left: 290px;
+  }
+  .chatHistoryDateListChat {
+    width: 300px;
+    margin-left: 40px;
+  }
+  .chatContainer {
+    max-width: 550px;
+  }
+  .chatMessage {
+    max-width: 550px;
+  }
+  .pandaChat {
+    max-width: 545px;
+    padding-right: 0px;
+  }
+  .userChat {
+    max-width: 545px;
+    padding-left: 0px;
+  }
+  .newsAnswer, .wikiAnswer, .youTubeAnswer, .googleMapsAnswer, .googleImageAnswer, .googleSearchAnswer, .spotifyMusicAnswer, .tmdbAnswer {
+    width: 380px;
+    padding: 20px;
+  }
+  .googleSearchItem {
+    width: 360px;
+  }
+  .googleSearchItemContent {
+    flex-direction: column;
+  }
+  .googleSearchItemContent img {
+    width: 150px;
+  }
+  .youTubeAnswer iframe {
+    height: 215px;
+    width: 380px;
+  }
+  .googleMapsAnswer iframe {
+    width: 380px;
+  }
+  .tmdbAnswerContentImage img {
+    max-width: 150px;
+    margin-right: 10px;
+    margin-left: 0px;
+  }
+  .tmdbAnswerContentOverviewInfo {
+    display: none;
+  }
+}
+@media screen and (max-width: 909px) {
+  h1 {
+    font-size: 45px;
+    margin-left: -30px;
+  }
+  .blinking-cursor {
+    font-size: 45px;
+    margin-left: 20px;
+  }
+  .blinking-cursor2 {
+    font-size: 45px;
+    margin-left: -30px;
+  }
+  .mainContainer {
+    max-width: 700px;
+    font-size: 14px;
+    }
+  .chatHistoryContainer {
+    display: none;
+  }
+  .chatContainer {
+    max-width: 690px;
+  }
+  .chatMessage {
+    max-width: 690px;
+  }
+  .pandaChat {
+    max-width: 685px;
+    padding-right: 0px;
+  }
+  .userChat {
+    max-width: 685px;
+    padding-left: 0px;
+  }
+  .newsAnswer, .wikiAnswer, .youTubeAnswer, .googleMapsAnswer, .googleImageAnswer, .googleSearchAnswer, .spotifyMusicAnswer, .tmdbAnswer {
+    width: 500px;
+    padding: 20px;
+  }
 }

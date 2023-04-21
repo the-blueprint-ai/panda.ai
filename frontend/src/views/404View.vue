@@ -16,7 +16,7 @@ export default defineComponent({
     <navBar></navBar>
     <div class="body">
       <div>
-        <img src="../../src/assets/404.png" width="1200"/>
+        <img class="page404" src="../../src/assets/404.png" width="1200"/>
       </div>
     </div>
     <navFooter></navFooter>

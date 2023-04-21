@@ -118,7 +118,7 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div class="body">
-      <div>
+      <div class="roadmap">
         <h1>🐼</h1>
         <div class="roadmapTitle">
           <h1>panda.ai Product Roadmap</h1>

@@ -155,56 +155,54 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div class="bodyG">
-      <div>
-        <div class="mainContainer">
-          <div v-if="userStoreChatHistory" class="chatHistoryContainer">
-            <h2>Chat History</h2>
-            <div class="chatHistory">
-              <ChatUserChatHistory
-                v-if="historyMenu"
-                :history-menu="historyMenu"
-                :user-store-chat-history="userStoreChatHistory"
-                :user-id="userId"
-                @update-search-term="currentSearchTerm = $event"
-              ></ChatUserChatHistory>
-            </div>
-            <button class="startNewChat" @click="startNewChat">
-              Start new chat
-            </button>
+      <div class="mainContainer">
+        <div v-if="userStoreChatHistory" class="chatHistoryContainer">
+          <h2>Chat History</h2>
+          <div class="chatHistory">
+            <ChatUserChatHistory
+              v-if="historyMenu"
+              :history-menu="historyMenu"
+              :user-store-chat-history="userStoreChatHistory"
+              :user-id="userId"
+              @update-search-term="currentSearchTerm = $event"
+            ></ChatUserChatHistory>
           </div>
-          <div class="mainChatContainer">
-            <div class="chatContainer" id="chatContainer">
-              <chatMessage
-                v-for="(item, index) in chatHistory"
-                :message="item"
-                :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
-                :key="item.user + '-' + index"
-                :search-term="currentSearchTerm"
-                :is-disabled="this.isDisabled"
-              ></chatMessage>
-            </div>
-            <div class="userInputContainer">
-              <img v-bind:src="avatar" class="chatAvatar" />
-              <div class="userInput">
-                <textarea
-                  :disabled="isDisabled"
-                  class="input"
-                  v-model="messageToSend"
-                  @keydown.enter.stop.prevent="submitMessage(this.username)"
-                  id="userInput"
-                  name="userInput"
-                  placeholder="enter your message here"
-                  ref="messageInput"
-                ></textarea>
-                <button
-                  :disabled="isDisabled"
-                  class="chatButton"
-                  id="sendButton"
-                  @click="submitMessage(this.username)"
-                >
-                  Send
-                </button>
-              </div>
+          <button class="startNewChat" @click="startNewChat">
+            Start new chat
+          </button>
+        </div>
+        <div class="mainChatContainer">
+          <div class="chatContainer" id="chatContainer">
+            <chatMessage
+              v-for="(item, index) in chatHistory"
+              :message="item"
+              :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
+              :key="item.user + '-' + index"
+              :search-term="currentSearchTerm"
+              :is-disabled="this.isDisabled"
+            ></chatMessage>
+          </div>
+          <div class="userInputContainer">
+            <img v-bind:src="avatar" class="chatAvatar" />
+            <div class="userInput">
+              <textarea
+                :disabled="isDisabled"
+                class="input"
+                v-model="messageToSend"
+                @keydown.enter.stop.prevent="submitMessage(this.username)"
+                id="userInput"
+                name="userInput"
+                placeholder="enter your message here"
+                ref="messageInput"
+              ></textarea>
+              <button
+                :disabled="isDisabled"
+                class="chatButton"
+                id="sendButton"
+                @click="submitMessage(this.username)"
+              >
+                Send
+              </button>
             </div>
           </div>
         </div>

@@ -74,7 +74,7 @@ export default defineComponent({
       onboarded: "getStoreOnboarded",
       subscriber: "getStoreSubscriber",
       admin: "getStoreAdmin",
-      userChatHistory: "getStoreUserChatHistory",
+      userStoreChatHistory: "getStoreUserChatHistory",
     }),
     isEmailValid() {
       return this.validateEmail(this.new_email);
@@ -178,13 +178,45 @@ export default defineComponent({
         }
       };
     },
+    cropToSquare: function (img, callback) {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const width = img.width;
+      const height = img.height;
+      const size = Math.min(width, height);
+
+      canvas.width = size;
+      canvas.height = size;
+
+      const offsetX = width > height ? (width - height) / 2 : 0;
+      const offsetY = height > width ? (height - width) / 2 : 0;
+
+      ctx.drawImage(img, offsetX, offsetY, size, size, 0, 0, size, size);
+      callback(canvas.toDataURL());
+    },
+    dataURLToBlob: function (dataURL) {
+      const binary = atob(dataURL.split(",")[1]);
+      const array = [];
+      for (let i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], { type: "image/png" });
+    },
     async handleAvatarUpload(event) {
       const file = event.target.files[0];
       this.formData = new FormData();
       let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = async (e) => {
-        this.formData.append("file", file);
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          this.cropToSquare(img, (croppedDataURL) => {
+            const croppedBlob = this.dataURLToBlob(croppedDataURL);
+            this.formData.append("file", croppedBlob, this.fileName);
+          });
+        };
 
         // Process the uploaded image file here
         try {
@@ -521,7 +553,7 @@ export default defineComponent({
               :subscription-menu="subscriptionMenu"
               :data-menu="dataMenu"
               :settings-menu="settingsMenu"
-              :user-chat-history="userChatHistory"
+              :user-chat-history="userStoreChatHistory"
               :is-disabled="this.isDisabled"
             ></AccountUserChatHistory>
             <UserIntegrations

@@ -162,7 +162,7 @@ export default {
     <div class="userChatHistoryContent" id="chatContainer">
       <span v-if="selectedChat">
         <chatMessage
-          v-for="(contentItem, contentIndex) in selectedChat.content"
+          v-for="(contentItem, contentIndex) in selectedChat.content.slice().reverse()"
           :message="contentItem"
           :class="contentItem.user === 'panda' ? 'pandaChat' : 'userChat'"
           :key="contentIndex"

@@ -1,12 +1,15 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import axios from "axios";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default {
   data() {
     return {
       formData: null,
       imageDropPhrase: "",
+      loading: false,
+      buttonText: "SAVE",
     };
   },
   props: ["userId", "chatName"],
@@ -54,7 +57,8 @@ export default {
       } else if (chatName == "piratePanda") {
         this.imageDropPhrase = "drop it, ye scallywag...";
       } else if (chatName == "streetPanda") {
-        this.imageDropPhrase = "drop it like a thotty, drop it like a thotty...";
+        this.imageDropPhrase =
+          "drop it like a thotty, drop it like a thotty...";
       } else if (chatName == "pandaWeather") {
         this.imageDropPhrase = "drop it, human...";
       }
@@ -69,6 +73,31 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+    cropToSquare: function (img, callback) {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const width = img.width;
+      const height = img.height;
+      const size = Math.min(width, height);
+
+      canvas.width = size;
+      canvas.height = size;
+
+      const offsetX = width > height ? (width - height) / 2 : 0;
+      const offsetY = height > width ? (height - width) / 2 : 0;
+
+      ctx.drawImage(img, offsetX, offsetY, size, size, 0, 0, size, size);
+      callback(canvas.toDataURL());
+    },
+    dataURLToBlob: function (dataURL) {
+      const binary = atob(dataURL.split(",")[1]);
+      const array = [];
+      for (let i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], { type: "image/png" });
     },
     handleFileChange: function (event) {
       this.file = event.files[0];
@@ -99,15 +128,27 @@ export default {
       let reader = new FileReader();
       reader.readAsDataURL(this.file);
       reader.onload = (e) => {
-        this.setPreview(e.target.result);
-        this.formData.append("file", this.file);
-        this.setAvatar(this.preview);
-        this.setSaveButton("active");
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          this.cropToSquare(img, (croppedDataURL) => {
+            this.setPreview(croppedDataURL);
+            // Convert the cropped DataURL to a Blob and append it to formData
+            const croppedBlob = this.dataURLToBlob(croppedDataURL);
+            this.formData.append("file", croppedBlob, this.fileName);
+            this.setAvatar(this.preview);
+            this.setSaveButton("active");
+          });
+        };
       };
     },
     save: async function () {
+      this.loading = true;
       try {
-        const url = import.meta.env.VITE_APP_API_URL + "/uploadimage?userid=" + this.userId;
+        const url =
+          import.meta.env.VITE_APP_API_URL +
+          "/uploadimage?userid=" +
+          this.userId;
         const res = await fetch(url, {
           method: "POST",
           body: this.formData,
@@ -140,8 +181,12 @@ export default {
       this.setPreview(null);
       this.setAvatar("../../src/assets/user.png");
       this.formData = null;
+      this.loading = false;
       this.setSaveButton(null);
     },
+  },
+  components: {
+    SpinnerComponent,
   },
 };
 </script>
@@ -162,7 +207,11 @@ export default {
       @change="handleFileChange($event.target)"
       required
     />
-    <p v-if="(preview == null) & (fileError == null)" for="imageInput" v-text="imageDropPhrase"></p>
+    <p
+      v-if="(preview == null) & (fileError == null)"
+      for="imageInput"
+      v-text="imageDropPhrase"
+    ></p>
     <div v-if="this.preview">
       <img
         src="../assets/icons/x-circle.svg"
@@ -178,7 +227,10 @@ export default {
       type="submit"
       v-on:click="save"
     >
-      Save
+      <SpinnerComponent
+        :loading="this.loading"
+        :button-text="this.buttonText"
+      ></SpinnerComponent>
     </button>
   </div>
 </template>

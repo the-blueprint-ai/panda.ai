@@ -1588,6 +1588,9 @@ span.typed-text {
   cursor: pointer;
 }
 .saveButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   color: #000000;
   background-color: #ffcb4c;

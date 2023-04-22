@@ -22,6 +22,16 @@ export default defineComponent({
     };
   },
   watch: {},
+  async mounted() {
+    await this.getSession();
+    await this.getUserInfo();
+    const { userData } = getUserData(this.$store, this.userId);
+    userData(this.userId);
+    const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
+    userChatHistory(this.userId);
+    this.emptyChatStoreHistory;
+    this.startNewChat();
+  },
   computed: {
     ...mapGetters("userStore", {
       session: "getStoreSession",
@@ -46,16 +56,6 @@ export default defineComponent({
     isDisabled() {
       return this.$store.state.chatStore.isDisabled;
     },
-  },
-  async mounted() {
-    await this.getSession();
-    await this.getUserInfo();
-    const { userData } = getUserData(this.$store, this.userId);
-    userData(this.userId);
-    const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
-    userChatHistory(this.userId);
-    this.emptyChatStoreHistory;
-    this.startNewChat();
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),

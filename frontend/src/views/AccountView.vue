@@ -74,7 +74,7 @@ export default defineComponent({
       onboarded: "getStoreOnboarded",
       subscriber: "getStoreSubscriber",
       admin: "getStoreAdmin",
-      userChatHistory: "getStoreUserChatHistory",
+      userStoreChatHistory: "getStoreUserChatHistory",
     }),
     isEmailValid() {
       return this.validateEmail(this.new_email);
@@ -521,7 +521,7 @@ export default defineComponent({
               :subscription-menu="subscriptionMenu"
               :data-menu="dataMenu"
               :settings-menu="settingsMenu"
-              :user-chat-history="userChatHistory"
+              :user-chat-history="userStoreChatHistory"
               :is-disabled="this.isDisabled"
             ></AccountUserChatHistory>
             <UserIntegrations

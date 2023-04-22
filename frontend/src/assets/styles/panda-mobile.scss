@@ -855,6 +855,29 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   background-color: #FFFFFF;
 }
+.startNewChatSmall {
+  display: flex;
+  cursor: pointer;
+  background-color: #FFCB4C;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 1rem;
+  color: #000000;
+  font-size: large;
+  font-family: "Monaco";
+  width: 150px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  font-size: 12px;
+}
+.startNewChatSmall:Hover {
+  border: 5px solid #FFCB4C;
+  background-color: #FFFFFF;
+}
 .letsChat {
   cursor: pointer;
   background-color: #FFCB4C;
@@ -1847,11 +1870,7 @@ span.typed-text {
   white-space: nowrap;
 }
 .chatHistorySearch {
-  margin-left: -15px;
-  padding-left: 15px;
-  padding-right: 15px;
-  text-align: center;
-  border-bottom: 1px solid lightgray;
+  display: none;
 }
 .chatHistorySearchBox {
   height: 30px;

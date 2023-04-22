@@ -207,6 +207,7 @@ export default defineComponent({
           </div>
         </div>
       </div>
+      <button class="startNewChatSmall" @click="startNewChat">Start new chat</button>
     </div>
     <navFooter></navFooter>
   </main>

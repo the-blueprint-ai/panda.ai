@@ -47,7 +47,7 @@ class NewsSearchTool(BaseTool):
         for i, article in enumerate(top_5_articles):
             source_name = article['source'].get('name') or article['source'].get('Name') or "Unknown"
             html_list_items.append(f"<li><a href='{article['url']}' target='_blank'><strong>{article['title']}</strong> ({source_name})</a></li>")
-        html_list = f"<div class='newsAnswer'><h2 class='newsTitle'>{query}</h2><ol>" + "".join(html_list_items) + "</ol></div>"
+        html_list = f"<div class='newsAnswer'><h2 class='newsTitle'>{query} NEWS</h2><ol>" + "".join(html_list_items) + "</ol></div>"
         
         return html_list
 

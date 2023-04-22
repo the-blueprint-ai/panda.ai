@@ -10,6 +10,7 @@ import ChatUserChatHistory from "../components/chatUserChatHistory.vue";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 import { updateUserChatHistory } from "../composables/updateUserChatHistory.js";
 import { pandaChat } from "../composables/pandaChat.js";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
@@ -19,6 +20,9 @@ export default defineComponent({
       historyMenu: true,
       currentSearchTerm: null,
       activeChat: null,
+      thinkingAvatar: "../../assets/user.png",
+      loading: false,
+      buttonText: "Send",
     };
   },
   watch: {},
@@ -45,16 +49,13 @@ export default defineComponent({
     }),
     ...mapGetters("chatStore", {
       getChatStoreChatHistory: "getChatStoreChatHistory",
-      getIsDisabled: "getIsDisabled",
+      isDisabled: "getIsDisabled",
     }),
     inputIsVisible() {
       return this.$store.state.chatStore.inputIsVisible;
     },
     chatHistory() {
       return this.$store.state.chatStore.chatHistory;
-    },
-    isDisabled() {
-      return this.$store.state.chatStore.isDisabled;
     },
   },
   methods: {
@@ -85,18 +86,14 @@ export default defineComponent({
       this.focusInput();
     },
     async submitMessage(username) {
+      const tempMessage = this.messageToSend;
+      this.loading = true;
+      this.messageToSend = "🐼 thinking...";
+      this.setIsDisabledValue(true);
       this.addToChatStoreChatHistory({
         user: username,
-        message: this.messageToSend,
+        message: tempMessage,
       });
-      setTimeout(
-        () =>
-          this.addToChatStoreChatHistory({
-            user: "panda",
-            message: "Thinking...",
-          }),
-        1200
-      );
       const waitForResponse = async () => {
         return new Promise((resolve) => {
           const pandaResponse = pandaChat(
@@ -104,18 +101,15 @@ export default defineComponent({
             this.first_name,
             this.last_name,
             this.username,
-            this.messageToSend
+            tempMessage
           );
           resolve(pandaResponse);
         });
       };
 
-      Promise.resolve().then(() => {
-        this.messageToSend = "";
-      });
+      Promise.resolve().then(() => {});
 
       const pandaResponse = await waitForResponse();
-      this.removeChatHistory(1);
       this.addToChatStoreChatHistory({ user: "panda", message: pandaResponse });
 
       // Add code to update the chat history database
@@ -140,6 +134,9 @@ export default defineComponent({
           console.error("Failed to update chat history:", error);
         }
       }
+      this.messageToSend = "";
+      this.setIsDisabledValue(false);
+      this.loading = false;
     },
   },
   components: {
@@ -147,6 +144,7 @@ export default defineComponent({
     navFooter,
     ChatUserChatHistory,
     chatMessage,
+    SpinnerComponent,
   },
 });
 </script>
@@ -179,14 +177,15 @@ export default defineComponent({
               :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
               :key="item.user + '-' + index"
               :search-term="currentSearchTerm"
-              :is-disabled="this.isDisabled"
+              :is-disabled="this.loading"
             ></chatMessage>
           </div>
           <div class="userInputContainer">
-            <img v-bind:src="avatar" class="chatAvatar" />
+            <img v-if="this.loading" src="../assets/thinking.png" class="chatAvatar" />
+            <img v-else v-bind:src="avatar" class="chatAvatar" />
             <div class="userInput">
               <textarea
-                :disabled="isDisabled"
+                :disabled="this.loading"
                 class="input"
                 v-model="messageToSend"
                 @keydown.enter.stop.prevent="submitMessage(this.username)"
@@ -196,18 +195,23 @@ export default defineComponent({
                 ref="messageInput"
               ></textarea>
               <button
-                :disabled="isDisabled"
+                :disabled="this.loading"
                 class="chatButton"
                 id="sendButton"
                 @click="submitMessage(this.username)"
               >
-                Send
+                <SpinnerComponent
+                  :loading="this.loading"
+                  :button-text="this.buttonText"
+                ></SpinnerComponent>
               </button>
             </div>
           </div>
         </div>
       </div>
-      <button class="startNewChatSmall" @click="startNewChat">Start new chat</button>
+      <button class="startNewChatSmall" @click="startNewChat">
+        Start new chat
+      </button>
     </div>
     <navFooter></navFooter>
   </main>

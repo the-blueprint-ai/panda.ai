@@ -5,7 +5,6 @@ import { defineComponent } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
-import { getUserData } from "../composables/getUserData.js";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
 import { emailVerification } from "../composables/emailVerification.js";
 import AccountUserChatHistory from "../components/accountUserChatHistory.vue";
@@ -147,7 +146,17 @@ export default defineComponent({
       let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = async (e) => {
-        this.formData.append("file", file);
+        // Check if the image has the right dimensions (4 times wider than its height)
+        const isRightDimensions = await this.checkImageDimensions(e.target.result);
+        let imageFile = file;
+
+        if (!isRightDimensions) {
+          console.log("Cropping image to the right dimensions.");
+          const croppedBlob = await this.cropImage(e.target.result);
+          imageFile = new File([croppedBlob], file.name, { type: file.type });
+        }
+
+        this.formData.append("file", imageFile);
 
         // Process the uploaded image file here
         try {
@@ -178,22 +187,66 @@ export default defineComponent({
         }
       };
     },
-    cropToSquare: function (img, callback) {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+    async checkImageDimensions(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+          const width = img.width;
+          const height = img.height;
+          if (width === height * 4) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        };
+      });
+    },
+    async cropImage(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+          const width = img.width;
+          const height = img.height;
 
-      const width = img.width;
-      const height = img.height;
-      const size = Math.min(width, height);
+          // Calculate the dimensions of the cropped image
+          const targetHeight = height;
+          const targetWidth = targetHeight * 4;
 
-      canvas.width = size;
-      canvas.height = size;
+          // Create a canvas and draw the cropped image
+          const canvas = document.createElement("canvas");
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+          const ctx = canvas.getContext("2d");
+          const startX = (width - targetWidth) / 2;
+          ctx.drawImage(img, startX, 0, targetWidth, targetHeight, 0, 0, targetWidth, targetHeight);
 
-      const offsetX = width > height ? (width - height) / 2 : 0;
-      const offsetY = height > width ? (height - width) / 2 : 0;
+          // Get the cropped image as a Blob
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, img.type);
+        };
+      });
+    },
+    async cropToSquare(img) {
+      return new Promise((resolve) => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-      ctx.drawImage(img, offsetX, offsetY, size, size, 0, 0, size, size);
-      callback(canvas.toDataURL());
+        const width = img.width;
+        const height = img.height;
+        const size = Math.min(width, height);
+
+        canvas.width = size;
+        canvas.height = size;
+
+        const offsetX = width > height ? (width - height) / 2 : 0;
+        const offsetY = height > width ? (height - width) / 2 : 0;
+
+        ctx.drawImage(img, offsetX, offsetY, size, size, 0, 0, size, size);
+        resolve(canvas.toDataURL());
+      });
     },
     dataURLToBlob: function (dataURL) {
       const binary = atob(dataURL.split(",")[1]);
@@ -211,40 +264,39 @@ export default defineComponent({
       reader.onload = async (e) => {
         const img = new Image();
         img.src = e.target.result;
-        img.onload = () => {
-          this.cropToSquare(img, (croppedDataURL) => {
-            const croppedBlob = this.dataURLToBlob(croppedDataURL);
-            this.formData.append("file", croppedBlob, this.fileName);
-          });
-        };
+        img.onload = async () => {
+          const croppedDataURL = await this.cropToSquare(img);
+          const croppedBlob = this.dataURLToBlob(croppedDataURL);
+          this.formData.append("file", croppedBlob, this.fileName);
 
-        // Process the uploaded image file here
-        try {
-          const url =
-            import.meta.env.VITE_APP_API_URL +
-            "/users/avatar?user_id=" +
-            this.userId;
-          const res = await fetch(url, {
-            method: "POST",
-            body: this.formData,
-          });
+          // Process the uploaded image file here
+          try {
+            const url =
+              import.meta.env.VITE_APP_API_URL +
+              "/users/avatar?user_id=" +
+              this.userId;
+            const res = await fetch(url, {
+              method: "POST",
+              body: this.formData,
+            });
 
-          // Check if the response status indicates an error
-          if (!res.ok) {
-            const errorResponse = await res.json();
-            console.error("Server error response:", errorResponse);
-            throw new Error(`Server responded with status ${res.status}`);
+            // Check if the response status indicates an error
+            if (!res.ok) {
+              const errorResponse = await res.json();
+              console.error("Server error response:", errorResponse);
+              throw new Error(`Server responded with status ${res.status}`);
+            }
+
+            // Parse the JSON response
+            const jsonResponse = await res.json();
+            const updatedAvatarUrl =
+              jsonResponse.url + "?t=" + new Date().getTime();
+            this.$store.commit("userStore/setStoreAvatar", updatedAvatarUrl);
+          } catch (error) {
+            // Handle the error
+            console.error("An error occurred while saving the file:", error);
           }
-
-          // Parse the JSON response
-          const jsonResponse = await res.json();
-          const updatedAvatarUrl =
-            jsonResponse.url + "?t=" + new Date().getTime();
-          this.$store.commit("userStore/setStoreAvatar", updatedAvatarUrl);
-        } catch (error) {
-          // Handle the error
-          console.error("An error occurred while saving the file:", error);
-        }
+        };
       };
     },
     async updateUserData() {

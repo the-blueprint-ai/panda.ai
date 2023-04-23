@@ -176,8 +176,189 @@ span.typed-text {
   justify-content: space-between;
   font-family: "Monaco";
 }
+.hamburgerMenuIcon {
+  margin-top: 5px;
+}
 .mobileMenu {
-    margin-top: 5px;
+  position: relative;
+}
+.hamburgerMenu {
+  position: fixed;
+  top: 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  left: -100%;
+  width: 270px;
+  height: 100%;
+  background-color: #FFFFFF;
+  border-right: 2px solid #000000;
+  transition: left 0.3s ease;
+  font-size: 14px;
+}
+.hamburgerMenu a {
+  width: 100%;
+  display: block;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  color: #000000;
+  text-decoration: none;
+}
+.mobileMenuTop {
+  height: calc(100% - 200px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #FFFFFF;
+}
+.mobileMenuBottom {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.mobileMenuCloseButton {
+  cursor: pointer;
+  color: #000000;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 5px;
+  transition: all 0.5s ease-in-out;
+  border: 5px solid #FFCB4C;
+  border-radius: 50%;
+  font-size: large;
+  font-family: "Monaco";
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+  height: 30px;
+  width: 30px;
+  margin-top: 5px;
+  margin-left: 270px;
+  position: absolute;
+  z-index: 100;
+}
+.mobileMenuAvatar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.mobileMenuUserIcon {
+  width: 140px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  border-radius: 50%;
+}
+.mobileMenuChatButton {
+  background-color: #FFCB4C;
+  color: #000000;
+  border: none;
+  padding: 10px;
+  margin: 15px;
+  border: 2px solid #FFCB4C;
+  border-radius: 1rem;
+  font-size: 16px;
+  font-family: "Monaco";
+  height: 60px;
+  width: 180px;
+}
+.mobileMenuButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mobileMenuButtonLogin {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: none;
+  padding: 15px;
+  margin: 10px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease-in-out;
+  border: 3px solid #FFCB4C;
+  border-radius: 1rem;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  width: 150px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.mobileMenuButtonSignUp {
+  background-color: #FFCB4C;
+  color: #000000;
+  border: none;
+  padding: 15px;
+  margin: 10px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease-in-out;
+  border: 3px solid #FFCB4C;
+  border-radius: 1rem;
+  font-family: "Monaco";
+  text-transform: uppercase;
+  width: 150px;
+  box-shadow: 0px 15px 10px -15px #C8C8C8;
+}
+.mobileMenuList {
+  width: 100%;
+  overflow-y: scroll;
+}
+.mobileMenuIcon {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+}
+.mobileMenuIconTop {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+}
+.mobileMenuIconTop img {
+  width: 25px;
+}
+.mobileMenuIconBottom {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+}
+.mobileMenuIconBottom img {
+  width: 25px;
+}
+.mobileMenuIcon {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+}
+.mobileMenuIcon img {
+  width: 25px;
+}
+.mobileMenuBrandHolderBottom {
+  width: 100%;
+  display: flex;
+  // float: inline-end;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 15px;
+  padding-bottom: 30px;
+  background-color: #FFFFFF;
+}
+.mobileMenuBrandHolderBottom img {
+  margin: 0px;
+}
+.mobileMenuBrandHolderBottomBrandText {
+  margin-left: 15px;
+}
+.mobileMenuBrandHolderBottomBrandText h2 {
+  color: #000000;
 }
 .navbarbar {
   height: 1px;
@@ -210,7 +391,7 @@ span.typed-text {
     align-items: center;
     margin-top: -20px;
     margin-left: 0px;
-    }
+}
 .brandHolderBottom img {
     width: 40px;
 }

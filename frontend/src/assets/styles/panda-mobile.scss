@@ -233,7 +233,7 @@ span.typed-text {
   text-decoration: none;
 }
 .mobileMenuTop {
-  height: calc(100% - 200px);
+  height: calc(100% - 100px);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -855,8 +855,8 @@ span.typed-text {
   background-color: #FFFFFF;
 }
 .googleImageAnswerImages img {
-  height: 100%;
   max-width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
 }
 .googleImageAnswerImages img:hover {
@@ -2072,6 +2072,7 @@ span.typed-text {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #C8C8C8;
+  color: #000000;
 }
 .accountChatPicker {
   width: 100%;
@@ -2081,6 +2082,7 @@ span.typed-text {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #C8C8C8;
+  color: #000000;
 }
 .accountDataPicker {
   width: 100%;
@@ -2089,6 +2091,7 @@ span.typed-text {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #C8C8C8;
+  color: #000000;
 }
 .userChatHistoryDates {
   display:none ;

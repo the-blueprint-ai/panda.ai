@@ -359,7 +359,7 @@ span.typed-text {
   top: 140px;
   margin-bottom: 10px;
   flex-grow: 1;
-  max-height: calc(100% - 240px);
+  max-height: calc(100% - 245px);
   width: 92%;
   overflow-y: scroll;
 }
@@ -490,7 +490,7 @@ span.typed-text {
   background: #FFFFFF;
   color: #000000;
   padding: 10px;
-  font-family: "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
+  font-family: "Monaco";
   font-size: large;
   overflow: wrap;
   resize: none;

@@ -46,16 +46,33 @@ export default {
     redirectToSignIn() {
       this.$router.push("/signin");
     },
+    redirectToAccount() {
+      this.$router.push("/auth/" + this.userId + "/account");
+    },
+    redirectToChat() {
+      this.$router.push("/auth/" + this.userId + "/chat");
+    },
     async onLogout() {
       await Session.signOut();
-      window.location.href = ("http://localhost:3000/");
+      window.location.href = "http://localhost:3000/";
+    },
+    toggleMenu() {
+      const menu = this.$refs.hamburgerMenu;
+      if (menu.style.left === "-100%") {
+        menu.style.left = "0";
+      } else {
+        menu.style.left = "-100%";
+      }
     },
     openClose(event) {
       // Update the openClose method to take the event object as a parameter
       var _this = this;
 
       const closeListener = (e) => {
-        if (_this.catchOutsideClick(e, _this.$refs.avatar) && _this.catchOutsideClick(e, _this.$refs.caret))
+        if (
+          _this.catchOutsideClick(e, _this.$refs.avatar) &&
+          _this.catchOutsideClick(e, _this.$refs.caret)
+        )
           window.removeEventListener("click", closeListener),
             _this.setIsOpenValue(false);
       };
@@ -68,7 +85,8 @@ export default {
       if (!dropdown) return false; // Add this line to check if dropdown is null
 
       // When user clicks menu or a child of the menu — do nothing
-      if (dropdown == event.target || dropdown.contains(event.target)) return false;
+      if (dropdown == event.target || dropdown.contains(event.target))
+        return false;
 
       // When user clicks outside of the menu — close the menu
       if (this.isOpen && dropdown != event.target) return true;
@@ -83,8 +101,134 @@ export default {
 <template>
   <div class="navbar">
     <div class="navbar-top">
-      <div class="hamburgerMenu">
-        <img class="mobileMenu" src="../../src/assets/icons/list.svg" width="50" />
+      <div class="mobileMenu">
+        <img
+          class="hamburgerMenuIcon"
+          @click="toggleMenu"
+          src="../../src/assets/icons/list.svg"
+          width="50"
+        />
+        <nav class="hamburgerMenu" ref="hamburgerMenu">
+          <img
+            src="../assets/icons/x.svg"
+            class="mobileMenuCloseButton"
+            @click="toggleMenu"
+          />
+          <div class="mobileMenuTop">
+            <div class="mobileMenuAvatar" v-if="onboarded">
+              <img
+                class="mobileMenuUserIcon"
+                v-bind:src="avatar"
+                ref="avatar"
+                @click="redirectToAccount"
+              />
+              <button class="mobileMenuChatButton" @click="redirectToChat">
+                Let's Chat
+              </button>
+            </div>
+            <div v-else>
+              <div class="mobileMenuButtons">
+                <button
+                  class="mobileMenuButtonSignUp"
+                  @click="redirectToSignUp"
+                >
+                  Sign up
+                </button>
+                <button class="mobileMenuButtonLogin" @click="redirectToSignIn">
+                  Sign In
+                </button>
+              </div>
+            </div>
+            <div class="mobileMenuList">
+              <router-link to="/">
+                <div class="mobileMenuIconTop">
+                  <img
+                    src="../../src/assets/icons/house-door.svg"
+                    class="homesvg"
+                    alt="home"
+                  />
+                  <p>HOME</p>
+                </div>
+              </router-link>
+              <router-link to="/about">
+                <div class="mobileMenuIcon">
+                  <img
+                    src="../../src/assets/icons/file-person.svg"
+                    class="homesvg"
+                    alt="about"
+                  />
+                  <p>ABOUT</p>
+                </div>
+              </router-link>
+              <router-link to="/roadmap">
+                <div class="mobileMenuIcon">
+                  <img
+                    src="../../src/assets/icons/geo.svg"
+                    class="homesvg"
+                    alt="roadmap"
+                  />
+                  <p>ROADMAP</p>
+                </div>
+              </router-link>
+              <router-link to="/privacy">
+                <div class="mobileMenuIcon">
+                  <img
+                    src="../../src/assets/icons/file-earmark-lock.svg"
+                    class="homesvg"
+                    alt="privacy"
+                  />
+                  <p>PRIVACY</p>
+                </div>
+              </router-link>
+              <router-link to="/support">
+                <div class="mobileMenuIcon">
+                  <img
+                    src="../../src/assets/icons/question-square.svg"
+                    class="homesvg"
+                    alt="support"
+                  />
+                  <p>SUPPORT</p>
+                </div>
+              </router-link>
+              <router-link to="/terms-of-service">
+                <div class="mobileMenuIcon">
+                  <img
+                    src="../../src/assets/icons/emoji-smile.svg"
+                    class="homesvg"
+                    alt="support"
+                  />
+                  <p>TERMS OF SERVICE</p>
+                </div>
+              </router-link>
+              <router-link to="/privacy-policy">
+                <div class="mobileMenuIconBottom">
+                  <img
+                    src="../../src/assets/icons/file-earmark-lock.svg"
+                    class="homesvg"
+                    alt="support"
+                  />
+                  <p>PRIVACY POLICY</p>
+                </div>
+              </router-link>
+            </div>
+          </div>
+          <div class="mobileMenuBottom">
+            <button
+              v-if="onboarded"
+              class="mobileMenuChatButton"
+              @click="onLogout"
+            >
+              Sign Out
+            </button>
+            <div class="mobileMenuBrandHolderBottom">
+              <img class="logo" src="../../src/assets/panda.png" width="50" />
+              <div class="mobileMenuBrandHolderBottomBrandText">
+                <h2>panda.ai</h2>
+                <p>MADE WITH ❤️</p>
+              </div>
+            </div>
+          </div>
+        </nav>
       </div>
       <div class="brandHolderTop">
         <router-link to="/">
@@ -157,7 +301,7 @@ export default {
             <div class="dropdown-bar"></div>
             <div v-if="admin">
               <router-link :to="'/auth/admin/dashboard'">
-              <button class="dropdown-button">Admin Panel</button>
+                <button class="dropdown-button">Admin Panel</button>
               </router-link>
               <div class="dropdown-bar"></div>
               <button class="dropdown-button" @click="goToUserDashboard">

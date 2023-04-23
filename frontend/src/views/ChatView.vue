@@ -49,13 +49,16 @@ export default defineComponent({
     }),
     ...mapGetters("chatStore", {
       getChatStoreChatHistory: "getChatStoreChatHistory",
-      isDisabled: "getIsDisabled",
+      getIsDisabled: "getIsDisabled",
     }),
     inputIsVisible() {
       return this.$store.state.chatStore.inputIsVisible;
     },
     chatHistory() {
       return this.$store.state.chatStore.chatHistory;
+    },
+    isDisabled() {
+      return this.$store.state.chatStore.isDisabled;
     },
   },
   methods: {
@@ -177,7 +180,7 @@ export default defineComponent({
               :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
               :key="item.user + '-' + index"
               :search-term="currentSearchTerm"
-              :is-disabled="this.loading"
+              :is-disabled="this.isDisabled"
             ></chatMessage>
           </div>
           <div class="userInputContainer">
@@ -185,17 +188,17 @@ export default defineComponent({
             <img v-else v-bind:src="avatar" class="chatAvatar" />
             <div class="userInput">
               <textarea
-                :disabled="this.loading"
+                :disabled="this.loading || isDisabled"
                 class="input"
                 v-model="messageToSend"
                 @keydown.enter.stop.prevent="submitMessage(this.username)"
                 id="userInput"
                 name="userInput"
-                placeholder="enter your message here"
+                placeholder="enter your message here..."
                 ref="messageInput"
               ></textarea>
               <button
-                :disabled="this.loading"
+                :disabled="this.loading || isDisabled"
                 class="chatButton"
                 id="sendButton"
                 @click="submitMessage(this.username)"

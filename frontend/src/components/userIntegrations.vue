@@ -14,6 +14,7 @@ export default {
 
 <template>
   <div class="userIntegrations" v-if="integrationsMenu">
+    <h1 class="accountSectionHeading">INTEGRATIONS</h1>
     <h1>COMING SOON...</h1>
   </div>
 </template>

@@ -1691,7 +1691,8 @@ span.typed-text {
   border-top-right-radius: 15px;
 }
 .bannerCamera {
-  width: 1200px;
+  max-width: 1200px;
+  margin-left: -1200px;
   opacity: 0;
   position: absolute;
   border-top-left-radius: 15px;

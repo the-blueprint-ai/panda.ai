@@ -115,7 +115,7 @@ export default {
             @click="toggleMenu"
           />
           <div class="mobileMenuTop">
-            <div class="mobileMenuAvatar" v-if="onboarded">
+            <div class="mobileMenuAvatar" v-if="userId">
               <img
                 class="mobileMenuUserIcon"
                 v-bind:src="avatar"
@@ -214,7 +214,7 @@ export default {
           </div>
           <div class="mobileMenuBottom">
             <button
-              v-if="onboarded"
+              v-if="userId"
               class="mobileMenuChatButton"
               @click="onLogout"
             >
@@ -283,7 +283,7 @@ export default {
       <div class="account-items">
         <div @click="openClose">
           <img
-            v-if="onboarded"
+            v-if="userId"
             src="../../src/assets/icons/caret-down-fill.svg"
             class="downsvg"
             ref="caret"
@@ -324,7 +324,7 @@ export default {
           </div>
         </div>
         <img
-          v-if="onboarded"
+          v-if="userId"
           class="user-icon"
           v-bind:src="avatar"
           ref="avatar"

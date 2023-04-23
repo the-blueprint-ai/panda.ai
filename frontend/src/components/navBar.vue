@@ -55,31 +55,13 @@ export default {
       await Session.signOut();
       window.location.href = "https://www.mypanda.ai/";
     },
-    onTouchStart(event) {
-      this.startX = event.touches[0].clientX;
-      this.startY = event.touches[0].clientY;
-    },
-
-    onTouchMove(event) {
-      this.endX = event.touches[0].clientX;
-      this.endY = event.touches[0].clientY;
-    },
-
-    onTouchEnd() {
-      const deltaX = this.endX - this.startX;
-      const deltaY = this.endY - this.startY;
-
-      if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 0 && this.startX < 20) {
-        this.toggleMenu();
-      }
-    },
     toggleMenu() {
       const menu = this.$refs.hamburgerMenu;
 
-      if (!menu.style.left || menu.style.left === "-100%") {
+      if (!menu.style.left || menu.style.left === "-120%") {
         menu.style.left = "0";
       } else {
-        menu.style.left = "-100%";
+        menu.style.left = "-120%";
       }
     },
     openClose(event) {
@@ -117,12 +99,7 @@ export default {
 </script>
 
 <template>
-  <div
-    class="navbar"
-    @touchstart="onTouchStart"
-    @touchmove="onTouchMove"
-    @touchend="onTouchEnd"
-  >
+  <div class="navbar">
     <div class="navbar-top">
       <div class="mobileMenu">
         <img

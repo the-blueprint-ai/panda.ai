@@ -9,6 +9,7 @@ export default {
       visibilityStates: [],
       activeChat: null,
       selectedChat: null,
+      selectedDate: null,
       chatHistorySearch: "",
       typing: false,
       isDisabled: true,
@@ -45,6 +46,8 @@ export default {
 
           // Select the most recent chat on page load
           this.selectedChat = latestChat;
+          // this.selectedDate = newVal[0][0].date;
+          // this.resetSelectedChat();
 
           // Set the activeChat
           this.activeChat = this.selectedChat;
@@ -91,6 +94,22 @@ export default {
         })
         .filter((item) => item);
     },
+    allChats() {
+      return this.filteredChatData.reduce((accumulator, day) => {
+        return accumulator.concat(day.chats);
+      }, []);
+    },
+    chatsBySelectedDate() {
+      if (!this.selectedDate) {
+        return [];
+      }
+
+      const selectedDateData = this.filteredChatData.find(
+        (item) => item.date === this.selectedDate
+      );
+
+      return selectedDateData ? selectedDateData.chats : [];
+    },
   },
   methods: {
     toggleVisibility(index) {
@@ -109,6 +128,7 @@ export default {
 
 <template>
   <div class="userChatHistory" v-if="this.userChatHistory && historyMenu">
+    <h1 class="accountSectionHeading">CHAT HISTORY</h1>
     <div class="userChatHistoryDates">
       <div class="chatHistorySearch">
         <input
@@ -159,10 +179,43 @@ export default {
         </ul>
       </div>
     </div>
+    <div class="mobileAccountChatPickers">
+      <!-- Date picker -->
+      <select
+        v-model="selectedDate"
+        @change="resetSelectedChat"
+        class="accountDatePicker"
+      >
+        <option
+          v-for="(item, index) in filteredChatData"
+          :key="index"
+          :value="item.date"
+        >
+          {{ item.date }}
+        </option>
+      </select>
+
+      <!-- Chat picker -->
+      <select
+        v-model="selectedChat"
+        @change="activeChat = selectedChat"
+        class="accountChatPicker"
+      >
+        <option
+          v-for="(chat, chatIndex) in chatsBySelectedDate"
+          :key="chatIndex"
+          :value="chat"
+        >
+          {{ chat.title }} ({{ chat.time }})
+        </option>
+      </select>
+    </div>
     <div class="userChatHistoryContent" id="chatContainer">
       <span v-if="selectedChat">
         <chatMessage
-          v-for="(contentItem, contentIndex) in selectedChat.content.slice().reverse()"
+          v-for="(contentItem, contentIndex) in selectedChat.content
+            .slice()
+            .reverse()"
           :message="contentItem"
           :class="contentItem.user === 'panda' ? 'pandaChat' : 'userChat'"
           :key="contentIndex"

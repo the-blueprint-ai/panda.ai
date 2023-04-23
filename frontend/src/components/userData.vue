@@ -7,6 +7,7 @@ export default {
   data() {
     return {
       tab: "entities",
+      mobileTab: "entities",
     };
   },
   watch: {
@@ -69,6 +70,16 @@ export default {
 
 <template>
   <div class="userData" v-if="dataMenu">
+    <h1 class="accountSectionHeading">DATA</h1>
+    <div class="mobileAccountChatPickers">
+      <!-- Mobile picker for tabs -->
+      <select v-model="mobileTab" @change="dataTabSelector(mobileTab)" class="accountDataPicker">
+        <option value="entities">ENTITIES</option>
+        <option value="documents">DOCUMENTS</option>
+        <option value="social">SOCIAL</option>
+        <option value="browsing">BROWSING</option>
+      </select>
+    </div>
     <div class="userDataTypes">
       <h2
         :class="{

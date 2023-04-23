@@ -77,6 +77,7 @@ export default {
 
 <template>
   <div class="userSettings" v-if="settingsMenu">
+    <h1 class="accountSectionHeading">SETTINGS</h1>
     <LoadingOverlay
       v-if="this.loading"
       :loading="this.loading"

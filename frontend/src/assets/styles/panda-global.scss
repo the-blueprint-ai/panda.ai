@@ -1,5 +1,7 @@
 /* global-styles.css */
 
+@import "./panda-fonts";
+
 /* Import mobile styles */
 @media screen and (max-width: 767px) {
     @import "./panda-mobile";

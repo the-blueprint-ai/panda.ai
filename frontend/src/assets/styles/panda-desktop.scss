@@ -35,7 +35,7 @@ span {
 .blinking-cursor {
   font-size: 60px;
   font-weight: bold;
-  margin-left: 30px;
+  margin-left: 10px;
   color: #FFFFFF;
   -webkit-animation: 1s blink step-end infinite;
   -moz-animation: 1s blink step-end infinite;
@@ -690,8 +690,8 @@ span.typed-text {
   background-color: #FFFFFF;
 }
 .googleImageAnswerImages img {
-  height: 100%;
   max-width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
 }
 .googleImageAnswerImages img:hover {

@@ -25,6 +25,11 @@ export default {
     initVisibleItems() {
       this.visibleItems = this.faqSection.items.map(() => false);
     },
+    formatAnswer(answer) {
+      const urlRegex = /(https?:\/\/[^\s]+[\w/.)]+)/g;
+      const formattedAnswer = answer.replace(urlRegex, '<a href="$&" target="_blank">$&</a>');
+      return formattedAnswer;
+    },
   },
 };
 </script>
@@ -48,7 +53,7 @@ export default {
         <img v-else src="../assets/icons/caret-down-fill.svg" />
       </button>
       <div v-if="visibleItems[index]" class="faqAnswer">
-        <p>{{ faq.answer }}</p>
+        <p v-html="formatAnswer(faq.answer)"></p>
       </div>
     </div>
   </div>

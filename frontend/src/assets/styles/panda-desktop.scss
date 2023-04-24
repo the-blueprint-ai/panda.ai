@@ -1533,6 +1533,10 @@ span.typed-text {
   padding: 10px;
   margin-top: -20px;
 }
+.faqAnswer a {
+  color: #FFCB4C;
+  text-decoration: none;
+}
 .contactContainer {
   display: flex;
   flex-direction: column;
@@ -2663,6 +2667,7 @@ span.typed-text {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   height: 260px;
   width: 260px;
   padding: 20px;
@@ -2709,7 +2714,7 @@ span.typed-text {
   border: 1px solid #C8C8C8;
   background-color: #FFFFFF;
   color: #000000;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
 }
 .roadmapAdmin th {
   border: 1px solid #C8C8C8;
@@ -2845,7 +2850,7 @@ span.typed-text {
   border: 1px solid #C8C8C8;
   background-color: #FFFFFF;
   color: #000000;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
 }
 #saveFAQButton {
   color: #000000;

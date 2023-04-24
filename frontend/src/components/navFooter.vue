@@ -9,11 +9,11 @@ export default {
       if (navigateTo == "home") {
         this.$router.push("/");
       } else if (navigateTo == "discord") {
-        window.open("https://www.discord.com", "_blank");
+        window.open("https://discord.gg/8GnUbDKUFV", "_blank");
       } else if (navigateTo == "twitter") {
         window.open("https://twitter.com/mypanda_ai", "_blank");
       } else if (navigateTo == "linkedin") {
-        window.open("https://www.linkedin.com", "_blank");
+        window.open("https://www.linkedin.com/company/my-panda-ai", "_blank");
       } else {
         this.$router.push(navigateTo);
       }

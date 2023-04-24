@@ -21,6 +21,7 @@ import PasswordResetView from "../views/PasswordResetView.vue";
 import NewPasswordView from "../views/NewPasswordView.vue";
 import TestView from "../views/TestView.vue";
 import AdminView from "../views/AdminView.vue";
+import UnsubscribeView from "../views/UnsubscribeView.vue";
 
 // Authorization Guard
 async function checkAuth(to, from, next) {
@@ -156,6 +157,11 @@ const router = createRouter({
       path: "/terms-of-service",
       name: "termsofservice",
       component: TermsOfServiceView,
+    },
+    {
+      path: "/unsubscribe",
+      name: "unsubscribe",
+      component: UnsubscribeView,
     },
     {
       path: "/auth/test",

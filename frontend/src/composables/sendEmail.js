@@ -2,6 +2,7 @@ export async function sendEmail(from_email, to_emails, subject, html_content) {
   return new Promise((resolve, reject) => {
     const send = async () => {
       try {
+        const encodedHtmlContent = encodeURIComponent(html_content);
         const url =
           import.meta.env.VITE_APP_API_URL +
           "/email/send?from_email=" +
@@ -11,12 +12,11 @@ export async function sendEmail(from_email, to_emails, subject, html_content) {
           "&subject=" +
           subject +
           "&html_content=" +
-          html_content;
+          encodedHtmlContent;
 
         const res = await fetch(url, {
           method: "POST",
         });
-        console.log("sendEmail not called here");
         // Check if the response status indicates an error
         if (!res.ok) {
           const errorResponse = await res.json();

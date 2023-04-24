@@ -1,3 +1,4 @@
+const welcome_email = `
 <html>
   <head>
     <meta charset="UTF-8">
@@ -35,3 +36,6 @@
     </div>
   </body>
 </html>
+`;
+
+export default welcome_email;

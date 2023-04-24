@@ -5,6 +5,10 @@ import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getFAQs } from "../composables/getFAQs.js";
 import CollapsibleFAQList from "../components/collapsibleFAQList.vue";
+import SpinnerComponent from "../components/spinnerComponent.vue";
+import { sendEmail } from "../composables/sendEmail.js";
+import support_request_html from "../assets/emails/supportRequestEmail.js";
+import support_send_html from "../assets/emails/supportSendEmail.js";
 
 export default defineComponent({
   data() {
@@ -13,6 +17,9 @@ export default defineComponent({
       email: "",
       confirmedEmail: "",
       message: "",
+      loading: false,
+      buttonText: "SEND",
+      failedSend: false,
     };
   },
   async created() {
@@ -58,10 +65,42 @@ export default defineComponent({
         .filter((faqSection) => faqSection.items.length > 0);
     },
   },
+  methods: {
+    async sendSupportEmails(to_email, message) {
+      this.loading = true;
+      const support_message = support_send_html(this.confirmedEmail, message);
+      try {
+        await sendEmail(
+          "support@mypanda.ai",
+          to_email,
+          "Thank you for your support message",
+          support_request_html
+        );
+        await sendEmail(
+          "website@mypanda.ai",
+          "support@mypanda.ai",
+          "Website support request",
+          support_message
+        );
+        this.loading = false;
+        this.buttonText = "SENT!";
+      } catch (error) {
+        console.error("An error occurred while sending the emails:", error);
+        this.failedSend = true;
+        setTimeout(() => this.failedSend = false, 2000);
+      } finally {
+        setTimeout(() => this.buttonText = "SEND", 2000);
+        setTimeout(() => this.email = "", 2000);
+        setTimeout(() => this.confirmedEmail = "", 2000);
+        setTimeout(() => this.message = "", 2000);
+      }
+    },
+  },
   components: {
     navBar,
     navFooter,
     CollapsibleFAQList,
+    SpinnerComponent,
   },
 });
 </script>
@@ -110,10 +149,15 @@ export default defineComponent({
           <button
             v-if="this.email === this.confirmedEmail && this.message.length > 0"
             class="chatButton"
+            @click="sendSupportEmails(this.confirmedEmail, this.message)"
           >
-            SEND
+            <SpinnerComponent
+              :loading="this.loading"
+              :button-text="this.buttonText"
+            ></SpinnerComponent>
           </button>
           <button v-else class="chatButtonDisabled">SEND</button>
+          <div v-if="this.failedSend" class="failedSend"><h2>Message failed to send. Please try again later.</h2></div>
         </div>
       </div>
     </div>

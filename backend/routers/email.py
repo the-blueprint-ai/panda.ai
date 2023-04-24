@@ -18,11 +18,6 @@ logger = logging.getLogger(__name__)
 
 # ROUTERS
 @router.post("/send")
-async def send_email(from_email: str, to_emails: str, subject: str, html_content: str, session: SessionContainer = Depends(verify_session())):
-    result = await email_send(from_email, to_emails, subject, html_content)
-    return result
-
-@router.post("/support")
 async def send_email(from_email: str, to_emails: str, subject: str, html_content: str):
     result = await email_send(from_email, to_emails, subject, html_content)
     return result

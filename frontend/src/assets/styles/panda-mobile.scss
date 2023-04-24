@@ -74,7 +74,7 @@ span {
 .blinking-cursor2 {
   font-size: 26px;
   font-weight: bold;
-  margin-left: -15px;
+  margin-left: -16px;
   color: #FFFFFF;
   -webkit-animation: 1s blink step-end infinite;
   -moz-animation: 1s blink step-end infinite;
@@ -83,7 +83,7 @@ span {
   animation: 1s blink step-end infinite;
 }
 span.typed-text {
-  margin-left: 115px;
+  margin-left: 130px;
 }
 @keyframes blink {
   from,

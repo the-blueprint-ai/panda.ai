@@ -8,7 +8,7 @@ from langchain.agents import Tool
 from langchain.agents import AgentType
 from langchain.agents.agent import Agent
 from langchain.agents.conversational.base import ConversationalAgent
-from langchain.llms import PromptLayerOpenAI
+from langchain.chat_models import PromptLayerChatOpenAI
 from langchain.tools.base import BaseTool
 from langchain.prompts import PromptTemplate
 from langchain.agents.agent import AgentExecutor
@@ -34,49 +34,6 @@ promptlayer.api_key = settings.PRMPTLYR_API_KEY
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-PREFIX = """
-Assistant is a large language model called ""🐼 panda.ai"" and is trained on top of OpenAI's chatGPT. "🐼 panda.ai" was founded by Sean Betts in April 2023.
-
-"🐼 panda.ai" uses they/them for pronouns and is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, "🐼 panda.ai" is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
-
-"🐼 panda.ai" is constantly learning and improving, and its capabilities are constantly evolving. One thing "🐼 panda.ai" can do is to learn and remember specific topics a user is interested in called entities, which "🐼 panda.ai" stores in it's memory. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions in the style of a knowledgable expert. Additionally, "🐼 panda.ai" is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
-
-Overall, "🐼 panda.ai" is a powerful tool that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, "🐼 panda.ai" is here to assist. However, if "🐼 panda.ai" isn't totally sure of an answer, it will say "I'm not totally sure, but I think" and then give the answer. If the user asks what data you have on them, please tell them to check their account settings where they will find a data section that lists all the data that we store for them.
-
-The user "🐼 panda.ai" is speaking to is a human and their first name is {first_name}, their surname is {last_name} and their username is {username}.
-
-Today's date is {date}.
-
-TOOLS:
-------
-🐼 panda.ai has access to the following tools:"""
-
-FORMAT_INSTRUCTIONS = """To use a tool, ignore any entities and please use the following format:
-```
-Thought: Do I need to use a tool? Yes
-Action: the action to take, should be one of [{tool_names}]
-Action Input: the input to the action
-Observation: the result of the action
-```
-When you have a response to say to {human_prefix}, or if you do not need to use a tool, you MUST use the format:
-```
-{ai_prefix} thought: Do I need to use a tool? No
-{ai_prefix}: [your response here]
-```
-"""
-
-SUFFIX = """Begin!
-Entity memories. These should be ignored when using a tool:
-{entities}
-
-Previous conversation history:
-{current_history}
-{chat_history}
-
-New input: {input}
-{agent_scratchpad}"""
             
 
 search = GoogleSearchTool()
@@ -151,7 +108,7 @@ tools = [
 async def pandaChatAgent(userid: str, first_name: str, last_name: str, username: str, message: str):
     await save_entities(userid, message)
 
-    llm=PromptLayerOpenAI(openai_api_key = settings.OPENAI_API_KEY, temperature=0.05, pl_tags=[f"{ userid }"])
+    llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0.05, pl_tags=[f"{ userid }"], return_pl_id=True)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
     today = datetime.today()
@@ -162,6 +119,14 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     formatted_entities = '\n'.join([f"{item['entity']}: {item['description']}" for item in entities])
 
     chat_history = await get_user_chat_history(userid)
+
+    prefix_dict = promptlayer.prompts.get("main_panda_chat_prefix")
+    suffix_dict = promptlayer.prompts.get("main_panda_chat_suffix")
+    format_dict = promptlayer.prompts.get("main_panda_chat_format_instructions")
+
+    PREFIX = prefix_dict['template']
+    SUFFIX = suffix_dict['template']
+    FORMAT_INSTRUCTIONS =format_dict['template']
 
     MY_PREFIX = PREFIX.format(
         first_name=first_name,
@@ -210,6 +175,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     )
     try:
         response = agent_chain.run(input=f"{ message }")
+        logging.info(response)
         return JSONResponse(content={"response": response})
 
     except Exception as e:
@@ -218,7 +184,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
 
 
 async def save_entities(userid: str, message: str):
-    entity_llm=PromptLayerOpenAI(openai_api_key = settings.OPENAI_API_KEY, temperature=0, pl_tags=[f"{ userid }", "entityCreation"])
+    entity_llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0, pl_tags=[f"{ userid }", "entityCreation"])
     
     memory = ConversationEntityMemory(llm=entity_llm)
     
@@ -256,7 +222,7 @@ async def save_entities(userid: str, message: str):
                 existing_description = response.get('Item', {}).get('description', '')
                 combined_description = f"{existing_description} {description}"
 
-                summary_llm=PromptLayerOpenAI(openai_api_key = settings.OPENAI_API_KEY, temperature=0, pl_tags=[f"{ userid }", "summarisation"])
+                summary_llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0, pl_tags=[f"{ userid }", "summarisation"])
                 summarised_description = summary_llm(f"Summarise this for me and DO NOT leave out any details: {combined_description}")
 
                 new_description = summarised_description.replace("\n", "")

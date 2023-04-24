@@ -32,7 +32,7 @@ body {
   justify-content: flex-start;
   align-items: center;
   min-height: 78vh;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   padding-bottom: 30px;
   word-wrap: break-word;
   overflow: hidden;
@@ -138,7 +138,7 @@ span.typed-text {
   justify-content: flex-start;
   align-items: center;
   min-height: 78vh;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   word-wrap: break-word;
   overflow: hidden;
 }
@@ -165,7 +165,7 @@ span.typed-text {
   justify-content: flex-start;
   align-items: center;
   min-height: 78vh;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   word-wrap: break-word;
   overflow: hidden;
 }
@@ -200,7 +200,7 @@ span.typed-text {
   display:flex;
   flex-direction: row;
   justify-content: space-between;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
 }
 .hamburgerMenuIcon {
   margin-top: 5px;
@@ -256,7 +256,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 50%;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   box-shadow: 0px 15px 10px -15px #C8C8C8;
   height: 30px;
   width: 30px;
@@ -287,7 +287,7 @@ span.typed-text {
   border: 2px solid #FFCB4C;
   border-radius: 1rem;
   font-size: 16px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   height: 60px;
   width: 180px;
 }
@@ -307,7 +307,7 @@ span.typed-text {
   transition: all 0.3s ease-in-out;
   border: 3px solid #FFCB4C;
   border-radius: 1rem;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   text-transform: uppercase;
   width: 150px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
@@ -323,7 +323,7 @@ span.typed-text {
   transition: all 0.3s ease-in-out;
   border: 3px solid #FFCB4C;
   border-radius: 1rem;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   text-transform: uppercase;
   width: 150px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
@@ -461,7 +461,7 @@ span.typed-text {
   align-items: center;
   border: none;
   padding-left: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   text-transform: uppercase;
 }
 .dropdown-button {
@@ -473,7 +473,7 @@ span.typed-text {
   align-items: center;
   border: none;
   padding-left: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   text-transform: uppercase;
 }
 .dropdown-links a:link {
@@ -655,7 +655,7 @@ span.typed-text {
   background: #FFFFFF;
   color: #000000;
   padding: 5px;
-  font-family: "JetBrains Mono", "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
+  font-family: "Iosevka", "JetBrains Mono", "Monaco"; /*"Helvetica Neue", "Arial", sans-serif;*/
   font-size: 14px;
   overflow: wrap;
   resize: none;
@@ -724,7 +724,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
   font-size: 14px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   width: 180px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -1022,7 +1022,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
   font-size: 14px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   width: 70px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -1057,7 +1057,7 @@ span.typed-text {
   border-radius: 1rem;
   color: #000000;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   width: 80%;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -1079,7 +1079,7 @@ span.typed-text {
   border-radius: 1rem;
   color: #000000;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   width: 150px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
   font-size: 12px;
@@ -1101,7 +1101,7 @@ span.typed-text {
   border: 2px solid #FFCB4C;
   border-radius: 1rem;
   font-size: 16px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   height: 60px;
   width: 180px;
 }
@@ -1132,7 +1132,7 @@ span.typed-text {
   display:flex;
   flex-direction: column;
   align-items: center;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
 }
 .footerbar {
   height: 1px;
@@ -1468,7 +1468,7 @@ span.typed-text {
   margin-bottom: 15px;
   border: 2px solid #FFFFFF;
   border-radius: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 16px;
 }
 .emailPassword input:focus {
@@ -1484,7 +1484,7 @@ span.typed-text {
   margin-left: 15px;
   background-color: #FFCB4C;
   margin-bottom: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 18px;
   border: 5px solid #FFCB4C;
   border-radius: 10px;
@@ -1741,7 +1741,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   width: 100px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
   cursor: not-allowed;
@@ -1794,7 +1794,7 @@ span.typed-text {
   border: 5px solid #ffcb4c;
   border-radius: 1rem;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   width: 100px;
   z-index: 100;
 }
@@ -2009,7 +2009,7 @@ span.typed-text {
   padding: 5px;
   border: 2px solid lightgray;
   border-radius: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 18px;
   overflow: wrap;
   resize: none;
@@ -2110,7 +2110,7 @@ span.typed-text {
   padding-right: 10x;
   border: 2px solid lightgray;
   border-radius: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 16px;
   overflow: wrap;
   resize: none;
@@ -2312,7 +2312,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 1rem;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   width: 220px;
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
@@ -2322,7 +2322,7 @@ span.typed-text {
   border-radius: 10px;
   margin-top: 10px;
   padding: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 16px;
   border-bottom: 2px solid #000000;
   outline: none;
@@ -2404,7 +2404,7 @@ span.typed-text {
   height: 25px;
   border-radius: 10px;
   padding: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 14px;
   border-bottom: 2px solid #000000;
   outline: none;
@@ -2453,7 +2453,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 50%;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   box-shadow: 0px 15px 10px -15px #C8C8C8;
   height: 30px;
   width: 30px;
@@ -2580,7 +2580,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 10px;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   text-transform: uppercase;
   box-shadow: 0px 15px 10px -15px grey;
 }
@@ -2622,7 +2622,7 @@ span.typed-text {
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 13px;
   outline: none;
 }
@@ -2643,7 +2643,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 10px;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   text-transform: uppercase;
   box-shadow: 0px 15px 10px -15px grey;
 }
@@ -2667,7 +2667,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 15px;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .roadmapMoreButton:hover {
@@ -2718,7 +2718,7 @@ span.typed-text {
   height: 25px;
   border-radius: 10px;
   padding: 10px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   font-size: 16px;
   border-bottom: 2px solid #000000;
   outline: none;
@@ -2739,7 +2739,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 10px;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   box-shadow: 0px 15px 10px -15px #C8C8C8;
 }
 .roadmapOverlayCloseButton {
@@ -2752,7 +2752,7 @@ span.typed-text {
   border: 5px solid #FFCB4C;
   border-radius: 50%;
   font-size: large;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   box-shadow: 0px 15px 10px -15px #C8C8C8;
   height: 30px;
   width: 30px;
@@ -2921,7 +2921,7 @@ span.typed-text {
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   outline: none;
 }
 .newRoadmapDescription {
@@ -2934,7 +2934,7 @@ span.typed-text {
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   outline: none;
 }
 #saveRoadmapButton {
@@ -2982,7 +2982,7 @@ span.typed-text {
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
-  font-family: "JetBrains Mono", "Monaco";
+  font-family: "Iosevka", "JetBrains Mono", "Monaco";
   outline: none;
 }
 .newFAQAnswer input {

@@ -3,7 +3,7 @@ const typingStore = {
   state: {
     typeValue: "",
     typeStatus: false,
-    displayTextArray: ["Welcome to panda.ai"],
+    displayTextArray: ["welcome to panda.ai"],
     typingSpeed: 150,
     newTextDelay: 1500,
     displayTextArrayIndex: 0,

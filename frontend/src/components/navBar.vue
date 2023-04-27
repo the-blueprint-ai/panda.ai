@@ -160,6 +160,16 @@ export default {
                   <p>ABOUT</p>
                 </div>
               </router-link>
+              <router-link to="/pricing">
+                <div class="mobileMenuIcon">
+                  <img
+                    src="../../src/assets/icons/tag.svg"
+                    class="homesvg"
+                    alt="about"
+                  />
+                  <p>PRICING</p>
+                </div>
+              </router-link>
               <router-link to="/roadmap">
                 <div class="mobileMenuIcon">
                   <img
@@ -258,6 +268,16 @@ export default {
             />
           </router-link>
           <p>about</p>
+        </div>
+        <div class="menu-icon">
+          <router-link to="/pricing">
+            <img
+              src="../../src/assets/icons/tag.svg"
+              class="homesvg"
+              alt="about"
+            />
+          </router-link>
+          <p>pricing</p>
         </div>
         <div class="menu-icon">
           <router-link to="/roadmap">

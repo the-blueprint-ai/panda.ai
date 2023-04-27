@@ -22,6 +22,8 @@ import NewPasswordView from "../views/NewPasswordView.vue";
 import TestView from "../views/TestView.vue";
 import AdminView from "../views/AdminView.vue";
 import UnsubscribeView from "../views/UnsubscribeView.vue";
+import ThankYouView from "../views/ThankYouView.vue";
+import PricingView from "../views/PricingView.vue";
 
 // Authorization Guard
 async function checkAuth(to, from, next) {
@@ -59,11 +61,11 @@ const router = createRouter({
       name: "signin",
       component: SignInView,
     },
-    // {
-    //   path: "/signup",
-    //   name: "signup",
-    //   component: SignUpView,
-    // },
+    {
+      path: "/signup",
+      name: "signup",
+      component: SignUpView,
+    },
     {
       path: "/password-reset",
       name: "passwordreset",
@@ -129,6 +131,11 @@ const router = createRouter({
       component: AboutView,
     },
     {
+      path: "/pricing",
+      name: "pricing",
+      component: PricingView,
+    },
+    {
       path: "/roadmap",
       name: "roadmap",
       component: RoadmapView,
@@ -162,6 +169,11 @@ const router = createRouter({
       path: "/unsubscribe",
       name: "unsubscribe",
       component: UnsubscribeView,
+    },
+    {
+      path: "/thankyou",
+      name: "thankyou",
+      component: ThankYouView,
     },
     {
       path: "/auth/test",

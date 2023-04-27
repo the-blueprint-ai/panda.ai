@@ -26,11 +26,33 @@ async def email_send(from_email: str, to_emails: str, subject: str, html_content
 
         # Send an HTTP POST request to /mail/send
         response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
 
         return{"Email sent successfully"}
     
+    except HTTPError as e:
+        print(e.to_dict)
+
+async def add_contact(user_id: str, email: str):
+
+    data = {
+        "contacts": [
+            {
+                "email": email,
+                "custom_fields": {
+                    "e1_T": user_id
+                }
+            }
+        ]
+    }
+
+    try:
+        sg = SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
+
+        response = sg.client.marketing.contacts.put(
+            request_body=data
+        )
+
+        return{"Email saved successfully"}
+
     except HTTPError as e:
         print(e.to_dict)

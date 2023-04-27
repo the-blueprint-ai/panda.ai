@@ -5,6 +5,8 @@ import * as Session from "supertokens-web-js/recipe/session";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { saveEmail } from "../composables/saveEmail.js";
+import { sendEmail } from "../composables/sendEmail.js";
+import welcome_html from "../assets/emails/welcomeEmail.js";
 
 export default defineComponent({
   data() {
@@ -15,6 +17,7 @@ export default defineComponent({
     await this.getSession();
     await this.getUserInfo();
     saveEmail(this.userId, this.email);
+    sendEmail("hello@mypanda.ai", this.email, "Welcome to 🐼 panda.ai!", welcome_html);
   },
   computed: {
     ...mapGetters("userStore", {

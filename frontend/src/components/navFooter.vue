@@ -73,6 +73,7 @@ export default {
         <div class="singleMenu">
           <h2>Company</h2>
           <p navigate-to="about" @click="goToPage('/about')">about</p>
+          <p navigate-to="about" @click="goToPage('/pricing')">pricing</p>
           <p navigate-to="terms-of-service" @click="goToPage('/terms-of-service')">
             terms of service
           </p>

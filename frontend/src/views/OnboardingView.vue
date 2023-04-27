@@ -268,9 +268,9 @@ export default defineComponent({
             ),
           3841
         );
-        setTimeout(() => this.setSuccess(""), 3200);
-        setTimeout(() => this.finishOnboarding(this.userId), 4160);
-        setTimeout(() => this.setIsDisabledValue(false), 4160);
+        setTimeout(() => this.setSuccess(""), 32000);
+        setTimeout(() => this.finishOnboarding(this.userId), 41600);
+        setTimeout(() => this.setIsDisabledValue(false), 41600);
       }
       this.messageToSend = "";
     },

@@ -1719,7 +1719,11 @@ span.typed-text {
 }
 .contactFormItemLong h2 {
     margin-top: 20px;
-  }
+}
+.failedSend h2 {
+  margin-top: 30px;
+  color: red;
+}
 .messageInput {
   margin-bottom: 20px;
   height: 300px;

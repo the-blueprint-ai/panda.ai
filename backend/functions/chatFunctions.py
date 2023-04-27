@@ -175,7 +175,6 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     )
     try:
         response = agent_chain.run(input=f"{ message }")
-        logging.info(response)
         return JSONResponse(content={"response": response})
 
     except Exception as e:

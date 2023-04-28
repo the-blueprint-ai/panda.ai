@@ -88,7 +88,7 @@ export default defineComponent({
               <h2>🐼</h2>
               <h1>BAO</h1>
               <div class="subscriptionPlanDetails">
-                <p>100 messages per month</p>
+                <p>100 messages a month</p>
                 <p>3 Integrations</p>
               </div>
               <div v-if="this.subscriptionPeriod === 'monthly'">
@@ -122,7 +122,7 @@ export default defineComponent({
               <h2>🐼</h2>
               <h1>MEI</h1>
               <div class="subscriptionPlanDetails">
-                <p>300 messages per month</p>
+                <p>300 messages a month</p>
                 <p>5 Integrations</p>
               </div>
               <div v-if="this.subscriptionPeriod === 'monthly'">
@@ -156,7 +156,7 @@ export default defineComponent({
               <h2>🐼</h2>
               <h1>DA</h1>
               <div class="subscriptionPlanDetails">
-                <p>1,000 messages per month</p>
+                <p>1,000 messages a month</p>
                 <p>ALL Integrations</p>
               </div>
               <div v-if="this.subscriptionPeriod === 'monthly'">
@@ -195,7 +195,7 @@ export default defineComponent({
               <h1>WIKIPEDIA</h1>
               <img src="../assets/panda.png" />
               <p>
-                🐼 panda.ai can get information from wikipedia it helps them
+                🐼 panda.ai can get information from wikipedia if it helps them
                 answer your question
               </p>
             </div>

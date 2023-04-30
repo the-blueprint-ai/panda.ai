@@ -174,7 +174,7 @@ export default {
       </div>
       <div class="col-sm-2 d-flex justify-content-end">
         <ul class="navbar-nav">
-          <li v-if="userId" class="nav-item pt-2">
+          <li class="nav-item pt-2">
             <img
               src="../../src/assets/icons/question-square.svg"
               alt="support"

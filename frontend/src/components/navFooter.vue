@@ -30,7 +30,7 @@ export default {
     <div class="col-sm-2 px-5">
       <div class="row pb-5" @click="redirectToHome">
         <img class="w-25 h-25" src="../../src/assets/panda.png" width="30" />
-        <div class="col">
+        <div class="col mt-n2">
           <h4 class="pt-3 lh-1">panda.ai</h4>
           <p class="lh-1">MADE WITH ❤️</p>
         </div>

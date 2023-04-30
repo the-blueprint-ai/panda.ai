@@ -4,6 +4,7 @@ import { mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getRoadmap } from "../composables/getRoadmap.js";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
@@ -13,6 +14,8 @@ export default defineComponent({
       roadmapSuggestion: "",
       newIdeaId: 0,
       displayBuiltItemsCount: 6,
+      loading: false,
+      notifyMeButtonText: "NOTIFY ME",
     };
   },
   async mounted() {
@@ -119,6 +122,7 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    SpinnerComponent,
   },
 });
 </script>
@@ -325,36 +329,83 @@ export default defineComponent({
         </div>
       </div>
       <div
-        v-if="roadmapOverlay"
-        class="modal-dialog modal-dialog-centered"
-        id="feedbackModal"
-        tabindex="-1"
-        aria-labelledby="feedbackModalLabel"
-        aria-hidden="true"
+        id="roadmapOverlay"
+        class="roadmapOverlay"
+        :class="{ active: roadmapOverlay }"
       >
-        <h1>🐼</h1>
-        <h2>THANKS FOR THE FEEDBACK!</h2>
-        <p>
-          We’re doing our best to add the new features you want. Please share
-          your email address and we’ll notify you as we make progress!
-        </p>
-        <input
-          id="email"
-          ref="email"
-          v-model="email"
-          placeholder="your email address"
-          type="email"
-          name="email"
-          @keyup.enter="addEmail(this.newIdeaId, this.email)"
-        />
-        <button
-          class="roadmapOverlayButton"
-          @click="addEmail(this.newIdeaId, this.email)"
+        <div
+          class="card text-bg-dark text-center mb-3 border-secondary"
+          style="height: 450px; width: 35rem"
         >
-          Notify Me
-        </button>
+          <div class="card-header pt-3 pb-3 border-primary">
+            <h1>🐼</h1>
+            <h2>THANKS FOR THE FEEDBACK!</h2>
+          </div>
+          <div class="card-body pt-4 px-3 border-primary">
+            <p>
+              We’re doing our best to add the new features you want. Please
+              share your email address and we’ll notify you as we make progress!
+            </p>
+          </div>
+          <div
+            class="card-footer pt-4 pb-4 border-primary d-inline-flex justify-content-center align-items-center"
+          >
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                ref="email"
+                v-model="this.email"
+                class="form-control me-2"
+                id="floatingInput"
+                placeholder="kung-fu@panda.ai"
+                @keyup.enter="addEmail(this.newIdeaId, this.email)"
+                autocomplete="email"
+                required
+                style="width: 350px"
+              />
+              <label for="floatingInput" class="text-primary"
+                >Enter your email address</label
+              >
+            </div>
+            <button
+              class="btn btn-secondary ms-2 mt-n3 d-inline-flex justify-content-center"
+              @click="addEmail(this.newIdeaId, this.email)"
+            >
+              <SpinnerComponent
+                :loading="this.loading"
+                :button-text="this.notifyMeButtonText"
+              ></SpinnerComponent>
+            </button>
+          </div>
+          <button
+            class="btn btn-outline-secondary mb-5 mt-n2 mx-auto"
+            @click="this.activateOverlay()"
+            style="width: 200px"
+          >
+            CLOSE
+          </button>
+        </div>
       </div>
     </div>
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.roadmapOverlay {
+  display: none;
+}
+.roadmapOverlay.active {
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+}
+</style>

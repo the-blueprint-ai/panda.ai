@@ -208,6 +208,7 @@ export default {
       required
     />
     <p
+      class="text-primary"
       v-if="(preview == null) & (fileError == null)"
       for="imageInput"
       v-text="imageDropPhrase"
@@ -223,7 +224,7 @@ export default {
     <p id="badFile" for="imageInput" style="color: #ffcb4c; margin: 5px"></p>
     <button
       v-if="saveButton"
-      class="saveButton"
+      class="btn btn-secondary btn-lg"
       type="submit"
       v-on:click="save"
     >
@@ -234,3 +235,42 @@ export default {
     </button>
   </div>
 </template>
+
+<style scoped>
+.dropzone {
+  height: fit-content;
+  height: 150px;
+  width: 95%;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  border: 2px dashed #000000;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+.imageInput[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: inherit;
+  min-height: 200px;
+  max-height: 400px;
+  cursor: pointer;
+}
+.dropImage {
+  height: 100px;
+  border-radius: 50px;
+  margin-right: 20px;
+}
+.cancelButton {
+  margin-top: -60px;
+  margin-left: 90px;
+  height: 25px;
+  position: absolute;
+  z-index: 100;
+  cursor: pointer;
+}
+</style>

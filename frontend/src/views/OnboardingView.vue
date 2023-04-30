@@ -141,7 +141,10 @@ export default defineComponent({
     },
     async finishOnboarding(userId) {
       try {
-        const url = import.meta.env.VITE_APP_API_URL + "/users/set-onboarded?userId=" + userId;
+        const url =
+          import.meta.env.VITE_APP_API_URL +
+          "/users/set-onboarded?userId=" +
+          userId;
         const response = await fetch(url, {
           method: "POST",
           headers: {
@@ -251,15 +254,39 @@ export default defineComponent({
         setTimeout(() => this.addToChatHistory(this.getRandomChat()[12]), 3200);
         setTimeout(() => this.addToChatHistory(this.getRandomChat()[13]), 6400);
         setTimeout(() => this.addToChatHistory(this.getRandomChat()[14]), 9600);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[15]), 12800);
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[15]),
+          12800
+        );
         setTimeout(() => this.addToChatHistory(this.getRandomChat()[16]), 1600);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[17]), 19200);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[18]), 22400);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[19]), 25600);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[20]), 28800);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[21]), 32000);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[22]), 35200);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[23]), 38400);
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[17]),
+          19200
+        );
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[18]),
+          22400
+        );
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[19]),
+          25600
+        );
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[20]),
+          28800
+        );
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[21]),
+          32000
+        );
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[22]),
+          35200
+        );
+        setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[23]),
+          38400
+        );
         setTimeout(
           () =>
             saveUserChatHistory(
@@ -304,11 +331,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="bodyG">
-      <div v-if="session">
-        <div class="onboardingContainer">
+    <div v-if="session">
+      <div class="container-fluid bg-light text-white">
+        <div class="container pt-5 pb-5">
           <div class="mainChatContainer">
             <div class="chatContainer" id="chatContainer">
               <chatMessage
@@ -318,49 +345,121 @@ export default defineComponent({
                 :key="item.user"
               ></chatMessage>
             </div>
-            <div class="userInputContainer">
-              <img v-bind:src="avatar" class="chatAvatar" />
-              <div class="userInput">
+            <div class="container px-0">
+              <div class="form-floating mb-3 d-flex">
+                <img v-bind:src="avatar" class="chatAvatar mt-3" />
                 <textarea
                   :disabled="isDisabled"
-                  class="input"
+                  class="form-control mt-3 mx-3"
                   v-model="messageToSend"
                   @keydown.enter.stop.prevent="submitMessage()"
                   id="userInput"
                   name="userInput"
-                  placeholder="enter your message here"
+                  placeholder="enter your message here..."
                   ref="messageInput"
+                  style="min-height: 60px"
                 ></textarea>
+                <label
+                  for="floatingTextarea"
+                  class="text-primary mt-2"
+                  style="margin-left: 75px"
+                  >enter your message here...</label
+                >
                 <button
                   :disabled="isDisabled"
-                  class="chatButton"
+                  class="btn btn-secondary btn-lg mt-3 mb-1"
                   id="sendButton"
                   @click="submitMessage()"
+                  style="max-height: 60px"
                 >
-                  Send
+                  SEND
                 </button>
                 <button
-                  class="chatButton"
+                  class="btn btn-secondary btn-lg mt-3 mb-1 ms-3 me-2"
                   id="undoButton"
                   @click="removeMessage()"
+                  style="max-height: 60px"
                 >
-                  Undo
+                  UNDO
                 </button>
               </div>
             </div>
           </div>
+          <div v-if="imageDrop">
+            <ImageUpload
+              :user-id="this.userId"
+              @image-uploaded.once="submitMessage()"
+              :chat-name="chatName"
+            ></ImageUpload>
+          </div>
+          <h3 v-if="success">Image uploaded successfully!</h3>
+          <h3 v-if="error">Error uploading image, please try again.</h3>
         </div>
-        <div v-if="imageDrop">
-          <ImageUpload
-            :user-id="this.userId"
-            @image-uploaded.once="submitMessage()"
-            :chat-name="chatName"
-          ></ImageUpload>
-        </div>
-        <h3 v-if="success">Image uploaded successfully!</h3>
-        <h3 v-if="error">Error uploading image, please try again.</h3>
       </div>
     </div>
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.mainChatContainer {
+  height: 1000px;
+  background-color: #ffffff;
+  text-align: left;
+  display: flex;
+  border: 3px solid #ffffff;
+  border-radius: 15px;
+  margin: 5px;
+  margin-left: 5px;
+  padding: 5px;
+  flex-direction: column;
+  flex-grow: 4;
+  justify-content: top;
+  align-items: left;
+}
+.chatContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  flex-grow: 4;
+  overflow: scroll;
+}
+.pandaChat {
+  background-color: #ffffff;
+  text-align: left;
+  display: flex;
+  padding-right: 60px;
+  flex-direction: row;
+  justify-content: left;
+  align-items: left;
+}
+.userChat {
+  background-color: #ffffff;
+  text-align: left;
+  display: flex;
+  padding-left: 60px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: right;
+}
+.chatAvatar {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+}
+</style>
+
+<!-- 
+
+    <div v-if="imageDrop">
+      <ImageUpload
+        :user-id="this.userId"
+        @image-uploaded.once="submitMessage()"
+        :chat-name="chatName"
+      ></ImageUpload>
+    </div>
+    <h3 v-if="success">Image uploaded successfully!</h3>
+    <h3 v-if="error">Error uploading image, please try again.</h3>
+  </div>
+</div> -->

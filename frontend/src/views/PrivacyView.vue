@@ -12,7 +12,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main style="min-height: 71vh">
     <navBar></navBar>
     <div class="container-fluid h-100 bg-primary text-white">
       <div class="container pt-5 pb-5">

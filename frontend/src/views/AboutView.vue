@@ -12,7 +12,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main style="min-height: 71vh">
     <navBar></navBar>
     <div class="container-fluid h-100 bg-primary text-white">
       <div class="container pt-5 pb-5">
@@ -38,7 +38,7 @@ export default defineComponent({
         <div class="row">
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mb-5"
+              class="card text-bg-dark text-center mb-5 border-primary"
               style="width: 36rem"
             >
               <h5 class="card-header text-center">What Sets Us Apart 🔐</h5>
@@ -53,7 +53,7 @@ export default defineComponent({
           </div>
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mb-5"
+              class="card text-bg-dark text-center mb-5 border-primary"
               style="width: 36rem"
             >
               <h5 class="card-header text-center">
@@ -71,7 +71,7 @@ export default defineComponent({
         <div class="row">
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mb-5"
+              class="card text-bg-dark text-center mb-5 border-primary"
               style="width: 36rem"
             >
               <h5 class="card-header text-center">Our Core Values 🦄</h5>
@@ -94,7 +94,7 @@ export default defineComponent({
           </div>
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mb-5"
+              class="card text-bg-dark text-center mb-5 border-primary"
               style="width: 36rem"
             >
               <h5 class="card-header text-center">

@@ -27,7 +27,10 @@ export default {
     },
     formatAnswer(answer) {
       const urlRegex = /(https?:\/\/[^\s]+[\w/.)]+)/g;
-      const formattedAnswer = answer.replace(urlRegex, '<a href="$&" target="_blank">$&</a>');
+      const formattedAnswer = answer.replace(
+        urlRegex,
+        '<a href="$&" target="_blank">$&</a>'
+      );
       return formattedAnswer;
     },
   },
@@ -37,7 +40,7 @@ export default {
 <template>
   <div class="faqContent">
     <div v-if="!hideSectionTitles" class="faqTitle">
-      <h2>{{ faqSection.title }}</h2>
+      <h2 class="text-uppercase mt-3 mb-3">{{ faqSection.title }}</h2>
     </div>
     <div
       v-for="(faq, index) in faqSection.items"
@@ -58,3 +61,46 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.faqContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.faqQuestion {
+  width: 700px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  background-color: #FFFFFF;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 18px;
+  font-family: 'Iosevka';
+}
+.faqQuestion img {
+  margin-top: 4px;
+}
+.faqQuestion:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.faqAnswer {
+  width: 680px;
+  padding: 10px;
+  padding-top: 20px;
+  margin-top: -20px;
+  text-align: start;
+}
+.faqAnswer a {
+  color: #FFCB4C;
+  text-decoration: none;
+}
+</style>

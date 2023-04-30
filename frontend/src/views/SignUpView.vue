@@ -22,7 +22,8 @@ export default defineComponent({
       passwordOk: "",
       badPasswordError: "",
       loading: false,
-      buttonText: "SIGN UP",
+      signUpButtonText: "SIGN UP",
+      agreeToSPP: false,
     };
   },
   watch: {
@@ -166,17 +167,155 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="min-height: 71vh">
     <navBar></navBar>
-    <div class="bodyG">
-      <div class="signInContainer">
-        <div class="signInContainerTitle">
-          <img src="../assets/panda.png" />
-          <h2>SIGN UP</h2>
-          <h3>ALREADY HAVE AN ACCOUNT?</h3>
-          <p @click="toSignIn()">SIGN IN</p>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container d-flex justify-content-center pt-5 pb-5">
+        <div class="card text-bg-light text-center mb-3" style="width: 32rem">
+          <div class="card-header pt-3 pb-3">
+            <img
+              src="../assets/panda.png"
+              class="w-20 h-20"
+              alt="panda"
+              width="50"
+            />
+            <h2 class="pt-3">SIGN UP</h2>
+            <p>ALREADY HAVE AN ACCOUNT?</p>
+            <button type="button" class="btn btn-secondary" @click="toSignIn()">
+              SIGN IN
+            </button>
+          </div>
+          <div class="card-body pt-5 pb-4 px-5">
+            <form class="needs-validation" novalidate>
+              <div class="form-floating mb-3">
+                <label for="floatingInput">Email</label>
+                <input
+                  type="email"
+                  ref="email"
+                  v-model="this.email"
+                  class="form-control"
+                  id="floatingInput"
+                  placeholder="kung-fu@panda.ai"
+                  autocomplete="email"
+                  required
+                />
+                <div class="valid-feedback">🐼 Looks good!</div>
+                <div
+                  id="validationServerUsernameFeedback"
+                  class="invalid-feedback"
+                >
+                  Please enter a valid email address.
+                </div>
+              </div>
+              <div class="form-floating">
+                <label for="floatingPassword">Password</label>
+                <input
+                  type="password"
+                  ref="password"
+                  v-model="this.password"
+                  class="form-control"
+                  id="floatingPassword"
+                  placeholder="sKad00sh"
+                  autocomplete="password"
+                  @keyup.enter="signInClicked(this.email, this.password)"
+                  required
+                />
+                <div class="valid-feedback">🐼 Looks good!</div>
+                <div
+                  id="validationServerUsernameFeedback"
+                  class="invalid-feedback"
+                >
+                  Please enter a valid password.
+                </div>
+                <div id="passwordHelpBlock" class="form-text">
+                  Your password must be at least 8 characters long and include
+                  one lowercase, one uppercase and a number.
+                </div>
+              </div>
+              <div class="form-check ms-4 pt-4 pb-4 px-4">
+                <input
+                  type="checkbox"
+                  class="form-check-input mt-3"
+                  id="ToS&PP"
+                  value="this.agreeToSPP"
+                  required
+                />
+                <label class="form-check-label" for="ToS&PP"
+                  >Please agree to our
+                  <a @click="toToS">Terms of Service</a> and
+                  <a @click="toPP">Privacy Policy</a> to continue.</label
+                >
+                <div id="invalidCheck3Feedback" class="invalid-feedback">
+                  You must agree before submitting.
+                </div>
+              </div>
+              <div class="pt-1">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-lg d-inline-flex justify-content-center"
+                  style="width: 300px"
+                  @click="signInClicked(this.email, this.password)"
+                >
+                  <SpinnerComponent
+                    :loading="this.loading"
+                    :button-text="this.signUpButtonText"
+                  ></SpinnerComponent>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer pt-4 pb-4">
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+            >
+              <SpinnerComponent :loading="this.loadingGitHub"></SpinnerComponent
+              ><img
+                class="thirdPartLogo"
+                src="../assets/icons/github.svg"
+              />Sign Up With GitHub
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+            >
+              <SpinnerComponent :loading="this.loadingGoogle"></SpinnerComponent
+              ><img
+                class="thirdPartLogo"
+                src="../assets/icons/google.svg"
+              />Sign Up With Google
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+            >
+              <SpinnerComponent :loading="this.loadingApple"></SpinnerComponent
+              ><img class="thirdPartLogo" src="../assets/icons/apple.svg" />Sign Up With Apple
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+            >
+              <SpinnerComponent
+                :loading="this.loadingFacebook"
+              ></SpinnerComponent
+              ><img
+                class="thirdPartLogo"
+                src="../assets/icons/facebook.svg"
+              />Sign Up With Facebook
+            </button>
+          </div>
         </div>
-        <div class="signInBar"></div>
+      </div>
+    </div>
+    <navFooter></navFooter>
+  </main>
+
+  <!-- 
         <div class="emailPassword">
           <h2>Email</h2>
           <img
@@ -256,28 +395,20 @@ export default defineComponent({
               :button-text="this.buttonText"
             ></SpinnerComponent>
           </button>
-          <h4>BY CONTINUING YOU AGREE TO OUR:</h4>
-          <h5 @click="toToS()">TERMS OF SERVICE</h5>
-          <h5 @click="toPP()">PRIVACY POLICY</h5>
         </div>
-        <div class="signInBar"></div>
-        <div class="signInOption"><p>OR</p></div>
-        <div class="thirdPartySignIn">
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/github.svg" />Continue With GitHub
-          </div>
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/google.svg" />Continue With Google
-          </div>
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/apple.svg" />Continue With Apple
-          </div>
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/facebook.svg" />Continue With Facebook
-          </div>
-        </div>
-      </div>
-    </div>
-    <navFooter></navFooter>
-  </main>
+        > -->
 </template>
+
+<style scoped>
+.form-check a {
+  color: #ffcb4c;
+}
+.form-check a:hover {
+  color: #ffcb4c;
+  cursor: pointer;
+}
+.thirdPartLogo {
+  margin-top: 4px;
+  margin-right: 12px;
+}
+</style>

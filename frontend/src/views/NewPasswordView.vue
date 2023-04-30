@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { submitNewPassword } from "supertokens-web-js/recipe/thirdpartyemailpassword";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
@@ -10,6 +11,7 @@ export default defineComponent({
       password: "",
       passwordOk: "",
       badPasswordError: "",
+      sendButtonText: "RESET PASSWORD",
     };
   },
   watch: {
@@ -73,58 +75,68 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    SpinnerComponent,
   },
 });
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="bodyG">
-      <div class="emailSentContainer">
-        <img id="emailSentPanda" src="../assets/panda.png" />
-        <h2>CHOOSE A NEW PASSWORD</h2>
-        <img
-          id="emailSentEnvelope"
-          src="../assets/icons/envelope-paper-heart-fill.svg"
-        />
-        <div class="signInBar"></div>
-        <p>Please enter a new password below:</p>
-        <div class="emailPassword">
-          <img
-            v-if="isPasswordValid && passwordOk === 'ok' && password"
-            id="passwordGood"
-            src="../assets/icons/shield-fill-check.svg"
-          />
-          <img
-            v-if="passwordOk === 'no'"
-            id="passwordBad"
-            src="../assets/icons/shield-fill-exclamation.svg"
-          />
-          <input
-            ref="email"
-            v-model="this.password"
-            type="password"
-            placeholder="sKad00sh"
-            @keyup.enter="newPasswordEntered(this.password)"
-          />
-          <h6 v-if="badPasswordError">{{ badPasswordError }}</h6>
-          <button
-            v-if="!badPasswordError"
-            @click="newPasswordEntered(this.password)"
-          >
-            RESET PASSWORD
-          </button>
-          <button
-            v-else
-            style="
-              background-color: #c8c8c8;
-              border: 5px solid #c8c8c8;
-              cursor: default;
-            "
-          >
-            RESET PASSWORD
-          </button>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container d-flex justify-content-center pt-5 pb-5">
+        <div class="card text-bg-light text-center mb-3" style="width: 32rem">
+          <div class="card-header pt-3 pb-3">
+            <img
+              src="../assets/panda.png"
+              class="w-20 h-20"
+              alt="panda"
+              width="50"
+            />
+            <h2 class="pt-3">CHOOSE A NEW PASSWORD</h2>
+          </div>
+          <div class="card-body pt-4 pb-4 px-5">
+            <p>Please enter a new password below:</p>
+            <div class="form-floating mb-3">
+              <input
+                type="password"
+                ref="password"
+                v-model="this.email"
+                class="form-control"
+                id="floatingInput"
+                placeholder="sKad00sh"
+                autocomplete="password"
+                @keyup.enter="sendEmailClicked(this.email)"
+              />
+              <label for="floatingInput">Password</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="password"
+                ref="confirmPassword"
+                v-model="this.email"
+                class="form-control"
+                id="floatingInput"
+                placeholder="sKad00sh"
+                autocomplete="password"
+                @keyup.enter="sendEmailClicked(this.email)"
+              />
+              <label for="floatingInput">Confirm Password</label>
+            </div>
+            <div class="pt-4">
+              <button
+                type="button"
+                class="btn btn-secondary btn-lg mb-3 d-inline-flex justify-content-center"
+                style="width: 300px"
+                @click="newPasswordEntered(this.password)"
+              >
+                <SpinnerComponent
+                  :loading="this.loading"
+                  :button-text="this.sendButtonText"
+                ></SpinnerComponent>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

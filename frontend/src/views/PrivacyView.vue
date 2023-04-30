@@ -12,11 +12,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="body">
-      <div class="aboutContainer">
-        <h2>At 🐼 panda.ai, Privacy Matters 🛡️</h2>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container pt-5 pb-5">
+        <h2>AT 🐼 PANDA.AI, PRIVACY MATTERS 🛡️</h2>
         <p>
           We believe that privacy is a fundamental human right, and we take it
           very seriously. That's why we've built our entire platform with your
@@ -25,7 +25,7 @@ export default defineComponent({
           open communication with all our users.
         </p>
         <div class="aboutContainerLine"></div>
-        <h2>Here's our commitment to you: 🤝</h2>
+        <h2>HERE'S OUR COMMITMENT TO YOU: 🤝</h2>
         <ol type="1">
           <li>
             No Jargon 🚫
@@ -74,7 +74,7 @@ export default defineComponent({
           enjoy all the benefits our AI personal assistant has to offer.
         </p>
         <div class="aboutContainerLine"></div>
-        <h2>Powered by chatGPT 🔋</h2>
+        <h2>POWERED BY CHATGPT 🔋</h2>
         <p>
           🐼 panda.ai is built on top of open.ai's ChatGPT Large Language
           Model(LLM) Artificial Intelligence. As an AI language model, it's
@@ -107,3 +107,15 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.aboutContainerLine {
+  height: 1px;
+  width: 100%;
+  margin: 0px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  display: flex;
+  background-color: #ffffff;
+}
+</style>

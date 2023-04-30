@@ -12,14 +12,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="body">
-    <img src="../../src/assets/panda.png" class="biglogo" width="200" />
-      <div>
-        <h1>SUCCESSFULLY UNSUBSCRIBED</h1>
-        <p>We are sorry to see you go 😭</p>
-        <p>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container pt-5 pb-5 text-center">
+        <img src="../../src/assets/panda.png" width="200" />
+        <h1 class="mt-5">SUCCESSFULLY UNSUBSCRIBED</h1>
+        <h2 class="mt-5">We are sorry to see you go 😭</h2>
+        <p class="mt-3">
           You can always keep up to date with what we are doing by keeping an
           eye on the Roadmap page.
         </p>

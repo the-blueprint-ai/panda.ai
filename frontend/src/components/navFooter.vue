@@ -1,6 +1,9 @@
 <script>
 export default {
   methods: {
+    redirectToHome() {
+      this.$router.push("/");
+    },
     goToPage(route) {
       this.$router.push(route);
     },
@@ -23,76 +26,132 @@ export default {
 </script>
 
 <template>
-  <div class="navFooter">
-    <div class="footerbar"></div>
-    <div class="footerContainer">
-      <div class="brandSocialsHolder">
-        <div class="footerBranding">
-          <div class="brandHolderBottom">
-            <router-link to="/">
-              <img class="logo" src="../../src/assets/panda.png" width="50" />
-            </router-link>
-            <div class="brandText">
-              <h2>panda.ai</h2>
-              <p>MADE WITH ❤️</p>
-            </div>
-          </div>
+  <div class="row h-200 pt-5 pb-3 bg-white">
+    <div class="col-sm-2 px-5">
+      <div class="row pb-5" @click="redirectToHome">
+        <img class="w-25 h-25" src="../../src/assets/panda.png" width="30" />
+        <div class="col">
+          <h4 class="pt-3 lh-1">panda.ai</h4>
+          <p class="lh-1">MADE WITH ❤️</p>
         </div>
-        <div class="socialsHolder">
-          <img
-            navigate-to="discord"
-            @click="navigate($event)"
-            src="../assets/icons/discord.svg"
-          />
-          <img
-            navigate-to="twitter"
-            @click="navigate($event)"
-            src="../assets/icons/twitter.svg"
-          />
-          <img
-            navigate-to="linkedin"
-            @click="navigate($event)"
-            src="../assets/icons/linkedin.svg"
-          />
-          <a :href="'mailto:contact@mypanda.ai?subject=Hello!'">
-            <img
-              navigate-to="contact"
-              src="../assets/icons/envelope-at-fill.svg"
-            />
-          </a>
-        </div>
-        <h3>©panda.ai 2023</h3>
       </div>
-      <div class="footerMenus">
-        <div class="singleMenu">
-          <h2>Links</h2>
-          <p navigate-to="home" @click="goToPage('/')">home</p>
-          <p navigate-to="roadmap" @click="goToPage('/roadmap')">roadmap</p>
-          <p navigate-to="privacy" @click="goToPage('/privacy')">privacy</p>
+      <div class="row ps-2 list-unstyled">
+        <div class="col-3">
+          <li class="nav-item">
+            <img
+              navigate-to="discord"
+              @click="navigate($event)"
+              src="../assets/icons/discord.svg"
+              width="30"
+              height="30"
+            />
+          </li>
         </div>
-        <div class="singleMenu">
-          <h2>Company</h2>
-          <p navigate-to="about" @click="goToPage('/about')">about</p>
-          <p navigate-to="about" @click="goToPage('/pricing')">pricing</p>
-          <p navigate-to="terms-of-service" @click="goToPage('/terms-of-service')">
-            terms of service
-          </p>
-          <p navigate-to="privacy-policy" @click="goToPage('/privacy-policy')">
-            privacy policy
-          </p>
+        <div class="col-3">
+          <li class="nav-item">
+            <img
+              navigate-to="twitter"
+              @click="navigate($event)"
+              src="../assets/icons/twitter.svg"
+              width="30"
+              height="30"
+            />
+          </li>
         </div>
-        <div class="singleMenu">
-          <h2>Support</h2>
-          <p navigate-to="support" @click="goToPage('/support')">support</p>
-          <p navigate-to="contact" @click="goToPage('/support')">contact us</p>
+        <div class="col-3">
+          <li class="nav-item">
+            <img
+              navigate-to="linkedin"
+              @click="navigate($event)"
+              src="../assets/icons/linkedin.svg"
+              width="30"
+              height="30"
+            />
+          </li>
         </div>
-        <div class="singleMenu">
-          <h2>Social</h2>
-          <p navigate-to="discord" @click="navigate($event)">Discord</p>
-          <p navigate-to="twitter" @click="navigate($event)">Twitter</p>
-          <p navigate-to="linkedin" @click="navigate($event)">LinkedIn</p>
+        <div class="col-3">
+          <li class="nav-item">
+            <a :href="'mailto:contact@mypanda.ai?subject=Hello!'">
+              <img
+                navigate-to="contact"
+                src="../assets/icons/envelope-at-fill.svg"
+                width="30"
+                height="30"
+              />
+            </a>
+          </li>
         </div>
       </div>
     </div>
+    <div class="nav col-sm-10 justify-content-end px-5">
+      <div class="col-1">
+        <h3 class="pb-3"><strong>LINKS</strong></h3>
+        <p class="ps-1 lh-1" navigate-to="home" @click="goToPage('/')">home</p>
+        <p class="ps-1 lh-1" navigate-to="roadmap" @click="goToPage('/roadmap')">
+          roadmap
+        </p>
+        <p class="ps-1 lh-1" navigate-to="privacy" @click="goToPage('/privacy')">
+          privacy
+        </p>
+      </div>
+      <div class="col-1">
+        <h3 class="pb-3"><strong>COMPANY</strong></h3>
+        <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/about')">
+          about
+        </p>
+        <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/pricing')">
+          pricing
+        </p>
+        <p
+          class="ps-1 lh-1"
+          navigate-to="terms-of-service"
+          @click="goToPage('/terms-of-service')"
+        >
+          terms of service
+        </p>
+        <p
+          class="ps-1 lh-1"
+          navigate-to="privacy-policy"
+          @click="goToPage('/privacy-policy')"
+        >
+          privacy policy
+        </p>
+      </div>
+      <div class="col-1">
+        <h3 class="pb-3"><strong>SUPPORT</strong></h3>
+        <p class="ps-1 lh-1" navigate-to="support" @click="goToPage('/support')">
+          support
+        </p>
+        <p class="ps-1 lh-1" navigate-to="contact" @click="goToPage('/support')">
+          contact us
+        </p>
+      </div>
+      <div class="col-1">
+        <h3 class="pb-3"><strong>SOCIAL</strong></h3>
+        <p class="ps-1 lh-1" navigate-to="discord" @click="navigate($event)">
+          Discord
+        </p>
+        <p class="ps-1 lh-1" navigate-to="twitter" @click="navigate($event)">
+          Twitter
+        </p>
+        <p class="ps-1 lh-1" navigate-to="linkedin" @click="navigate($event)">
+          LinkedIn
+        </p>
+      </div>
+    </div>
+    <div class="row px-5 pt-3 text-center"><h5>©panda.ai 2023</h5></div>
   </div>
 </template>
+
+<style scoped>
+p:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+h4:hover {
+  cursor: pointer;
+}
+img:hover {
+  cursor: pointer;
+}
+</style>

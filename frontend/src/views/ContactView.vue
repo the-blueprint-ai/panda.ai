@@ -12,13 +12,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="body">
-      <div>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container text-center pt-5 pb-5">
         <h1>🐼</h1>
         <h1>CONTACT US</h1>
-        <h2>COMING SOON...</h2>
+        <h2 class="mt-5">COMING SOON...</h2>
       </div>
     </div>
     <navFooter></navFooter>

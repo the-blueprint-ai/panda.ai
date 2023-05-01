@@ -46,8 +46,8 @@ class NewsSearchTool(BaseTool):
         html_list_items = []
         for i, article in enumerate(top_5_articles):
             source_name = article['source'].get('name') or article['source'].get('Name') or "Unknown"
-            html_list_items.append(f"<li><a href='{article['url']}' target='_blank'><strong>{article['title']}</strong> ({source_name})</a></li>")
-        html_list = f"<div class='newsAnswer'><h2 class='newsTitle'>{query} NEWS</h2><ol>" + "".join(html_list_items) + "</ol></div>"
+            html_list_items.append(f"<li><a class='text-primary' href='{article['url']}' target='_blank' style='text-decoration: none'>{article['title']} ({source_name})</a></li>")
+        html_list = f"<div class=class='card text-bg-light text-center'><div class='card-header text-uppercase pt-3 pb-2 px-3'><h2 class='text-uppercase'>{query} NEWS</h2></div><div class='card-body text-start pt-2 pb-1 px-2'><ol>" + "".join(html_list_items) + "</ol></div></div>"
         
         return html_list
 
@@ -97,12 +97,14 @@ class WikipediaSearchTool(BaseTool):
             wikiImage = self.get_wiki_image(queryUnderscored, response)
 
             html = f"""
-    <div class="wikiAnswer">
-        <a href="{wikiURL}" target="_blank"><img class="wikiAnswerImage" src="{wikiImage}" /></a>
-        <h2 class="wikiAnswerTitle"><a href="{wikiURL}" target="_blank">{wikiTitle}</a></h2>
-        <p class="wikiAnswerSummary">{wikiExtract}</p>
-        <div class="seeMoreButton">
-             <a href="{wikiURL}" target="_blank"><button class="seeMore">SEE MORE...</button></a>
+    <div class='card text-bg-light text-center'>
+        <a href="{wikiURL}" target="_blank"><img class="card-img-top" src="{wikiImage}" /></a>
+        <div class='card-body pt-2 pb-1 px-2'>
+            <h2 class="text-primary text-uppercase mt-2"><a class='text-primary' href="{wikiURL}" target="_blank" style='text-decoration: none'>{wikiTitle}</a></h2>
+            <p class="card-text">{wikiExtract}</p>
+        </div>
+        <div class="card-footer pt-2 pb-2 px-2">
+             <a href="{wikiURL}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style='width: 80%'>SEE MORE...</button></a>
         </div>
     </div>
         """
@@ -140,11 +142,15 @@ class YouTubeSearchTool(BaseTool):
 
                 if ytVideoId:
                     html = f"""
-    <div class="youTubeAnswer">
-        <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><h2>{query} VIDEO</h2></a>
-        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        <div class="seeMoreButton">
-             <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><button class="seeMore">SEE MORE...</button></a>
+    <div class="card text-bg-light text-center">
+        <div class='card-header text-uppercase pt-3 pb-2 px-3'>
+            <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank" style='text-decoration: none'><h2 class='text-primary text-uppercase'>{query} VIDEO</h2></a>
+        </div>
+        <div class='card-body pt-2 pb-1 px-2' style='width: 100%'>
+            <iframe width="100%" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer pt-2 pb-2 px-2">
+            <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style='width: 80%'>SEE MORE...</button></a>
         </div>
     </div>
                     """
@@ -216,19 +222,19 @@ class GoogleImageSearchTool(BaseTool):
                 # Generate HTML for 5 random items
                 html_items = ''
                 for idx, item in enumerate(random_items):
-                    html_items += f'<a href="{item["image"]["contextLink"]}" target="_blank"><img src="{item["link"]}" alt="{item["title"]}" /></a>'
+                    html_items += f'<a href="{item["image"]["contextLink"]}" target="_blank"><img class="img-thumbnail mb-2" src="{item["link"]}" alt="{item["title"]}" /></a>'
 
                 html = f"""
-        <div class="googleImageAnswer">
-            <div class="googleImageAnswerHeading">
-                <a href="https://www.google.com/search?q={encoded_query}&tbm=isch" target="_blank"><h2>{query} IMAGES</h2></a>
+        <div class="card text-bg-light text-center">
+            <div class="card-header text-uppercase pt-3 pb-2 px-3">
+                <a href="https://www.google.com/search?q={encoded_query}&tbm=isch" target="_blank" style='text-decoration: none'><h2 class='text-primary'>{query} IMAGES</h2></a>
             </div>
-            <div class="googleImageAnswerImages">
+            <div class="card-body pt-2 pb-2 px-2">
                 {html_items}
             </div>
-                <div class="seeMoreButton">
-                    <a href="https://www.google.com/search?q={encoded_query}&tbm=isch" target="_blank"><button class="seeMore">SEE MORE...</button></a>
-                </div>
+            <div class="card-footer pt-2 pb-2 px-2">
+                <a href="https://www.google.com/search?q={encoded_query}&tbm=isch" target="_blank"><button class="btn btn-secondary btn-lg text-center" style='width: 80%'>SEE MORE...</button></a>
+            </div>
         </div>
                         """
                 return html
@@ -276,10 +282,10 @@ class GoogleSearchTool(BaseTool):
                         else:
                             image_src = None
 
-                        html_items += f'<div class="googleSearchItem"><div class="googleSearchItemTitle"><a href="{item["link"]}" target="_blank"><h2>{item["title"]}</h2></a></div><div class="googleSearchItemContent">'
+                        html_items += f'<li class="list-group-item"><a class="text-primary" href="{item["link"]}" target="_blank" style="text-decoration: none"><h4 class="text-uppercase mt-2">{item["title"]}</h4></a><div class="googleSearchItemContent d-flex flex-row align-items-center">'
                         if image_src:
-                            html_items += f'<a href="{item["link"]}" target="_blank"><img src="{image_src}" alt="{item["title"]}" /></a>'
-                        html_items += f'<p>{item["snippet"]}</p></div></div>'
+                            html_items += f'<a class="me-3" href="{item["link"]}" target="_blank" style="width: 50%"><img class="img-thumbnail" src="{image_src}" alt="{item["title"]}" /></a>'
+                        html_items += f'<p class="card-text">{item["snippet"]}</p></div></li>'
                         count += 1
 
                     if count == 5:
@@ -291,16 +297,18 @@ class GoogleSearchTool(BaseTool):
                     count += 1
 
                 html = f"""
-        <div class="googleSearchAnswer">
-            <div class="googleSearchResultsHeading">
-                <a href="https://www.google.com/search?q={encoded_query}&dateRestrict=m1&safe=active" target="_blank"><h2>{query} SEARCH RESULTS</h2></a>
+        <div class="card text-bg-light text-center">
+            <div class="card-header text-uppercase pt-3 pb-2 px-3">
+                <a href="https://www.google.com/search?q={encoded_query}&dateRestrict=m1&safe=active" target="_blank" style='text-decoration: none'><h2 class='text-primary'>{query} SEARCH RESULTS</h2></a>
             </div>
-            <div class="googleSearchAnswerResults">
-                {html_items}
+            <div class="card-body text-start pt-0 pb-0 px-0">
+                <ul class="list-group list-group-flush">
+                    {html_items}
+                </ul>
             </div>
-                <div class="seeMoreButton">
-                    <a href="https://www.google.com/search?q={encoded_query}&dateRestrict=m1&safe=active" target="_blank"><button class="seeMore">SEE MORE...</button></a>
-                </div>
+            <div class="card-footer pt-2 pb-2 px-2">
+                <a href="https://www.google.com/search?q={encoded_query}&dateRestrict=m1&safe=active" target="_blank"><button class="btn btn-secondary btn-lg text-center" style="width: 80%">SEE MORE...</button></a>
+            </div>
         </div>
                         """
                 return html
@@ -417,14 +425,11 @@ class TMDBSearchTool(BaseTool):
                     known_for_images = self.generate_known_for_images(known_for)
 
                     html = f"""
-        <div class="tmdbAnswer">
-            <div class="tmdbAnswerHeading">
-                <a href="https://www.themoviedb.org/person/{id}-{name}" target="_blank"><h2>{name}</h2></a>
-            </div>
-            <div class="tmdbAnswerContent">
-                <div class="tmdbAnswerContentImage">
-                     <a href="https://www.themoviedb.org/person/{id}-{name}" target="_blank"><img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{image}" alt="{name}" /></a>
-                </div>
+        <div class="card text-bg-light text-center">
+            <a href="https://www.themoviedb.org/person/{id}-{name}" target="_blank"><img class="card-img-top" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{image}" alt="{name}" /></a>
+            <div class="card-body pt-2 pb-1 px-2 text-start">
+                <a href="https://www.themoviedb.org/person/{id}-{name}" target="_blank" style="text-decoration: none"><h2 class="text-primary text-uppercase">{name}</h2></a>
+
                 <div class="tmdbAnswerContentDetails">
                     <h2>KNOWN FOR:</h2>
                     <div class="tmdbAnswerContentDetailsKnownFor">
@@ -432,9 +437,9 @@ class TMDBSearchTool(BaseTool):
                     </div>
                 </div>
             </div>
-                <div class="seeMoreButton">
-                    <a href="https://www.themoviedb.org/person/{id}-{name}" target="_blank"><button class="seeMore">SEE MORE...</button></a>
-                </div>
+            <div class="card-footer pt-2 pb-2 px-2">
+                <a href="https://www.themoviedb.org/movie/{id}-{name}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style="width: 80%">SEE MORE...</button></a>
+            </div>
         </div>
                         """
                         
@@ -450,33 +455,25 @@ class TMDBSearchTool(BaseTool):
                     formatted_rating = "{:.1f}".format(round(rating, 1))
 
                     html = f"""
-        <div class="tmdbAnswer">
-            <div class="tmdbAnswerHeading">
-                <a href="https://www.themoviedb.org/movie/{id}-{name}" target="_blank"><h2>{name}</h2></a>
-            </div>
-            <div class="tmdbAnswerContent">
-                <div class="tmdbAnswerContentImage">
-                    <a href="https://www.themoviedb.org/movie/{id}-{name}" target="_blank"><img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{image}" alt="{name}" /></a>
-                </div>
-                <div class="tmdbAnswerContentDetails">
-                    <div class="tmdbAnswerContentOverview">
-                        <p>{overview}</p>
-                        <div class="tmdbAnswerContentOverviewInfo">
-                            <div class="tmdbAnswerContentOverviewInfoReleaseDate">
-                                <h3>RELEASE DATE:</h3>
-                                <p>{formatted_date}</p>
-                            </div>
-                            <div class="tmdbAnswerContentOverviewInfoRating">
-                                <h3>RATING:</h3>
-                                <p>{formatted_rating}</p>
-                            </div>
-                        </div>
+        <div class="card text-bg-light text-center">
+            <a href="https://www.themoviedb.org/movie/{id}-{name}" target="_blank"><img class="card-img-top" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{image}" alt="{name}" /></a>
+            <div class="card-body pt-2 pb-1 px-2 text-start">
+                <a href="https://www.themoviedb.org/movie/{id}-{name}" target="_blank" style="text-decoration: none"><h2 class="text-primary text-uppercase">{name}</h2></a>
+                <div class="movieSubtitle d-flex">
+                    <div class="movieReleaseDate me-5">
+                        <h6 class="card-subtitle text-muted">RELEASE DATE:</h6>
+                        <p class="card-subtitle text-muted">{formatted_date}</p>
+                    </div>
+                    <div class="movieRating">
+                        <h6 class="card-subtitle text-muted">TMDB RATING:</h6>
+                        <p class="card-subtitle text-muted">{formatted_rating}</p>
                     </div>
                 </div>
+                <p class="card-text mt-1 mb-3">{overview}</p>
             </div>
-                <div class="seeMoreButton">
-                    <a href="https://www.themoviedb.org/movie/{id}-{name}" target="_blank"><button class="seeMore">SEE MORE...</button></a>
-                </div>
+            <div class="card-footer pt-2 pb-2 px-2">
+                <a href="https://www.themoviedb.org/movie/{id}-{name}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style="width: 80%">SEE MORE...</button></a>
+            </div>
         </div>
                         """
 
@@ -492,33 +489,25 @@ class TMDBSearchTool(BaseTool):
                     formatted_rating = "{:.1f}".format(round(rating, 1))
 
                     html = f"""
-        <div class="tmdbAnswer">
-            <div class="tmdbAnswerHeading">
-                <a href="https://www.themoviedb.org/tv/{id}-{name}" target="_blank"><h2>{name}</h2></a>
-            </div>
-            <div class="tmdbAnswerContent">
-                <div class="tmdbAnswerContentImage">
-                    <a href="https://www.themoviedb.org/tv/{id}-{name}" target="_blank"><img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{image}" alt="{name}" /></a>
-                </div>
-                <div class="tmdbAnswerContentDetails">
-                    <div class="tmdbAnswerContentOverview">
-                        <p>{overview}</p>
-                        <div class="tmdbAnswerContentOverviewInfo">
-                            <div class="tmdbAnswerContentOverviewInfoReleaseDate">
-                                <h3>RELEASE DATE:</h3>
-                                <p>{formatted_date}</p>
-                            </div>
-                            <div class="tmdbAnswerContentOverviewInfoRating">
-                                <h3>RATING:</h3>
-                                <p>{formatted_rating}</p>
-                            </div>
-                        </div>
+        <div class="card text-bg-light text-center">
+            <a href="https://www.themoviedb.org/tv/{id}-{name}" target="_blank"><img class="card-img-top" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{image}" alt="{name}" /></a>
+            <div class="card-body pt-2 pb-1 px-2 text-start">
+                <a href="https://www.themoviedb.org/tv/{id}-{name}" target="_blank" style="text-decoration: none"><h2 class="text-primary text-uppercase">{name}</h2></a>
+                <div class="movieSubtitle d-flex">
+                    <div class="movieReleaseDate me-5">
+                        <h6 class="card-subtitle text-muted">RELEASE DATE:</h6>
+                        <p class="card-subtitle text-muted">{formatted_date}</p>
+                    </div>
+                    <div class="movieRating">
+                        <h6 class="card-subtitle text-muted">TMDB RATING:</h6>
+                        <p class="card-subtitle text-muted">{formatted_rating}</p>
                     </div>
                 </div>
+                <p class="card-text mt-1 mb-3">{overview}</p>
             </div>
-                <div class="seeMoreButton">
-                    <a href="https://www.themoviedb.org/tv/{id}-{name}" target="_blank"><button class="seeMore">SEE MORE...</button></a>
-                </div>
+            <div class="card-footer pt-2 pb-2 px-2">
+                <a href="https://www.themoviedb.org/tv/{id}-{name}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style="width: 80%">SEE MORE...</button></a>
+            </div>
         </div>
                         """
                 

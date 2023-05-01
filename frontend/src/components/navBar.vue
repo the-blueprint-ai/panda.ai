@@ -73,48 +73,12 @@ export default {
       this.$router.push("/auth/admin/dashboard");
     },
     redirectToUserDashboard() {
-      this.$router.push("/auth/" + this.userId + "/chat");
+      window.open("https://api.mypanda.ai/auth/dashboard", "_blank");
     },
     async onLogout() {
       await Session.signOut();
       window.location.href = "https://www.mypanda.ai/";
     },
-    // toggleMenu() {
-    //   const menu = this.$refs.hamburgerMenu;
-
-    //   if (!menu.style.left || menu.style.left === "-120%") {
-    //     menu.style.left = "0";
-    //   } else {
-    //     menu.style.left = "-120%";
-    //   }
-    // },
-    // openClose(event) {
-    //   // Update the openClose method to take the event object as a parameter
-    //   var _this = this;
-
-    //   const closeListener = (e) => {
-    //     if (
-    //       _this.catchOutsideClick(e, _this.$refs.avatar) &&
-    //       _this.catchOutsideClick(e, _this.$refs.caret)
-    //     )
-    //       window.removeEventListener("click", closeListener),
-    //         _this.setIsOpenValue(false);
-    //   };
-
-    //   window.addEventListener("click", closeListener);
-
-    //   this.setIsOpenValue(!this.isOpen);
-    // },
-    // catchOutsideClick(event, dropdown) {
-    //   if (!dropdown) return false; // Add this line to check if dropdown is null
-
-    //   // When user clicks menu or a child of the menu — do nothing
-    //   if (dropdown == event.target || dropdown.contains(event.target))
-    //     return false;
-
-    //   // When user clicks outside of the menu — close the menu
-    //   if (this.isOpen && dropdown != event.target) return true;
-    // },
   },
 };
 </script>
@@ -209,25 +173,26 @@ export default {
             >
               <img v-bind:src="avatar" class="rounded" ref="avatar" width="60"/>
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" @click="redirectToChat">Chat</a></li>
+            <ul class="dropdown-menu dropdown-menu-lg-end me-4">
+              <li><a class="dropdown-item" @click="redirectToChat">CHAT</a></li>
               <li>
-                <a class="dropdown-item" @click="redirectToAccount">Account</a>
+                <a class="dropdown-item" @click="redirectToAccount">ACCOUNT</a>
               </li>
               <li><hr v-if="admin" class="dropdown-divider" /></li>
+              <li><h6 class="dropdown-header">ADMIN</h6></li>
               <li>
                 <a v-if="admin" class="dropdown-item" @click="redirectToAdmin"
-                  >Admin Panel</a
+                  >ADMIN PANEL</a
                 >
               </li>
               <li>
                 <a v-if="admin" class="dropdown-item" @click="redirectToUserDashboard"
-                  >User Dashboard</a
+                  >USER DASHBOARD</a
                 >
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <a class="dropdown-item" @click="onLogout">Sign Out</a>
+                <a class="dropdown-item" @click="onLogout">SIGN OUT</a>
               </li>
             </ul>
           </li>

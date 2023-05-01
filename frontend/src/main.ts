@@ -33,3 +33,5 @@ app.use(
 );
 
 app.mount("#app");
+
+import "bootstrap/dist/js/bootstrap.js";

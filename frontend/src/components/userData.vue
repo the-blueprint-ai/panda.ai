@@ -70,18 +70,8 @@ export default {
 
 <template>
   <div class="userData" v-if="dataMenu">
-    <h1 class="accountSectionHeading">DATA</h1>
-    <div class="mobileAccountChatPickers">
-      <!-- Mobile picker for tabs -->
-      <select v-model="mobileTab" @change="dataTabSelector(mobileTab)" class="accountDataPicker">
-        <option value="entities">ENTITIES</option>
-        <option value="documents">DOCUMENTS</option>
-        <option value="social">SOCIAL</option>
-        <option value="browsing">BROWSING</option>
-      </select>
-    </div>
     <div class="userDataTypes">
-      <h2
+      <h4
         :class="{
           selected: tab === 'entities',
           unselected: tab !== 'entities',
@@ -89,8 +79,8 @@ export default {
         @click="dataTabSelector('entities')"
       >
         <img src="../assets/icons/list-ul.svg" />ENTITIES
-      </h2>
-      <h2
+      </h4>
+      <h4
         :class="{
           selected: tab === 'documents',
           unselected: tab !== 'documents',
@@ -98,14 +88,14 @@ export default {
         @click="dataTabSelector('documents')"
       >
         <img src="../assets/icons/files.svg" />DOCUMENTS
-      </h2>
-      <h2
+      </h4>
+      <h4
         :class="{ selected: tab === 'social', unselected: tab !== 'social' }"
         @click="dataTabSelector('social')"
       >
         <img src="../assets/icons/chat-right-text-fill.svg" />SOCIAL
-      </h2>
-      <h2
+      </h4>
+      <h4
         :class="{
           selected: tab === 'browsing',
           unselected: tab !== 'browsing',
@@ -113,7 +103,7 @@ export default {
         @click="dataTabSelector('browsing')"
       >
         <img src="../assets/icons/browser-safari.svg" />BROWSING
-      </h2>
+      </h4>
     </div>
     <div class="userDataContent">
       <div v-if="tab === 'entities'" class="entitiesData">
@@ -129,11 +119,12 @@ export default {
           below you can click on the description in the table to edit it and
           that will update 🐼 panda.ai's memory 🤓.
         </p>
-        <table v-if="entitiesData.length != 0" class="entitiesTable">
-          <thead>
+        <table v-if="entitiesData.length != 0" class="table table-bordered table-striped table-hover">
+          <thead class="table-dark">
             <tr>
               <th>Entity</th>
               <th>Description</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -147,6 +138,7 @@ export default {
               >
                 {{ entity.description }}
               </td>
+              <td class="align-middle"><img src="../assets/icons/x-circle-fill.svg" /></td>
             </tr>
           </tbody>
         </table>
@@ -171,3 +163,46 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.userData {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+.userDataTypes {
+  min-width: 180px;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-right: 1px solid lightgray;
+}
+.userDataTypes h4 {
+  width: 195px;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  margin-left: -16px;
+  font-size: 20px;
+}
+.userDataTypes h4:hover {
+  cursor: pointer;
+  background-color: #FFCB4C;
+}
+.userDataTypes h4 img {
+  height: 20px;
+  margin-right: 15px;
+}
+.userDataContent {
+  display: flex;
+  padding: 20px;
+  text-align: left;
+  flex-wrap: wrap;
+}
+.align-middle img {
+  cursor: pointer;
+}
+</style>

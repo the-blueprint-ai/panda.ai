@@ -268,7 +268,7 @@ export default defineComponent({
             <button
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
-              style="width: 300px; margin: 7px"
+              style="width: 300px; margin: 7px; text-decoration: none"
             >
               <SpinnerComponent :loading="this.loadingGitHub"></SpinnerComponent
               ><img

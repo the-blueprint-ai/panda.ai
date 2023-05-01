@@ -147,7 +147,9 @@ export default defineComponent({
       reader.readAsDataURL(file);
       reader.onload = async (e) => {
         // Check if the image has the right dimensions (4 times wider than its height)
-        const isRightDimensions = await this.checkImageDimensions(e.target.result);
+        const isRightDimensions = await this.checkImageDimensions(
+          e.target.result
+        );
         let imageFile = file;
 
         if (!isRightDimensions) {
@@ -220,7 +222,17 @@ export default defineComponent({
           canvas.height = targetHeight;
           const ctx = canvas.getContext("2d");
           const startX = (width - targetWidth) / 2;
-          ctx.drawImage(img, startX, 0, targetWidth, targetHeight, 0, 0, targetWidth, targetHeight);
+          ctx.drawImage(
+            img,
+            startX,
+            0,
+            targetWidth,
+            targetHeight,
+            0,
+            0,
+            targetWidth,
+            targetHeight
+          );
 
           // Get the cropped image as a Blob
           canvas.toBlob((blob) => {
@@ -419,41 +431,17 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="bodyGW" id="body">
-      <div v-if="session" class="mobileAccountWrapper">
-        <div class="mobileAccountBar">
-          <img
-            src="../assets/icons/chat-right-text-fill.svg"
-            @click="this.toggleHistory"
-          />
-          <img
-            src="../assets/icons/shuffle.svg"
-            @click="this.toggleIntegrations"
-          />
-          <img
-            src="../assets/icons/coin.svg"
-            @click="this.toggleSubscription"
-          />
-          <img
-            src="../assets/icons/database-fill-lock.svg"
-            @click="this.toggleData"
-          />
-          <img
-            src="../assets/icons/gear-wide-connected.svg"
-            @click="this.toggleSettings"
-          />
-          <img
-            class="mobileAccountChatButton"
-            src="../assets/icons/chat-heart-fill.svg"
-            @click="redirectToChat"
-          />
-        </div>
-        <div v-if="session" class="accountWrapper">
-          <div class="userBanner">
-            <img v-if="banner" v-bind:src="banner" />
-            <img v-else src="../assets/banner.png" />
+    <div v-if="session">
+      <div class="container-fluid bg-light text-white">
+        <div class="container d-flex flex-column pt-4 pb-5">
+          <div
+            v-if="userStoreChatHistory"
+            class="card text-bg-white text-primary text-center"
+          >
+            <img v-if="banner" v-bind:src="banner" class="card-img-top" />
+            <img v-else src="../assets/banner.png" class="card-img-top" />
             <img
               src="../assets/icons/camera2.svg"
               @click="triggerBannerUpload"
@@ -466,170 +454,108 @@ export default defineComponent({
               style="display: none"
               @change="handleBannerUpload"
             />
-          </div>
-          <div class="profileAvatar">
-            <div class="accountAvatarBackground"></div>
-            <img v-if="avatar" v-bind:src="avatar" class="accountAvatar" />
-            <img v-else src="../assets/user.png" class="accountAvatar" />
-            <img
-              src="../assets/icons/camera.svg"
-              @click="triggerAvatarUpload"
-              class="avatarCamera"
-            />
-            <input
-              type="file"
-              ref="avatarInput"
-              accept="image/*"
-              style="display: none"
-              @change="handleAvatarUpload"
-            />
-          </div>
-          <div class="profilePanel">
-            <div class="userDetails">
-              <h2>{{ first_name }} {{ last_name }}</h2>
-              <h3>{{ username }}</h3>
-              <p>{{ email }}</p>
-              <p v-if="joined">Joined: {{ joined }}</p>
-              <button class="accountChatButton" @click="redirectToChat">
-                Let's Chat
-              </button>
-            </div>
-            <div v-if="about" class="aboutDetails">
-              <h2>ABOUT</h2>
-              <p>{{ about }}</p>
-            </div>
-            <div id="overlay" class="overlay" :class="{ active: overlay }">
-              <div class="overlayContent">
-                <img
-                  src="../assets/icons/x.svg"
-                  class="overlayCloseButton"
-                  @click="activateOverlay"
-                />
-                <div class="overlayTitle">
-                  <h2>Edit Your Details</h2>
-                  <p>User ID: {{ userId }}</p>
-                </div>
-                <div class="overlayForm">
-                  <form>
-                    <div class="overlayFormInput">
-                      <p>First Name:</p>
-                      <input
-                        id="firstName"
-                        v-model="new_first_name"
-                        :placeholder="first_name"
-                        type="text"
-                        name="firstName"
-                      />
-                    </div>
-                    <div class="overlayFormInput">
-                      <p>Last Name:</p>
-                      <input
-                        id="lastName"
-                        v-model="new_last_name"
-                        :placeholder="last_name"
-                        type="text"
-                        name="lastName"
-                      />
-                    </div>
-                    <div class="overlayFormInput">
-                      <p>Username:</p>
-                      <input
-                        id="username"
-                        v-model="new_username"
-                        :placeholder="'READ ONLY - ' + username"
-                        type="text"
-                        name="username"
-                        readonly
-                      />
-                    </div>
-                    <div class="overlayFormInput">
-                      <p>Email:</p>
-                      <img
-                        v-if="isEmailValid && emailOk === 'ok' && email"
-                        id="emailAccountGood"
-                        src="../assets/icons/envelope-check-fill.svg"
-                      />
-                      <img
-                        v-if="emailOk === 'no'"
-                        id="emailAccountBad"
-                        src="../assets/icons/envelope-exclamation-fill.svg"
-                      />
-                      <input
-                        id="email"
-                        ref="email"
-                        v-model="new_email"
-                        :placeholder="'READ ONLY - ' + email"
-                        type="email"
-                        name="email"
-                        readonly
-                      />
-                    </div>
-                    <div>
-                      <h6
-                        v-if="new_email && emailChecking"
-                        style="color: black"
-                      >
-                        CHECKING...
-                      </h6>
-                      <h6 v-if="emailExistsError">{{ emailExistsError }}</h6>
-                    </div>
-                  </form>
-                </div>
-                <span class="spacer"></span>
-                <div class="overlayButtons">
-                  <button class="chatButton" @click="updateUserData()">
-                    Save
+            <div
+              class="card-body text-start d-flex justify-content-between pt-4 pb-4 px-4"
+            >
+              <div class="profile d-flex">
+                <div class="profileLeft">
+                  <div class="accountAvatarBackground"></div>
+                  <img
+                    v-if="avatar"
+                    v-bind:src="avatar"
+                    class="accountAvatar"
+                  />
+                  <img v-else src="../assets/user.png" class="accountAvatar" />
+                  <img
+                    src="../assets/icons/camera.svg"
+                    @click="triggerAvatarUpload"
+                    class="avatarCamera"
+                  />
+                  <input
+                    type="file"
+                    ref="avatarInput"
+                    accept="image/*"
+                    style="display: none"
+                    @change="handleAvatarUpload"
+                  />
+                  <div class="profileDetails">
+                    <h2 class="card-title">{{ first_name }} {{ last_name }}</h2>
+                    <h5 class="card-subtitle mb-2 text-muted">
+                      {{ username }}
+                    </h5>
+                    <p class="mt-4">{{ email }}</p>
+                    <p class="mt-n3" v-if="joined">Joined: {{ joined }}</p>
+                  </div>
+                  <button
+                    class="btn btn-secondary btn-lg ms-4"
+                    @click="redirectToChat"
+                    style="width: 170px"
+                  >
+                    Let's Chat
                   </button>
                 </div>
+                <div class="about ms-5">
+                  <h2>ABOUT</h2>
+                  <p>{{ about }}</p>
+                </div>
+              </div>
+
+              <div class="edit ms-5 me-5">
+                <img
+                  src="../assets/icons/three-dots-vertical.svg"
+                  class="profileEdit"
+                  @click="activateOverlay"
+                />
               </div>
             </div>
-            <div class="editUserDetails">
-              <img
-                src="../assets/icons/three-dots-vertical.svg"
-                class="profileEdit"
-                @click="activateOverlay"
-              />
-            </div>
           </div>
-          <div class="accountDetailsWrapper">
-            <div class="accountDetailsMenu">
-              <button
+          <div
+            v-if="userStoreChatHistory"
+            class="card text-bg-white text-primary mt-4"
+          >
+            <div class="card-header d-flex justify-content-around pt-3 pb-2">
+              <h4
                 class="userChatHistoryMenuButton"
                 :class="{ active: historyMenuActive }"
                 @click="this.toggleHistory"
+                style="cursor: pointer"
               >
-                Chat History
-              </button>
-              <button
+                CHAT HISTORY
+              </h4>
+              <h4
                 class="userIntegrationsMenuButton"
                 :class="{ active: integrationsMenuActive }"
                 @click="this.toggleIntegrations"
+                style="cursor: pointer"
               >
-                Integrations
-              </button>
-              <button
+                INTEGRATIONS
+              </h4>
+              <h4
                 class="userSubscriptionMenuButton"
                 :class="{ active: subscriptionMenuActive }"
                 @click="this.toggleSubscription"
+                style="cursor: pointer"
               >
-                Subscription
-              </button>
-              <button
+                SUBSCRIPTION
+              </h4>
+              <h4
                 class="userDataMenuButton"
                 :class="{ active: dataMenuActive }"
                 @click="this.toggleData()"
+                style="cursor: pointer"
               >
-                Data
-              </button>
-              <button
+                DATA
+              </h4>
+              <h4
                 class="userSettingsMenuButton"
                 :class="{ active: settingsMenuActive }"
                 @click="this.toggleSettings"
+                style="cursor: pointer"
               >
-                Settings
-              </button>
+                SETTINGS
+              </h4>
             </div>
-            <div class="userChatHistory">
+            <div class="card-body scrollable-card-body text-start">
               <AccountUserChatHistory
                 :history-menu="historyMenu"
                 :integrations-menu="integrationsMenu"
@@ -678,3 +604,166 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.bannerCamera {
+  max-width: 1200px;
+  margin-left: -1200px;
+  opacity: 0;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  transition: 0.5s ease;
+}
+.bannerCamera:hover {
+  transition-delay: 0.3s;
+  opacity: 1;
+  cursor: pointer;
+}
+.accountAvatarBackground {
+  display: flex;
+  height: 200px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #ffffff;
+  border: 7px solid #ffffff;
+  align-items: start;
+  position: relative;
+  margin-top: -115px;
+  margin-left: 10px;
+}
+.accountAvatar {
+  display: flex;
+  height: 200px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #ffffff;
+  border: 7px solid #ffffff;
+  align-items: start;
+  position: relative;
+  margin-top: -205px;
+  margin-left: 10px;
+}
+.profileDetails {
+  margin-top: -30px;
+  margin-left: 40px;
+}
+.profileEdit {
+  width: 30px;
+}
+.scrollable-card-body {
+  height: 900px;
+  overflow-y: auto;
+}
+.userChatHistoryMenuButton:hover,
+.userIntegrationsMenuButton:hover,
+.userSubscriptionMenuButton:hover,
+.userDataMenuButton:hover,
+.userSettingsMenuButton:hover {
+  background-image: linear-gradient(to right, #ffcb4c 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+}
+.userChatHistoryMenuButton.active,
+.userIntegrationsMenuButton.active,
+.userSubscriptionMenuButton.active,
+.userDataMenuButton.active,
+.userSettingsMenuButton.active {
+  background-image: linear-gradient(to right, #ffcb4c 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+}
+</style>
+
+<!-- 
+        <div id="overlay" class="overlay" :class="{ active: overlay }">
+          <div class="overlayContent">
+            <img
+              src="../assets/icons/x.svg"
+              class="overlayCloseButton"
+              @click="activateOverlay"
+            />
+            <div class="overlayTitle">
+              <h2>Edit Your Details</h2>
+              <p>User ID: {{ userId }}</p>
+            </div>
+            <div class="overlayForm">
+              <form>
+                <div class="overlayFormInput">
+                  <p>First Name:</p>
+                  <input
+                    id="firstName"
+                    v-model="new_first_name"
+                    :placeholder="first_name"
+                    type="text"
+                    name="firstName"
+                  />
+                </div>
+                <div class="overlayFormInput">
+                  <p>Last Name:</p>
+                  <input
+                    id="lastName"
+                    v-model="new_last_name"
+                    :placeholder="last_name"
+                    type="text"
+                    name="lastName"
+                  />
+                </div>
+                <div class="overlayFormInput">
+                  <p>Username:</p>
+                  <input
+                    id="username"
+                    v-model="new_username"
+                    :placeholder="'READ ONLY - ' + username"
+                    type="text"
+                    name="username"
+                    readonly
+                  />
+                </div>
+                <div class="overlayFormInput">
+                  <p>Email:</p>
+                  <img
+                    v-if="isEmailValid && emailOk === 'ok' && email"
+                    id="emailAccountGood"
+                    src="../assets/icons/envelope-check-fill.svg"
+                  />
+                  <img
+                    v-if="emailOk === 'no'"
+                    id="emailAccountBad"
+                    src="../assets/icons/envelope-exclamation-fill.svg"
+                  />
+                  <input
+                    id="email"
+                    ref="email"
+                    v-model="new_email"
+                    :placeholder="'READ ONLY - ' + email"
+                    type="email"
+                    name="email"
+                    readonly
+                  />
+                </div>
+                <div>
+                  <h6
+                    v-if="new_email && emailChecking"
+                    style="color: black"
+                  >
+                    CHECKING...
+                  </h6>
+                  <h6 v-if="emailExistsError">{{ emailExistsError }}</h6>
+                </div>
+              </form>
+            </div>
+            <span class="spacer"></span>
+            <div class="overlayButtons">
+              <button class="chatButton" @click="updateUserData()">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

@@ -210,7 +210,7 @@ export default defineComponent({
                 <img v-else v-bind:src="avatar" class="chatAvatar mt-2" />
                 <textarea
                   :disabled="this.loading || isDisabled"
-                  class="form-control mt-1 mx-3"
+                  class="form-control mt-1 mx-3 shadow-none"
                   v-model="messageToSend"
                   @keydown.enter.stop.prevent="submitMessage(this.username)"
                   id="userInput"

@@ -188,7 +188,6 @@ export default defineComponent({
           <div class="card-body pt-5 pb-4 px-5">
             <form class="needs-validation" novalidate>
               <div class="form-floating mb-3">
-                <label for="floatingInput">Email</label>
                 <input
                   type="email"
                   ref="email"
@@ -199,6 +198,7 @@ export default defineComponent({
                   autocomplete="email"
                   required
                 />
+                <label for="floatingInput">Email</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
                 <div
                   id="validationServerUsernameFeedback"
@@ -208,7 +208,6 @@ export default defineComponent({
                 </div>
               </div>
               <div class="form-floating">
-                <label for="floatingPassword">Password</label>
                 <input
                   type="password"
                   ref="password"
@@ -220,6 +219,7 @@ export default defineComponent({
                   @keyup.enter="signInClicked(this.email, this.password)"
                   required
                 />
+                <label for="floatingPassword">Password</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
                 <div
                   id="validationServerUsernameFeedback"

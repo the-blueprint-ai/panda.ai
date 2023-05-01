@@ -133,7 +133,7 @@ export default {
         <input
           v-model="chatHistorySearch"
           type="text"
-          class="form-control"
+          class="form-control shadow-none"
           id="searchInput"
           placeholder="🐼 search chat history..."
         />

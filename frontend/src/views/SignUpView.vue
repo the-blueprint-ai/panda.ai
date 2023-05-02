@@ -22,8 +22,13 @@ export default defineComponent({
       passwordOk: "",
       badPasswordError: "",
       loading: false,
+      loadingGitHub: false,
+      loadingGoogle: false,
+      loadingApple: false,
+      loadingFacebook: false,
       signUpButtonText: "SIGN UP",
       agreeToSPP: false,
+      formSubmitted: false,
     };
   },
   watch: {
@@ -46,6 +51,9 @@ export default defineComponent({
           "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.";
       }
     },
+    isCheckboxValid() {
+      return this.agreeToSPP;
+    },
   },
   computed: {
     isEmailValid() {
@@ -67,7 +75,15 @@ export default defineComponent({
       return regex.test(password);
     },
     signUpClicked: async function (store, email, password) {
+      this.formSubmitted = true;
       this.loading = true;
+
+      // Check if the form is valid and if the user has agreed to the ToS and PP before making the API calls
+      if (!this.isEmailValid || !this.isPasswordValid || !this.agreeToSPP) {
+        this.loading = false;
+        return;
+      }
+
       try {
         let response = await emailPasswordSignUp({
           formFields: [
@@ -131,7 +147,7 @@ export default defineComponent({
             this.email = "";
             this.$refs.email.value = null;
             this.emailChecking = true;
-          }, 3000);
+          }, 3600);
         } else {
           this.emailChecking = false;
           setTimeout(() => {
@@ -196,10 +212,17 @@ export default defineComponent({
                   id="floatingInput"
                   placeholder="kung-fu@panda.ai"
                   autocomplete="email"
+                  :class="{
+                    'is-valid': this.email.length > 0 && isEmailValid,
+                    'is-invalid': formSubmitted && !isEmailValid,
+                  }"
                   required
                 />
                 <label for="floatingInput">Email</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
+                <div v-if="emailExistsError" class="valid-feedback text-danger">
+                  {{ this.emailExistsError }}
+                </div>
                 <div
                   id="validationServerUsernameFeedback"
                   class="invalid-feedback"
@@ -217,6 +240,10 @@ export default defineComponent({
                   placeholder="sKad00sh"
                   autocomplete="password"
                   @keyup.enter="signInClicked(this.email, this.password)"
+                  :class="{
+                    'is-valid': this.password.length > 0 && isPasswordValid,
+                    'is-invalid': formSubmitted && !isPasswordValid,
+                  }"
                   required
                 />
                 <label for="floatingPassword">Password</label>
@@ -237,15 +264,24 @@ export default defineComponent({
                   type="checkbox"
                   class="form-check-input mt-3"
                   id="ToS&PP"
-                  value="this.agreeToSPP"
+                  v-model="agreeToSPP"
+                  :class="{
+                    'is-valid': formSubmitted && agreeToSPP,
+                    'is-invalid': formSubmitted && !agreeToSPP,
+                  }"
                   required
                 />
                 <label class="form-check-label" for="ToS&PP"
                   >Please agree to our
-                  <a @click="toToS">Terms of Service</a> and
-                  <a @click="toPP">Privacy Policy</a> to continue.</label
+                  <a class="text-secondary" @click="toToS">Terms of Service</a>
+                  and
+                  <a class="text-secondary" @click="toPP">Privacy Policy</a> to
+                  continue.</label
                 >
-                <div id="invalidCheck3Feedback" class="invalid-feedback">
+                <div
+                  v-if="formSubmitted && !agreeToSPP"
+                  class="invalid-feedback d-block"
+                >
                   You must agree before submitting.
                 </div>
               </div>
@@ -254,7 +290,7 @@ export default defineComponent({
                   type="button"
                   class="btn btn-secondary btn-lg d-inline-flex justify-content-center"
                   style="width: 300px"
-                  @click="signInClicked(this.email, this.password)"
+                  @click="signUpClicked(this.email, this.password)"
                 >
                   <SpinnerComponent
                     :loading="this.loading"
@@ -264,11 +300,12 @@ export default defineComponent({
               </div>
             </form>
           </div>
-          <div class="card-footer pt-4 pb-4">
+          <!-- <div class="card-footer pt-4 pb-4">
             <button
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
-              style="width: 300px; margin: 7px; text-decoration: none"
+              style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent :loading="this.loadingGitHub"></SpinnerComponent
               ><img
@@ -280,6 +317,7 @@ export default defineComponent({
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
               style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent :loading="this.loadingGoogle"></SpinnerComponent
               ><img
@@ -291,14 +329,17 @@ export default defineComponent({
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
               style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent :loading="this.loadingApple"></SpinnerComponent
-              ><img class="thirdPartLogo" src="../assets/icons/apple.svg" />Sign Up With Apple
+              ><img class="thirdPartLogo" src="../assets/icons/apple.svg" />Sign
+              Up With Apple
             </button>
             <button
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
               style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent
                 :loading="this.loadingFacebook"
@@ -308,7 +349,7 @@ export default defineComponent({
                 src="../assets/icons/facebook.svg"
               />Sign Up With Facebook
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

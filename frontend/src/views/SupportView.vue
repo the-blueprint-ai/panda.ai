@@ -134,7 +134,7 @@ export default defineComponent({
         />
         <div class="d-flex justify-content-center">
           <div class="card text-bg-light mt-5 mb-3" style="width: 500px">
-            <div class="card-header pt-3 pb-3">
+            <div class="card-header mt-n4 pb-3">
               <h1 class="mt-5">CONTACT US</h1>
               <p>
                 If you can't find what you're looking for in the FAQs above,

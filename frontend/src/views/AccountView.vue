@@ -13,6 +13,7 @@ import UserSubscription from "../components/userSubscription.vue";
 import UserData from "../components/userData.vue";
 import UserSettings from "../components/userSettings.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { Modal } from "bootstrap";
 
 export default defineComponent({
   data() {
@@ -31,7 +32,6 @@ export default defineComponent({
       dataMenuActive: false,
       settingsMenuActive: false,
       formData: null,
-      new_email: "",
       emailTimer: null,
       emailExistsError: "",
       emailChecking: null,
@@ -39,7 +39,10 @@ export default defineComponent({
       new_first_name: "",
       new_last_name: "",
       new_username: "",
+      new_email: "",
       isDisabled: true,
+      saveDetailsButtonText: "SAVE DETAILS",
+      detailsUpdated: false,
     };
   },
   watch: {
@@ -99,20 +102,20 @@ export default defineComponent({
         if (response.doesExist) {
           this.emailChecking = false;
           this.emailExistsError =
-            "Email already in use. Please choose another one instead";
+            "Email already registered. Please choose another one instead";
           this.emailOk = "no";
           setTimeout(() => {
             this.emailExistsError = "";
             this.emailOk = "";
-            this.email = "";
+            this.new_email = "";
             this.$refs.email.value = null;
             this.emailChecking = true;
-          }, 3000);
+          }, 3600);
         } else {
           this.emailChecking = false;
           setTimeout(() => {
             this.emailOk = "ok";
-          }, 3000);
+          }, 3600);
         }
       } catch (err) {
         console.error(err); // log the error to the console
@@ -312,6 +315,8 @@ export default defineComponent({
       };
     },
     async updateUserData() {
+      this.loading = true;
+
       if (this.new_first_name !== "") {
         this.$store.commit("userStore/setStoreFirstName", this.new_first_name);
       }
@@ -341,17 +346,26 @@ export default defineComponent({
           method: "POST",
         });
 
-        this.overlay = !this.overlay;
         // Check if the response status indicates an error
         if (!res.ok) {
           const errorResponse = await res.json();
           console.error("Server error response:", errorResponse);
           throw new Error(`Server responded with status ${res.status}`);
+        } else {
+          this.loading = false;
+          this.saveDetailsButtonText = "SAVED!";
+          setTimeout(() => {
+            this.saveDetailsButtonText = "SAVE DETAILS";
+            this.detailsUpdated = true;
+          }, 1200);
         }
       } catch (error) {
         // Handle the error
         console.error("An error occurred while saving the file:", error);
       }
+    },
+    closeModal() {
+      this.detailsUpdated = false;
     },
     activateOverlay() {
       this.overlay = !this.overlay;
@@ -531,6 +545,7 @@ export default defineComponent({
                     <div class="modal-body text-center">
                       <h1>🐼</h1>
                       <p>To edit your details, please update them below:</p>
+                      <p class="ms-1 mb-n4 text-start">First Name:</p>
                       <div class="form-floating mb-2">
                         <input
                           type="text"
@@ -542,6 +557,7 @@ export default defineComponent({
                         />
                         <label for="floatingInput">{{ first_name }}</label>
                       </div>
+                      <p class="ms-1 mb-n4 text-start">Last Name:</p>
                       <div class="form-floating mb-2">
                         <input
                           type="text"
@@ -553,6 +569,7 @@ export default defineComponent({
                         />
                         <label for="floatingInput">{{ last_name }}</label>
                       </div>
+                      <p class="ms-1 mb-n4 text-start">Username:</p>
                       <div class="form-floating mb-2">
                         <input
                           type="text"
@@ -565,6 +582,7 @@ export default defineComponent({
                         />
                         <label for="floatingInput">{{ username }}</label>
                       </div>
+                      <p class="ms-1 mb-n4 text-start">Email:</p>
                       <div class="form-floating mb-2">
                         <input
                           type="email"
@@ -573,19 +591,48 @@ export default defineComponent({
                           id="email"
                           v-model="new_email"
                           :placeholder="email"
-                          disabled
+                          autocomplete="email"
+                          :class="{
+                            'is-valid': this.email.length > 0 && isEmailValid,
+                            'is-invalid': formSubmitted && !isEmailValid,
+                          }"
                         />
                         <label for="floatingInput">{{ email }}</label>
+                        <div class="valid-feedback">🐼 Looks good!</div>
+                        <div
+                          v-if="emailExistsError"
+                          class="valid-feedback text-danger"
+                        >
+                          {{ this.emailExistsError }}
+                        </div>
+                        <div
+                          id="validationServerUsernameFeedback"
+                          class="invalid-feedback"
+                        >
+                          Please enter a valid email address.
+                        </div>
                       </div>
                     </div>
                     <div class="modal-footer">
                       <button
+                        v-if="!this.detailsUpdated"
                         @click="updateUserData()"
                         type="button"
-                        class="btn btn-secondary"
+                        class="btn btn-secondary d-flex justify-content-center"
+                        style="width: 130px"
                       >
-                        SAVE DETAILS
+                        <SpinnerComponent
+                          :loading="this.loading"
+                          :button-text="this.saveDetailsButtonText"
+                        ></SpinnerComponent>
                       </button>
+                      <button
+                        v-else
+                        class="btn btn-danger d-flex justify-content-center"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                        @click="closeModal()"
+                        style="width: 130px">CLOSE</button>
                     </div>
                   </div>
                 </div>

@@ -145,11 +145,12 @@ export default defineComponent({
               FORGOT PASSWORD?
             </h4>
           </div>
-          <div class="card-footer pt-4 pb-4">
+          <!-- <div class="card-footer pt-4 pb-4">
             <button
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
               style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent :loading="this.loadingGitHub"></SpinnerComponent
               ><img class="thirdPartLogo" src="../assets/icons/github.svg" />Sign In With GitHub
@@ -158,6 +159,7 @@ export default defineComponent({
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
               style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent :loading="this.loadingGoogle"></SpinnerComponent
               ><img class="thirdPartLogo" src="../assets/icons/google.svg" />Sign In With Google
@@ -166,6 +168,7 @@ export default defineComponent({
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
               style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent :loading="this.loadingApple"></SpinnerComponent
               ><img class="thirdPartLogo" src="../assets/icons/apple.svg" />Sign In With Apple
@@ -174,11 +177,12 @@ export default defineComponent({
               type="button"
               class="btn btn-outline-primary d-inline-flex justify-content-center"
               style="width: 300px; margin: 7px"
+              disabled
             >
               <SpinnerComponent :loading="this.loadingFacebook"></SpinnerComponent
               ><img class="thirdPartLogo" src="../assets/icons/facebook.svg" />Sign In With Facebook
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

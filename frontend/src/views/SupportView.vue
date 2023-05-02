@@ -112,17 +112,19 @@ export default defineComponent({
       <div class="container pt-5 pb-5 text-center">
         <h1>🐼</h1>
         <h1 class="mb-5">WHAT CAN WE HELP YOU WITH?</h1>
-        <div class="form-floating mb-3">
-          <input
-            class="form-control"
-            id="searchInput"
-            type="text"
-            v-model="searchQuery"
-            placeholder="🐼 Search for answers..."
-          />
-          <label class="text-primary" for="searchInput"
-            >🐼 Search for answers...</label
-          >
+        <div class="d-flex justify-content-center">
+          <div class="form-floating mb-3" style="width: 500px">
+            <input
+              class="form-control"
+              id="searchInput"
+              type="text"
+              v-model="searchQuery"
+              placeholder="🐼 Search for answers..."
+            />
+            <label class="text-primary" for="searchInput"
+              >🐼 Search for answers...</label
+            >
+          </div>
         </div>
         <CollapsibleFAQList
           v-for="(faqSection, index) in filteredFaqs"
@@ -130,68 +132,70 @@ export default defineComponent({
           :faq-section="faqSection"
           :hide-section-titles="searchQuery.trim() !== ''"
         />
-        <div class="card text-bg-light mt-5 mb-3">
-          <div class="card-header pt-3 pb-3">
-            <h1 class="mt-5">CONTACT US</h1>
-            <p>
-              If you can't find what you're looking for in the FAQs above,
-              please get in touch with us using the form below:
-            </p>
-          </div>
-          <div class="card-body pt-5 pb-4 px-5">
-            <div class="form-floating mb-3">
-              <input
-                class="form-control"
-                id="emailInput"
-                type="email"
-                v-model="email"
-                placeholder="kungu-fu-panda@mypanda.ai"
-              />
-              <label class="text-primary" for="emailInput">Email</label>
+        <div class="d-flex justify-content-center">
+          <div class="card text-bg-light mt-5 mb-3" style="width: 500px">
+            <div class="card-header pt-3 pb-3">
+              <h1 class="mt-5">CONTACT US</h1>
+              <p>
+                If you can't find what you're looking for in the FAQs above,
+                please get in touch with us using the form below:
+              </p>
             </div>
-            <div class="form-floating mb-3">
-              <input
-                class="form-control"
-                id="confirmInput"
-                type="email"
-                v-model="confirmedEmail"
-                placeholder="kungu-fu-panda@mypanda.ai"
-              />
-              <label class="text-primary" for="confirmInput"
-                >Confirm Email</label
+            <div class="card-body pt-5 pb-4 px-5">
+              <div class="form-floating mb-3">
+                <input
+                  class="form-control"
+                  id="emailInput"
+                  type="email"
+                  v-model="email"
+                  placeholder="kungu-fu-panda@mypanda.ai"
+                />
+                <label class="text-primary" for="emailInput">Email</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  class="form-control"
+                  id="confirmInput"
+                  type="email"
+                  v-model="confirmedEmail"
+                  placeholder="kungu-fu-panda@mypanda.ai"
+                />
+                <label class="text-primary" for="confirmInput"
+                  >Confirm Email</label
+                >
+              </div>
+              <div class="form-floating mb-3">
+                <textarea
+                  class="form-control"
+                  id="messageInput"
+                  type="email"
+                  v-model="message"
+                  placeholder="kungu-fu-panda@mypanda.ai"
+                ></textarea>
+                <label class="text-primary" for="messageInput"
+                  >Please enter your message...</label
+                >
+              </div>
+            </div>
+            <div class="card-footer pt-4 pb-4">
+              <button
+                v-if="
+                  this.email.length > 0 &&
+                  this.email === this.confirmedEmail &&
+                  this.message.length > 0
+                "
+                class="btn btn-secondary btn-lg"
+                @click="sendSupportEmails(this.confirmedEmail, this.message)"
               >
+                <SpinnerComponent
+                  :loading="this.loading"
+                  :button-text="this.buttonText"
+                ></SpinnerComponent>
+              </button>
+              <button v-else class="btn btn-secondary btn-lg" disabled>
+                SEND
+              </button>
             </div>
-            <div class="form-floating mb-3">
-              <textarea
-                class="form-control"
-                id="messageInput"
-                type="email"
-                v-model="message"
-                placeholder="kungu-fu-panda@mypanda.ai"
-              ></textarea>
-              <label class="text-primary" for="messageInput"
-                >Please enter your message...</label
-              >
-            </div>
-          </div>
-          <div class="card-footer pt-4 pb-4">
-            <button
-              v-if="
-                this.email.length > 0 &&
-                this.email === this.confirmedEmail &&
-                this.message.length > 0
-              "
-              class="btn btn-secondary btn-lg"
-              @click="sendSupportEmails(this.confirmedEmail, this.message)"
-            >
-              <SpinnerComponent
-                :loading="this.loading"
-                :button-text="this.buttonText"
-              ></SpinnerComponent>
-            </button>
-            <button v-else class="btn btn-secondary btn-lg" disabled>
-              SEND
-            </button>
           </div>
         </div>
       </div>

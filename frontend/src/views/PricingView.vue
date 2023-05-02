@@ -36,6 +36,7 @@ export default defineComponent({
             id="btnradio1"
             autocomplete="on"
             checked
+            @change="subscriptionPeriod = 'monthly'"
           />
           <label class="btn btn-outline-secondary" for="btnradio1"
             >MONTHLY</label
@@ -47,6 +48,7 @@ export default defineComponent({
             name="btnradio"
             id="btnradio2"
             autocomplete="off"
+            @change="subscriptionPeriod = 'annual'"
           />
           <label class="btn btn-outline-secondary" for="btnradio2"
             >ANNUAL</label
@@ -72,8 +74,8 @@ export default defineComponent({
                   <p class="mt-n2">for one month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1>£FREE</h1>
-                  <p>for one month</p>
+                  <h1 class="mt-5">£FREE</h1>
+                  <p class="mt-n2">for one month</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
@@ -100,8 +102,8 @@ export default defineComponent({
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1>£29.99</h1>
-                  <p>per year</p>
+                  <h1 class="mt-5">£29.99</h1>
+                  <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
@@ -128,8 +130,8 @@ export default defineComponent({
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1>£59.99</h1>
-                  <p>per year</p>
+                  <h1 class="mt-5">£59.99</h1>
+                  <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
@@ -156,8 +158,8 @@ export default defineComponent({
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1>£149.99</h1>
-                  <p>per year</p>
+                  <h1 class="mt-5">£149.99</h1>
+                  <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">

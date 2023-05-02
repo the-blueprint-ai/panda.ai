@@ -334,7 +334,7 @@ export default defineComponent({
         aria-labelledby="addRoadmapModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered" ref="addRoadmapModal">
           <div class="modal-content text-primary">
             <div class="modal-header">
               <h4 class="modal-title" id="addRoadmapModalLabel">
@@ -362,7 +362,6 @@ export default defineComponent({
                   class="form-control me-2"
                   id="floatingInput"
                   placeholder="kung-fu@panda.ai"
-                  @keyup.enter="addEmail(this.newIdeaId, this.email)"
                   autocomplete="email"
                   required
                 />
@@ -374,6 +373,7 @@ export default defineComponent({
                 @click="addEmail(this.newIdeaId, this.email)"
                 type="button"
                 class="btn btn-secondary"
+                data-bs-dismiss="modal"
               >
                 <SpinnerComponent
                   :loading="this.loading"

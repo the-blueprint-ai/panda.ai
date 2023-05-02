@@ -96,40 +96,40 @@ export default {
         <div class="container-fluid">
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-              <div class="col px-3">
+              <div class="col px-3" @click="redirectToHome">
                 <li class="nav-item pt-2">
                   <img src="../../src/assets/icons/house-door.svg" alt="home" />
-                  <a class="nav-link" @click="redirectToHome">home</a>
+                  <a class="nav-link">home</a>
                 </li>
               </div>
-              <div class="col px-3">
+              <div class="col px-3" @click="redirectToAbout">
                 <li class="nav-item pt-2">
                   <img
                     src="../../src/assets/icons/file-person.svg"
                     alt="about"
                   />
-                  <a class="nav-link" @click="redirectToAbout">about</a>
+                  <a class="nav-link">about</a>
                 </li>
               </div>
-              <div class="col px-3">
+              <div class="col px-3" @click="redirectToPricing">
                 <li class="nav-item pt-2">
                   <img src="../../src/assets/icons/tag.svg" alt="about" />
-                  <a class="nav-link" @click="redirectToPricing">pricing</a>
+                  <a class="nav-link">pricing</a>
                 </li>
               </div>
-              <div class="col px-3">
+              <div class="col px-3" @click="redirectToRoadmap">
                 <li class="nav-item pt-2">
                   <img src="../../src/assets/icons/geo.svg" alt="roadmap" />
-                  <a class="nav-link" @click="redirectToRoadmap">roadmap</a>
+                  <a class="nav-link">roadmap</a>
                 </li>
               </div>
-              <div class="col px-3">
+              <div class="col px-3" @click="redirectToPrivacy">
                 <li class="nav-item pt-2">
                   <img
                     src="../../src/assets/icons/file-earmark-lock.svg"
                     alt="privacy"
                   />
-                  <a class="nav-link" @click="redirectToPrivacy">privacy</a>
+                  <a class="nav-link">privacy</a>
                 </li>
               </div>
             </ul>
@@ -138,12 +138,12 @@ export default {
       </div>
       <div class="col-sm-2 d-flex justify-content-end">
         <ul class="navbar-nav">
-          <li class="nav-item pt-2">
+          <li class="nav-item pt-2" @click="redirectToSupport">
             <img
               src="../../src/assets/icons/question-square.svg"
               alt="support"
             />
-            <a class="nav-link" @click="redirectToSupport">support</a>
+            <a class="nav-link">support</a>
           </li>
           <li v-if="!userId" class="d-flex align-items-center ps-5 px-2">
             <button

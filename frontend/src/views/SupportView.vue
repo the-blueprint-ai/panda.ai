@@ -108,7 +108,7 @@ export default defineComponent({
 <template>
   <main style="min-height: 71vh">
     <navBar></navBar>
-    <div class="container-fluid h-100 bg-primary text-white">
+    <div class="container-fluid bg-primary text-white">
       <div class="container pt-5 pb-5 text-center">
         <h1>🐼</h1>
         <h1 class="mb-5">WHAT CAN WE HELP YOU WITH?</h1>
@@ -130,10 +130,7 @@ export default defineComponent({
           :faq-section="faqSection"
           :hide-section-titles="searchQuery.trim() !== ''"
         />
-        <div
-          class="card text-bg-light text-center mt-5 mb-3"
-          style="width: 32rem"
-        >
+        <div class="card text-bg-light mt-5 mb-3">
           <div class="card-header pt-3 pb-3">
             <h1 class="mt-5">CONTACT US</h1>
             <p>

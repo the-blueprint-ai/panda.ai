@@ -216,16 +216,6 @@ export default {
         </div>
       </div>
     </div>
-    <!-- 
-        <div class="overlayForm">
-          <form>
-            <img
-              v-if="this.email == this.confirmedEmail"
-              id="emailDeleteGood"
-              src="../assets/icons/envelope-check-fill.svg"
-            />
-          </form>
-    </div> -->
     <span class="spacer"></span>
     <h2>DELETE ACCOUNT</h2>
     <p>To delete your 🐼 panda.ai account please click the button below:</p>

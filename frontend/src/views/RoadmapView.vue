@@ -64,7 +64,6 @@ export default defineComponent({
         const data = await res.json(); // get the response data from the server
         this.newIdeaId = data.roadmap_id; // set the newIdeaId to the returned roadmap_id
         this.roadmapSuggestion = "";
-        this.activateOverlay();
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
@@ -86,7 +85,6 @@ export default defineComponent({
         });
 
         this.email = "";
-        this.activateOverlay();
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
@@ -243,7 +241,6 @@ export default defineComponent({
                   id="floatingTextarea"
                   v-model="roadmapSuggestion"
                   placeholder="🐼 please submit your ideas here!"
-                  @keyup.enter="addIdea(roadmapSuggestion)"
                 ></textarea>
                 <label for="floatingTextarea" class="text-primary"
                   >🐼 please submit your ideas here!</label
@@ -252,6 +249,8 @@ export default defineComponent({
               <button
                 v-if="roadmapSuggestion.length > 0"
                 class="btn btn-secondary mt-3"
+                data-bs-toggle="modal"
+                data-bs-target="#addRoadmapModal"
                 @click="addIdea(roadmapSuggestion)"
               >
                 Submit
@@ -329,61 +328,60 @@ export default defineComponent({
         </div>
       </div>
       <div
-        id="roadmapOverlay"
-        class="roadmapOverlay"
-        :class="{ active: roadmapOverlay }"
+        class="modal fade"
+        id="addRoadmapModal"
+        tabindex="-1"
+        aria-labelledby="addRoadmapModalLabel"
+        aria-hidden="true"
       >
-        <div
-          class="card text-bg-dark text-center mb-3 border-secondary"
-          style="height: 450px; width: 35rem"
-        >
-          <div class="card-header pt-3 pb-3 border-primary">
-            <h1>🐼</h1>
-            <h2>THANKS FOR THE FEEDBACK!</h2>
-          </div>
-          <div class="card-body pt-4 px-3 border-primary">
-            <p>
-              We’re doing our best to add the new features you want. Please
-              share your email address and we’ll notify you as we make progress!
-            </p>
-          </div>
-          <div
-            class="card-footer pt-4 pb-4 border-primary d-inline-flex justify-content-center align-items-center"
-          >
-            <div class="form-floating mb-3">
-              <input
-                type="email"
-                ref="email"
-                v-model="this.email"
-                class="form-control me-2"
-                id="floatingInput"
-                placeholder="kung-fu@panda.ai"
-                @keyup.enter="addEmail(this.newIdeaId, this.email)"
-                autocomplete="email"
-                required
-                style="width: 350px"
-              />
-              <label for="floatingInput" class="text-primary"
-                >Enter your email address</label
-              >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content text-primary">
+            <div class="modal-header">
+              <h4 class="modal-title" id="addRoadmapModalLabel">
+                THANKS FOR THE FEEDBACK!
+              </h4>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
-            <button
-              class="btn btn-secondary ms-2 mt-n3 d-inline-flex justify-content-center"
-              @click="addEmail(this.newIdeaId, this.email)"
-            >
-              <SpinnerComponent
-                :loading="this.loading"
-                :button-text="this.notifyMeButtonText"
-              ></SpinnerComponent>
-            </button>
+            <div class="modal-body text-center">
+              <h1>🐼</h1>
+              <p>
+                We’re doing our best to add the new features you want. Please
+                share your email address and we’ll notify you as we make
+                progress!
+              </p>
+              <div class="form-floating mb-2">
+                <input
+                  type="email"
+                  ref="email"
+                  v-model="this.email"
+                  class="form-control me-2"
+                  id="floatingInput"
+                  placeholder="kung-fu@panda.ai"
+                  @keyup.enter="addEmail(this.newIdeaId, this.email)"
+                  autocomplete="email"
+                  required
+                />
+                <label for="floatingInput">Enter your email address...</label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                @click="addEmail(this.newIdeaId, this.email)"
+                type="button"
+                class="btn btn-secondary"
+              >
+                <SpinnerComponent
+                  :loading="this.loading"
+                  :button-text="this.notifyMeButtonText"
+                ></SpinnerComponent>
+              </button>
+            </div>
           </div>
-          <button
-            class="btn btn-outline-secondary mb-5 mt-n2 mx-auto"
-            @click="this.activateOverlay()"
-            style="width: 200px"
-          >
-            CLOSE
-          </button>
         </div>
       </div>
     </div>

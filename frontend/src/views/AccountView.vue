@@ -499,13 +499,96 @@ export default defineComponent({
                   <p>{{ about }}</p>
                 </div>
               </div>
-
               <div class="edit ms-5 me-5">
                 <img
                   src="../assets/icons/three-dots-vertical.svg"
                   class="profileEdit"
-                  @click="activateOverlay"
+                  data-bs-toggle="modal"
+                  data-bs-target="#userDetailsModal"
+                  style="cursor: pointer"
                 />
+              </div>
+              <div
+                class="modal fade"
+                id="userDetailsModal"
+                tabindex="-1"
+                aria-labelledby="userDetailsModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="userDetailsModalLabel">
+                        EDIT YOUR DETAILS
+                      </h4>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body text-center">
+                      <h1>🐼</h1>
+                      <p>To edit your details, please update them below:</p>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="text"
+                          name="first_name"
+                          class="form-control mt-4"
+                          id="first_name"
+                          v-model="new_first_name"
+                          :placeholder="first_name"
+                        />
+                        <label for="floatingInput">{{ first_name }}</label>
+                      </div>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="text"
+                          name="last_name"
+                          class="form-control mt-4"
+                          id="last_name"
+                          v-model="new_last_name"
+                          :placeholder="last_name"
+                        />
+                        <label for="floatingInput">{{ last_name }}</label>
+                      </div>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="text"
+                          name="username"
+                          class="form-control mt-4"
+                          id="username"
+                          v-model="new_username"
+                          :placeholder="username"
+                          disabled
+                        />
+                        <label for="floatingInput">{{ username }}</label>
+                      </div>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="email"
+                          name="email"
+                          class="form-control mt-4"
+                          id="email"
+                          v-model="new_email"
+                          :placeholder="email"
+                          disabled
+                        />
+                        <label for="floatingInput">{{ email }}</label>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        @click="updateUserData()"
+                        type="button"
+                        class="btn btn-secondary"
+                      >
+                        SAVE DETAILS
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -676,94 +759,3 @@ export default defineComponent({
   background-size: 1px 5px;
 }
 </style>
-
-<!-- 
-        <div id="overlay" class="overlay" :class="{ active: overlay }">
-          <div class="overlayContent">
-            <img
-              src="../assets/icons/x.svg"
-              class="overlayCloseButton"
-              @click="activateOverlay"
-            />
-            <div class="overlayTitle">
-              <h2>Edit Your Details</h2>
-              <p>User ID: {{ userId }}</p>
-            </div>
-            <div class="overlayForm">
-              <form>
-                <div class="overlayFormInput">
-                  <p>First Name:</p>
-                  <input
-                    id="firstName"
-                    v-model="new_first_name"
-                    :placeholder="first_name"
-                    type="text"
-                    name="firstName"
-                  />
-                </div>
-                <div class="overlayFormInput">
-                  <p>Last Name:</p>
-                  <input
-                    id="lastName"
-                    v-model="new_last_name"
-                    :placeholder="last_name"
-                    type="text"
-                    name="lastName"
-                  />
-                </div>
-                <div class="overlayFormInput">
-                  <p>Username:</p>
-                  <input
-                    id="username"
-                    v-model="new_username"
-                    :placeholder="'READ ONLY - ' + username"
-                    type="text"
-                    name="username"
-                    readonly
-                  />
-                </div>
-                <div class="overlayFormInput">
-                  <p>Email:</p>
-                  <img
-                    v-if="isEmailValid && emailOk === 'ok' && email"
-                    id="emailAccountGood"
-                    src="../assets/icons/envelope-check-fill.svg"
-                  />
-                  <img
-                    v-if="emailOk === 'no'"
-                    id="emailAccountBad"
-                    src="../assets/icons/envelope-exclamation-fill.svg"
-                  />
-                  <input
-                    id="email"
-                    ref="email"
-                    v-model="new_email"
-                    :placeholder="'READ ONLY - ' + email"
-                    type="email"
-                    name="email"
-                    readonly
-                  />
-                </div>
-                <div>
-                  <h6
-                    v-if="new_email && emailChecking"
-                    style="color: black"
-                  >
-                    CHECKING...
-                  </h6>
-                  <h6 v-if="emailExistsError">{{ emailExistsError }}</h6>
-                </div>
-              </form>
-            </div>
-            <span class="spacer"></span>
-            <div class="overlayButtons">
-              <button class="chatButton" @click="updateUserData()">
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->

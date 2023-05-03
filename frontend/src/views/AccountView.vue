@@ -1,19 +1,18 @@
 <script>
 import * as Session from "supertokens-web-js/recipe/session";
 import { doesEmailExist } from "supertokens-web-js/recipe/thirdpartyemailpassword";
+import { doesUsernameExist } from "../composables/doesUsernameExist.js";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
-import { emailVerification } from "../composables/emailVerification.js";
 import AccountUserChatHistory from "../components/accountUserChatHistory.vue";
 import UserIntegrations from "../components/userIntegrations.vue";
 import UserSubscription from "../components/userSubscription.vue";
 import UserData from "../components/userData.vue";
 import UserSettings from "../components/userSettings.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
-import { Modal } from "bootstrap";
 
 export default defineComponent({
   data() {
@@ -33,9 +32,9 @@ export default defineComponent({
       settingsMenuActive: false,
       formData: null,
       emailTimer: null,
+      usernameTimer: null,
       emailExistsError: "",
-      emailChecking: null,
-      emailOk: "",
+      usernameExistsError: "",
       new_first_name: "",
       new_last_name: "",
       new_username: "",
@@ -43,6 +42,8 @@ export default defineComponent({
       isDisabled: true,
       saveDetailsButtonText: "SAVE DETAILS",
       detailsUpdated: false,
+      formSubmitted: false,
+      loading: false,
     };
   },
   watch: {
@@ -53,6 +54,15 @@ export default defineComponent({
       // Start a new timer for 1000ms
       this.emailTimer = setTimeout(() => {
         this.checkEmail(newValue);
+      }, 400);
+    },
+    new_username(newValue) {
+      // Clear the previous timer (if there was one)
+      clearTimeout(this.usernameTimer);
+
+      // Start a new timer for 1000ms
+      this.usernameTimer = setTimeout(() => {
+        this.checkUsername(newValue);
       }, 400);
     },
   },
@@ -81,13 +91,15 @@ export default defineComponent({
     isEmailValid() {
       return this.validateEmail(this.new_email);
     },
+    isUsernameValid() {
+      return !this.usernameExistsError;
+    },
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     ...mapMutations("chatStore", {
       setIsDisabled: "setIsDisabled",
     }),
-    emailVerification,
     validateEmail: function (email) {
       var re =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -100,21 +112,33 @@ export default defineComponent({
         });
 
         if (response.doesExist) {
-          this.emailChecking = false;
           this.emailExistsError =
-            "Email already registered. Please choose another one instead";
-          this.emailOk = "no";
+            "Email already registered. Please choose another one instead.";
           setTimeout(() => {
             this.emailExistsError = "";
-            this.emailOk = "";
             this.new_email = "";
-            this.$refs.email.value = null;
-            this.emailChecking = true;
           }, 3600);
+        }
+      } catch (err) {
+        console.error(err); // log the error to the console
+        if (err.isSuperTokensGeneralError === true) {
+          // this may be a custom error message sent from the API by you.
+          window.alert(err.message);
         } else {
-          this.emailChecking = false;
+          window.alert("Oops! Something went wrong.");
+        }
+      }
+    },
+    checkUsername: async function (username) {
+      try {
+        let response = await doesUsernameExist(username);
+
+        if (response) {
+          this.usernameExistsError =
+            "Username already registered. Please choose another one instead.";
           setTimeout(() => {
-            this.emailOk = "ok";
+            this.usernameExistsError = "";
+            this.new_username = "";
           }, 3600);
         }
       } catch (err) {
@@ -578,9 +602,20 @@ export default defineComponent({
                           id="username"
                           v-model="new_username"
                           :placeholder="username"
-                          disabled
+                          :class="{
+                            'is-valid':
+                              this.new_username.length > 0 && !usernameExistsError,
+                            'is-invalid': usernameExistsError,
+                          }"
                         />
                         <label for="floatingInput">{{ username }}</label>
+                        <div class="valid-feedback">🐼 Looks good!</div>
+                        <div
+                          v-if="usernameExistsError"
+                          class="invalid-feedback text-danger"
+                        >
+                          {{ this.usernameExistsError }}
+                        </div>
                       </div>
                       <p class="ms-1 mb-n4 text-start">Email:</p>
                       <div class="form-floating mb-2">
@@ -593,15 +628,16 @@ export default defineComponent({
                           :placeholder="email"
                           autocomplete="email"
                           :class="{
-                            'is-valid': this.email.length > 0 && isEmailValid,
-                            'is-invalid': formSubmitted && !isEmailValid,
+                            'is-valid':
+                              this.new_email.length > 0 && !emailExistsError,
+                            'is-invalid': emailExistsError,
                           }"
                         />
                         <label for="floatingInput">{{ email }}</label>
                         <div class="valid-feedback">🐼 Looks good!</div>
                         <div
                           v-if="emailExistsError"
-                          class="valid-feedback text-danger"
+                          class="invalid-feedback text-danger"
                         >
                           {{ this.emailExistsError }}
                         </div>
@@ -620,6 +656,7 @@ export default defineComponent({
                         type="button"
                         class="btn btn-secondary d-flex justify-content-center"
                         style="width: 130px"
+                        :disabled="emailExistsError.length > 0 || usernameExistsError.length > 0"
                       >
                         <SpinnerComponent
                           :loading="this.loading"
@@ -632,7 +669,10 @@ export default defineComponent({
                         data-bs-dismiss="modal"
                         aria-label="Close"
                         @click="closeModal()"
-                        style="width: 130px">CLOSE</button>
+                        style="width: 130px"
+                      >
+                        CLOSE
+                      </button>
                     </div>
                   </div>
                 </div>

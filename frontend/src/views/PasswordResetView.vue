@@ -10,6 +10,8 @@ export default defineComponent({
     return {
       email: "",
       sendButtonText: "SEND",
+      loading: false,
+      formSubmitted: false,
     };
   },
   mounted() {},
@@ -25,6 +27,8 @@ export default defineComponent({
       return re.test(email);
     },
     sendEmailClicked: async function (email) {
+      this.formSubmitted = true;
+      this.loading = true;
       try {
         let response = await sendPasswordResetEmail({
           formFields: [
@@ -44,6 +48,7 @@ export default defineComponent({
             }
           });
         } else {
+          this.loading = false;
           // reset password email sent.
           window.alert("Please check your email for the password reset link");
         }
@@ -92,8 +97,20 @@ export default defineComponent({
                 placeholder="kung-fu@panda.ai"
                 autocomplete="email"
                 @keyup.enter="sendEmailClicked(this.email)"
+                :class="{
+                  'is-valid': this.email.length > 0 && isEmailValid,
+                  'is-invalid': formSubmitted && !isEmailValid,
+                }"
+                required
               />
               <label for="floatingInput">Email</label>
+              <div class="valid-feedback">🐼 Looks good!</div>
+              <div
+                id="validationServerUsernameFeedback"
+                class="invalid-feedback"
+              >
+                Please enter a valid email address.
+              </div>
             </div>
             <div class="pt-4">
               <button

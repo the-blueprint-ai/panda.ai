@@ -213,14 +213,17 @@ export default defineComponent({
                   placeholder="kung-fu@panda.ai"
                   autocomplete="email"
                   :class="{
-                    'is-valid': this.email.length > 0 && isEmailValid,
-                    'is-invalid': formSubmitted && !isEmailValid,
+                    'is-valid': this.email.length > 0 && !emailExistsError,
+                    'is-invalid': emailExistsError,
                   }"
                   required
                 />
                 <label for="floatingInput">Email</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
-                <div v-if="emailExistsError" class="valid-feedback text-danger">
+                <div
+                  v-if="emailExistsError"
+                  class="invalid-feedback text-danger"
+                >
                   {{ this.emailExistsError }}
                 </div>
                 <div
@@ -242,7 +245,7 @@ export default defineComponent({
                   @keyup.enter="signInClicked(this.email, this.password)"
                   :class="{
                     'is-valid': this.password.length > 0 && isPasswordValid,
-                    'is-invalid': formSubmitted && !isPasswordValid,
+                    'is-invalid': this.password.length > 0 && !isPasswordValid,
                   }"
                   required
                 />
@@ -287,10 +290,11 @@ export default defineComponent({
               </div>
               <div class="pt-1">
                 <button
+                  @click="signUpClicked(this.email, this.password)"
                   type="button"
                   class="btn btn-secondary btn-lg d-inline-flex justify-content-center"
                   style="width: 300px"
-                  @click="signUpClicked(this.email, this.password)"
+                  :disabled="this.email.length == 0 || this.password.length == 0 || emailExistsError || !isPasswordValid || !agreeToSPP"
                 >
                   <SpinnerComponent
                     :loading="this.loading"

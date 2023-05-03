@@ -91,3 +91,85 @@ export default {
     </span>
   </div>
 </template>
+
+<style scoped>
+.userChat {
+  background-color: #FFFFFF;
+  text-align: left;
+  display: flex;
+  max-width: 785px;
+  padding-left: 60px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: right;
+}
+.userChat.highlighted {
+  position: relative;
+  width: 99%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: #FFCB4C;
+  border-radius: 15px;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: right;
+  border: none;
+}
+.pandaChat {
+  background-color: #FFFFFF;
+  text-align: left;
+  display: flex;
+  max-width: 785px;
+  padding-right: 60px;
+  flex-direction: row;
+  justify-content: left;
+  align-items: left;
+}
+.pandaChat.highlighted {
+  position: relative;
+  width: 99%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: #FFCB4C;
+  border-radius: 15px;
+  border: none;
+}
+.chatMessage {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #EFEFEF;
+}
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin: 10px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+  width:fit-content;
+  word-wrap: break-word;
+  border-radius: 15px;
+  color: #000000;
+}
+.message ol li {
+  margin-bottom: 10px;
+}
+.message a {
+  color: #000000;
+  text-decoration: none;
+  text-align: center;
+}
+.message a:hover {
+  color: #FFCB4C;
+  text-decoration: none;
+}
+.chatAvatar {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+}
+</style>

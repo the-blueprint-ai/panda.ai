@@ -128,26 +128,29 @@ export default {
 
 <template>
   <div class="userChatHistory" v-if="this.userChatHistory && historyMenu">
-    <h1 class="accountSectionHeading">CHAT HISTORY</h1>
-    <div class="userChatHistoryDates">
-      <div class="chatHistorySearch">
+    <div class="chatHistorySideBar">
+      <div class="input-group sticky-top">
         <input
-          class="chatHistorySearchBox"
-          type="text"
           v-model="chatHistorySearch"
+          type="text"
+          class="form-control shadow-none"
+          id="searchInput"
           placeholder="🐼 search chat history..."
         />
+        <button
+          v-if="typing"
+          class="btn btn-warning pb-2"
+          @click="clearSearch"
+          type="button"
+          id="button-addon2"
+        >
+          <img src="../assets/icons/x-circle.svg" />
+        </button>
       </div>
-      <img
-        v-if="typing"
-        class="clearAccountSearch"
-        src="../assets/icons/x-circle.svg"
-        @click="clearSearch"
-      />
       <div class="chatHistoryDateListAccount">
-        <ul>
+        <ul class="list-unstyled mt-3">
           <li
-            class="chatHistoryDay"
+            class="mt-2"
             v-for="(item, index) in filteredChatData"
             :key="index"
           >
@@ -165,7 +168,7 @@ export default {
                 <span
                   class="chatHistoryTime"
                   @click="activeChat = selectedChat = chat"
-                  >{{ chat.time }}:</span
+                  ><strong>{{ chat.time }}: </strong></span
                 >
                 <span
                   class="chatHistoryTitle"
@@ -179,8 +182,7 @@ export default {
         </ul>
       </div>
     </div>
-    <div class="mobileAccountChatPickers">
-      <!-- Date picker -->
+    <!-- <div class="mobileAccountChatPickers">
       <select
         v-model="selectedDate"
         @change="resetSelectedChat"
@@ -194,8 +196,6 @@ export default {
           {{ item.date }}
         </option>
       </select>
-
-      <!-- Chat picker -->
       <select
         v-model="selectedChat"
         @change="activeChat = selectedChat"
@@ -209,7 +209,7 @@ export default {
           {{ chat.title }} ({{ chat.time }})
         </option>
       </select>
-    </div>
+    </div> -->
     <div class="userChatHistoryContent" id="chatContainer">
       <span v-if="selectedChat">
         <chatMessage
@@ -226,3 +226,37 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.userChatHistory {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  overflow-x: hidden;
+}
+.chatHistorySideBar {
+  min-width: 400px;
+  max-width: 400px;
+  padding: 10px;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-right: 1px solid lightgray;
+}
+.list-unstyled li {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+.list-unstyled:hover {
+  cursor: pointer;
+}
+.userChatHistoryContent {
+  display: flex;
+  flex-direction: column-reverse;
+  min-width: 790px;
+  margin: 10px;
+  margin-left: 40px;
+}
+</style>

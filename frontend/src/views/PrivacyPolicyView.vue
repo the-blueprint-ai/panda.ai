@@ -12,13 +12,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="min-height: 71vh">
     <navBar></navBar>
-    <div class="body">
-      <div class="privacyPolicyContainer">
-        <h2>🐼 panda.ai Privacy Policy</h2>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container pt-5 pb-5">
+        <h2 class="text-center">🐼 PANDA.AI PRIVACY POLICY</h2>
         <div class="aboutContainerLine"></div>
-        <h3>Effective Date: 1st April 2023</h3>
+        <h3 class="text-secondary">EFFECTIVE DATE: 1ST APRIL 2023</h3>
         <p>
           At panda.ai, we are committed to protecting your privacy and ensuring
           that you have full control over your data. This Privacy Policy
@@ -35,7 +35,7 @@ export default defineComponent({
         <div class="aboutContainerLine"></div>
         <ol type="1">
           <li>
-            <h3>Information We Collect</h3>
+            <h3 class="text-secondary">INFORMATION WE COLLECT</h3>
             We collect information that you provide to us directly and
             information that is generated as you use our services. This may
             include:
@@ -53,7 +53,7 @@ export default defineComponent({
             </ol>
           </li>
           <li>
-            <h3>How We Use Your Information</h3>
+            <h3 class="text-secondary">HOW WE USE YOUR INFORMATION</h3>
             We use your information to:
             <ol type="a">
               <li>
@@ -68,20 +68,20 @@ export default defineComponent({
             </ol>
           </li>
           <li>
-            <h3>Lawful Basis for Processing Personal Data</h3>
+            <h3 class="text-secondary">LAWFUL BASIS FOR PROCESSING PERSONAL DATA</h3>
             Under the GDPR, our lawful basis for processing your personal data
             is your explicit consent. By using our services, you give us
             permission to collect, use, and share your information as described
             in this Privacy Policy.
           </li>
           <li>
-            <h3>Data Retention Period</h3>
+            <h3 class="text-secondary">DATA RETENTION PERIOD</h3>
             We will retain your personal data until you decide to delete your
             data and/or delete your account. Upon deletion, we will remove your
             information from our systems.
           </li>
           <li>
-            <h3>Your Data Rights</h3>
+            <h3 class="text-secondary">YOUR DATA RIGHTS</h3>
             As a data subject, you have the following rights under the GDPR and
             UK data privacy laws:
             <ol type="a">
@@ -116,13 +116,13 @@ export default defineComponent({
             </ol>
           </li>
           <li>
-            <h3>Data Storage and Transfers</h3>
+            <h3 class="text-secondary">DATA STORAGE AND TRANSFERS</h3>
             All data is currently held within the UK. If this changes in the
             future, we will inform our users and update our Privacy Policy
             accordingly.
           </li>
           <li>
-            <h3>Changes to Our Privacy Policy</h3>
+            <h3 class="text-secondary">CHANGES TO OUR PRIVACY POLICY</h3>
             We may update this Privacy Policy from time to time. When we make
             changes, we will update the "Effective Date" at the top of this
             policy and notify you of any material changes. We encourage you to
@@ -130,12 +130,11 @@ export default defineComponent({
             protecting your information.
           </li>
           <li>
-            <h3>Contact Us</h3>
+            <h3 class="text-secondary">CONTACT US</h3>
             <p>
               If you have any questions or concerns about this Privacy Policy,
-              Policy, please contact us at:
+              Policy, please contact us at: <a class="text-secondary" href="mailto:privacy@mypanda.ai">privacy@mypanda.ai</a>
             </p>
-            <a href="mailto:privacy@mypanda.ai">privacy@mypanda.ai</a>
           </li>
         </ol>
         <div class="aboutContainerLine"></div>
@@ -149,3 +148,15 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.aboutContainerLine {
+  height: 1px;
+  width: 100%;
+  margin: 0px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  display: flex;
+  background-color: #ffffff;
+}
+</style>

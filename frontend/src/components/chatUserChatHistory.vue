@@ -140,60 +140,61 @@ export default {
 </script>
 
 <template>
-  <div
-    class="chatUserChatHistory"
-    v-if="this.userStoreChatHistory && historyMenu"
-  >
-    <div class="chatUserChatHistoryDates">
-      <div class="chatUserChatHistorySearch">
-        <input
-          class="chatUserChatHistorySearchBox"
-          type="text"
-          v-model="chatHistorySearch"
-          @input="$emit('update-search-term', chatHistorySearch)"
-          placeholder="🐼 search chat history..."
-        />
-      </div>
-      <img
-        v-if="typing"
-        class="clearChatSearch"
-        src="../assets/icons/x-circle.svg"
-        @click="clearSearch"
+  <div v-if="this.userStoreChatHistory && historyMenu">
+    <div class="input-group sticky-top mb-3">
+      <input
+        v-model="chatHistorySearch"
+        type="text"
+        class="form-control shadow-none"
+        id="searchInput"
+        placeholder="🐼 search chat history..."
+        @input="$emit('update-search-term', chatHistorySearch)"
       />
-      <div class="chatHistoryDateListChat">
-        <ul>
+      <button
+        v-if="typing"
+        class="btn btn-warning pb-2"
+        @click="clearSearch"
+        type="button"
+        id="button-addon2"
+      >
+        <img src="../assets/icons/x-circle.svg" />
+      </button>
+    </div>
+    <ul class="list-unstyled mt-3">
+      <li class="mt-2" v-for="(item, index) in filteredChatData" :key="index">
+        <span @click="toggleVisibility(index)">{{
+          visibilityStates[index] ? "- " : "+ "
+        }}</span>
+        <span @click="toggleVisibility(index)">{{ item.date }}</span>
+        <ul v-show="visibilityStates[index]" class="list-unstyled ms-4">
           <li
-            class="chatHistoryDay"
-            v-for="(item, index) in filteredChatData"
-            :key="index"
+            class="mt-2"
+            :class="{ active: activeChat === chat }"
+            v-for="(chat, chatIndex) in item.chats"
+            :key="chatIndex"
           >
-            <span @click="toggleVisibility(index)">{{
-              visibilityStates[index] ? "- " : "+ "
-            }}</span>
-            <span @click="toggleVisibility(index)">{{ item.date }}</span>
-            <ul v-show="visibilityStates[index]">
-              <li
-                class="chatHistoryTimeTitle"
-                :class="{ active: activeChat === chat }"
-                v-for="(chat, chatIndex) in item.chats"
-                :key="chatIndex"
-              >
-                <span
-                  class="chatHistoryTime"
-                  @click="showSelectedChat(index, chatIndex)"
-                  >{{ chat.time }}:</span
-                >
-                <span
-                  class="chatHistoryTitle"
-                  :class="{ active: chat === activeChat }"
-                  @click="showSelectedChat(index, chatIndex)"
-                  >{{ chat.title }}</span
-                >
-              </li>
-            </ul>
+            <span @click="showSelectedChat(index, chatIndex)"
+              ><strong>{{ chat.time }}: </strong></span
+            >
+            <span
+              :class="{ active: chat === activeChat }"
+              @click="showSelectedChat(index, chatIndex)"
+              >{{ chat.title }}</span
+            >
           </li>
         </ul>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
+
+<style scoped>
+.list-unstyled li {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+.list-unstyled:hover {
+  cursor: pointer;
+}
+</style>

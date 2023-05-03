@@ -8,7 +8,8 @@ from event_utils import register_events
 from pydantic import ValidationError, BaseModel
 import logging
 from datetime import datetime
-from typing import List
+from typing import List, Optional
+import hashlib
 
 from functions.adminFunctions import get_roadmap, update_roadmap, add_roadmap_item, topline_user_stats, users_by_day_stats, topline_onboarding_stats, onboarding_by_day_stats, topline_chat_stats, chat_by_day_stats, topline_entity_stats, entity_by_day_stats
 
@@ -49,6 +50,23 @@ async def check_admin_route(user_id: str, session: SessionContainer = Depends(ve
         raise e
     except Exception as e:
         logger.error(f"Error in check_admin_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@router.get("/check-username", response_model=bool)
+async def check_username_route(username: str, session: SessionContainer = Depends(verify_session())):
+    try:
+        query = "SELECT username FROM panda_ai_users WHERE hashed_username = :hashed_username"
+        values = {"hashed_username": hash_username(username)}
+        response = await database.fetch_one(query=query, values=values)
+        if response:
+            return True
+        else:
+            return False
+    except HTTPException as e:
+        logger.error(f"HTTPException in check_username_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in check_username_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @router.get("/roadmap")
@@ -126,3 +144,7 @@ async def get_user_stats_route(session: SessionContainer = Depends(verify_sessio
     except Exception as e:
         logger.error(f"Error in get_user_stats_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+# FUNCITONS
+def hash_username(username: str) -> bytes:
+    return hashlib.sha256(username.encode()).digest()

@@ -39,6 +39,24 @@ export default {
     setIsOpenValue(value) {
       this.$store.commit("setIsOpen", value);
     },
+    redirectToHome() {
+      this.$router.push("/");
+    },
+    redirectToAbout() {
+      this.$router.push("/about");
+    },
+    redirectToPricing() {
+      this.$router.push("/pricing");
+    },
+    redirectToRoadmap() {
+      this.$router.push("/roadmap");
+    },
+    redirectToPrivacy() {
+      this.$router.push("/privacy");
+    },
+    redirectToSupport() {
+      this.$router.push("/support");
+    },
     redirectToSignUp() {
       this.$router.push("/signup");
     },
@@ -51,325 +69,155 @@ export default {
     redirectToChat() {
       this.$router.push("/auth/" + this.userId + "/chat");
     },
+    redirectToAdmin() {
+      this.$router.push("/auth/admin/dashboard");
+    },
+    redirectToUserDashboard() {
+      window.open("https://api.mypanda.ai/auth/dashboard", "_blank");
+    },
     async onLogout() {
       await Session.signOut();
       window.location.href = "https://www.mypanda.ai/";
-    },
-    toggleMenu() {
-      const menu = this.$refs.hamburgerMenu;
-
-      if (!menu.style.left || menu.style.left === "-120%") {
-        menu.style.left = "0";
-      } else {
-        menu.style.left = "-120%";
-      }
-    },
-    openClose(event) {
-      // Update the openClose method to take the event object as a parameter
-      var _this = this;
-
-      const closeListener = (e) => {
-        if (
-          _this.catchOutsideClick(e, _this.$refs.avatar) &&
-          _this.catchOutsideClick(e, _this.$refs.caret)
-        )
-          window.removeEventListener("click", closeListener),
-            _this.setIsOpenValue(false);
-      };
-
-      window.addEventListener("click", closeListener);
-
-      this.setIsOpenValue(!this.isOpen);
-    },
-    catchOutsideClick(event, dropdown) {
-      if (!dropdown) return false; // Add this line to check if dropdown is null
-
-      // When user clicks menu or a child of the menu — do nothing
-      if (dropdown == event.target || dropdown.contains(event.target))
-        return false;
-
-      // When user clicks outside of the menu — close the menu
-      if (this.isOpen && dropdown != event.target) return true;
-    },
-    goToUserDashboard() {
-      window.open("http://localhost:3001/auth/dashboard");
     },
   },
 };
 </script>
 
 <template>
-  <div class="navbar">
-    <div class="navbar-top">
-      <div class="mobileMenu">
-        <img
-          class="hamburgerMenuIcon"
-          @click="toggleMenu"
-          src="../../src/assets/icons/list.svg"
-          width="50"
-        />
-        <nav class="hamburgerMenu" ref="hamburgerMenu">
-          <img
-            src="../assets/icons/x.svg"
-            class="mobileMenuCloseButton"
-            @click="toggleMenu"
-          />
-          <div class="mobileMenuTop">
-            <div class="mobileMenuAvatar" v-if="userId">
-              <img
-                class="mobileMenuUserIcon"
-                v-bind:src="avatar"
-                ref="avatar"
-                @click="redirectToAccount"
-              />
-              <button class="mobileMenuChatButton" @click="redirectToChat">
-                Let's Chat
-              </button>
-            </div>
-            <div v-else>
-              <div class="mobileMenuButtons">
-                <button
-                  class="mobileMenuButtonSignUp"
-                  @click="redirectToSignUp"
-                >
-                  Sign up
-                </button>
-                <button class="mobileMenuButtonLogin" @click="redirectToSignIn">
-                  Sign In
-                </button>
+  <div class="row">
+    <div class="navbar navbar-expand-lg bg-white pt-2 pb-2">
+      <div class="col-sm-1 px-5" style="width: 200px">
+        <a class="navbar-brand" @click="redirectToHome">
+          <img class="logo" src="../../src/assets/panda.png" width="50" />
+          panda.ai
+        </a>
+      </div>
+      <div class="col-sm-9 d-flex flex-shrink-1 me-auto">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <div class="col px-3" @click="redirectToHome">
+                <li class="nav-item pt-3">
+                  <img src="../../src/assets/icons/house-door.svg" alt="home" />
+                  <a class="nav-link">home</a>
+                </li>
               </div>
-            </div>
-            <div class="mobileMenuList">
-              <router-link to="/">
-                <div class="mobileMenuIconTop">
-                  <img
-                    src="../../src/assets/icons/house-door.svg"
-                    class="homesvg"
-                    alt="home"
-                  />
-                  <p>HOME</p>
-                </div>
-              </router-link>
-              <router-link to="/about">
-                <div class="mobileMenuIcon">
+              <div class="col px-3" @click="redirectToAbout">
+                <li class="nav-item pt-3">
                   <img
                     src="../../src/assets/icons/file-person.svg"
-                    class="homesvg"
                     alt="about"
                   />
-                  <p>ABOUT</p>
-                </div>
-              </router-link>
-              <router-link to="/pricing">
-                <div class="mobileMenuIcon">
-                  <img
-                    src="../../src/assets/icons/tag.svg"
-                    class="homesvg"
-                    alt="about"
-                  />
-                  <p>PRICING</p>
-                </div>
-              </router-link>
-              <router-link to="/roadmap">
-                <div class="mobileMenuIcon">
-                  <img
-                    src="../../src/assets/icons/geo.svg"
-                    class="homesvg"
-                    alt="roadmap"
-                  />
-                  <p>ROADMAP</p>
-                </div>
-              </router-link>
-              <router-link to="/privacy">
-                <div class="mobileMenuIcon">
+                  <a class="nav-link">about</a>
+                </li>
+              </div>
+              <div class="col px-3" @click="redirectToPricing">
+                <li class="nav-item pt-3">
+                  <img src="../../src/assets/icons/tag.svg" alt="about" />
+                  <a class="nav-link">pricing</a>
+                </li>
+              </div>
+              <div class="col px-3" @click="redirectToRoadmap">
+                <li class="nav-item pt-3">
+                  <img src="../../src/assets/icons/geo.svg" alt="roadmap" />
+                  <a class="nav-link">roadmap</a>
+                </li>
+              </div>
+              <div class="col px-3" @click="redirectToPrivacy">
+                <li class="nav-item pt-3">
                   <img
                     src="../../src/assets/icons/file-earmark-lock.svg"
-                    class="homesvg"
                     alt="privacy"
                   />
-                  <p>PRIVACY</p>
-                </div>
-              </router-link>
-              <router-link to="/support">
-                <div class="mobileMenuIcon">
-                  <img
-                    src="../../src/assets/icons/question-square.svg"
-                    class="homesvg"
-                    alt="support"
-                  />
-                  <p>SUPPORT</p>
-                </div>
-              </router-link>
-              <router-link to="/terms-of-service">
-                <div class="mobileMenuIcon">
-                  <img
-                    src="../../src/assets/icons/emoji-smile.svg"
-                    class="homesvg"
-                    alt="support"
-                  />
-                  <p>TERMS OF SERVICE</p>
-                </div>
-              </router-link>
-              <router-link to="/privacy-policy">
-                <div class="mobileMenuIconBottom">
-                  <img
-                    src="../../src/assets/icons/file-earmark-lock.svg"
-                    class="homesvg"
-                    alt="support"
-                  />
-                  <p>PRIVACY POLICY</p>
-                </div>
-              </router-link>
-            </div>
-          </div>
-          <div class="mobileMenuBottom">
-            <button
-              v-if="userId"
-              class="mobileMenuChatButton"
-              @click="onLogout"
-            >
-              Sign Out
-            </button>
-            <div class="mobileMenuBrandHolderBottom">
-              <img class="logo" src="../../src/assets/panda.png" width="50" />
-              <div class="mobileMenuBrandHolderBottomBrandText">
-                <h2>panda.ai</h2>
-                <p>MADE WITH ❤️</p>
+                  <a class="nav-link">privacy</a>
+                </li>
               </div>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div class="brandHolderTop">
-        <router-link to="/">
-          <img class="logo" src="../../src/assets/panda.png" width="50" />
-        </router-link>
-        <router-link to="/">
-          <p>panda.ai</p>
-        </router-link>
-      </div>
-      <div class="menu-items">
-        <div class="menu-icon">
-          <router-link to="/">
-            <img
-              src="../../src/assets/icons/house-door.svg"
-              class="homesvg"
-              alt="home"
-            />
-          </router-link>
-          <p>home</p>
-        </div>
-        <div class="menu-icon">
-          <router-link to="/about">
-            <img
-              src="../../src/assets/icons/file-person.svg"
-              class="homesvg"
-              alt="about"
-            />
-          </router-link>
-          <p>about</p>
-        </div>
-        <div class="menu-icon">
-          <router-link to="/pricing">
-            <img
-              src="../../src/assets/icons/tag.svg"
-              class="homesvg"
-              alt="about"
-            />
-          </router-link>
-          <p>pricing</p>
-        </div>
-        <div class="menu-icon">
-          <router-link to="/roadmap">
-            <img
-              src="../../src/assets/icons/geo.svg"
-              class="homesvg"
-              alt="roadmap"
-            />
-          </router-link>
-          <p>roadmap</p>
-        </div>
-        <div class="menu-icon">
-          <router-link to="/privacy">
-            <img
-              src="../../src/assets/icons/file-earmark-lock.svg"
-              class="homesvg"
-              alt="privacy"
-            />
-          </router-link>
-          <p>privacy</p>
-        </div>
-      </div>
-      <div class="account-items">
-        <div @click="openClose">
-          <img
-            v-if="userId"
-            src="../../src/assets/icons/caret-down-fill.svg"
-            class="downsvg"
-            ref="caret"
-          />
-        </div>
-        <div class="dropdown-menu" v-if="isOpen">
-          <div class="dropdown-links">
-            <router-link :to="'/auth/' + userId + '/chat'">
-              <button class="dropdown-button-top">Chat</button>
-            </router-link>
-            <div class="dropdown-bar"></div>
-            <router-link :to="'/auth/' + userId + '/account'">
-              <button class="dropdown-button">Account</button>
-            </router-link>
-            <div class="dropdown-bar"></div>
-            <div v-if="admin">
-              <router-link :to="'/auth/admin/dashboard'">
-                <button class="dropdown-button">Admin Panel</button>
-              </router-link>
-              <div class="dropdown-bar"></div>
-              <button class="dropdown-button" @click="goToUserDashboard">
-                User Dashboard
-              </button>
-              <div class="dropdown-bar"></div>
-            </div>
-            <div v-if="session">
-              <button class="dropdown-button" @click="onLogout">
-                Sign Out
-              </button>
-            </div>
-            <div v-else>
-              <router-link to="/signin">
-                <button class="dropdown-button">Sign In</button>
-              </router-link>
-            </div>
-            <div class="dropdown-bar"></div>
-            <div class="dropdown-bottom"></div>
+            </ul>
           </div>
         </div>
-        <img
-          v-if="userId"
-          class="user-icon"
-          v-bind:src="avatar"
-          ref="avatar"
-          @click="openClose"
-        />
-        <div v-else>
-          <!-- <button class="authButton-signup" @click="redirectToSignUp">
-            Sign up
-          </button> -->
-          <button class="authButton-login" @click="redirectToSignIn">
-            Sign In
-          </button>
-        </div>
-        <div class="menu-icon">
-          <router-link to="/support">
+      </div>
+      <div class="col-sm-2 d-flex justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item pt-3" @click="redirectToSupport">
             <img
               src="../../src/assets/icons/question-square.svg"
-              class="homesvg"
               alt="support"
             />
-          </router-link>
-          <p>support</p>
-        </div>
+            <a class="nav-link">support</a>
+          </li>
+          <li v-if="!userId" class="d-flex align-items-center ps-5 px-2">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              @click="redirectToSignUp"
+            >
+              SIGN UP
+            </button>
+          </li>
+          <li v-if="!userId" class="d-flex align-items-center px-2 pe-5">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              @click="redirectToSignIn"
+            >
+              SIGN IN
+            </button>
+          </li>
+          <li v-if="userId" class="dropdown px-3 pe-4">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img v-bind:src="avatar" class="rounded" ref="avatar" width="60"/>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg-end me-4">
+              <li><a class="dropdown-item" @click="redirectToChat">CHAT</a></li>
+              <li>
+                <a class="dropdown-item" @click="redirectToAccount">ACCOUNT</a>
+              </li>
+              <li><hr v-if="admin" class="dropdown-divider" /></li>
+              <li><h6 v-if="admin" class="dropdown-header">ADMIN</h6></li>
+              <li>
+                <a v-if="admin" class="dropdown-item" @click="redirectToAdmin"
+                  >ADMIN PANEL</a
+                >
+              </li>
+              <li>
+                <a v-if="admin" class="dropdown-item" @click="redirectToUserDashboard"
+                  >USER DASHBOARD</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item" @click="onLogout">SIGN OUT</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="navbarbar"></div>
   </div>
 </template>
+
+<style scoped>
+.nav-item {
+  width: 3.5vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.nav-item img {
+  width: 2rem;
+}
+.nav-item:hover {
+  background-color: #FFCB4C;
+  border-radius: 10px;
+}
+a:hover {
+  cursor: pointer;
+}
+</style>

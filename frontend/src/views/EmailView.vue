@@ -7,17 +7,25 @@ import navFooter from "../components/navFooter.vue";
 import { saveEmail } from "../composables/saveEmail.js";
 import { sendEmail } from "../composables/sendEmail.js";
 import welcome_html from "../assets/emails/welcomeEmail.js";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default defineComponent({
   data() {
-    return {};
+    return {
+      sendButtonText: "LOGOUT",
+    };
   },
   watch: {},
   async mounted() {
     await this.getSession();
     await this.getUserInfo();
     saveEmail(this.userId, this.email);
-    sendEmail("hello@mypanda.ai", this.email, "Welcome to 🐼 panda.ai!", welcome_html);
+    sendEmail(
+      "hello@mypanda.ai",
+      this.email,
+      "Welcome to 🐼 panda.ai!",
+      welcome_html
+    );
   },
   computed: {
     ...mapGetters("userStore", {
@@ -35,28 +43,53 @@ export default defineComponent({
   components: {
     navBar,
     navFooter,
+    SpinnerComponent,
   },
 });
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="bodyG">
-      <div class="emailSentContainer">
-        <img id="emailSentPanda" src="../assets/panda.png" />
-        <h2>VERIFICATION EMAIL SENT...</h2>
-        <img
-          id="emailSentEnvelope"
-          src="../assets/icons/envelope-paper-heart-fill.svg"
-        />
-        <div class="signInBar"></div>
-        <p>
-          Please click on the link in the email we just sent you to confirm your
-          email address and complete the sign up process.
-        </p>
-        <h3 @click="emailVerification">RESEND EMAIL</h3>
-        <button class="authButton-login" @click="onLogout">LOGOUT</button>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container d-flex justify-content-center pt-5 pb-5">
+        <div class="card text-bg-light text-center mb-3" style="width: 32rem">
+          <div class="card-header pt-3 pb-3">
+            <img
+              src="../assets/panda.png"
+              class="w-20 h-20"
+              alt="panda"
+              width="50"
+            />
+            <h2 class="pt-3">VERIFICATION EMAIL SENT...</h2>
+          </div>
+          <div class="card-body pt-4 pb-4 px-5">
+            <p>
+              Please click on the link in the email we just sent you to confirm
+              your email address and complete the sign up process.
+            </p>
+            <h5
+              class="text-secondary mt-4"
+              @click="emailVerification"
+              style="cursor: pointer"
+            >
+              RESEND EMAIL
+            </h5>
+            <div class="pt-4">
+              <button
+                type="button"
+                class="btn btn-secondary btn-lg mb-3 d-inline-flex justify-content-center"
+                style="width: 300px"
+                @click="onLogout"
+              >
+                <SpinnerComponent
+                  :loading="this.loading"
+                  :button-text="this.sendButtonText"
+                ></SpinnerComponent>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <navFooter></navFooter>

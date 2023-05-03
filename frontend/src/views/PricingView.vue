@@ -6,6 +6,7 @@ import navFooter from "../components/navFooter.vue";
 export default defineComponent({
   data: () => {
     return {
+      country: "uk",
       subscriptionPeriod: "monthly",
       recommendedPlan: "mei",
     };
@@ -22,37 +23,71 @@ export default defineComponent({
     <navBar></navBar>
     <div class="container-fluid h-100 bg-primary text-white">
       <div class="container text-center pt-5 pb-5">
+        <div class="ukUSA d-flex justify-content-end">
+          <div
+            class="btn-group btn-group-lg pb-0 mb-n5 me-5"
+            role="group"
+            aria-label="UK/USA Prices"
+          >
+            <input
+              type="radio"
+              class="btn-check"
+              name="ukUSA"
+              id="uk"
+              autocomplete="on"
+              checked
+              @change="country = 'uk'"
+            />
+            <label class="btn btn-outline-light px-2 pt-1 pb-1" for="uk"
+              ><img src="../assets/icons/united-kingdom.png" width="30"
+            /></label>
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="ukUSA"
+              id="usa"
+              autocomplete="off"
+              @change="country = 'usa'"
+            />
+            <label class="btn btn-outline-light px-2 pt-1 pb-1" for="usa"
+              ><img
+                src="../assets/icons/united-states-of-america.png"
+                width="30"
+            /></label>
+          </div>
+        </div>
         <h1>🐼</h1>
         <h1>PANDA.AI PRICING</h1>
-        <div
-          class="btn-group btn-group-lg pt-4"
-          role="group"
-          aria-label="Monthly/Annual Prices"
-        >
-          <input
-            type="radio"
-            class="btn-check"
-            name="btnradio"
-            id="btnradio1"
-            autocomplete="on"
-            checked
-            @change="subscriptionPeriod = 'monthly'"
-          />
-          <label class="btn btn-outline-secondary" for="btnradio1"
-            >MONTHLY</label
+        <div class="monthlyAnnual">
+          <div
+            class="btn-group btn-group-lg pt-4"
+            role="group"
+            aria-label="Monthly/Annual Prices"
           >
+            <input
+              type="radio"
+              class="btn-check"
+              name="monthlyAnnual"
+              id="monthly"
+              autocomplete="on"
+              checked
+              @change="subscriptionPeriod = 'monthly'"
+            />
+            <label class="btn btn-outline-secondary" for="monthly"
+              >MONTHLY</label
+            >
 
-          <input
-            type="radio"
-            class="btn-check"
-            name="btnradio"
-            id="btnradio2"
-            autocomplete="off"
-            @change="subscriptionPeriod = 'annual'"
-          />
-          <label class="btn btn-outline-secondary" for="btnradio2"
-            >ANNUAL</label
-          >
+            <input
+              type="radio"
+              class="btn-check"
+              name="monthlyAnnual"
+              id="annual"
+              autocomplete="off"
+              @change="subscriptionPeriod = 'annual'"
+            />
+            <label class="btn btn-outline-secondary" for="annual">ANNUAL</label>
+          </div>
         </div>
         <div class="row mb-5">
           <div class="col mb-5">
@@ -70,16 +105,18 @@ export default defineComponent({
                   <p class="mt-n3">ALL Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5">£FREE</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>FREE</h1>
                   <p class="mt-n2">for one month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5">£FREE</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>FREE</h1>
                   <p class="mt-n2">for one month</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width:150px">START TRIAL</button>
+                <button class="btn btn-secondary" style="width: 150px">
+                  START TRIAL
+                </button>
               </div>
             </div>
           </div>
@@ -98,16 +135,18 @@ export default defineComponent({
                   <p class="mt-n3">3 Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5">£2.99</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>2.99</h1>
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5">£29.99</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>29.99</h1>
                   <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width:150px">SELECT</button>
+                <button class="btn btn-secondary" style="width: 150px">
+                  SELECT
+                </button>
               </div>
             </div>
           </div>
@@ -126,16 +165,18 @@ export default defineComponent({
                   <p class="mt-n3">5 Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5">£5.99</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>5.99</h1>
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5">£59.99</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>59.99</h1>
                   <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width:150px">SELECT</button>
+                <button class="btn btn-secondary" style="width: 150px">
+                  SELECT
+                </button>
               </div>
             </div>
           </div>
@@ -154,16 +195,18 @@ export default defineComponent({
                   <p class="mt-n3">ALL Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5">£14.99</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>14.99</h1>
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5">£149.99</h1>
+                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>149.99</h1>
                   <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width:150px">SELECT</button>
+                <button class="btn btn-secondary" style="width: 150px">
+                  SELECT
+                </button>
               </div>
             </div>
           </div>
@@ -202,7 +245,8 @@ export default defineComponent({
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
-                  🐼 panda.ai can get information from wikipedia if it helps them answer your question.
+                  🐼 panda.ai can get information from wikipedia if it helps
+                  them answer your question.
                 </p>
               </div>
             </div>
@@ -220,7 +264,8 @@ export default defineComponent({
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
-                  🐼 panda.ai will show you images if it helps them answer your question.
+                  🐼 panda.ai will show you images if it helps them answer your
+                  question.
                 </p>
               </div>
             </div>
@@ -239,9 +284,7 @@ export default defineComponent({
                 <img src="../assets/panda.png" width="180" />
               </div>
               <div class="card-footer pt-4 pb-2">
-                <p>
-                  🐼 panda.ai can fetch you music from Spotify.
-                </p>
+                <p>🐼 panda.ai can fetch you music from Spotify.</p>
               </div>
             </div>
           </div>
@@ -258,7 +301,8 @@ export default defineComponent({
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
-                  🐼 panda.ai will show you relevant search results if it helps them answer your question.
+                  🐼 panda.ai will show you relevant search results if it helps
+                  them answer your question.
                 </p>
               </div>
             </div>
@@ -276,7 +320,8 @@ export default defineComponent({
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
-                  🐼 panda.ai can get you the latest news on any topic you ask them about.
+                  🐼 panda.ai can get you the latest news on any topic you ask
+                  them about.
                 </p>
               </div>
             </div>
@@ -314,7 +359,8 @@ export default defineComponent({
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
-                  🐼 panda.ai can fetch you information about any book you're interested in.
+                  🐼 panda.ai can fetch you information about any book you're
+                  interested in.
                 </p>
               </div>
             </div>
@@ -331,9 +377,7 @@ export default defineComponent({
                 <img src="../assets/panda.png" width="180" />
               </div>
               <div class="card-footer pt-4 pb-2">
-                <p>
-                  🐼 panda.ai will help you get your shopping done.
-                </p>
+                <p>🐼 panda.ai will help you get your shopping done.</p>
               </div>
             </div>
           </div>

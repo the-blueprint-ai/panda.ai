@@ -22,7 +22,7 @@ export default defineComponent({
       activeChat: null,
       thinkingAvatar: "../../assets/user.png",
       loading: false,
-      buttonText: "Send",
+      buttonText: "SEND",
     };
   },
   watch: {},
@@ -153,69 +153,108 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="bodyG">
-      <div class="mainContainer">
-        <div v-if="userStoreChatHistory" class="chatHistoryContainer">
-          <h2>Chat History</h2>
-          <div class="chatHistory">
-            <ChatUserChatHistory
-              v-if="historyMenu"
-              :history-menu="historyMenu"
-              :user-store-chat-history="userStoreChatHistory"
-              :user-id="userId"
-              @update-search-term="currentSearchTerm = $event"
-            ></ChatUserChatHistory>
-          </div>
-          <button class="startNewChat" @click="startNewChat">
-            Start new chat
-          </button>
-        </div>
-        <div class="mainChatContainer">
-          <div class="chatContainer" id="chatContainer">
-            <chatMessage
-              v-for="(item, index) in chatHistory"
-              :message="item"
-              :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
-              :key="item.user + '-' + index"
-              :search-term="currentSearchTerm"
-              :is-disabled="this.isDisabled"
-            ></chatMessage>
-          </div>
-          <div class="userInputContainer">
-            <img v-if="this.loading" src="../assets/thinking.png" class="chatAvatar" />
-            <img v-else v-bind:src="avatar" class="chatAvatar" />
-            <div class="userInput">
-              <textarea
-                :disabled="this.loading || isDisabled"
-                class="input"
-                v-model="messageToSend"
-                @keydown.enter.stop.prevent="submitMessage(this.username)"
-                id="userInput"
-                name="userInput"
-                placeholder="enter your message here..."
-                ref="messageInput"
-              ></textarea>
+    <div v-if="session">
+      <div class="container-fluid bg-light text-white">
+        <div class="container d-flex pt-5 pb-5">
+          <div
+            v-if="userStoreChatHistory"
+            class="card text-bg-white text-primary text-center me-3"
+            style="width: 24rem"
+          >
+            <div class="card-header pt-3 pb-2">
+              <h3>CHAT HISTORY</h3>
+            </div>
+            <div class="card-body scrollable-card-body text-start pt-4 pb-4 px-4">
+              <ChatUserChatHistory
+                v-if="historyMenu"
+                :history-menu="historyMenu"
+                :user-store-chat-history="userStoreChatHistory"
+                :user-id="userId"
+                @update-search-term="currentSearchTerm = $event"
+              ></ChatUserChatHistory>
+            </div>
+            <div class="card-footer pt-3 pb-3">
               <button
-                :disabled="this.loading || isDisabled"
-                class="chatButton"
-                id="sendButton"
-                @click="submitMessage(this.username)"
+                class="btn btn-secondary btn-lg"
+                @click="startNewChat"
+                style="height: 57px; width: 300px"
               >
-                <SpinnerComponent
-                  :loading="this.loading"
-                  :button-text="this.buttonText"
-                ></SpinnerComponent>
+                START NEW CHAT
               </button>
+            </div>
+          </div>
+          <div
+            v-if="userStoreChatHistory"
+            class="card text-bg-white text-primary text-center me-3"
+            style="width: 48rem"
+          >
+            <div class="card-body scrollable-card-body text-start pt-4 pb-4 px-4">
+              <chatMessage
+                v-for="(item, index) in chatHistory"
+                :message="item"
+                :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
+                :key="item.user + '-' + index"
+                :search-term="currentSearchTerm"
+                :is-disabled="this.isDisabled"
+              ></chatMessage>
+            </div>
+            <div class="card-footer pt-2 pt-1">
+              <div class="form-floating mb-2 d-flex">
+                <img
+                  v-if="this.loading"
+                  src="../assets/thinking.png"
+                  class="chatAvatar mt-2"
+                />
+                <img v-else v-bind:src="avatar" class="chatAvatar mt-2" />
+                <textarea
+                  :disabled="this.loading || isDisabled"
+                  class="form-control mt-1 mx-3 shadow-none"
+                  v-model="messageToSend"
+                  @keydown.enter.stop.prevent="submitMessage(this.username)"
+                  id="userInput"
+                  name="userInput"
+                  placeholder="enter your message here..."
+                  ref="messageInput"
+                  style="min-height: 60px"
+                ></textarea>
+                <label
+                  for="floatingTextarea"
+                  class="text-primary"
+                  style="margin-left: 65px"
+                  >enter your message here...</label
+                >
+                <button
+                  :disabled="this.loading || isDisabled"
+                  class="btn btn-secondary btn-lg mt-2"
+                  id="sendButton"
+                  @click="submitMessage(this.username)"
+                  style="max-height: 60px"
+                >
+                  <SpinnerComponent
+                    :loading="this.loading"
+                    :button-text="this.buttonText"
+                  ></SpinnerComponent>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <button class="startNewChatSmall" @click="startNewChat">
-        Start new chat
-      </button>
     </div>
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.scrollable-card-body {
+  height: 900px;
+  overflow-y: auto;
+}
+.chatAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+</style>

@@ -14,11 +14,11 @@ from cryptography.fernet import Fernet, InvalidToken
 from databases import Database
 import logging
 from typing import Optional, Any
-import json
 import boto3
 from io import BytesIO
 import os
 from functions.entityFunctions import delete_entity
+import hashlib
 
 # CONFIG
 router = APIRouter(
@@ -191,6 +191,14 @@ async def get_user_data(user_id: str):
     else:
         return None
     
+def hash_username(username: str) -> bytes:
+    return hashlib.sha256(username.encode()).digest()
+
+def encrypt_if_not_none(value: Optional[str]) -> Optional[str]:
+    if value is not None:
+        return cipher_suite.encrypt(value.encode()).decode('utf-8')
+    return None
+    
 def decrypt_if_not_none(value):
     if value is not None:
         return cipher_suite.decrypt(value.encode()).decode('utf-8')
@@ -225,7 +233,9 @@ async def save_user_data(user_id: str, first_name: Optional[str] = None, last_na
 
     if username is not None:
         fields_to_update.append("username = :username")
+        fields_to_update.append("hashed_username = :hashed_username")
         values["username"] = encrypt_if_not_none(username)
+        values["hashed_username"] = hash_username(username)
 
     if email is not None:
         fields_to_update.append("email = :email")
@@ -246,23 +256,14 @@ async def save_user_data(user_id: str, first_name: Optional[str] = None, last_na
     if onboarded is not None:
         fields_to_update.append("onboarded = :onboarded")
         values["onboarded"] = onboarded
-    else:
-        fields_to_update.append("onboarded = :onboarded")
-        values["onboarded"] = False
 
     if subscriber is not None:
         fields_to_update.append("subscriber = :subscriber")
         values["subscriber"] = subscriber
-    else:
-        fields_to_update.append("subscriber = :subscriber")
-        values["subscriber"] = False
 
     if admin is not None:
         fields_to_update.append("admin = :admin")
         values["admin"] = admin
-    else:
-        fields_to_update.append("admin = :admin")
-        values["admin"] = False
 
     # Join the fields to update and add the WHERE clause to the query
     query += " " + ", ".join(fields_to_update) + " WHERE user_id = :user_id"
@@ -270,10 +271,6 @@ async def save_user_data(user_id: str, first_name: Optional[str] = None, last_na
     await database.execute(query=query, values=values)
     return {"message": "User data updated successfully"}
 
-def encrypt_if_not_none(value: Optional[str]) -> Optional[str]:
-    if value is not None:
-        return cipher_suite.encrypt(value.encode()).decode('utf-8')
-    return None
 
 async def save_new_user_data(user_id: str, first_name: Optional[str] = None, last_name: Optional[str] = None, username: Optional[str] = None, email: Optional[str] = None, avatar: Optional[str] = None, banner: Optional[str] = None, about: Optional[str] = None, onboarded: Optional[bool] = None, subscriber: Optional[bool] = None, admin: Optional[bool] = None):
     if onboarded is None:
@@ -305,6 +302,7 @@ async def save_new_user_data(user_id: str, first_name: Optional[str] = None, las
     await database.execute(query=query, values=values)
     return {"message": "User data inserted successfully"}
     
+
 async def save_user_banner(user_id: str, file: UploadFile = File(...)):
     try:
         # Read the file content
@@ -344,6 +342,7 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
     except Exception as e:
         response = {"error": str(e)}
         return response
+
 
 async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
     try:
@@ -401,6 +400,7 @@ async def delete_user_chat_history(user_id: str):
         response = {"error": str(e)}
         return response
 
+
 async def delete_internal_user(user_id: str, session: SessionContainer = Depends(verify_session())):
     try:
         await delete_entity(user_id)
@@ -427,6 +427,7 @@ async def delete_internal_user(user_id: str, session: SessionContainer = Depends
     except Exception as e:
         response = {"error": str(e)}
         return response
+
 
 def update_password(oldPassword: str, newPassword: str, session: SessionContainer = Depends(verify_session())):
     try:
@@ -462,6 +463,7 @@ def update_password(oldPassword: str, newPassword: str, session: SessionContaine
     except Exception as e:
         response = {"error": str(e)}
         return response
+
 
 async def set_onboarded(user_id: str):
     try:

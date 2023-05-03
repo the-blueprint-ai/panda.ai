@@ -1,12 +1,12 @@
 <script>
 import * as Session from "supertokens-web-js/recipe/session";
 import { doesEmailExist } from "supertokens-web-js/recipe/thirdpartyemailpassword";
+import { doesUsernameExist } from "../composables/doesUsernameExist.js";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
-import { emailVerification } from "../composables/emailVerification.js";
 import AccountUserChatHistory from "../components/accountUserChatHistory.vue";
 import UserIntegrations from "../components/userIntegrations.vue";
 import UserSubscription from "../components/userSubscription.vue";
@@ -31,15 +31,19 @@ export default defineComponent({
       dataMenuActive: false,
       settingsMenuActive: false,
       formData: null,
-      new_email: "",
       emailTimer: null,
+      usernameTimer: null,
       emailExistsError: "",
-      emailChecking: null,
-      emailOk: "",
+      usernameExistsError: "",
       new_first_name: "",
       new_last_name: "",
       new_username: "",
+      new_email: "",
       isDisabled: true,
+      saveDetailsButtonText: "SAVE DETAILS",
+      detailsUpdated: false,
+      formSubmitted: false,
+      loading: false,
     };
   },
   watch: {
@@ -50,6 +54,15 @@ export default defineComponent({
       // Start a new timer for 1000ms
       this.emailTimer = setTimeout(() => {
         this.checkEmail(newValue);
+      }, 400);
+    },
+    new_username(newValue) {
+      // Clear the previous timer (if there was one)
+      clearTimeout(this.usernameTimer);
+
+      // Start a new timer for 1000ms
+      this.usernameTimer = setTimeout(() => {
+        this.checkUsername(newValue);
       }, 400);
     },
   },
@@ -78,13 +91,15 @@ export default defineComponent({
     isEmailValid() {
       return this.validateEmail(this.new_email);
     },
+    isUsernameValid() {
+      return !this.usernameExistsError;
+    },
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     ...mapMutations("chatStore", {
       setIsDisabled: "setIsDisabled",
     }),
-    emailVerification,
     validateEmail: function (email) {
       var re =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -97,22 +112,34 @@ export default defineComponent({
         });
 
         if (response.doesExist) {
-          this.emailChecking = false;
           this.emailExistsError =
-            "Email already in use. Please choose another one instead";
-          this.emailOk = "no";
+            "Email already registered. Please choose another one instead.";
           setTimeout(() => {
             this.emailExistsError = "";
-            this.emailOk = "";
-            this.email = "";
-            this.$refs.email.value = null;
-            this.emailChecking = true;
-          }, 3000);
+            this.new_email = "";
+          }, 3600);
+        }
+      } catch (err) {
+        console.error(err); // log the error to the console
+        if (err.isSuperTokensGeneralError === true) {
+          // this may be a custom error message sent from the API by you.
+          window.alert(err.message);
         } else {
-          this.emailChecking = false;
+          window.alert("Oops! Something went wrong.");
+        }
+      }
+    },
+    checkUsername: async function (username) {
+      try {
+        let response = await doesUsernameExist(username);
+
+        if (response) {
+          this.usernameExistsError =
+            "Username already registered. Please choose another one instead.";
           setTimeout(() => {
-            this.emailOk = "ok";
-          }, 3000);
+            this.usernameExistsError = "";
+            this.new_username = "";
+          }, 3600);
         }
       } catch (err) {
         console.error(err); // log the error to the console
@@ -147,7 +174,9 @@ export default defineComponent({
       reader.readAsDataURL(file);
       reader.onload = async (e) => {
         // Check if the image has the right dimensions (4 times wider than its height)
-        const isRightDimensions = await this.checkImageDimensions(e.target.result);
+        const isRightDimensions = await this.checkImageDimensions(
+          e.target.result
+        );
         let imageFile = file;
 
         if (!isRightDimensions) {
@@ -220,7 +249,17 @@ export default defineComponent({
           canvas.height = targetHeight;
           const ctx = canvas.getContext("2d");
           const startX = (width - targetWidth) / 2;
-          ctx.drawImage(img, startX, 0, targetWidth, targetHeight, 0, 0, targetWidth, targetHeight);
+          ctx.drawImage(
+            img,
+            startX,
+            0,
+            targetWidth,
+            targetHeight,
+            0,
+            0,
+            targetWidth,
+            targetHeight
+          );
 
           // Get the cropped image as a Blob
           canvas.toBlob((blob) => {
@@ -300,6 +339,8 @@ export default defineComponent({
       };
     },
     async updateUserData() {
+      this.loading = true;
+
       if (this.new_first_name !== "") {
         this.$store.commit("userStore/setStoreFirstName", this.new_first_name);
       }
@@ -329,17 +370,26 @@ export default defineComponent({
           method: "POST",
         });
 
-        this.overlay = !this.overlay;
         // Check if the response status indicates an error
         if (!res.ok) {
           const errorResponse = await res.json();
           console.error("Server error response:", errorResponse);
           throw new Error(`Server responded with status ${res.status}`);
+        } else {
+          this.loading = false;
+          this.saveDetailsButtonText = "SAVED!";
+          setTimeout(() => {
+            this.saveDetailsButtonText = "SAVE DETAILS";
+            this.detailsUpdated = true;
+          }, 1200);
         }
       } catch (error) {
         // Handle the error
         console.error("An error occurred while saving the file:", error);
       }
+    },
+    closeModal() {
+      this.detailsUpdated = false;
     },
     activateOverlay() {
       this.overlay = !this.overlay;
@@ -419,41 +469,17 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="bodyGW" id="body">
-      <div v-if="session" class="mobileAccountWrapper">
-        <div class="mobileAccountBar">
-          <img
-            src="../assets/icons/chat-right-text-fill.svg"
-            @click="this.toggleHistory"
-          />
-          <img
-            src="../assets/icons/shuffle.svg"
-            @click="this.toggleIntegrations"
-          />
-          <img
-            src="../assets/icons/coin.svg"
-            @click="this.toggleSubscription"
-          />
-          <img
-            src="../assets/icons/database-fill-lock.svg"
-            @click="this.toggleData"
-          />
-          <img
-            src="../assets/icons/gear-wide-connected.svg"
-            @click="this.toggleSettings"
-          />
-          <img
-            class="mobileAccountChatButton"
-            src="../assets/icons/chat-heart-fill.svg"
-            @click="redirectToChat"
-          />
-        </div>
-        <div v-if="session" class="accountWrapper">
-          <div class="userBanner">
-            <img v-if="banner" v-bind:src="banner" />
-            <img v-else src="../assets/banner.png" />
+    <div v-if="session">
+      <div class="container-fluid bg-light text-white">
+        <div class="container d-flex flex-column pt-4 pb-5">
+          <div
+            v-if="userStoreChatHistory"
+            class="card text-bg-white text-primary text-center"
+          >
+            <img v-if="banner" v-bind:src="banner" class="card-img-top" />
+            <img v-else src="../assets/banner.png" class="card-img-top" />
             <img
               src="../assets/icons/camera2.svg"
               @click="triggerBannerUpload"
@@ -466,170 +492,240 @@ export default defineComponent({
               style="display: none"
               @change="handleBannerUpload"
             />
-          </div>
-          <div class="profileAvatar">
-            <div class="accountAvatarBackground"></div>
-            <img v-if="avatar" v-bind:src="avatar" class="accountAvatar" />
-            <img v-else src="../assets/user.png" class="accountAvatar" />
-            <img
-              src="../assets/icons/camera.svg"
-              @click="triggerAvatarUpload"
-              class="avatarCamera"
-            />
-            <input
-              type="file"
-              ref="avatarInput"
-              accept="image/*"
-              style="display: none"
-              @change="handleAvatarUpload"
-            />
-          </div>
-          <div class="profilePanel">
-            <div class="userDetails">
-              <h2>{{ first_name }} {{ last_name }}</h2>
-              <h3>{{ username }}</h3>
-              <p>{{ email }}</p>
-              <p v-if="joined">Joined: {{ joined }}</p>
-              <button class="accountChatButton" @click="redirectToChat">
-                Let's Chat
-              </button>
-            </div>
-            <div v-if="about" class="aboutDetails">
-              <h2>ABOUT</h2>
-              <p>{{ about }}</p>
-            </div>
-            <div id="overlay" class="overlay" :class="{ active: overlay }">
-              <div class="overlayContent">
-                <img
-                  src="../assets/icons/x.svg"
-                  class="overlayCloseButton"
-                  @click="activateOverlay"
-                />
-                <div class="overlayTitle">
-                  <h2>Edit Your Details</h2>
-                  <p>User ID: {{ userId }}</p>
-                </div>
-                <div class="overlayForm">
-                  <form>
-                    <div class="overlayFormInput">
-                      <p>First Name:</p>
-                      <input
-                        id="firstName"
-                        v-model="new_first_name"
-                        :placeholder="first_name"
-                        type="text"
-                        name="firstName"
-                      />
-                    </div>
-                    <div class="overlayFormInput">
-                      <p>Last Name:</p>
-                      <input
-                        id="lastName"
-                        v-model="new_last_name"
-                        :placeholder="last_name"
-                        type="text"
-                        name="lastName"
-                      />
-                    </div>
-                    <div class="overlayFormInput">
-                      <p>Username:</p>
-                      <input
-                        id="username"
-                        v-model="new_username"
-                        :placeholder="'READ ONLY - ' + username"
-                        type="text"
-                        name="username"
-                        readonly
-                      />
-                    </div>
-                    <div class="overlayFormInput">
-                      <p>Email:</p>
-                      <img
-                        v-if="isEmailValid && emailOk === 'ok' && email"
-                        id="emailAccountGood"
-                        src="../assets/icons/envelope-check-fill.svg"
-                      />
-                      <img
-                        v-if="emailOk === 'no'"
-                        id="emailAccountBad"
-                        src="../assets/icons/envelope-exclamation-fill.svg"
-                      />
-                      <input
-                        id="email"
-                        ref="email"
-                        v-model="new_email"
-                        :placeholder="'READ ONLY - ' + email"
-                        type="email"
-                        name="email"
-                        readonly
-                      />
-                    </div>
-                    <div>
-                      <h6
-                        v-if="new_email && emailChecking"
-                        style="color: black"
-                      >
-                        CHECKING...
-                      </h6>
-                      <h6 v-if="emailExistsError">{{ emailExistsError }}</h6>
-                    </div>
-                  </form>
-                </div>
-                <span class="spacer"></span>
-                <div class="overlayButtons">
-                  <button class="chatButton" @click="updateUserData()">
-                    Save
+            <div
+              class="card-body text-start d-flex justify-content-between pt-4 pb-4 px-4"
+            >
+              <div class="profile d-flex">
+                <div class="profileLeft">
+                  <div class="accountAvatarBackground"></div>
+                  <img
+                    v-if="avatar"
+                    v-bind:src="avatar"
+                    class="accountAvatar"
+                  />
+                  <img v-else src="../assets/user.png" class="accountAvatar" />
+                  <img
+                    src="../assets/icons/camera.svg"
+                    @click="triggerAvatarUpload"
+                    class="avatarCamera"
+                  />
+                  <input
+                    type="file"
+                    ref="avatarInput"
+                    accept="image/*"
+                    style="display: none"
+                    @change="handleAvatarUpload"
+                  />
+                  <div class="profileDetails">
+                    <h2 class="card-title">{{ first_name }} {{ last_name }}</h2>
+                    <h5 class="card-subtitle mb-2 text-muted">
+                      {{ username }}
+                    </h5>
+                    <p class="mt-4">{{ email }}</p>
+                    <p class="mt-n3" v-if="joined">Joined: {{ joined }}</p>
+                  </div>
+                  <button
+                    class="btn btn-secondary btn-lg ms-4"
+                    @click="redirectToChat"
+                    style="width: 170px"
+                  >
+                    Let's Chat
                   </button>
+                </div>
+                <div class="about ms-5">
+                  <h2>ABOUT</h2>
+                  <p>{{ about }}</p>
+                </div>
+              </div>
+              <div class="edit ms-5 me-5">
+                <img
+                  src="../assets/icons/three-dots-vertical.svg"
+                  class="profileEdit"
+                  data-bs-toggle="modal"
+                  data-bs-target="#userDetailsModal"
+                  style="cursor: pointer"
+                />
+              </div>
+              <div
+                class="modal fade"
+                id="userDetailsModal"
+                tabindex="-1"
+                aria-labelledby="userDetailsModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="userDetailsModalLabel">
+                        EDIT YOUR DETAILS
+                      </h4>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body text-center">
+                      <h1>🐼</h1>
+                      <p>To edit your details, please update them below:</p>
+                      <p class="ms-1 mb-n4 text-start">First Name:</p>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="text"
+                          name="first_name"
+                          class="form-control mt-4"
+                          id="first_name"
+                          v-model="new_first_name"
+                          :placeholder="first_name"
+                        />
+                        <label for="floatingInput">{{ first_name }}</label>
+                      </div>
+                      <p class="ms-1 mb-n4 text-start">Last Name:</p>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="text"
+                          name="last_name"
+                          class="form-control mt-4"
+                          id="last_name"
+                          v-model="new_last_name"
+                          :placeholder="last_name"
+                        />
+                        <label for="floatingInput">{{ last_name }}</label>
+                      </div>
+                      <p class="ms-1 mb-n4 text-start">Username:</p>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="text"
+                          name="username"
+                          class="form-control mt-4"
+                          id="username"
+                          v-model="new_username"
+                          :placeholder="username"
+                          :class="{
+                            'is-valid':
+                              this.new_username.length > 0 && !usernameExistsError,
+                            'is-invalid': usernameExistsError,
+                          }"
+                        />
+                        <label for="floatingInput">{{ username }}</label>
+                        <div class="valid-feedback">🐼 Looks good!</div>
+                        <div
+                          v-if="usernameExistsError"
+                          class="invalid-feedback text-danger"
+                        >
+                          {{ this.usernameExistsError }}
+                        </div>
+                      </div>
+                      <p class="ms-1 mb-n4 text-start">Email:</p>
+                      <div class="form-floating mb-2">
+                        <input
+                          type="email"
+                          name="email"
+                          class="form-control mt-4"
+                          id="email"
+                          v-model="new_email"
+                          :placeholder="email"
+                          autocomplete="email"
+                          :class="{
+                            'is-valid':
+                              this.new_email.length > 0 && !emailExistsError,
+                            'is-invalid': emailExistsError,
+                          }"
+                        />
+                        <label for="floatingInput">{{ email }}</label>
+                        <div class="valid-feedback">🐼 Looks good!</div>
+                        <div
+                          v-if="emailExistsError"
+                          class="invalid-feedback text-danger"
+                        >
+                          {{ this.emailExistsError }}
+                        </div>
+                        <div
+                          id="validationServerUsernameFeedback"
+                          class="invalid-feedback"
+                        >
+                          Please enter a valid email address.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        v-if="!this.detailsUpdated"
+                        @click="updateUserData()"
+                        type="button"
+                        class="btn btn-secondary d-flex justify-content-center"
+                        style="width: 130px"
+                        :disabled="emailExistsError.length > 0 || usernameExistsError.length > 0"
+                      >
+                        <SpinnerComponent
+                          :loading="this.loading"
+                          :button-text="this.saveDetailsButtonText"
+                        ></SpinnerComponent>
+                      </button>
+                      <button
+                        v-else
+                        class="btn btn-danger d-flex justify-content-center"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                        @click="closeModal()"
+                        style="width: 130px"
+                      >
+                        CLOSE
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="editUserDetails">
-              <img
-                src="../assets/icons/three-dots-vertical.svg"
-                class="profileEdit"
-                @click="activateOverlay"
-              />
-            </div>
           </div>
-          <div class="accountDetailsWrapper">
-            <div class="accountDetailsMenu">
-              <button
+          <div
+            v-if="userStoreChatHistory"
+            class="card text-bg-white text-primary mt-4"
+          >
+            <div class="card-header d-flex justify-content-around pt-3 pb-2">
+              <h4
                 class="userChatHistoryMenuButton"
                 :class="{ active: historyMenuActive }"
                 @click="this.toggleHistory"
+                style="cursor: pointer"
               >
-                Chat History
-              </button>
-              <button
+                CHAT HISTORY
+              </h4>
+              <h4
                 class="userIntegrationsMenuButton"
                 :class="{ active: integrationsMenuActive }"
                 @click="this.toggleIntegrations"
+                style="cursor: pointer"
               >
-                Integrations
-              </button>
-              <button
+                INTEGRATIONS
+              </h4>
+              <h4
                 class="userSubscriptionMenuButton"
                 :class="{ active: subscriptionMenuActive }"
                 @click="this.toggleSubscription"
+                style="cursor: pointer"
               >
-                Subscription
-              </button>
-              <button
+                SUBSCRIPTION
+              </h4>
+              <h4
                 class="userDataMenuButton"
                 :class="{ active: dataMenuActive }"
                 @click="this.toggleData()"
+                style="cursor: pointer"
               >
-                Data
-              </button>
-              <button
+                DATA
+              </h4>
+              <h4
                 class="userSettingsMenuButton"
                 :class="{ active: settingsMenuActive }"
                 @click="this.toggleSettings"
+                style="cursor: pointer"
               >
-                Settings
-              </button>
+                SETTINGS
+              </h4>
             </div>
-            <div class="userChatHistory">
+            <div class="card-body scrollable-card-body text-start">
               <AccountUserChatHistory
                 :history-menu="historyMenu"
                 :integrations-menu="integrationsMenu"
@@ -678,3 +774,75 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.bannerCamera {
+  max-width: 1200px;
+  margin-left: -1200px;
+  opacity: 0;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  transition: 0.5s ease;
+}
+.bannerCamera:hover {
+  transition-delay: 0.3s;
+  opacity: 1;
+  cursor: pointer;
+}
+.accountAvatarBackground {
+  display: flex;
+  height: 200px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #ffffff;
+  border: 7px solid #ffffff;
+  align-items: start;
+  position: relative;
+  margin-top: -115px;
+  margin-left: 10px;
+}
+.accountAvatar {
+  display: flex;
+  height: 200px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #ffffff;
+  border: 7px solid #ffffff;
+  align-items: start;
+  position: relative;
+  margin-top: -205px;
+  margin-left: 10px;
+}
+.profileDetails {
+  margin-top: -30px;
+  margin-left: 40px;
+}
+.profileEdit {
+  width: 30px;
+}
+.scrollable-card-body {
+  height: 900px;
+  overflow-y: auto;
+}
+.userChatHistoryMenuButton:hover,
+.userIntegrationsMenuButton:hover,
+.userSubscriptionMenuButton:hover,
+.userDataMenuButton:hover,
+.userSettingsMenuButton:hover {
+  background-image: linear-gradient(to right, #ffcb4c 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+}
+.userChatHistoryMenuButton.active,
+.userIntegrationsMenuButton.active,
+.userSubscriptionMenuButton.active,
+.userDataMenuButton.active,
+.userSettingsMenuButton.active {
+  background-image: linear-gradient(to right, #ffcb4c 100%, transparent 0%);
+  background-position-y: 45px;
+  background-repeat: repeat-x;
+  background-size: 1px 5px;
+}
+</style>

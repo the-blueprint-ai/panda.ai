@@ -12,13 +12,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="min-height: 71vh">
     <navBar></navBar>
-    <div class="body">
-      <div class="privacyPolicyContainer">
-        <h2>🐼 panda.ai Terms of Service</h2>
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container pt-5 pb-5">
+        <h2 class="text-center">🐼 PANDA.AI TERMS OF SERVICE</h2>
         <div class="aboutContainerLine"></div>
-        <h3>Effective Date: 1st April 2023</h3>
+        <h3 class="text-secondary">EFFECTIVE DATE: 1ST APRIL 2023</h3>
         <p>
           Please read these Terms of Service ("Terms") carefully before using
           the panda.ai chatbot and associated services (the "Services") provided
@@ -29,14 +29,14 @@ export default defineComponent({
         <div class="aboutContainerLine"></div>
         <ol type="1">
           <li>
-            <h3>Eligibility</h3>
+            <h3 class="text-secondary">ELIGIBILITY</h3>
             By using our Services, you represent and warrant that you are at
             least 18 years old and have the legal capacity to enter into these
             Terms. If you are under 18, you must have consent from a parent or
             legal guardian to use our Services.
           </li>
           <li>
-            <h3>Account Registration</h3>
+            <h3 class="text-secondary">ACCOUNT REGISTRATION</h3>
             To use our Services, you may need to register for an account. You
             agree to provide accurate, complete, and up-to-date information when
             registering for an account. You are responsible for maintaining the
@@ -44,7 +44,7 @@ export default defineComponent({
             that occur under your account.
           </li>
           <li>
-            <h3>Acceptable Use</h3>
+            <h3 class="text-secondary">ACCEPTABLE USE</h3>
             You agree not to use our Services for any unlawful, harmful, or
             disruptive purpose or in any manner that violates these Terms. You
             agree not to:
@@ -63,7 +63,7 @@ export default defineComponent({
             </ol>
           </li>
           <li>
-            <h3>Intellectual Property Rights</h3>
+            <h3 class="text-secondary">INTELLECTUAL PROPERTY RIGHTS</h3>
             All content, features, and functionality of our Services, including
             but not limited to text, graphics, logos, and software, are the
             property of panda.ai or its licensors and are protected by
@@ -72,14 +72,14 @@ export default defineComponent({
             result in legal action.
           </li>
           <li>
-            <h3>Termination</h3>
+            <h3 class="text-secondary">TERMINATION</h3>
             We reserve the right to terminate or suspend your access to our
             Services, with or without notice, if we believe you have breached
             any provision of these Terms or if your use of our Services is
             harmful to our interests or the interests of other users.
           </li>
           <li>
-            <h3>Disclaimer of Warranties</h3>
+            <h3 class="text-secondary">DISCLAIMER OF WARRANTIES</h3>
             Our Services are provided on an "as is" and "as available" basis. We
             make no warranties, expressed or implied, and hereby disclaim and
             negate all other warranties, including without limitation, implied
@@ -88,7 +88,7 @@ export default defineComponent({
             other violation of rights.
           </li>
           <li>
-            <h3>Limitation of Liability</h3>
+            <h3 class="text-secondary">LIMITATION OF LIABILITY</h3>
             In no event shall panda.ai or its suppliers be liable for any
             damages (including, without limitation, damages for loss of data or
             profit, or due to business interruption) arising out of the use or
@@ -96,29 +96,29 @@ export default defineComponent({
             or in writing of the possibility of such damage.
           </li>
           <li>
-            <h3>Changes to Terms</h3>
+            <h3 class="text-secondary">CHANGES TO TERMS</h3>
             We reserve the right to modify or replace these Terms at any time.
             We will provide notice of any material changes to the Terms, and
             your continued use of our Services after any such changes
             constitutes your acceptance of the new Terms.
           </li>
           <li>
-            <h3>Governing Law</h3>
+            <h3 class="text-secondary">GOVERNING LAW</h3>
             These Terms shall be governed by and construed in accordance with
             the laws of the United Kingdom, without regard to its conflict of
             law provisions.
           </li>
           <li>
-            <h3>Contact Us</h3>
+            <h3 class="text-secondary">CONTACT US</h3>
             <p>
               If you have any questions or concerns about these Terms, please
               contact us at:
-            </p>
-            <a href="mailto:terms@mypanda.ai">terms@mypanda.ai</a>
+            <a class="text-secondary" href="mailto:terms@mypanda.ai">terms@mypanda.ai</a>
+          </p>
           </li>
         </ol>
         <div class="aboutContainerLine"></div>
-        <p>
+        <p class="text-center">
           By using our Services, you agree to be bound by these Terms of
           Service.
         </p>
@@ -127,3 +127,15 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.aboutContainerLine {
+  height: 1px;
+  width: 100%;
+  margin: 0px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  display: flex;
+  background-color: #ffffff;
+}
+</style>

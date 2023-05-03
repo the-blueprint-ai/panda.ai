@@ -13,7 +13,7 @@ export default defineComponent({
       email: "",
       password: "",
       loading: false,
-      buttonText: "SIGN IN",
+      signInButtonText: "SIGN IN",
     };
   },
   methods: {
@@ -80,65 +80,119 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="min-height: 71vh">
     <navBar></navBar>
-    <div class="bodyG">
-      <div class="signInContainer">
-        <div class="signInContainerTitle">
-          <img src="../assets/panda.png" />
-          <h2>SIGN IN</h2>
-          <!-- <h3>NOT REGISTERED YET?</h3>
-          <p @click="toSignUp()">SIGN UP</p> -->
-        </div>
-        <div class="signInBar"></div>
-        <div class="emailPassword">
-          <h2>Email</h2>
-          <form>
-            <input
-              ref="email"
-              v-model="this.email"
-              type="email"
-              placeholder="kung-fu@panda.ai"
-              autocomplete="email"
+    <div class="container-fluid h-100 bg-primary text-white">
+      <div class="container d-flex justify-content-center pt-5 pb-5">
+        <div class="card text-bg-light text-center mb-3" style="width: 32rem">
+          <div class="card-header pt-3 pb-3">
+            <img
+              src="../assets/panda.png"
+              class="w-20 h-20"
+              alt="panda"
+              width="50"
             />
-          </form>
-          <h2>Password</h2>
-          <form @submit.prevent="signInClicked(this.email, this.password)">
-            <input
-              ref="password"
-              v-model="this.password"
-              type="password"
-              placeholder="sKad00sh"
-              @keyup.enter="signInClicked(this.email, this.password)"
-              autocomplete="password"
-            />
-          </form>
-          <button class="signInButton" @click="signInClicked(this.email, this.password)">
-            <SpinnerComponent
-              :loading="this.loading"
-              :button-text="this.buttonText"
-            ></SpinnerComponent>
-          </button>
-          <h3 @click="toForgotPassword()">FORGOT PASSWORD?</h3>
+            <h2 class="pt-3">SIGN IN</h2>
+            <p>NOT REGISTERED YET?</p>
+            <button type="button" class="btn btn-secondary" @click="toSignUp()">
+              SIGN UP
+            </button>
+          </div>
+          <div class="card-body pt-5 pb-4 px-5">
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                ref="email"
+                v-model="this.email"
+                class="form-control"
+                id="floatingInput"
+                placeholder="kung-fu@panda.ai"
+                autocomplete="email"
+              />
+              <label for="floatingInput">Email</label>
+            </div>
+            <div class="form-floating">
+              <input
+                type="password"
+                ref="password"
+                v-model="this.password"
+                class="form-control"
+                id="floatingPassword"
+                placeholder="sKad00sh"
+                autocomplete="password"
+                @keyup.enter="signInClicked(this.email, this.password)"
+              />
+              <label for="floatingPassword">Password</label>
+            </div>
+            <div class="pt-5">
+              <button
+                type="button"
+                class="btn btn-secondary btn-lg d-inline-flex justify-content-center"
+                style="width: 300px"
+                @click="signInClicked(this.email, this.password)"
+              >
+                <SpinnerComponent
+                  :loading="this.loading"
+                  :button-text="this.signInButtonText"
+                ></SpinnerComponent>
+              </button>
+            </div>
+            <h4
+              class="pt-4"
+              @click="toForgotPassword()"
+              style="cursor: pointer"
+            >
+              FORGOT PASSWORD?
+            </h4>
+          </div>
+          <!-- <div class="card-footer pt-4 pb-4">
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+              disabled
+            >
+              <SpinnerComponent :loading="this.loadingGitHub"></SpinnerComponent
+              ><img class="thirdPartLogo" src="../assets/icons/github.svg" />Sign In With GitHub
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+              disabled
+            >
+              <SpinnerComponent :loading="this.loadingGoogle"></SpinnerComponent
+              ><img class="thirdPartLogo" src="../assets/icons/google.svg" />Sign In With Google
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+              disabled
+            >
+              <SpinnerComponent :loading="this.loadingApple"></SpinnerComponent
+              ><img class="thirdPartLogo" src="../assets/icons/apple.svg" />Sign In With Apple
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary d-inline-flex justify-content-center"
+              style="width: 300px; margin: 7px"
+              disabled
+            >
+              <SpinnerComponent :loading="this.loadingFacebook"></SpinnerComponent
+              ><img class="thirdPartLogo" src="../assets/icons/facebook.svg" />Sign In With Facebook
+            </button>
+          </div> -->
         </div>
-        <!-- <div class="signInBar"></div>
-        <div class="signInOption"><p>OR</p></div>
-        <div class="thirdPartySignIn">
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/github.svg" />Continue With GitHub
-          </div>
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/google.svg" />Continue With Google
-          </div>
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/apple.svg" />Continue With Apple
-          </div>
-          <div class="thirdPartyButton">
-            <img src="../assets/icons/facebook.svg" />Continue With Facebook
-          </div>
-        </div> -->
       </div>
     </div>
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+.thirdPartLogo {
+  margin-top: 4px;
+  margin-right: 12px;
+}
+</style>

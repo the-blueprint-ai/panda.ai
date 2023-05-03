@@ -14,19 +14,43 @@ export default {
       confirmedEmail: "",
     };
   },
-  watch: {},
+  watch: {
+    newPassword() {
+      if (this.isPasswordValid == true) {
+        this.passwordOk = "ok";
+        this.badPasswordError = "";
+      } else {
+        this.passwordOk = "no";
+        this.badPasswordError =
+          "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.";
+      }
+    },
+    confirmNewPassword() {
+      if (this.confirmNewPassword == this.newPassword) {
+        this.passwordOk = "ok";
+        this.badPasswordError = "";
+      } else {
+        this.passwordOk = "no";
+        this.badPasswordError =
+          "Your confirmed password must match your new password.";
+      }
+    },
+  },
   props: {
     settingsMenu: Boolean,
     userId: String,
     email: String,
   },
   created() {},
-  methods: {
-    activatePasswordOverlay() {
-      this.passwordOverlay = !this.passwordOverlay;
+  computed: {
+    isPasswordValid() {
+      return this.validatePassword(this.password);
     },
-    activateDeleteOverlay() {
-      this.deleteOverlay = !this.deleteOverlay;
+  },
+  methods: {
+    validatePassword: function (password) {
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      return regex.test(password);
     },
     async deleteAccount(userId) {
       this.deleteOverlay = false;
@@ -77,7 +101,6 @@ export default {
 
 <template>
   <div class="userSettings" v-if="settingsMenu">
-    <h1 class="accountSectionHeading">SETTINGS</h1>
     <LoadingOverlay
       v-if="this.loading"
       :loading="this.loading"
@@ -86,56 +109,94 @@ export default {
     <h1>🐼</h1>
     <h2>CHANGE PASSWORD</h2>
     <p>To change your 🐼 panda.ai password please click the button below:</p>
-    <button class="chatButton" @click="activatePasswordOverlay">
+    <button
+      type="button"
+      class="btn btn-secondary btn-lg mt-1 mb-5"
+      data-bs-toggle="modal"
+      data-bs-target="#passwordModal"
+    >
       CHANGE PASSWORD
     </button>
     <div
-      id="passwordOverlay"
-      class="overlay"
-      :class="{ active: passwordOverlay }"
+      class="modal fade"
+      id="passwordModal"
+      tabindex="-1"
+      aria-labelledby="passwordModalLabel"
+      aria-hidden="true"
     >
-      <div class="overlayContent">
-        <img
-          src="../assets/icons/x.svg"
-          class="overlayCloseButton"
-          @click="activatePasswordOverlay"
-        />
-        <div class="overlayTitle">
-          <h2>CHANGE PASSWORD</h2>
-        </div>
-        <div class="overlayForm">
-          <h1>🐼</h1>
-          <p>
-            To change your password, please enter your current password and your
-            new password below:
-          </p>
-          <form>
-            <img
-              v-if="this.email == this.confirmedEmail"
-              id="emailDeleteGood"
-              src="../assets/icons/envelope-check-fill.svg"
-            />
-            <input
-              class="changePassword"
-              id="currentPassword"
-              v-model="currentPassword"
-              placeholder="current password"
-              type="password"
-              name="password"
-              autocomplete="password"
-            />
-            <input
-              class="changePassword"
-              id="newPassword"
-              v-model="newPassword"
-              placeholder="new password"
-              type="password"
-              name="password"
-              autocomplete="password"
-            />
-            <input
-              class="changePassword"
-              @keyup.enter="
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="passwordModalLabel">CHANGE PASSWORD</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <h1>🐼</h1>
+            <p>
+              To change your password, please enter your current password and
+              your new password below:
+            </p>
+            <div class="form-floating mb-2">
+              <input
+                type="password"
+                name="password"
+                class="form-control mt-4"
+                id="currentPassword"
+                v-model="currentPassword"
+                autocomplete="password"
+                placeholder="current password"
+              />
+              <label for="floatingInput">current password</label>
+            </div>
+            <div class="form-floating mb-2">
+              <input
+                type="password"
+                name="password"
+                class="form-control mt-2"
+                id="newPassword"
+                v-model="newPassword"
+                autocomplete="password"
+                placeholder="new password"
+              />
+              <label for="floatingInput">new password</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="password"
+                name="password"
+                class="form-control mt-2"
+                id="confirmNewPassword"
+                v-model="confirmNewPassword"
+                autocomplete="password"
+                placeholder="confirm new password"
+                @keyup.enter="
+                  changePassword(
+                    this.userId,
+                    this.email,
+                    this.currentPassword,
+                    this.newPassword
+                  )
+                "
+              />
+              <label for="floatingInput">confirm new password</label>
+              <div id="passwordHelpBlock" class="form-text">
+                Your new password must be at least 8 characters long and include
+                one lowercase, one uppercase and a number.
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              v-if="
+                this.newPassword.length > 0 &&
+                this.newPassword === this.confirmNewPassword
+              "
+              @click="
                 changePassword(
                   this.userId,
                   this.email,
@@ -143,78 +204,92 @@ export default {
                   this.newPassword
                 )
               "
-              id="confirmNewPassword"
-              v-model="confirmNewPassword"
-              placeholder="confirm new password"
-              type="password"
-              name="password"
-              autocomplete="password"
-            />
-          </form>
-          <button
-            v-if="this.newPassword === this.confirmNewPassword"
-            class="chatButton"
-            @click="
-              changePassword(
-                this.userId,
-                this.email,
-                this.currentPassword,
-                this.newPassword
-              )
-            "
-          >
-            CHANGE PASSWORD
-          </button>
-          <button v-else class="chatButton" disabled>CHANGE PASSWORD</button>
+              type="button"
+              class="btn btn-secondary"
+            >
+              CHANGE PASSWORD
+            </button>
+            <button v-else class="btn btn-secondary" disabled>
+              CHANGE PASSWORD
+            </button>
+          </div>
         </div>
       </div>
     </div>
     <span class="spacer"></span>
     <h2>DELETE ACCOUNT</h2>
     <p>To delete your 🐼 panda.ai account please click the button below:</p>
-    <button class="chatButton" @click="activateDeleteOverlay">
+    <button
+      type="button"
+      class="btn btn-secondary btn-lg mt-1"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteModal"
+    >
       DELETE ACCOUNT
     </button>
-    <div id="deleteOverlay" class="overlay" :class="{ active: deleteOverlay }">
-      <div class="overlayContent">
-        <img
-          src="../assets/icons/x.svg"
-          class="overlayCloseButton"
-          @click="activateDeleteOverlay"
-        />
-        <div class="overlayTitle">
-          <h2>DELETE ACCOUNT</h2>
-        </div>
-        <div class="overlayForm">
-          <h1>🐼</h1>
-          <p>We're very sad to see you leave us 😭.</p>
-          <p>
-            To confirm deletion of your 🐼 panda.ai account please re-enter your
-            email address below and click confirm
-          </p>
-          <img
-            v-if="this.email == this.confirmedEmail"
-            id="emailDeleteGood"
-            src="../assets/icons/envelope-check-fill.svg"
-          />
-          <input
-            class="emailDelete"
-            id="emailDelete"
-            v-model="confirmedEmail"
-            :placeholder="email"
-            type="email"
-            name="email"
-          />
-          <button
-            v-if="this.email === this.confirmedEmail"
-            class="chatButton"
-            @click="deleteAccount(this.userId)"
-          >
-            CONFIRM DELETION
-          </button>
-          <button v-else class="chatButton" disabled>CONFIRM DELETION</button>
+
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="deleteModalLabel">DELETE ACCOUNT</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <h1>🐼</h1>
+            <p>We're very sad to see you leave us 😭.</p>
+            <p>
+              To confirm deletion of your 🐼 panda.ai account please re-enter
+              your email address below and click confirm deletion.
+            </p>
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                name="email"
+                class="form-control mt-4"
+                id="emailDelete"
+                v-model="confirmedEmail"
+                :placeholder="email"
+                autocomplete="email"
+              />
+              <label for="floatingInput">{{ email }}</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              v-if="this.email === this.confirmedEmail"
+              type="button"
+              class="btn btn-secondary"
+              @click="deleteAccount(this.userId)"
+            >
+              CONFIRM DELETION
+            </button>
+            <button v-else class="btn btn-secondary" disabled>
+              CONFIRM DELETION
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.userSettings {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+</style>

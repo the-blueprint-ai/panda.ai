@@ -86,24 +86,24 @@ export default {
 <template>
   <div class="row">
     <div class="navbar navbar-expand-lg bg-white pt-2 pb-2">
-      <div class="col-sm-1 px-5">
+      <div class="col-sm-1 px-5" style="width: 200px">
         <a class="navbar-brand" @click="redirectToHome">
           <img class="logo" src="../../src/assets/panda.png" width="50" />
           panda.ai
         </a>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-9 d-flex flex-shrink-1 me-auto">
         <div class="container-fluid">
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <div class="col px-3" @click="redirectToHome">
-                <li class="nav-item pt-2">
+                <li class="nav-item pt-3">
                   <img src="../../src/assets/icons/house-door.svg" alt="home" />
                   <a class="nav-link">home</a>
                 </li>
               </div>
               <div class="col px-3" @click="redirectToAbout">
-                <li class="nav-item pt-2">
+                <li class="nav-item pt-3">
                   <img
                     src="../../src/assets/icons/file-person.svg"
                     alt="about"
@@ -112,19 +112,19 @@ export default {
                 </li>
               </div>
               <div class="col px-3" @click="redirectToPricing">
-                <li class="nav-item pt-2">
+                <li class="nav-item pt-3">
                   <img src="../../src/assets/icons/tag.svg" alt="about" />
                   <a class="nav-link">pricing</a>
                 </li>
               </div>
               <div class="col px-3" @click="redirectToRoadmap">
-                <li class="nav-item pt-2">
+                <li class="nav-item pt-3">
                   <img src="../../src/assets/icons/geo.svg" alt="roadmap" />
                   <a class="nav-link">roadmap</a>
                 </li>
               </div>
               <div class="col px-3" @click="redirectToPrivacy">
-                <li class="nav-item pt-2">
+                <li class="nav-item pt-3">
                   <img
                     src="../../src/assets/icons/file-earmark-lock.svg"
                     alt="privacy"
@@ -138,7 +138,7 @@ export default {
       </div>
       <div class="col-sm-2 d-flex justify-content-end">
         <ul class="navbar-nav">
-          <li class="nav-item pt-2" @click="redirectToSupport">
+          <li class="nav-item pt-3" @click="redirectToSupport">
             <img
               src="../../src/assets/icons/question-square.svg"
               alt="support"
@@ -163,7 +163,7 @@ export default {
               SIGN IN
             </button>
           </li>
-          <li v-if="userId" class="dropdown px-3 ps-4 pe-4">
+          <li v-if="userId" class="dropdown px-3 pe-4">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -179,7 +179,7 @@ export default {
                 <a class="dropdown-item" @click="redirectToAccount">ACCOUNT</a>
               </li>
               <li><hr v-if="admin" class="dropdown-divider" /></li>
-              <li><h6 class="dropdown-header">ADMIN</h6></li>
+              <li><h6 v-if="admin" class="dropdown-header">ADMIN</h6></li>
               <li>
                 <a v-if="admin" class="dropdown-item" @click="redirectToAdmin"
                   >ADMIN PANEL</a
@@ -204,7 +204,7 @@ export default {
 
 <style scoped>
 .nav-item {
-  width: 80px;
+  width: 4vw;
   display: flex;
   flex-direction: column;
   align-items: center;

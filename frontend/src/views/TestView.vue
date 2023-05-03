@@ -117,50 +117,24 @@ export default defineComponent({
             <span v-html="getCurrentText(index)"></span>
           </p>
         </div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-secondary mt-5" @click="openModal">
-          Launch demo modal
-        </button>
-
-        <!-- Modal -->
-        <div
-          class="modal fade"
-          :id="modalId"
-          tabindex="-1"
-          :aria-labelledby="modalId + 'Label'"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" :id="modalId + 'Label'">
-                  Modal title
-                </h1>
-                <button
-                  type="button"
-                  class="btn-close"
-                  @click="closeModal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <slot></slot>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  @click="closeModal"
-                >
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Save changes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Dropdown
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
     <navFooter></navFooter>

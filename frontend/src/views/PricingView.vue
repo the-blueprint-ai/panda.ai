@@ -93,7 +93,7 @@ export default defineComponent({
           <div class="col mb-5">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
-              style="width: 18rem"
+              style="width: 17rem"
             >
               <div class="card-header pt-3 pb-3">
                 <h2>🐼</h2>
@@ -123,7 +123,7 @@ export default defineComponent({
           <div class="col mb-5">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
-              style="width: 18rem"
+              style="width: 17rem"
             >
               <div class="card-header pt-3 pb-3">
                 <h2>🐼</h2>
@@ -153,7 +153,7 @@ export default defineComponent({
           <div class="col mb-5">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
-              style="width: 18rem"
+              style="width: 17rem"
             >
               <div class="card-header pt-3 pb-3">
                 <h2>🐼</h2>
@@ -183,7 +183,7 @@ export default defineComponent({
           <div class="col mb-5">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
-              style="width: 18rem"
+              style="width: 17rem"
             >
               <div class="card-header pt-3 pb-3">
                 <h2>🐼</h2>

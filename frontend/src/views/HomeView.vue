@@ -97,15 +97,8 @@ export default defineComponent({
         <img src="../../src/assets/panda.png" width="200" />
         <h1 class="pt-5 pb-5">
           <span class="typed-text">{{ typeValue }}</span>
-          <span class="blinking-cursor">|</span>
-          <span class="blinking-cursor2">|</span>
-          <span class="blinking-cursor2">|</span>
-          <span class="blinking-cursor2">|</span>
-          <span class="blinking-cursor2">|</span>
-          <span class="blinking-cursor2">|</span>
-          <span class="blinking-cursor2">|</span>
-          <span class="blinking-cursor2">|</span>
-          <span class="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
+          <span class="cursorSpace" :class="{ typing: typeStatus }">&nbsp;</span>
+          <span class="cursor"></span>
         </h1>
         <div v-if="session">
           <router-link :to="'/auth/' + userId + '/chat'">
@@ -124,74 +117,19 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.blinking-cursor {
-  /* font-size: 60px;
-  font-weight: bold; */
-  margin-left: 1vw;
-  color: #ffffff;
-  -webkit-animation: 1s blink step-end infinite;
-  -moz-animation: 1s blink step-end infinite;
-  -ms-animation: 1s blink step-end infinite;
-  -o-animation: 1s blink step-end infinite;
-  animation: 1s blink step-end infinite;
-}
-.blinking-cursor2 {
-  /* font-size: 60px;
-  font-weight: bold; */
-  margin-left: -0.77vw;
-  color: #ffffff;
-  -webkit-animation: 1s blink step-end infinite;
-  -moz-animation: 1s blink step-end infinite;
-  -ms-animation: 1s blink step-end infinite;
-  -o-animation: 1s blink step-end infinite;
-  animation: 1s blink step-end infinite;
-}
-span.typed-text {
-  margin-left: 80px;
-}
-@keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #ffffff;
+@keyframes cursor-blink {
+  0% {
+    opacity: 0;
   }
 }
-@-moz-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #ffffff;
-  }
-}
-@-webkit-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #ffffff;
-  }
-}
-@-ms-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #ffffff;
-  }
-}
-@-o-keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #ffffff;
-  }
+.cursor::after {
+  margin-bottom: -3px;
+  content: "";
+  width: 20px;
+  height: 35px;
+  background: #FFFFFF;
+  display: inline-block;
+  opacity: 100%;
+  animation: cursor-blink 1s steps(2, jump-none) infinite;
 }
 </style>

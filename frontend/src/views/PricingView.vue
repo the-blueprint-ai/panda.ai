@@ -25,7 +25,7 @@ export default defineComponent({
       <div class="container text-center pt-5 pb-5">
         <div class="ukUSA d-flex justify-content-end">
           <div
-            class="btn-group btn-group-lg pb-0 mb-n5 me-5"
+            class="btn-group btn-group-sm mb-n5 me-5 align-items-center"
             role="group"
             aria-label="UK/USA Prices"
           >
@@ -38,7 +38,7 @@ export default defineComponent({
               checked
               @change="country = 'uk'"
             />
-            <label class="btn btn-outline-light px-2 pt-1 pb-1" for="uk"
+            <label class="btn btn-outline-light px-2" for="uk"
               ><img src="../assets/icons/united-kingdom.png" width="30"
             /></label>
 
@@ -50,7 +50,7 @@ export default defineComponent({
               autocomplete="off"
               @change="country = 'usa'"
             />
-            <label class="btn btn-outline-light px-2 pt-1 pb-1" for="usa"
+            <label class="btn btn-outline-light px-2" for="usa"
               ><img
                 src="../assets/icons/united-states-of-america.png"
                 width="30"

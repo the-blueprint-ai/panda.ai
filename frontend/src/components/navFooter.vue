@@ -28,15 +28,15 @@ export default {
 <template>
   <div class="row h-200 pt-5 pb-3 bg-white">
     <div class="col-sm-2 px-5">
-      <div class="row pb-5" @click="redirectToHome">
-        <img class="w-25 h-25" src="../../src/assets/panda.png" width="30" />
-        <div class="col mt-n2">
+      <div class="row pb-5" @click="redirectToHome" style="min-width: 300px">
+        <img class="w-25 h-25" src="../../src/assets/panda.png"  style="min-width: 100px" />
+        <div class="col mt-n2" style="min-width: 150px">
           <h4 class="pt-3 lh-1">panda.ai</h4>
           <p class="lh-1">MADE WITH ❤️</p>
         </div>
       </div>
-      <div class="row ps-2 list-unstyled">
-        <div class="col-3">
+      <div class="row ps-2 list-unstyled" style="min-width: 250px">
+        <div class="col-3" style="min-width: 50px">
           <li class="nav-item">
             <img
               navigate-to="discord"
@@ -47,7 +47,7 @@ export default {
             />
           </li>
         </div>
-        <div class="col-3">
+        <div class="col-3" style="min-width: 50px">
           <li class="nav-item">
             <img
               navigate-to="twitter"
@@ -58,7 +58,7 @@ export default {
             />
           </li>
         </div>
-        <div class="col-3">
+        <div class="col-3" style="min-width: 50px">
           <li class="nav-item">
             <img
               navigate-to="linkedin"
@@ -69,7 +69,7 @@ export default {
             />
           </li>
         </div>
-        <div class="col-3">
+        <div class="col-3" style="min-width: 50px">
           <li class="nav-item">
             <a :href="'mailto:contact@mypanda.ai?subject=Hello!'">
               <img
@@ -83,8 +83,8 @@ export default {
         </div>
       </div>
     </div>
-    <div class="nav col-sm-10 justify-content-end px-5">
-      <div class="col-1">
+    <div class="bottomLinks nav col-sm-10 justify-content-end px-5">
+      <div class="col-1" style="min-width: 150px">
         <h3 class="pb-3"><strong>LINKS</strong></h3>
         <p class="ps-1 lh-1" navigate-to="home" @click="goToPage('/')">home</p>
         <p class="ps-1 lh-1" navigate-to="roadmap" @click="goToPage('/roadmap')">
@@ -94,7 +94,7 @@ export default {
           privacy
         </p>
       </div>
-      <div class="col-1">
+      <div class="col-1" style="min-width: 150px">
         <h3 class="pb-3"><strong>COMPANY</strong></h3>
         <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/about')">
           about
@@ -117,7 +117,7 @@ export default {
           privacy policy
         </p>
       </div>
-      <div class="col-1">
+      <div class="col-1" style="min-width: 150px">
         <h3 class="pb-3"><strong>SUPPORT</strong></h3>
         <p class="ps-1 lh-1" navigate-to="support" @click="goToPage('/support')">
           support
@@ -126,7 +126,7 @@ export default {
           contact us
         </p>
       </div>
-      <div class="col-1">
+      <div class="col-1" style="min-width: 150px">
         <h3 class="pb-3"><strong>SOCIAL</strong></h3>
         <p class="ps-1 lh-1" navigate-to="discord" @click="navigate($event)">
           Discord
@@ -139,7 +139,7 @@ export default {
         </p>
       </div>
     </div>
-    <div class="row px-5 pt-3 text-center"><h5>©panda.ai 2023</h5></div>
+    <div class="copywright row px-5 pt-3 text-center"><h5>©panda.ai 2023</h5></div>
   </div>
 </template>
 
@@ -153,5 +153,13 @@ h4:hover {
 }
 img:hover {
   cursor: pointer;
+}
+@media (max-width: 992px) {
+  .bottomLinks {
+    display: none;
+  }
+  .copywright {
+    margin-top: 20px;
+  }
 }
 </style>

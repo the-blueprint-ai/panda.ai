@@ -132,4 +132,14 @@ export default defineComponent({
   opacity: 100%;
   animation: cursor-blink 1s steps(2, jump-none) infinite;
 }
+@media (max-width: 992px) {
+  .cursor::after {
+    height: 32px;
+  }
+}
+@media (max-width: 576px) {
+  .cursor::after {
+    height: 28px;
+  }
+}
 </style>

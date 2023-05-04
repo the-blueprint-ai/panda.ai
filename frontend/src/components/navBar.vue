@@ -150,6 +150,7 @@ export default {
               type="button"
               class="btn btn-outline-primary"
               @click="redirectToSignUp"
+              style="width: 100px"
             >
               SIGN UP
             </button>
@@ -159,6 +160,7 @@ export default {
               type="button"
               class="btn btn-outline-primary"
               @click="redirectToSignIn"
+              style="width: 100px"
             >
               SIGN IN
             </button>

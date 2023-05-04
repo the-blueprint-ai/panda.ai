@@ -136,17 +136,34 @@ export default defineComponent({
           </li>
         </ul>
       </div>
+      <h2 class="cursor text-center">TESTING</h2>
     </div>
     <navFooter></navFooter>
   </main>
 </template>
 
-<style>
+<style scoped>
 .smallcursor {
   display: inline-block;
   width: 12px;
   height: 16px;
   margin-left: 5px;
   background-color: white;
+}
+@keyframes cursor-blink {
+  0% {
+    opacity: 0;
+  }
+}
+.cursor::after {
+  margin-left: 10px;
+  margin-bottom: -1px;
+  content: "";
+  width: 15px;
+  height: 25px;
+  background: #FFCB4C;
+  display: inline-block;
+  opacity: 100%;
+  animation: cursor-blink 1.5s steps(2, jump-none) infinite;
 }
 </style>

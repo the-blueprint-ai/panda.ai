@@ -217,6 +217,7 @@ export default defineComponent({
                     'is-invalid': emailExistsError,
                   }"
                   required
+                  disabled
                 />
                 <label for="floatingInput">Email</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
@@ -248,6 +249,7 @@ export default defineComponent({
                     'is-invalid': this.password.length > 0 && !isPasswordValid,
                   }"
                   required
+                  disabled
                 />
                 <label for="floatingPassword">Password</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
@@ -273,6 +275,7 @@ export default defineComponent({
                     'is-invalid': formSubmitted && !agreeToSPP,
                   }"
                   required
+                  disabled
                 />
                 <label class="form-check-label" for="ToS&PP"
                   >Please agree to our

@@ -129,7 +129,7 @@ export default {
               src="../../src/assets/panda.png"
               class="img mt-3"
               ref="panda"
-              width="200"
+              width="150"
               @click="redirectToAccount"
             />
             <router-link :to="'/signin'">
@@ -143,7 +143,7 @@ export default {
               v-bind:src="avatar"
               class="img-thumbnail rounded-circle mt-3"
               ref="avatar"
-              width="200"
+              width="150"
               @click="redirectToAccount"
             />
             <router-link :to="'/auth/' + userId + '/chat'">
@@ -289,62 +289,6 @@ export default {
             :button-text="this.signOutButtonText"
           ></SpinnerComponent>
         </button>
-        <hr class="divider mt-0 mb-0" />
-        <div class="bg-light">
-          <div class="row list-unstyled d-flex justify-content-evenly mt-5">
-            <li class="nav-item">
-              <img
-                navigate-to="discord"
-                @click="navigate($event)"
-                src="../assets/icons/discord.svg"
-                width="30"
-                height="30"
-              />
-            </li>
-            <li class="nav-item">
-              <img
-                navigate-to="twitter"
-                @click="navigate($event)"
-                src="../assets/icons/twitter.svg"
-                width="30"
-                height="30"
-              />
-            </li>
-            <li class="nav-item">
-              <img
-                navigate-to="linkedin"
-                @click="navigate($event)"
-                src="../assets/icons/linkedin.svg"
-                width="30"
-                height="30"
-              />
-            </li>
-            <li class="nav-item">
-              <a :href="'mailto:contact@mypanda.ai?subject=Hello!'">
-                <img
-                  navigate-to="contact"
-                  src="../assets/icons/envelope-at-fill.svg"
-                  width="30"
-                  height="30"
-                />
-              </a>
-            </li>
-          </div>
-          <div class="d-flex flex-row mt-5 justify-content-center">
-            <img
-              class="w25 h25"
-              src="../../src/assets/panda.png"
-              style="height: 50px; width: 50px"
-            />
-            <div>
-              <h4 class="ms-3 pt-0 lh-1">panda.ai</h4>
-              <p class="ms-3 lh-1">MADE WITH ❤️</p>
-            </div>
-          </div>
-          <div class="copywright row mb-5 px-5 pt-3 text-center">
-            <h5>©panda.ai 2023</h5>
-          </div>
-        </div>
       </div>
       <div class="col-sm-1 px-5" style="width: 200px">
         <a class="navbar-brand" @click="redirectToHome">
@@ -473,135 +417,6 @@ export default {
     </div>
   </div>
 </template>
-
-<!-- 
-  
-    <div class="mobileMenuTop">
-      <div class="mobileMenuAvatar" v-if="userId">
-        <img
-          class="mobileMenuUserIcon"
-          v-bind:src="avatar"
-          ref="avatar"
-          @click="redirectToAccount"
-        />
-        <button class="mobileMenuChatButton" @click="redirectToChat">
-          Let's Chat
-        </button>
-      </div>
-      <div v-else>
-        <div class="mobileMenuButtons">
-          <button
-            class="mobileMenuButtonSignUp"
-            @click="redirectToSignUp"
-          >
-            Sign up
-          </button>
-          <button class="mobileMenuButtonLogin" @click="redirectToSignIn">
-            Sign In
-          </button>
-        </div>
-      </div>
-      <div class="mobileMenuList">
-        <router-link to="/">
-          <div class="mobileMenuIconTop">
-            <img
-              src="../../src/assets/icons/house-door.svg"
-              class="homesvg"
-              alt="home"
-            />
-            <p>HOME</p>
-          </div>
-        </router-link>
-        <router-link to="/about">
-          <div class="mobileMenuIcon">
-            <img
-              src="../../src/assets/icons/file-person.svg"
-              class="homesvg"
-              alt="about"
-            />
-            <p>ABOUT</p>
-          </div>
-        </router-link>
-        <router-link to="/pricing">
-          <div class="mobileMenuIcon">
-            <img
-              src="../../src/assets/icons/tag.svg"
-              class="homesvg"
-              alt="about"
-            />
-            <p>PRICING</p>
-          </div>
-        </router-link>
-        <router-link to="/roadmap">
-          <div class="mobileMenuIcon">
-            <img
-              src="../../src/assets/icons/geo.svg"
-              class="homesvg"
-              alt="roadmap"
-            />
-            <p>ROADMAP</p>
-          </div>
-        </router-link>
-        <router-link to="/privacy">
-          <div class="mobileMenuIcon">
-            <img
-              src="../../src/assets/icons/file-earmark-lock.svg"
-              class="homesvg"
-              alt="privacy"
-            />
-            <p>PRIVACY</p>
-          </div>
-        </router-link>
-        <router-link to="/support">
-          <div class="mobileMenuIcon">
-            <img
-              src="../../src/assets/icons/question-square.svg"
-              class="homesvg"
-              alt="support"
-            />
-            <p>SUPPORT</p>
-          </div>
-        </router-link>
-        <router-link to="/terms-of-service">
-          <div class="mobileMenuIcon">
-            <img
-              src="../../src/assets/icons/emoji-smile.svg"
-              class="homesvg"
-              alt="support"
-            />
-            <p>TERMS OF SERVICE</p>
-          </div>
-        </router-link>
-        <router-link to="/privacy-policy">
-          <div class="mobileMenuIconBottom">
-            <img
-              src="../../src/assets/icons/file-earmark-lock.svg"
-              class="homesvg"
-              alt="support"
-            />
-            <p>PRIVACY POLICY</p>
-          </div>
-        </router-link>
-      </div>
-    </div>
-    <div class="mobileMenuBottom">
-      <button
-        v-if="userId"
-        class="mobileMenuChatButton"
-        @click="onLogout"
-      >
-        Sign Out
-      </button>
-      <div class="mobileMenuBrandHolderBottom">
-        <img class="logo" src="../../src/assets/panda.png" width="50" />
-        <div class="mobileMenuBrandHolderBottomBrandText">
-          <h2>panda.ai</h2>
-          <p>MADE WITH ❤️</p>
-        </div>
-      </div>
-    </div>
-  </nav>
-</div> -->
 
 <style scoped>
 .nav-item {

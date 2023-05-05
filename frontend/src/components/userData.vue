@@ -195,6 +195,9 @@ export default {
   width: 100%;
   justify-content: flex-start;
 }
+.accountCardSelector {
+  display: none;
+}
 .userDataTypes {
   min-width: 180px;
   margin: 0px;
@@ -230,7 +233,10 @@ export default {
 .align-middle img {
   cursor: pointer;
 }
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+  .accountCardSelector {
+    display: block;
+  }
   .userData {
     flex-direction: column;
   }

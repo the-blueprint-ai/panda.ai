@@ -295,8 +295,8 @@ export default defineComponent({
                 <button
                   @click="signUpClicked(this.email, this.password)"
                   type="button"
-                  class="btn btn-secondary btn-lg d-inline-flex justify-content-center"
-                  style="width: 300px"
+                  class="btn btn-secondary btn-lg d-inline-flex justify-content-center mb-4"
+                  style="width: 70%"
                   :disabled="this.email.length == 0 || this.password.length == 0 || emailExistsError || !isPasswordValid || !agreeToSPP"
                 >
                   <SpinnerComponent

@@ -128,7 +128,7 @@ export default defineComponent({
               <button
                 type="button"
                 class="btn btn-secondary btn-lg d-inline-flex justify-content-center"
-                style="width: 300px"
+                style="width: 70%"
                 @click="signInClicked(this.email, this.password)"
               >
                 <SpinnerComponent

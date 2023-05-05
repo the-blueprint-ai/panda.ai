@@ -615,6 +615,7 @@ export default {
   width: 2rem;
 }
 .nav-item:hover {
+  width: 3.5vw;
   background-color: #ffcb4c;
   border-radius: 10px;
 }

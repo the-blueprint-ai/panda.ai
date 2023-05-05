@@ -22,9 +22,9 @@ export default defineComponent({
       failedSend: false,
     };
   },
-  async created() {
+  async mounted() {
     // Call the getFAQs function and wait for it to complete
-    await getFAQs(this.$store);
+    getFAQs(this.$store);
   },
   computed: {
     ...mapGetters("faqsStore", {

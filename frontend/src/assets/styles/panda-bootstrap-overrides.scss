@@ -10,12 +10,14 @@ $link-color: #FFCB4C;
 
 // Bootstrap Overrides
 @font-face {
-    font-family: "Iosevka";
-    src: url("../fonts/iosevka.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
+	font-family: 'Iosevka';
+	font-display: block;
+	font-weight: 400;
+	font-stretch: normal;
+	font-style: normal;
+	src: url('../fonts/iosevka-regular.ttf') format('truetype'), url('../fonts/iosevka-regular.woff2') format('woff2');
 }
 
 :root {
-  --bs-font-sans-serif: 'Iosevka', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-sans-serif: 'Iosevka', 'Monaco', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }

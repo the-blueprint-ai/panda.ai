@@ -30,6 +30,9 @@ export default defineComponent({
     ...mapGetters("faqsStore", {
       getStoreFAQs: "getStoreSortedFAQs",
     }),
+    // faqData() {
+    //   return this.getStoreSortedFAQs || [];
+    // },
     filteredFaqs() {
       const query = this.searchQuery.trim().toLowerCase();
       const faqs = this.getStoreFAQs.map((faqSection) => ({
@@ -109,7 +112,7 @@ export default defineComponent({
   <main style="min-height: 71vh">
     <navBar></navBar>
     <div class="container-fluid bg-primary text-white">
-      <div class="container pt-5 pb-5 text-center">
+      <div v-if="this.getStoreFAQs" class="container pt-5 pb-5 text-center">
         <h1>🐼</h1>
         <h1 class="mb-5">WHAT CAN WE HELP YOU WITH?</h1>
         <div class="d-flex justify-content-center">

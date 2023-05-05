@@ -38,8 +38,8 @@ export default defineComponent({
         <div class="row">
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-dark text-center mb-5 border-primary"
-              style="width: 36rem"
+              class="card text-bg-dark text-center mb-4 border-primary"
+              style="min-width: 250px"
             >
               <h5 class="card-header text-center">What Sets Us Apart 🔐</h5>
               <p class="card-text pt-3 pb-3 px-3">
@@ -53,8 +53,8 @@ export default defineComponent({
           </div>
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-dark text-center mb-5 border-primary"
-              style="width: 36rem"
+              class="card text-bg-dark text-center mb-4 border-primary"
+              style="min-width: 250px"
             >
               <h5 class="card-header text-center">
                 Powered by OpenAI's ChatGPT LLM 🔋
@@ -71,8 +71,8 @@ export default defineComponent({
         <div class="row">
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-dark text-center mb-5 border-primary"
-              style="width: 36rem"
+              class="card text-bg-dark text-center mb-4 border-primary"
+              style="min-width: 250px"
             >
               <h5 class="card-header text-center">Our Core Values 🦄</h5>
               <p class="card-text pt-3 pb-3 px-3">
@@ -94,8 +94,8 @@ export default defineComponent({
           </div>
           <div class="col d-flex justify-content-center">
             <div
-              class="card text-bg-dark text-center mb-5 border-primary"
-              style="width: 36rem"
+              class="card text-bg-dark text-center mb-4 border-primary"
+              style="min-width: 250px"
             >
               <h5 class="card-header text-center">
                 Our Vision for the Future 🔮

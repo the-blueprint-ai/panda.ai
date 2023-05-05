@@ -354,7 +354,7 @@ export default {
           <li v-if="!userId" class="d-flex align-items-center ps-5 px-2">
             <button
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-secondary"
               @click="redirectToSignUp"
               style="width: 100px"
             >
@@ -364,7 +364,7 @@ export default {
           <li v-if="!userId" class="d-flex align-items-center px-2 pe-5">
             <button
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-secondary"
               @click="redirectToSignIn"
               style="width: 100px"
             >
@@ -430,7 +430,6 @@ export default {
   width: 2rem;
 }
 .nav-item:hover {
-  width: 3.5vw;
   background-color: #ffcb4c;
   border-radius: 10px;
 }

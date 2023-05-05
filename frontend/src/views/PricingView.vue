@@ -23,7 +23,7 @@ export default defineComponent({
     <navBar></navBar>
     <div class="container-fluid h-100 bg-primary text-white">
       <div class="container text-center pt-5 pb-5">
-        <div class="ukUSA d-flex justify-content-end">
+        <div class="ukUSA d-flex justify-content-end mt-n4 mb-5">
           <div
             class="btn-group btn-group-sm mb-n5 me-5 align-items-center"
             role="group"
@@ -90,7 +90,7 @@ export default defineComponent({
           </div>
         </div>
         <div class="row mb-5">
-          <div class="col mb-5">
+          <div class="col mb-5 d-flex justify-content-center">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
               style="width: 18rem"
@@ -120,7 +120,7 @@ export default defineComponent({
               </div>
             </div>
           </div>
-          <div class="col mb-5">
+          <div class="col mb-5 d-flex justify-content-center">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
               style="width: 18rem"
@@ -150,7 +150,7 @@ export default defineComponent({
               </div>
             </div>
           </div>
-          <div class="col mb-5">
+          <div class="col mb-5 d-flex justify-content-center">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
               style="width: 18rem"
@@ -180,7 +180,7 @@ export default defineComponent({
               </div>
             </div>
           </div>
-          <div class="col mb-5">
+          <div class="col mb-5 d-flex justify-content-center">
             <div
               class="card text-bg-light text-center mt-5 mb-3"
               style="width: 18rem"
@@ -211,11 +211,11 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <h1 class="mt-5">PANDA.AI INTEGRATIONS</h1>
+        <h1 class="mt-5 mb-5">PANDA.AI INTEGRATIONS</h1>
         <div class="row d-inline-flex justify-content-center">
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -234,7 +234,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -253,7 +253,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -274,7 +274,7 @@ export default defineComponent({
         <div class="row mt-n5 d-inline-flex justify-content-center">
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -290,7 +290,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -309,7 +309,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -330,7 +330,7 @@ export default defineComponent({
         <div class="row mt-n5 d-inline-flex justify-content-center">
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -348,7 +348,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -367,7 +367,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light text-center mx-1 mt-5 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -387,3 +387,12 @@ export default defineComponent({
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+@media (max-width: 576px) {
+  .ukUSA {
+    justify-content: center !important;
+    margin-left: 50px;
+  }
+}
+</style>

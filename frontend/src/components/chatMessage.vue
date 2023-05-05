@@ -172,4 +172,20 @@ export default {
   margin-bottom: 12px;
   border-radius: 10px;
 }
+@media (max-width: 576px) {
+  .chatAvatar {
+    display: none;
+  }
+  .message {
+    width: 300px;
+    padding: 3px;
+    margin: 3px;
+  }
+  .pandaChat {
+    width: 300px;
+  }
+  .userChat {
+    width: 300px;
+  }
+}
 </style>

@@ -127,7 +127,10 @@ export default {
 </script>
 
 <template>
-  <div class="userChatHistory" v-if="this.userChatHistory && historyMenu">
+  <div
+    class="userChatHistory d-flex flex-column"
+    v-if="this.userChatHistory && historyMenu"
+  >
     <div class="chatHistorySideBar">
       <div class="input-group sticky-top">
         <input
@@ -182,13 +185,15 @@ export default {
         </ul>
       </div>
     </div>
-    <!-- <div class="mobileAccountChatPickers">
+    <div class="chatSelector">
       <select
         v-model="selectedDate"
         @change="resetSelectedChat"
-        class="accountDatePicker"
+        class="form-select"
+        aria-label="Default select example"
       >
         <option
+          selected
           v-for="(item, index) in filteredChatData"
           :key="index"
           :value="item.date"
@@ -199,7 +204,8 @@ export default {
       <select
         v-model="selectedChat"
         @change="activeChat = selectedChat"
-        class="accountChatPicker"
+        class="form-select mt-2"
+        aria-label="Default select example"
       >
         <option
           v-for="(chat, chatIndex) in chatsBySelectedDate"
@@ -209,7 +215,7 @@ export default {
           {{ chat.title }} ({{ chat.time }})
         </option>
       </select>
-    </div> -->
+    </div>
     <div class="userChatHistoryContent" id="chatContainer">
       <span v-if="selectedChat">
         <chatMessage
@@ -258,5 +264,45 @@ export default {
   min-width: 790px;
   margin: 10px;
   margin-left: 40px;
+}
+.mobileAccountChatPickers {
+  display: none;
+}
+@media (max-width: 1440px) {
+  .chatHistorySideBar {
+    min-width: 250px;
+    max-width: 250px;
+  }
+}
+@media (max-width: 1200px) {
+  .userChatHistoryContent {
+    min-width: 600px;
+    margin-left: 10px;
+  }
+}
+@media (max-width: 992px) {
+  .userChatHistoryContent {
+    min-width: 410px;
+  }
+}
+@media (max-width: 768px) {
+  .chatHistorySideBar {
+    display: none;
+  }
+  .mobileAccountChatPickers {
+    display: block;
+  }
+  .userChatHistoryContent {
+    min-width: 480px;
+    margin-left: 0px;
+  }
+  .chatSelector {
+    display: fixed;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #EFEFEF;
+  }
+}
+@media (max-width: 576px) {
+
 }
 </style>

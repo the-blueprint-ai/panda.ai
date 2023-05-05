@@ -100,7 +100,7 @@ export default {
 </script>
 
 <template>
-  <div class="userSettings" v-if="settingsMenu">
+  <div class="userSettings text-center" v-if="settingsMenu">
     <LoadingOverlay
       v-if="this.loading"
       :loading="this.loading"

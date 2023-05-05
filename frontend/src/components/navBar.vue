@@ -2,10 +2,14 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions, mapGetters } from "vuex";
 import { getUserData } from "../composables/getUserData.js";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default {
   data() {
-    return {};
+    return {
+      loading: false,
+      signOutButtonText: "SIGN OUT",
+    };
   },
   computed: {
     ...mapGetters("userStore", {
@@ -82,9 +86,13 @@ export default {
       window.open("https://api.mypanda.ai/auth/dashboard", "_blank");
     },
     async onLogout() {
+      this.loading = true;
       await Session.signOut();
       window.location.href = "https://www.mypanda.ai/";
     },
+  },
+  components: {
+    SpinnerComponent,
   },
 };
 </script>
@@ -139,7 +147,11 @@ export default {
               @click="redirectToAccount"
             />
             <router-link :to="'/auth/' + userId + '/chat'">
-              <button type="button" class="btn btn-secondary btn-lg mt-4">
+              <button
+                type="button"
+                class="btn btn-secondary btn-lg mt-4"
+                style="width: 200px"
+              >
                 LET'S CHAT
               </button>
             </router-link>
@@ -240,24 +252,24 @@ export default {
               />
               <p class="nav-link text-uppercase ms-4">PRIVACY POLICY</p>
             </li>
-            <div v-if="!userId" class="d-flex justify-content-center">
+            <div v-if="!userId" class="d-flex justify-content-center mt-4">
               <li><hr class="divider mt-0" /></li>
-              <li class="d-flex align-items-center ps-5 px-2">
+              <li class="d-flex align-items-center ps-5 px-2 me-3">
                 <button
                   type="button"
-                  class="btn btn-outline-primary"
+                  class="btn btn-secondary btn-lg"
                   @click="redirectToSignUp"
-                  style="width: 100px"
+                  style="width: 120px"
                 >
                   SIGN UP
                 </button>
               </li>
-              <li class="d-flex align-items-center px-2 pe-5">
+              <li class="d-flex align-items-center px-2 pe-5 ms-3">
                 <button
                   type="button"
-                  class="btn btn-outline-primary"
+                  class="btn btn-secondary btn-lg"
                   @click="redirectToSignIn"
-                  style="width: 100px"
+                  style="width: 120px"
                 >
                   SIGN IN
                 </button>
@@ -265,6 +277,18 @@ export default {
             </div>
           </ul>
         </div>
+        <button
+          v-if="userId"
+          type="button"
+          class="btn btn-secondary btn-lg mb-4 m-auto d-inline-flex justify-content-center"
+          @click="onLogout"
+          style="width: 200px"
+        >
+          <SpinnerComponent
+            :loading="this.loading"
+            :button-text="this.signOutButtonText"
+          ></SpinnerComponent>
+        </button>
         <hr class="divider mt-0 mb-0" />
         <div class="bg-light">
           <div class="row list-unstyled d-flex justify-content-evenly mt-5">

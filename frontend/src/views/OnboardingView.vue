@@ -335,9 +335,11 @@ export default defineComponent({
     <navBar></navBar>
     <div v-if="session">
       <div class="container-fluid bg-light text-white">
-        <div class="container pt-5 pb-5">
-          <div class="mainChatContainer">
-            <div class="chatContainer" id="chatContainer">
+        <div class="container pt-5 pb-5 d-flex justify-content-center">
+          <div class="chatCard card text-bg-white text-primary text-center me-3">
+            <div
+              class="card-body scrollable-card-body text-start pt-4 pb-4 px-4"
+            >
               <chatMessage
                 v-for="item in chatHistory"
                 :message="item"
@@ -345,8 +347,8 @@ export default defineComponent({
                 :key="item.user"
               ></chatMessage>
             </div>
-            <div class="container px-0">
-              <div class="form-floating mb-3 d-flex">
+            <div class="card-footer pt-2 pt-1">
+              <div class="chatBox form-floating mb-3 d-flex">
                 <img v-bind:src="avatar" class="chatAvatar mt-3" />
                 <textarea
                   :disabled="isDisabled"
@@ -361,27 +363,32 @@ export default defineComponent({
                 ></textarea>
                 <label
                   for="floatingTextarea"
-                  class="text-primary mt-2"
+                  class="chatPrompt text-primary mt-2"
                   style="margin-left: 75px"
                   >enter your message here...</label
                 >
-                <button
-                  :disabled="isDisabled"
-                  class="btn btn-secondary btn-lg mt-3 mb-1"
-                  id="sendButton"
-                  @click="submitMessage()"
-                  style="max-height: 60px"
+                <div
+                  class="chatButtons d-flex align-items-center mt-3"
+                  style="width: 220px"
                 >
-                  SEND
-                </button>
-                <button
-                  class="btn btn-secondary btn-lg mt-3 mb-1 ms-3 me-2"
-                  id="undoButton"
-                  @click="removeMessage()"
-                  style="max-height: 60px"
-                >
-                  UNDO
-                </button>
+                  <button
+                    :disabled="isDisabled"
+                    class="btn btn-secondary btn-lg"
+                    id="sendButton"
+                    @click="submitMessage()"
+                    style="max-height: 60px"
+                  >
+                    SEND
+                  </button>
+                  <button
+                    class="btn btn-secondary btn-lg ms-3 me-2"
+                    id="undoButton"
+                    @click="removeMessage()"
+                    style="max-height: 60px"
+                  >
+                    UNDO
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -392,36 +399,19 @@ export default defineComponent({
               :chat-name="chatName"
             ></ImageUpload>
           </div>
-          <h3 v-if="success">Image uploaded successfully!</h3>
-          <h3 v-if="error">Error uploading image, please try again.</h3>
+          <h5 v-if="success" class="text-primary text-center mt-5">Image uploaded successfully!</h5>
+          <h5 v-if="error" class="text-danger text-center mt-5">Error uploading image, please try again.</h5>
         </div>
       </div>
     </div>
-    <navFooter></navFooter>
+    <navFooter class="navFooter"></navFooter>
   </main>
 </template>
 
 <style scoped>
-.mainChatContainer {
+.chatCard {
   height: 1000px;
-  background-color: #ffffff;
-  text-align: left;
-  display: flex;
-  border: 3px solid #ffffff;
-  border-radius: 15px;
-  margin: 5px;
-  margin-left: 5px;
-  padding: 5px;
-  flex-direction: column;
-  flex-grow: 4;
-  justify-content: top;
-  align-items: left;
-}
-.chatContainer {
-  display: flex;
-  flex-direction: column-reverse;
-  flex-grow: 4;
-  overflow: scroll;
+  max-width: 830px;
 }
 .pandaChat {
   background-color: #ffffff;
@@ -448,18 +438,23 @@ export default defineComponent({
   margin-bottom: 12px;
   border-radius: 10px;
 }
+@media (max-width: 768px) {
+  .chatBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .chatBox img {
+    display: none;
+  }
+  .chatBox .chatPrompt {
+    margin-left: 0px !important;
+  }
+  .chatButtons {
+    margin-left: 50px;
+  }
+  .navFooter {
+    display: none;
+  }
+}
 </style>
-
-<!-- 
-
-    <div v-if="imageDrop">
-      <ImageUpload
-        :user-id="this.userId"
-        @image-uploaded.once="submitMessage()"
-        :chat-name="chatName"
-      ></ImageUpload>
-    </div>
-    <h3 v-if="success">Image uploaded successfully!</h3>
-    <h3 v-if="error">Error uploading image, please try again.</h3>
-  </div>
-</div> -->

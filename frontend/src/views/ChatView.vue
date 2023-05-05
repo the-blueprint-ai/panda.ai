@@ -156,17 +156,19 @@ export default defineComponent({
   <main style="height: 71vh">
     <navBar></navBar>
     <div v-if="session">
-      <div class="container-fluid bg-light text-white">
+      <div class="container-fluid bg-light text-white d-flex flex-column align-items-center">
         <div class="container d-flex pt-5 pb-5">
           <div
             v-if="userStoreChatHistory"
-            class="card text-bg-white text-primary text-center me-3"
+            class="historyCard card text-bg-white text-primary text-center me-3"
             style="width: 24rem"
           >
             <div class="card-header pt-3 pb-2">
               <h3>CHAT HISTORY</h3>
             </div>
-            <div class="card-body scrollable-card-body text-start pt-4 pb-4 px-4">
+            <div
+              class="card-body scrollable-card-body text-start pt-4 pb-4 px-4"
+            >
               <ChatUserChatHistory
                 v-if="historyMenu"
                 :history-menu="historyMenu"
@@ -179,7 +181,7 @@ export default defineComponent({
               <button
                 class="btn btn-secondary btn-lg"
                 @click="startNewChat"
-                style="height: 57px; width: 300px"
+                style="height: 57px; width: 80%"
               >
                 START NEW CHAT
               </button>
@@ -190,7 +192,9 @@ export default defineComponent({
             class="card text-bg-white text-primary text-center me-3"
             style="width: 48rem"
           >
-            <div class="card-body scrollable-card-body text-start pt-4 pb-4 px-4">
+            <div
+              class="card-body scrollable-card-body text-start pt-4 pb-4 px-4"
+            >
               <chatMessage
                 v-for="(item, index) in chatHistory"
                 :message="item"
@@ -201,7 +205,7 @@ export default defineComponent({
               ></chatMessage>
             </div>
             <div class="card-footer pt-2 pt-1">
-              <div class="form-floating mb-2 d-flex">
+              <div class="chatBox form-floating mb-2 d-flex">
                 <img
                   v-if="this.loading"
                   src="../assets/thinking.png"
@@ -227,7 +231,7 @@ export default defineComponent({
                 >
                 <button
                   :disabled="this.loading || isDisabled"
-                  class="btn btn-secondary btn-lg mt-2"
+                  class="chatButton btn btn-secondary btn-lg mt-2"
                   id="sendButton"
                   @click="submitMessage(this.username)"
                   style="max-height: 60px"
@@ -241,9 +245,16 @@ export default defineComponent({
             </div>
           </div>
         </div>
+        <button
+          class="startNewChatLowerButton btn btn-secondary btn-lg ms-n2 mt-n4 mb-4"
+          @click="startNewChat"
+          style="height: 57px; width: 250px"
+        >
+          START NEW CHAT
+        </button>
       </div>
     </div>
-    <navFooter></navFooter>
+    <navFooter class="navFooter"></navFooter>
   </main>
 </template>
 
@@ -256,5 +267,42 @@ export default defineComponent({
   width: 50px;
   height: 50px;
   border-radius: 10px;
+}
+@media (min-width: 992px) {
+  .startNewChatLowerButton {
+    display: none;
+  }
+}
+@media (max-width: 992px) {
+  .historyCard {
+    display: none;
+  }
+  .startNewChatLowerButton {
+    display: block;
+  }
+}
+@media (max-width: 768px) {
+  .navFooter {
+    display: none;
+  }
+}
+@media (max-width: 576px) {
+  .chatBox {
+    display: flex;
+    flex-direction: column;
+  }
+  .chatBox img {
+    display: none;
+  }
+  .chatBox textarea {
+    width: 98%;
+    margin-left: 3px !important;
+  }
+  .chatBox label {
+    display: none;
+  }
+  .chatButton {
+    margin-top: 20px !important;
+  }
 }
 </style>

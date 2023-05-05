@@ -70,7 +70,7 @@ export default {
   width: 100%;
 }
 .faqQuestion {
-  width: 700px;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   margin-top: 0px;
@@ -93,7 +93,7 @@ export default {
   background-color: #FFCB4C;
 }
 .faqAnswer {
-  width: 680px;
+  width: 85%;
   padding: 10px;
   padding-top: 20px;
   margin-top: -20px;

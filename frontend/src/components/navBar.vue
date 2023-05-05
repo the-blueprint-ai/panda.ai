@@ -116,7 +116,7 @@ export default {
         aria-labelledby="offcanvasNavbarLabel"
       >
         <div class="offcanvas-header d-flex flex-column">
-          <div class="">
+          <div class="d-flex justify-content-end" style="width: 100%">
             <button
               type="button"
               class="btn-close"

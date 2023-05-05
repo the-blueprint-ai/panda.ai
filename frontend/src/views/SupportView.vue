@@ -184,8 +184,9 @@ export default defineComponent({
                   this.email === this.confirmedEmail &&
                   this.message.length > 0
                 "
-                class="btn btn-secondary btn-lg"
+                class="btn btn-secondary btn-lg d-inline-flex justify-content-center"
                 @click="sendSupportEmails(this.confirmedEmail, this.message)"
+                style="width: 70%"
               >
                 <SpinnerComponent
                   :loading="this.loading"

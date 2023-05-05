@@ -122,7 +122,7 @@ export default {
         <p class="ps-1 lh-1" navigate-to="support" @click="goToPage('/support')">
           support
         </p>
-        <p class="ps-1 lh-1" navigate-to="contact" @click="goToPage('/support')">
+        <p class="ps-1 lh-1" navigate-to="contact" @click="goToPage('/contact')">
           contact us
         </p>
       </div>

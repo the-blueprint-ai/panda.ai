@@ -30,9 +30,6 @@ export default defineComponent({
     ...mapGetters("faqsStore", {
       getStoreFAQs: "getStoreSortedFAQs",
     }),
-    // faqData() {
-    //   return this.getStoreSortedFAQs || [];
-    // },
     filteredFaqs() {
       const query = this.searchQuery.trim().toLowerCase();
       const faqs = this.getStoreFAQs.map((faqSection) => ({

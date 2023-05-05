@@ -44,6 +44,14 @@ export default defineComponent({
       detailsUpdated: false,
       formSubmitted: false,
       loading: false,
+      selectedOption: null,
+      accountDataOptions: [
+        { text: "Chat History", value: "chatHistory" },
+        { text: "Integrations", value: "integrations" },
+        { text: "Subscription", value: "subscription" },
+        { text: "Data", value: "data" },
+        { text: "Settings", value: "settings" },
+      ],
     };
   },
   watch: {
@@ -394,6 +402,26 @@ export default defineComponent({
     activateOverlay() {
       this.overlay = !this.overlay;
     },
+    onOptionChange(event) {
+      const option = event.target.value;
+      switch (option) {
+        case "chatHistory":
+          this.toggleHistory();
+          break;
+        case "integrations":
+          this.toggleIntegrations();
+          break;
+        case "subscription":
+          this.toggleSubscription();
+          break;
+        case "data":
+          this.toggleData();
+          break;
+        case "settings":
+          this.toggleSettings();
+          break;
+      }
+    },
     toggleHistory() {
       this.historyMenu = true;
       this.integrationsMenu = false;
@@ -604,7 +632,8 @@ export default defineComponent({
                           :placeholder="username"
                           :class="{
                             'is-valid':
-                              this.new_username.length > 0 && !usernameExistsError,
+                              this.new_username.length > 0 &&
+                              !usernameExistsError,
                             'is-invalid': usernameExistsError,
                           }"
                         />
@@ -656,7 +685,10 @@ export default defineComponent({
                         type="button"
                         class="btn btn-secondary d-flex justify-content-center"
                         style="width: 130px"
-                        :disabled="emailExistsError.length > 0 || usernameExistsError.length > 0"
+                        :disabled="
+                          emailExistsError.length > 0 ||
+                          usernameExistsError.length > 0
+                        "
                       >
                         <SpinnerComponent
                           :loading="this.loading"
@@ -683,47 +715,64 @@ export default defineComponent({
             v-if="userStoreChatHistory"
             class="card text-bg-white text-primary mt-4"
           >
-            <div class="card-header d-flex justify-content-around pt-3 pb-2">
-              <h4
-                class="userChatHistoryMenuButton"
-                :class="{ active: historyMenuActive }"
-                @click="this.toggleHistory"
-                style="cursor: pointer"
-              >
-                CHAT HISTORY
-              </h4>
-              <h4
-                class="userIntegrationsMenuButton"
-                :class="{ active: integrationsMenuActive }"
-                @click="this.toggleIntegrations"
-                style="cursor: pointer"
-              >
-                INTEGRATIONS
-              </h4>
-              <h4
-                class="userSubscriptionMenuButton"
-                :class="{ active: subscriptionMenuActive }"
-                @click="this.toggleSubscription"
-                style="cursor: pointer"
-              >
-                SUBSCRIPTION
-              </h4>
-              <h4
-                class="userDataMenuButton"
-                :class="{ active: dataMenuActive }"
-                @click="this.toggleData()"
-                style="cursor: pointer"
-              >
-                DATA
-              </h4>
-              <h4
-                class="userSettingsMenuButton"
-                :class="{ active: settingsMenuActive }"
-                @click="this.toggleSettings"
-                style="cursor: pointer"
-              >
-                SETTINGS
-              </h4>
+            <div class="card-header">
+              <div class="accountCardTitles d-flex justify-content-around pt-3 pb-2">
+                <h4
+                  class="userChatHistoryMenuButton"
+                  :class="{ active: historyMenuActive }"
+                  @click="this.toggleHistory"
+                  style="cursor: pointer"
+                >
+                  CHAT HISTORY
+                </h4>
+                <h4
+                  class="userIntegrationsMenuButton"
+                  :class="{ active: integrationsMenuActive }"
+                  @click="this.toggleIntegrations"
+                  style="cursor: pointer"
+                >
+                  INTEGRATIONS
+                </h4>
+                <h4
+                  class="userSubscriptionMenuButton"
+                  :class="{ active: subscriptionMenuActive }"
+                  @click="this.toggleSubscription"
+                  style="cursor: pointer"
+                >
+                  SUBSCRIPTION
+                </h4>
+                <h4
+                  class="userDataMenuButton"
+                  :class="{ active: dataMenuActive }"
+                  @click="this.toggleData()"
+                  style="cursor: pointer"
+                >
+                  DATA
+                </h4>
+                <h4
+                  class="userSettingsMenuButton"
+                  :class="{ active: settingsMenuActive }"
+                  @click="this.toggleSettings"
+                  style="cursor: pointer"
+                >
+                  SETTINGS
+                </h4>
+              </div>
+              <div class="accountCardSelector">
+                <select
+                  v-model="selectedOption"
+                  class="form-select mb-2"
+                  @change="onOptionChange"
+                >
+                  <option
+                    v-for="accountDataOption in accountDataOptions"
+                    :key="accountDataOption.value"
+                    :value="accountDataOption.value"
+                  >
+                    {{ accountDataOption.text }}
+                  </option>
+                </select>
+              </div>
             </div>
             <div class="card-body scrollable-card-body text-start">
               <AccountUserChatHistory
@@ -821,6 +870,9 @@ export default defineComponent({
 .profileEdit {
   width: 30px;
 }
+.accountCardSelector {
+  display: none;
+}
 .scrollable-card-body {
   height: 900px;
   overflow-y: auto;
@@ -844,5 +896,28 @@ export default defineComponent({
   background-position-y: 45px;
   background-repeat: repeat-x;
   background-size: 1px 5px;
+}
+@media (max-width: 992px) {
+  .card-header h4 {
+    font-size: 18px;
+  }
+}
+@media (max-width: 768px) {
+  .card-header h4 {
+    font-size: 16px;
+  }
+  .about {
+    display: none;
+  }
+}
+@media (max-width: 576px) {
+  .accountCardTitles {
+    display: none !important;
+  }
+  .accountCardSelector {
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+  }
 }
 </style>

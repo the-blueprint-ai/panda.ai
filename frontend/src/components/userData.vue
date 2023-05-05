@@ -7,7 +7,13 @@ export default {
   data() {
     return {
       tab: "entities",
-      mobileTab: "entities",
+      selectedOption: null,
+      accountDataOptions: [
+        { text: "Entities", value: "entities" },
+        { text: "Documents", value: "documents" },
+        { text: "Social", value: "social" },
+        { text: "Browsing", value: "browsing" },
+      ],
     };
   },
   watch: {
@@ -63,6 +69,9 @@ export default {
     redirectToChat() {
       this.$router.push("/" + this.userId + "/chat");
     },
+    onTabChange(event) {
+      this.tab = event.target.value;
+    },
   },
   components: {},
 };
@@ -105,6 +114,17 @@ export default {
         <img src="../assets/icons/browser-safari.svg" />BROWSING
       </h4>
     </div>
+    <div class="accountCardSelector">
+      <select v-model="tab" class="form-select mb-2" @change="onTabChange">
+        <option
+          v-for="accountDataOption in accountDataOptions"
+          :key="accountDataOption.value"
+          :value="accountDataOption.value"
+        >
+          {{ accountDataOption.text }}
+        </option>
+      </select>
+    </div>
     <div class="userDataContent">
       <div v-if="tab === 'entities'" class="entitiesData">
         <p>
@@ -119,7 +139,10 @@ export default {
           below you can click on the description in the table to edit it and
           that will update 🐼 panda.ai's memory 🤓.
         </p>
-        <table v-if="entitiesData.length != 0" class="table table-bordered table-striped table-hover">
+        <table
+          v-if="entitiesData.length != 0"
+          class="table table-bordered table-striped table-hover"
+        >
           <thead class="table-dark">
             <tr>
               <th>Entity</th>
@@ -138,7 +161,9 @@ export default {
               >
                 {{ entity.description }}
               </td>
-              <td class="align-middle"><img src="../assets/icons/x-circle-fill.svg" /></td>
+              <td class="align-middle">
+                <img src="../assets/icons/x-circle-fill.svg" />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -190,7 +215,7 @@ export default {
 }
 .userDataTypes h4:hover {
   cursor: pointer;
-  background-color: #FFCB4C;
+  background-color: #ffcb4c;
 }
 .userDataTypes h4 img {
   height: 20px;
@@ -204,5 +229,13 @@ export default {
 }
 .align-middle img {
   cursor: pointer;
+}
+@media (max-width: 576px) {
+  .userData {
+    flex-direction: column;
+  }
+  .userDataTypes {
+    display: none;
+  }
 }
 </style>

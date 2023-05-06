@@ -24,7 +24,7 @@ cipher_suite = Fernet(key.encode())
 
 # HELPER FUNCTIONS
 async def get_user_data(user_id: str):
-    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin FROM panda_ai_users WHERE user_id = :user_id"
+    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin, integrations FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 
@@ -44,6 +44,7 @@ async def get_user_data(user_id: str):
         onboarded = result["onboarded"]
         subscriber = result["subscriber"]
         admin = result["admin"]
+        integrations = result["integrations"]
         
 
         return {
@@ -59,6 +60,7 @@ async def get_user_data(user_id: str):
             "onboarded": onboarded,
             "subscriber": subscriber,
             "admin": admin,
+            "integrations": integrations,
         }
     else:
         return None
@@ -243,4 +245,3 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
         response = {"error": str(e)}
         return response
     
-    return response

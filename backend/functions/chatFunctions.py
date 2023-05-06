@@ -30,6 +30,7 @@ from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from functions.entityFunctions import get_most_relevant_entities
 from functions.toolFunctions import NewsSearchTool, WikipediaSearchTool, YouTubeSearchTool, GoogleMapsSearchTool, GoogleImageSearchTool, GoogleSearchTool, SpotifySearchTool, TMDBSearchTool
+# from functions.subscriptionFunctions import get_user_messages_this_month
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
 
@@ -108,6 +109,10 @@ tools = [
 # FUNCTIONS
 async def pandaChatAgent(userid: str, first_name: str, last_name: str, username: str, message: str):
     # await save_entities(userid, message)
+
+    number_of_messages_this_month = await get_user_messages_this_month(userid)
+    messages_count = number_of_messages_this_month["count"]
+    logging.info("Number of messages this month: " + str(messages_count))
 
     llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0.05, pl_tags=[f"{ userid }"], return_pl_id=True)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -189,7 +194,6 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
         MY_FORMAT_INSTRUCTIONS,
     )
 
-    logging.info("Prompt Template: " + str(prompt_template.template))
     tokens = num_tokens_from_string(prompt_template.template, "cl100k_base")
 
     try:
@@ -405,3 +409,11 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
     encoding = tiktoken.get_encoding(encoding_name)
     num_tokens = len(encoding.encode(string))
     return num_tokens
+
+
+async def get_user_messages_this_month(user_id: str):
+    query = "SELECT COUNT(*) AS count FROM panda_ai_messages WHERE user_id = :user_id AND success = true AND EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM NOW()) AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW())"
+    values = {"user_id": user_id}
+    result = await database.fetch_one(query=query, values=values)
+
+    return result

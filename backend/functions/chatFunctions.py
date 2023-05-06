@@ -15,7 +15,7 @@ from langchain.agents.agent import AgentExecutor
 from langchain.agents.agent_types import AgentType
 from langchain.agents.loading import AGENT_TO_CLASS, load_agent
 from langchain.callbacks.base import BaseCallbackManager
-from langchain.schema import BaseLanguageModel
+from langchain.base_language import BaseLanguageModel
 from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from typing import Any, List, Optional, Sequence, Type, Union, Dict
@@ -24,11 +24,13 @@ from config import settings
 import logging
 import boto3
 import json
+import tiktoken
 from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from functions.entityFunctions import get_most_relevant_entities
 from functions.toolFunctions import NewsSearchTool, WikipediaSearchTool, YouTubeSearchTool, GoogleMapsSearchTool, GoogleImageSearchTool, GoogleSearchTool, SpotifySearchTool, TMDBSearchTool
+# from functions.subscriptionFunctions import get_user_messages_this_month
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
 
@@ -107,80 +109,108 @@ tools = [
 # FUNCTIONS
 async def pandaChatAgent(userid: str, first_name: str, last_name: str, username: str, message: str):
     # await save_entities(userid, message)
+    check_data = await get_subscriber_and_user_messages_per_month(userid)
+    subscriber = check_data["subscriber"]
+    messages_allowed = check_data["messages_per_month"]
+    number_of_messages_this_month = await get_user_messages_this_month(userid)
+    messages_count = number_of_messages_this_month["count"]
 
-    llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0.05, pl_tags=[f"{ userid }"], return_pl_id=True)
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    if (subscriber == False):
+        return JSONResponse(content={"response": "<span>Apologies! You need to subscribe to one of our packages to use 🐼 panda.ai. You can find more information about our subscription packages <a href='https://www.mypanda.ai/pricing' target='_blank'>here</a>.</span>"})
+    elif (messages_count >= messages_allowed):
+        return JSONResponse(content={"response": f"<span>Apologies! You have used up your monthly messages allowance. To add more messages to your monthly plan or to upgrade your subscription, please see the infomation below:</span><h5 class='mt-4 mb-0'>ADD ONS</h5><span><p>You can add more messages to your monthly subscription as a one-off or ongoing every month by visiting your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, heading to the Subscription tab and updating your subscription details</p><span><h5 class='mt-4 mb-0'>UPGRADING</h5><span><p>To upgrade your subscription to include more messages per month in your plan you can go to your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, head to the Subscriptions tab and upgrade your subscription.</p></span>"})
+    else:
+        llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0.05, pl_tags=[f"{ userid }"], return_pl_id=True)
+        memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-    today = datetime.today()
-    suffix = 'th' if 11 <= today.day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(today.day % 10, 'th')
-    current_date = today.strftime(f"%d{suffix} %B %Y")
+        today = datetime.today()
+        suffix = 'th' if 11 <= today.day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(today.day % 10, 'th')
+        current_date = today.strftime(f"%d{suffix} %B %Y")
 
-    entities = await get_most_relevant_entities(userid, message)
-    formatted_entities = '\n'.join([f"{item['entity']}: {item['description']}" for item in entities])
+        entities = await get_most_relevant_entities(userid, message)
+        formatted_entities = '\n'.join([f"{item['entity']}: {item['description']}" for item in entities])
 
-    chat_history = await get_user_chat_history(userid)
+        chat_history = await get_user_chat_history(userid)
 
-    prefix_dict = promptlayer.prompts.get("main_panda_chat_prefix")
-    suffix_dict = promptlayer.prompts.get("main_panda_chat_suffix")
-    format_dict = promptlayer.prompts.get("main_panda_chat_format_instructions")
+        if chat_history is not None and chat_history[0].get("chat_id") is not None:
+            chatid = chat_history[0]["chat_id"]
+        else:
+            chatid = 0
 
-    PREFIX = prefix_dict['template']
-    SUFFIX = suffix_dict['template']
-    FORMAT_INSTRUCTIONS =format_dict['template']
+        prefix_dict = promptlayer.prompts.get("main_panda_chat_prefix")
+        suffix_dict = promptlayer.prompts.get("main_panda_chat_suffix")
+        format_dict = promptlayer.prompts.get("main_panda_chat_format_instructions")
 
-    MY_PREFIX = PREFIX.format(
-        ai_prefix="🐼 panda.ai",
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        current_date=current_date,
-    )
-    MY_SUFFIX = SUFFIX.format(
-        entities = formatted_entities,
-        current_history = "\n".join([f"{entry['user']}: {entry['message']}" if 'message' in entry else f"{entry['user']}:" for entry in reversed(chat_history[0]["chat_script"] if chat_history else [])]),
-        chat_history = "{chat_history}",
-        input = "{input}",
-        agent_scratchpad = "{agent_scratchpad}",
-    )
+        PREFIX = prefix_dict['template']
+        SUFFIX = suffix_dict['template']
+        FORMAT_INSTRUCTIONS =format_dict['template']
 
-    MY_FORMAT_INSTRUCTIONS = FORMAT_INSTRUCTIONS
+        MY_PREFIX = PREFIX.format(
+            ai_prefix="🐼 panda.ai",
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            current_date=current_date,
+        )
+        MY_SUFFIX = SUFFIX.format(
+            entities = formatted_entities,
+            current_history = "\n".join([f"{entry['user']}: {entry['message']}" if 'message' in entry else f"{entry['user']}:" for entry in reversed(chat_history[0]["chat_script"] if chat_history else [])]),
+            chat_history = "{chat_history}",
+            input = "{input}",
+            agent_scratchpad = "{agent_scratchpad}",
+        )
 
-    class pandaAgent(ConversationalAgent):
-        @classmethod
-        def create_prompt(
-            cls,
-            tools: Sequence[BaseTool],
-            prefix: str = MY_PREFIX,
-            suffix: str = MY_SUFFIX,
-            format_instructions: str = MY_FORMAT_INSTRUCTIONS,
-            ai_prefix: str = "🐼 panda.ai",
-            human_prefix: str = f"{username}",
-            input_variables: Optional[List[str]] = None,
-        ) -> PromptTemplate:
-            return super().create_prompt(
-                tools,
-                prefix=prefix,
-                suffix=suffix,
-                format_instructions=format_instructions,
-                ai_prefix=ai_prefix,
-                human_prefix=human_prefix,
-                input_variables=input_variables,
-            )
+        MY_FORMAT_INSTRUCTIONS = FORMAT_INSTRUCTIONS
 
-    agent_chain = initialize_agent(
-        tools,
-        llm,
-        # return_intermediate_steps=True,
-        agent=pandaAgent,
-        agent_kwargs={"prefix": MY_PREFIX, "suffix": MY_SUFFIX, "format_instructions": MY_FORMAT_INSTRUCTIONS, "ai_prefix": "🐼 panda.ai", "human_prefix": f"{username}"}, verbose=True, memory=memory
-    )
-    try:
-        response = agent_chain.run(input=f"{ message }")
-        return JSONResponse(content={"response": response})
 
-    except Exception as e:
-        logging.error(f"Error while running agent_chain: {e}")
-        return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later 🐼"})
+        class pandaAgent(ConversationalAgent):
+            @classmethod
+            def create_prompt(
+                cls,
+                tools: Sequence[BaseTool],
+                prefix: str = MY_PREFIX,
+                suffix: str = MY_SUFFIX,
+                format_instructions: str = MY_FORMAT_INSTRUCTIONS,
+                ai_prefix: str = "🐼 panda.ai",
+                human_prefix: str = f"{username}",
+                input_variables: Optional[List[str]] = None,
+            ) -> PromptTemplate:
+                return super().create_prompt(
+                    tools,
+                    prefix=prefix,
+                    suffix=suffix,
+                    format_instructions=format_instructions,
+                    ai_prefix=ai_prefix,
+                    human_prefix=human_prefix,
+                    input_variables=input_variables,
+                )
+
+        agent_chain = initialize_agent(
+            tools,
+            llm,
+            # return_intermediate_steps=True,
+            agent=pandaAgent,
+            agent_kwargs={"prefix": MY_PREFIX, "suffix": MY_SUFFIX, "format_instructions": MY_FORMAT_INSTRUCTIONS, "ai_prefix": "🐼 panda.ai", "human_prefix": f"{username}"}, verbose=True, memory=memory
+        )
+
+        prompt_template = pandaAgent.create_prompt(
+            tools,
+            MY_PREFIX,
+            MY_SUFFIX,
+            MY_FORMAT_INSTRUCTIONS,
+        )
+
+        tokens = num_tokens_from_string(prompt_template.template, "cl100k_base")
+
+        try:
+            response = agent_chain.run(input=f"{ message }")
+            await save_new_message(userid, chatid, message, response, tokens, True)
+            return JSONResponse(content={"response": response})
+
+        except Exception as e:
+            logging.error(f"Error while running agent_chain: {e}")
+            await save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later", tokens, False)
+            return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later 🐼"})
 
 
 async def save_entities(userid: str, message: str):
@@ -257,13 +287,14 @@ async def save_entities(userid: str, message: str):
 
 
 async def get_user_chat_history(user_id: str):
-    query = "SELECT user_id, created_at, updated_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1"
+    query = "SELECT chat_id, user_id, created_at, updated_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1"
     values = {"user_id": user_id}
     results = await database.fetch_all(query=query, values=values)
 
     if results:
         chat_history = []
         for result in results:
+            chat_id = result["chat_id"]
             user_id = result["user_id"]
             created_at = result["created_at"]
             updated_at = result["updated_at"]
@@ -272,6 +303,7 @@ async def get_user_chat_history(user_id: str):
             # Check if chat_script contains </div>
             if "</div>" not in str(chat_script):
                 chat_history.append({
+                    "chat_id": chat_id,
                     "user_id": user_id,
                     "created_at": created_at,
                     "updated_at": updated_at,
@@ -353,3 +385,49 @@ def initialize_agent(
         callback_manager=callback_manager,
         **kwargs,
     )
+
+
+async def save_new_message(user_id: str, chat_id: int, message: str, message_response: str, tokens: int, success: bool):
+
+    cost = round((tokens/1000) * 0.002, 6)  # Calculate the cost for GPT 3.5 TURBO
+
+    values = {
+        "user_id": user_id,
+        "chat_id": chat_id,
+        "message": message,
+        "message_response": message_response,
+        "tokens": tokens,
+        "cost": cost,
+        "success": success
+    }
+
+    query = """
+        INSERT INTO panda_ai_messages (user_id, chat_id, message, message_response, tokens, cost, success)
+        VALUES (:user_id, :chat_id, :message, :message_response, :tokens, :cost, :success)
+    """
+
+    await database.execute(query=query, values=values)
+    return {"message": "User data inserted successfully"}
+
+
+def num_tokens_from_string(string: str, encoding_name: str) -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
+
+
+async def get_user_messages_this_month(user_id: str):
+    query = "SELECT COUNT(*) AS count FROM panda_ai_messages WHERE user_id = :user_id AND success = true AND EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM NOW()) AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW())"
+    values = {"user_id": user_id}
+    result = await database.fetch_one(query=query, values=values)
+
+    return result
+
+
+async def get_subscriber_and_user_messages_per_month(user_id: str):
+    query = "SELECT subscriber, messages_per_month FROM panda_ai_users WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    result = await database.fetch_one(query=query, values=values)
+
+    return result

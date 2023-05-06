@@ -219,7 +219,7 @@ export default defineComponent({
                   @keydown.enter.stop.prevent="submitMessage(this.username)"
                   id="userInput"
                   name="userInput"
-                  placeholder="🐼 enter your message to panda.ai here..."
+                  placeholder="🐼 enter your message..."
                   ref="messageInput"
                   style="min-height: 60px"
                 ></textarea>
@@ -228,7 +228,7 @@ export default defineComponent({
                   for="floatingTextarea"
                   class="text-primary"
                   style="margin-left: 65px"
-                  >🐼 enter your message to panda.ai here...</label
+                  >🐼 enter your message...</label
                 >
                 <button
                   :disabled="this.loading || isDisabled"

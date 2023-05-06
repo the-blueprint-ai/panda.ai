@@ -15,7 +15,7 @@ from langchain.agents.agent import AgentExecutor
 from langchain.agents.agent_types import AgentType
 from langchain.agents.loading import AGENT_TO_CLASS, load_agent
 from langchain.callbacks.base import BaseCallbackManager
-from langchain.schema import BaseLanguageModel
+from langchain.base_language import BaseLanguageModel
 from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from typing import Any, List, Optional, Sequence, Type, Union, Dict
@@ -24,6 +24,7 @@ from config import settings
 import logging
 import boto3
 import json
+import tiktoken
 from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
@@ -120,6 +121,11 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
 
     chat_history = await get_user_chat_history(userid)
 
+    if chat_history is not None and chat_history[0].get("chat_id") is not None:
+        chatid = chat_history[0]["chat_id"]
+    else:
+        chatid = 0
+
     prefix_dict = promptlayer.prompts.get("main_panda_chat_prefix")
     suffix_dict = promptlayer.prompts.get("main_panda_chat_suffix")
     format_dict = promptlayer.prompts.get("main_panda_chat_format_instructions")
@@ -144,6 +150,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     )
 
     MY_FORMAT_INSTRUCTIONS = FORMAT_INSTRUCTIONS
+
 
     class pandaAgent(ConversationalAgent):
         @classmethod
@@ -174,12 +181,25 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
         agent=pandaAgent,
         agent_kwargs={"prefix": MY_PREFIX, "suffix": MY_SUFFIX, "format_instructions": MY_FORMAT_INSTRUCTIONS, "ai_prefix": "🐼 panda.ai", "human_prefix": f"{username}"}, verbose=True, memory=memory
     )
+
+    prompt_template = pandaAgent.create_prompt(
+        tools,
+        MY_PREFIX,
+        MY_SUFFIX,
+        MY_FORMAT_INSTRUCTIONS,
+    )
+
+    logging.info("Prompt Template: " + str(prompt_template.template))
+    tokens = num_tokens_from_string(prompt_template.template, "cl100k_base")
+
     try:
         response = agent_chain.run(input=f"{ message }")
+        await save_new_message(userid, chatid, message, response, tokens, True)
         return JSONResponse(content={"response": response})
 
     except Exception as e:
         logging.error(f"Error while running agent_chain: {e}")
+        await save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later", tokens, False)
         return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later 🐼"})
 
 
@@ -257,13 +277,14 @@ async def save_entities(userid: str, message: str):
 
 
 async def get_user_chat_history(user_id: str):
-    query = "SELECT user_id, created_at, updated_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1"
+    query = "SELECT chat_id, user_id, created_at, updated_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1"
     values = {"user_id": user_id}
     results = await database.fetch_all(query=query, values=values)
 
     if results:
         chat_history = []
         for result in results:
+            chat_id = result["chat_id"]
             user_id = result["user_id"]
             created_at = result["created_at"]
             updated_at = result["updated_at"]
@@ -272,6 +293,7 @@ async def get_user_chat_history(user_id: str):
             # Check if chat_script contains </div>
             if "</div>" not in str(chat_script):
                 chat_history.append({
+                    "chat_id": chat_id,
                     "user_id": user_id,
                     "created_at": created_at,
                     "updated_at": updated_at,
@@ -353,3 +375,33 @@ def initialize_agent(
         callback_manager=callback_manager,
         **kwargs,
     )
+
+
+async def save_new_message(user_id: str, chat_id: int, message: str, message_response: str, tokens: int, success: bool):
+
+    cost = round((tokens/1000) * 0.002, 6)  # Calculate the cost for GPT 3.5 TURBO
+
+    values = {
+        "user_id": user_id,
+        "chat_id": chat_id,
+        "message": message,
+        "message_response": message_response,
+        "tokens": tokens,
+        "cost": cost,
+        "success": success
+    }
+
+    query = """
+        INSERT INTO panda_ai_messages (user_id, chat_id, message, message_response, tokens, cost, success)
+        VALUES (:user_id, :chat_id, :message, :message_response, :tokens, :cost, :success)
+    """
+
+    await database.execute(query=query, values=values)
+    return {"message": "User data inserted successfully"}
+
+
+def num_tokens_from_string(string: str, encoding_name: str) -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens

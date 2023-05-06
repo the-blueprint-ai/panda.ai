@@ -193,7 +193,7 @@ export default defineComponent({
             style="width: 48rem"
           >
             <div
-              class="card-body scrollable-card-body text-start pt-4 pb-4 px-4"
+              class="chatWindow card-body scrollable-card-body text-start pt-4 pb-4 px-4"
             >
               <chatMessage
                 v-for="(item, index) in chatHistory"
@@ -219,15 +219,16 @@ export default defineComponent({
                   @keydown.enter.stop.prevent="submitMessage(this.username)"
                   id="userInput"
                   name="userInput"
-                  placeholder="enter your message here..."
+                  placeholder="🐼 enter your message to panda.ai here..."
                   ref="messageInput"
                   style="min-height: 60px"
                 ></textarea>
                 <label
+                  v-if="!this.loading"
                   for="floatingTextarea"
                   class="text-primary"
                   style="margin-left: 65px"
-                  >enter your message here...</label
+                  >🐼 enter your message to panda.ai here...</label
                 >
                 <button
                   :disabled="this.loading || isDisabled"
@@ -267,6 +268,10 @@ export default defineComponent({
   width: 50px;
   height: 50px;
   border-radius: 10px;
+}
+.chatWindow {
+  display: flex;
+  flex-direction: column-reverse;
 }
 @media (min-width: 992px) {
   .startNewChatLowerButton {

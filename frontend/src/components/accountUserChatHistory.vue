@@ -128,7 +128,7 @@ export default {
 
 <template>
   <div
-    class="userChatHistory d-flex flex-column"
+    class="userChatHistory"
     v-if="this.userChatHistory && historyMenu"
   >
     <div class="chatHistorySideBar">
@@ -268,6 +268,9 @@ export default {
 .mobileAccountChatPickers {
   display: none;
 }
+.chatSelector {
+  display: none;
+}
 @media (max-width: 1440px) {
   .chatHistorySideBar {
     min-width: 250px;
@@ -286,6 +289,10 @@ export default {
   }
 }
 @media (max-width: 768px) {
+  .userChatHistory {
+    display: flex;
+    flex-direction: column;
+  }
   .chatHistorySideBar {
     display: none;
   }
@@ -297,7 +304,7 @@ export default {
     margin-left: 0px;
   }
   .chatSelector {
-    display: fixed;
+    display: block;
     padding-bottom: 10px;
     border-bottom: 1px solid #EFEFEF;
   }

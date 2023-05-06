@@ -565,12 +565,15 @@ export default defineComponent({
                   <p>{{ about }}</p>
                 </div>
               </div>
-              <div class="edit ms-5 me-5">
+              <div
+                class="edit ms-5 me-5"
+                v-tooltip="Test"
+                data-bs-toggle="modal"
+                data-bs-target="#userDetailsModal"
+              >
                 <img
                   src="../assets/icons/three-dots-vertical.svg"
                   class="profileEdit"
-                  data-bs-toggle="modal"
-                  data-bs-target="#userDetailsModal"
                   style="cursor: pointer"
                 />
               </div>

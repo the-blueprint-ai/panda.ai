@@ -47,7 +47,7 @@ class NewsSearchTool(BaseTool):
         for i, article in enumerate(top_5_articles):
             source_name = article['source'].get('name') or article['source'].get('Name') or "Unknown"
             html_list_items.append(f"<li><a class='text-primary' href='{article['url']}' target='_blank' style='text-decoration: none'>{article['title']} ({source_name})</a></li>")
-        html_list = f"<div class=class='card text-bg-light text-center'><div class='card-header text-uppercase pt-3 pb-2 px-3'><h2 class='text-uppercase'>{query} NEWS</h2></div><div class='card-body text-start pt-2 pb-1 px-2'><ol>" + "".join(html_list_items) + "</ol></div></div>"
+        html_list = f"<div class='card text-bg-light text-center'><div class='card-header text-uppercase pt-3 pb-2 px-3'><h2 class='text-uppercase'>{query}</h2></div><div class='card-body text-start pt-2 pb-1 px-2'><ol>" + "".join(html_list_items) + "</ol></div></div>"
         
         return html_list
 
@@ -144,7 +144,7 @@ class YouTubeSearchTool(BaseTool):
                     html = f"""
     <div class="card text-bg-light text-center">
         <div class='card-header text-uppercase pt-3 pb-2 px-3'>
-            <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank" style='text-decoration: none'><h2 class='text-primary text-uppercase'>{query} VIDEO</h2></a>
+            <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank" style='text-decoration: none'><h2 class='text-primary text-uppercase'>{query}</h2></a>
         </div>
         <div class='card-body pt-2 pb-1 px-2' style='width: 100%'>
             <iframe width="100%" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -176,13 +176,15 @@ class GoogleMapsSearchTool(BaseTool):
         url = "https://www.google.com/maps/embed/v1/place?"f"key={settings.GOOGLE_MAPS_API_KEY}&q={encoded_query}"
 
         return f"""
-            <div class="googleMapsAnswer">
-                <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank"><h2>{query} MAP</h2></a>
-                <div class="googleMapsAnswerMap">
+            <div class="card text-bg-light text-center">
+                <div class='card-header text-uppercase pt-3 pb-2 px-3'>
+                    <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank" style='text-decoration: none'><h2 class='text-primary text-uppercase'>{query}</h2></a>
+                </div>
+                <div class='card-body pt-2 pb-1 px-2' style='width: 100%'>
                     <iframe width="560" height="315" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src={url} allowfullscreen></iframe>
                 </div>
-                <div class="seeMoreButton">
-                    <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank"><button class="seeMore">SEE MORE...</button></a>
+                <div class="card-footer pt-2 pb-2 px-2">
+                    <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style='width: 80%'>SEE MORE...</button></a>
                 </div>
             </div>
                 """
@@ -406,7 +408,9 @@ class TMDBSearchTool(BaseTool):
         }
 
         response = requests.get(url, params=params)
-        logging.info("Response: " + response)
+        logging.info(f"Response status code: {response.status_code}")
+        logging.debug(f"Response content: {response.content}")
+
 
         if response.status_code == 200:
             try:

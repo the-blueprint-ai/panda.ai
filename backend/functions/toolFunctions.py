@@ -388,28 +388,23 @@ class TMDBSearchTool(BaseTool):
     name = "Movie & TV Search"
     description = "Use this when you want to search for movies, tv shows or actors. The input to this should be a single search term."
 
-    def generate_known_for_images(known_for):
+    def generate_known_for_images(self, known_for):
         images = []
         for item in known_for:
             title = item.get("title", item.get("name", "Unknown"))
-            img_tag = f'<img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{item["poster_path"]}" alt="{title}" />'
+            img_tag = f'<img class="img-thumbnail" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{item["poster_path"]}" alt="{title}" style="width: 30%"/>'
             images.append(img_tag)
         return "".join(images)
 
     def _run(self, query: str) -> str:
-        # URL-encode the query parameter
-        encoded_query = quote(query)
-        logging.info("Encoded Query: " + encoded_query)
-
         url = 'https://api.themoviedb.org/3/search/multi?'
         params = {
-            'api_key': settings.TMDB_API_KEY,
-            'query': encoded_query
+            'query': query,
+            'api_key': settings.TMDB_API_KEY
+            
         }
 
         response = requests.get(url, params=params)
-        logging.info(f"Response status code: {response.status_code}")
-        logging.debug(f"Response content: {response.content}")
 
 
         if response.status_code == 200:
@@ -417,26 +412,29 @@ class TMDBSearchTool(BaseTool):
                 data = response.json()
                 # Parse the data and return the desired value
                 results = data['results']
+                logging.info("Results: " + str(results))
 
                 if not results:
                     return "I'm so sorry! I can't find that at the moment. Please try again later 🐼"
 
-                if results[0]["media_type"] == "person":
-                    id = results[0]["id"]
-                    name = results[0]["name"]
-                    image = results[0]["profile_path"]
-                    known_for = results[0]["known_for"]
+                first_item = results[0]
+
+                if first_item["media_type"] == "person":
+                    id = first_item["id"]
+                    name = first_item["name"]
+                    image = first_item["profile_path"]
+                    known_for = first_item["known_for"]
                     known_for_images = self.generate_known_for_images(known_for)
 
                     html = f"""
         <div class="card text-bg-light text-center">
             <a href="https://www.themoviedb.org/person/{id}-{name}" target="_blank"><img class="card-img-top" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{image}" alt="{name}" /></a>
-            <div class="card-body pt-2 pb-1 px-2 text-start">
+            <div class="card-body pt-2 pb-1 px-2 text-center">
                 <a href="https://www.themoviedb.org/person/{id}-{name}" target="_blank" style="text-decoration: none"><h2 class="text-primary text-uppercase">{name}</h2></a>
 
                 <div class="tmdbAnswerContentDetails">
                     <h2>KNOWN FOR:</h2>
-                    <div class="tmdbAnswerContentDetailsKnownFor">
+                    <div class="tmdbAnswerContentDetailsKnownFor d-flex justify-content-between">
                         {known_for_images}
                     </div>
                 </div>
@@ -447,15 +445,15 @@ class TMDBSearchTool(BaseTool):
         </div>
                         """
                         
-                elif results[0]["media_type"] == "movie":
-                    id = results[0]["id"]
-                    name = results[0]["title"]
-                    overview = results[0]["overview"]
-                    image = results[0]["poster_path"]
-                    release_date = results[0]["release_date"]
+                elif first_item["media_type"] == "movie":
+                    id = first_item["id"]
+                    name = first_item["title"]
+                    overview = first_item["overview"]
+                    image = first_item["poster_path"]
+                    release_date = first_item["release_date"]
                     date_obj = datetime.strptime(release_date, "%Y-%m-%d")
                     formatted_date = date_obj.strftime("%-dth %B %Y")
-                    rating = results[0]["vote_average"]
+                    rating = first_item["vote_average"]
                     formatted_rating = "{:.1f}".format(round(rating, 1))
 
                     html = f"""
@@ -481,12 +479,12 @@ class TMDBSearchTool(BaseTool):
         </div>
                         """
 
-                elif results[0]["media_type"] == "tv":
-                    id = results[0]["id"]
-                    name = results[0]["name"]
-                    overview = results[0]["overview"]
-                    image = results[0]["poster_path"]
-                    release_date = results[0]["first_air_date"]
+                elif first_item["media_type"] == "tv":
+                    id = first_item["id"]
+                    name = first_item["name"]
+                    overview = first_item["overview"]
+                    image = first_item["poster_path"]
+                    release_date = first_item["first_air_date"]
                     date_obj = datetime.strptime(release_date, "%Y-%m-%d")
                     formatted_date = date_obj.strftime("%-dth %B %Y")
                     rating = results[0]["vote_average"]

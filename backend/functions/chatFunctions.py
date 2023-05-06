@@ -106,7 +106,7 @@ tools = [
 
 # FUNCTIONS
 async def pandaChatAgent(userid: str, first_name: str, last_name: str, username: str, message: str):
-    await save_entities(userid, message)
+    # await save_entities(userid, message)
 
     llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0.05, pl_tags=[f"{ userid }"], return_pl_id=True)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -129,10 +129,11 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     FORMAT_INSTRUCTIONS =format_dict['template']
 
     MY_PREFIX = PREFIX.format(
+        ai_prefix="🐼 panda.ai",
         first_name=first_name,
         last_name=last_name,
         username=username,
-        date=current_date,
+        current_date=current_date,
     )
     MY_SUFFIX = SUFFIX.format(
         entities = formatted_entities,

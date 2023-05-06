@@ -350,7 +350,7 @@ export default defineComponent({
                 <h1>MOVIES & TV SHOWS</h1>
               </div>
               <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/panda.png" width="80%" />
+                <img class="img-thumbnail" src="../assets/screenshots/movie-inception.png" width="80%" />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>🐼 panda.ai can fetch you information on any Movie or TV Show.</p>
@@ -366,7 +366,7 @@ export default defineComponent({
                 <h1>ACTORS</h1>
               </div>
               <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/panda.png" width="80%" />
+                <img class="img-thumbnail" src="../assets/screenshots/actor-tom-holland.png" width="80%" />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>🐼 panda.ai can fetch you information on any Actors.</p>

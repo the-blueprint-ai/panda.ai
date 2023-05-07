@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     APP_NAME: str
     API_DOMAIN: str
     WEBSITE_DOMAIN: str
+    WEBHOOKS_USERNAME: str
+    WEBHOOKS_PASSWORD: str
+    SUBSCRIPTIONS_USERNAME: str
+    SUBSCRIPTIONS_PASSWORD: str
     S3_BUCKET: str
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str

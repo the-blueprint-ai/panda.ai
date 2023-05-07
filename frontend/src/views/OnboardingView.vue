@@ -154,7 +154,7 @@ export default defineComponent({
 
         const data = await response.json();
         console.log(data.message);
-        this.$router.push("/auth/" + userId + "/account");
+        this.$router.push("/pricing");
       } catch (error) {
         console.error(error);
       }

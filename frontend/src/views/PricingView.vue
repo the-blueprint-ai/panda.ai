@@ -1,19 +1,39 @@
 <script>
 import { defineComponent } from "vue";
+import { mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import subscriptionModal from "../components/subscriptionModal.vue";
 
 export default defineComponent({
   data: () => {
     return {
       country: "uk",
       subscriptionPeriod: "monthly",
-      recommendedPlan: "mei",
+      currentPlanType: "free",
     };
+  },
+  mounted() {},
+  computed: {
+    ...mapGetters("userStore", {
+      userId: "getStoreUserId",
+    }),
+    isOpen() {
+      return this.$store.state.isOpen;
+    },
+  },
+  methods: {
+    toSignIn() {
+      this.$router.push("/signin");
+    },
+    setPlanType(planType) {
+      this.currentPlanType = planType;
+    },
   },
   components: {
     navBar,
     navFooter,
+    subscriptionModal,
   },
 });
 </script>
@@ -89,6 +109,13 @@ export default defineComponent({
             <label class="btn btn-outline-secondary" for="annual">ANNUAL</label>
           </div>
         </div>
+        <subscriptionModal
+          modal-id="subscriptionModal"
+          :country="country"
+          :subscriptionPeriod="subscriptionPeriod"
+          :plan-type="currentPlanType"
+        >
+        </subscriptionModal>
         <div class="row mb-5">
           <div class="col mb-5 d-flex justify-content-center">
             <div
@@ -105,17 +132,40 @@ export default defineComponent({
                   <p class="mt-n3">ALL Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>FREE</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>FREE
+                  </h1>
                   <p class="mt-n2">for one month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>FREE</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>FREE
+                  </h1>
                   <p class="mt-n2">for one month</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width: 150px">
+                <button
+                  v-if="this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#subscriptionModal"
+                  style="width: 150px"
+                  @click="setPlanType('free')"
+                >
                   START TRIAL
+                </button>
+                <button
+                  v-if="!this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  style="width: 150px"
+                  @click="toSignIn"
+                >
+                  SIGN UP
                 </button>
               </div>
             </div>
@@ -135,24 +185,47 @@ export default defineComponent({
                   <p class="mt-n3">3 Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>2.99</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>2.99
+                  </h1>
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>29.99</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>29.99
+                  </h1>
                   <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width: 150px">
+                <button
+                  v-if="this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#subscriptionModal"
+                  style="width: 150px"
+                  @click="setPlanType('bao')"
+                >
                   SELECT
+                </button>
+                <button
+                  v-if="!this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  style="width: 150px"
+                  @click="toSignIn"
+                >
+                  SIGN UP
                 </button>
               </div>
             </div>
           </div>
           <div class="col mb-5 d-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mt-5 mb-3"
+              class="card text-bg-light border-secondary text-center mt-5 mb-3"
               style="width: 18rem"
             >
               <div class="card-header text-bg-secondary pt-3 pb-3">
@@ -166,17 +239,40 @@ export default defineComponent({
                   <p class="mt-n3">5 Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>5.99</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>5.99
+                  </h1>
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>59.99</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>59.99
+                  </h1>
                   <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width: 150px">
+                <button
+                  v-if="this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#subscriptionModal"
+                  style="width: 150px"
+                  @click="setPlanType('mei')"
+                >
                   SELECT
+                </button>
+                <button
+                  v-if="!this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  style="width: 150px"
+                  @click="toSignIn"
+                >
+                  SIGN UP
                 </button>
               </div>
             </div>
@@ -196,17 +292,40 @@ export default defineComponent({
                   <p class="mt-n3">ALL Integrations</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'monthly'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>14.99</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>14.99
+                  </h1>
                   <p class="mt-n2">per month</p>
                 </div>
                 <div v-if="this.subscriptionPeriod === 'annual'">
-                  <h1 class="mt-5"><span v-if="country == 'uk'">£</span><span v-else-if="country == 'usa'">$</span>149.99</h1>
+                  <h1 class="mt-5">
+                    <span v-if="country == 'uk'">£</span
+                    ><span v-else-if="country == 'usa'">$</span>149.99
+                  </h1>
                   <p class="mt-n2">per year</p>
                 </div>
               </div>
               <div class="card-footer pt-4 pb-4">
-                <button class="btn btn-secondary" style="width: 150px">
+                <button
+                  v-if="this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#subscriptionModal"
+                  style="width: 150px"
+                  @click="setPlanType('da')"
+                >
                   SELECT
+                </button>
+                <button
+                  v-if="!this.userId"
+                  type="button"
+                  class="btn btn-secondary"
+                  style="width: 150px"
+                  @click="toSignIn"
+                >
+                  SIGN UP
                 </button>
               </div>
             </div>
@@ -222,8 +341,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>VIDEO</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/new-rockstars-video.png" width="100%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/new-rockstars-video.png"
+                  width="100%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
@@ -241,8 +366,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>MAPS</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/new-york-map.png" width="100%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/new-york-map.png"
+                  width="100%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>🐼 panda.ai can get you maps for anywhere in the world.</p>
@@ -257,8 +388,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>IMAGES</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/panda-images.png" width="100%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/panda-images.png"
+                  width="100%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
@@ -276,8 +413,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>WIKIPEDIA</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/thom-yorke-wikipedia.png" width="100%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/thom-yorke-wikipedia.png"
+                  width="100%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
@@ -295,8 +438,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>SEARCH</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/openai-search.png" width="100%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/openai-search.png"
+                  width="100%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
@@ -314,8 +463,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>NEWS</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/local-election-news.png" width="100%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/local-election-news.png"
+                  width="100%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
@@ -333,8 +488,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>MUSIC</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/radiohead-music.png" width="100%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/radiohead-music.png"
+                  width="100%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>🐼 panda.ai can fetch you music from Spotify.</p>
@@ -349,11 +510,19 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>MOVIES & TV SHOWS</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/movie-inception.png" width="80%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/movie-inception.png"
+                  width="80%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
-                <p>🐼 panda.ai can fetch you information on any Movie or TV Show.</p>
+                <p>
+                  🐼 panda.ai can fetch you information on any Movie or TV Show.
+                </p>
               </div>
             </div>
           </div>
@@ -365,8 +534,14 @@ export default defineComponent({
               <div class="card-header pt-4 pb-3">
                 <h1>ACTORS</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/screenshots/actor-tom-holland.png" width="80%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/screenshots/actor-tom-holland.png"
+                  width="80%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>🐼 panda.ai can fetch you information on any Actors.</p>
@@ -382,8 +557,14 @@ export default defineComponent({
                 <h4>COMING SOON</h4>
                 <h1>WEATHER</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/panda.png" width="80%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/panda.png"
+                  width="80%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
@@ -401,8 +582,14 @@ export default defineComponent({
                 <h4>COMING SOON</h4>
                 <h1>BOOKS</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/panda.png" width="80%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/panda.png"
+                  width="80%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>
@@ -421,8 +608,14 @@ export default defineComponent({
                 <h4>COMING SOON</h4>
                 <h1>SHOPPING</h1>
               </div>
-              <div class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="../assets/panda.png" width="80%" />
+              <div
+                class="card-body pt-4 pb-4 px-3 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  class="img-thumbnail"
+                  src="../assets/panda.png"
+                  width="80%"
+                />
               </div>
               <div class="card-footer pt-4 pb-2">
                 <p>🐼 panda.ai will help you get your shopping done.</p>

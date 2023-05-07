@@ -14,8 +14,8 @@ async def get_user_messages_this_month(user_id: str):
 
     return result
 
-async def get_user_messages_per_month(user_id: str):
-    query = "SELECT messages_per_month FROM panda_ai_users WHERE user_id = :user_id"
+async def get_subscriber_and_user_messages_per_month(user_id: str):
+    query = "SELECT subscriber, messages_per_month FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 

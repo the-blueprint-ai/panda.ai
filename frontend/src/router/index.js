@@ -23,7 +23,7 @@ import TestView from "../views/TestView.vue";
 import AdminView from "../views/AdminView.vue";
 import UnsubscribeView from "../views/UnsubscribeView.vue";
 import ThankYouView from "../views/ThankYouView.vue";
-import PricingView from "../views/PricingView.vue";
+import SubscriptionsView from "../views/SubscriptionsView.vue";
 
 // Authorization Guard
 async function checkAuth(to, from, next) {
@@ -131,9 +131,9 @@ const router = createRouter({
       component: AboutView,
     },
     {
-      path: "/pricing",
-      name: "pricing",
-      component: PricingView,
+      path: "/subscriptions",
+      name: "subscriptions",
+      component: SubscriptionsView,
     },
     {
       path: "/roadmap",

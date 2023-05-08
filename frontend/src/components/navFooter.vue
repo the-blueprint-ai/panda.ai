@@ -99,8 +99,8 @@ export default {
         <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/about')">
           about
         </p>
-        <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/pricing')">
-          pricing
+        <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/subscriptions')">
+          subscriptions
         </p>
         <p
           class="ps-1 lh-1"

@@ -49,8 +49,8 @@ export default {
     redirectToAbout() {
       this.$router.push("/about");
     },
-    redirectToPricing() {
-      this.$router.push("/pricing");
+    redirectToSubscriptions() {
+      this.$router.push("/subscriptions");
     },
     redirectToRoadmap() {
       this.$router.push("/roadmap");
@@ -178,8 +178,8 @@ export default {
               class="nav-item w-100 d-flex flex-row align-items-start ps-2 pt-3"
               @click="redirectToPricing"
             >
-              <img src="../../src/assets/icons/tag.svg" alt="about" />
-              <p class="nav-link text-uppercase ms-4 mb-0">pricing</p>
+              <img src="../../src/assets/icons/tag.svg" alt="subscriptions" />
+              <p class="nav-link text-uppercase ms-4 mb-0">subscriptions</p>
             </li>
             <li
               class="nav-item w-100 d-flex flex-row align-items-start ps-2 pt-3"
@@ -315,10 +315,10 @@ export default {
                   <a class="nav-link">about</a>
                 </li>
               </div>
-              <div class="col px-3" @click="redirectToPricing">
+              <div class="col px-3" @click="redirectToSubscriptions">
                 <li class="nav-item pt-3">
-                  <img src="../../src/assets/icons/tag.svg" alt="about" />
-                  <a class="nav-link">pricing</a>
+                  <img src="../../src/assets/icons/tag.svg" alt="subscriptions" />
+                  <a class="nav-link">subscriptions</a>
                 </li>
               </div>
               <div class="col px-3" @click="redirectToRoadmap">

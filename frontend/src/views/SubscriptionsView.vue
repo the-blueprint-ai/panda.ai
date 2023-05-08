@@ -78,7 +78,7 @@ export default defineComponent({
           </div>
         </div>
         <h1>🐼</h1>
-        <h1>PANDA.AI PRICING</h1>
+        <h1>PANDA.AI SUBSCRIPTIONS</h1>
         <div class="monthlyAnnual">
           <div
             class="btn-group btn-group-lg pt-4"
@@ -550,7 +550,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-light border-secondary text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header text-bg-secondary pt-4 pb-3">
@@ -575,7 +575,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-light border-secondary text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header text-bg-secondary pt-4 pb-3">
@@ -601,7 +601,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-light border-secondary text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header text-bg-secondary pt-4 pb-3">

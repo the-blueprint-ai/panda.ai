@@ -17,6 +17,17 @@ export default {
   data() {
     return {
       currentPage: 1,
+      formFirstName: "",
+      formLastName: "",
+      formEmail: "",
+      formAddress: "",
+      formCity: "",
+      formPostcode: "",
+      formCountry: "",
+      formNameOnCard: "",
+      loading: false,
+      token: "",
+      error: "",
       classes: {
         focus: "focus",
         invalid: "invalid",
@@ -24,12 +35,6 @@ export default {
         complete: "complete",
       },
       fonts: ["https://fonts.googleapis.com/css?family=Lato:400,700"],
-      placeholder: {
-        number: "4111 1111 1111 1111",
-        cvv: "CVV",
-        expiry: "MM / YY",
-      },
-      locale: "en",
       styles: {
         base: {
           color: "#333",
@@ -65,6 +70,12 @@ export default {
     };
   },
   mounted() {},
+  created() {
+    this.formFirstName = this.first_name;
+    this.formLastName = this.last_name;
+    this.formEmail = this.email;
+    this.formNameOnCard = `${this.first_name} ${this.last_name}`;
+  },
   computed: {
     ...mapGetters("userStore", {
       userId: "getStoreUserId",
@@ -86,18 +97,42 @@ export default {
     tokenize() {
       this.loading = true;
 
-      // Call tokenize method through the card component ref
-      // Additional data can be passed to the tokenize method
       this.$refs.card
         .tokenize({})
         .then((data) => {
           this.loading = false;
           this.token = data.token;
+          this.error = "";
         })
         .catch((error) => {
-          console.error(error);
           this.loading = false;
+          this.error = "Problem while tokenizing your card details";
+          this.token = "";
         });
+    },
+    onSubmit(e) {
+      e.preventDefault();
+      this.$refs.cardComponent.tokenize().then((data) => {
+        console.log("chargebee token", data.token);
+      });
+    },
+    onChange(status) {
+      let errors = {
+        ...this.errors,
+        [status.field]: status.error,
+      };
+      this.errors = errors;
+      let { message } =
+        Object.values(errors)
+          .filter((message) => !!message)
+          .pop() || {};
+      this.errorMessage = message;
+    },
+    onFocus(event) {
+      console.log(event.field, "focused");
+    },
+    onReady(el) {
+      el.focus();
     },
   },
   components: {
@@ -181,27 +216,27 @@ export default {
           <div
             v-if="currentPage == 1"
             class="modalContentPage1 d-inline-flex align-items-center"
-            style="height: 300px"
+            style="height: 250px"
           >
             <form>
               <div class="d-flex">
-                <div class="form-floating mb-3" style="width: 48%">
+                <div class="form-floating mt-4 mb-3" style="width: 48%">
                   <input
                     type="text"
                     class="form-control"
                     id="firstName"
                     placeholder="Po"
-                    v-model="first_name"
+                    v-model="formFirstName"
                   />
                   <label for="firstName">First Name</label>
                 </div>
-                <div class="form-floating mb-3 ms-3" style="width: 48%">
+                <div class="form-floating mt-4 mb-3 ms-3" style="width: 48%">
                   <input
                     type="text"
                     class="form-control"
                     id="lastName"
                     placeholder="Ping"
-                    v-model="last_name"
+                    v-model="formLastName"
                   />
                   <label for="lastName">Last Name</label>
                 </div>
@@ -212,7 +247,7 @@ export default {
                   class="form-control"
                   id="email"
                   placeholder="Po.Ping@mypanda.ai"
-                  v-model="email"
+                  v-model="formEmail"
                 />
                 <label for="email">Email</label>
               </div>
@@ -221,15 +256,16 @@ export default {
           <div
             v-if="currentPage == 2"
             class="modalContentPage2 d-inline-flex align-items-center"
-            style="height: 300px"
+            style="height: 250px"
           >
             <form>
-              <div class="form-floating mb-3">
+              <div class="form-floating mt-4 mb-3">
                 <input
                   type="text"
                   class="form-control"
                   id="address"
                   placeholder="Address"
+                  v-model="formAddress"
                 />
                 <label for="email">Address</label>
               </div>
@@ -240,6 +276,7 @@ export default {
                     class="form-control"
                     id="city"
                     placeholder="City"
+                    v-model="formCity"
                   />
                   <label for="firstName">City</label>
                 </div>
@@ -249,12 +286,17 @@ export default {
                     class="form-control"
                     id="postcode"
                     placeholder="Postcode"
+                    v-model="formPostcode"
                   />
                   <label for="lastName">Postcode</label>
                 </div>
               </div>
               <div class="form-floating mb-3">
-                <select class="form-select" aria-label="Country">
+                <select
+                  class="form-select"
+                  aria-label="Country"
+                  v-model="formCountry"
+                >
                   <option value="uk">United Kingdom</option>
                   <option value="usa">United States of America</option>
                 </select>
@@ -264,23 +306,50 @@ export default {
           </div>
           <div
             v-if="currentPage == 3"
-            class="modalContentPage3 d-inline-flex align-items-center"
-            style="height: 300px"
+            class="modalContentPage3 d-inline-flex align-items-center justify-content-center"
+            style="height: 250px; min-width: 100%"
           >
-            <h2>Page 3</h2>
-            <CardComponent
-              ref="card"
-              class="fieldset field"
-              :styles="styles"
-              :classes="classes"
-              :locale="locale"
-              :placeholder="placeholder"
-              :fonts="fonts"
-            >
-              <CardNumber class="ex1-input" />
-              <CardExpiry class="ex1-input" />
-              <CardCvv class="ex1-input" />
-            </CardComponent>
+            <div class="ex1-fieldset" style="min-width: 80%">
+              <div class="form-floating">
+                <input
+                  class="form-control"
+                  id="nameOnCard"
+                  :class="{ val: formNameOnCard }"
+                  type="text"
+                  placeholder="Kung Fu Panda"
+                  v-model="formNameOnCard"
+                />
+                <label for="nameOnCard">Name on Card</label>
+              </div>
+              <!-- Render card components in fields-mode -->
+              <!-- Pass styles, classes, locale, placeholder, fonts as props -->
+              <CardComponent
+                ref="card"
+                class="fieldset field"
+                :classes="classes"
+				:placeholder="placeholder"
+              >
+                <!-- <div class="form-floating mt-3"> -->
+                  <!-- Card number field -->
+                  <!-- <CardNumber class="form-control" id="cardNumber" />
+                  <label for="cardNumber">Card Number</label>
+                </div> -->
+                <!-- <div class="d-flex">
+                  <div class="form-floating mt-3" style="min-width: 48%"> -->
+                    <!-- Card expiry field -->
+                    <!-- <CardExpiry class="form-control" id="cardExpiry" />
+                    <label for="cardExpiry">Expiry</label>
+                  </div> -->
+                  <!-- <div class="form-floating ms-3 mt-3" style="min-width: 48%"> -->
+                    <!-- Card cvv field -->
+                    <!-- <CardCvv class="form-control" id="cardCVV" />
+                    <label for="cardCVV">CVV</label>
+                  </div>
+                </div> -->
+              </CardComponent>
+            </div>
+            <div class="error" role="alert" v-if="error">{{ error }}</div>
+            <div class="token" v-if="token">{{ token }}</div>
           </div>
         </div>
         <div class="modal-footer text-bg-light">
@@ -294,7 +363,16 @@ export default {
             PREVIOUS
           </button>
           <button
-            v-if="currentPage <= 2"
+            v-if="currentPage == 1"
+            type="button"
+            class="btn btn-secondary"
+            @click="nextPage"
+            style="width: 100px"
+          >
+            NEXT
+          </button>
+          <button
+            v-if="currentPage == 2"
             type="button"
             class="btn btn-secondary"
             @click="nextPage"
@@ -304,9 +382,10 @@ export default {
           </button>
           <button
             v-if="currentPage == 3"
-            type="button"
+            type="submit"
+            :class="{ submit: loading }"
             class="btn btn-secondary"
-            @click="nextPage"
+            @click="tokenize"
             style="width: 100px"
           >
             PAY

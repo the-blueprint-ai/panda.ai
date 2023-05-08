@@ -17,6 +17,7 @@ export default defineComponent({
   computed: {
     ...mapGetters("userStore", {
       userId: "getStoreUserId",
+      email: "getStoreEmail",
     }),
     isOpen() {
       return this.$store.state.isOpen;
@@ -106,7 +107,7 @@ export default defineComponent({
               autocomplete="off"
               @change="subscriptionPeriod = 'annual'"
             />
-            <label class="btn btn-outline-secondary" for="annual">ANNUAL</label>
+            <label class="btn btn-outline-secondary" for="annual">YEARLY</label>
           </div>
         </div>
         <subscriptionModal
@@ -330,6 +331,15 @@ export default defineComponent({
               </div>
             </div>
           </div>
+        </div>
+        <div class="mb-4">
+          <stripe-pricing-table
+            pricing-table-id="prctbl_1N5a7oDrmPhl15PTgKXzKrPz"
+            publishable-key="pk_test_51N1wGGDrmPhl15PTgoJrIXxyVsodv0QVLOwv3BGhKFYErGjD73u08d6unvyr8kudD3MCJNYd0paqpeHJOJFUc4Yu0088kJEQgy"
+            client-reference-id="{{userId}}"
+            customer-email="{{email}}"
+          >
+          </stripe-pricing-table>
         </div>
         <h1 class="mt-5 mb-4">PANDA.AI INTEGRATIONS</h1>
         <div class="row d-inline-flex justify-content-center">

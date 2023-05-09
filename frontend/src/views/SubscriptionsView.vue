@@ -11,9 +11,16 @@ export default defineComponent({
       country: "uk",
       subscriptionPeriod: "monthly",
       currentPlanType: "free",
+      formUserId: "",
+      formEmail: "",
     };
   },
   mounted() {},
+  created() {
+    this.formUserId = this.userId;
+    this.formEmail = this.email;
+    console.log("Email: " + this.formEmail)
+  },
   computed: {
     ...mapGetters("userStore", {
       userId: "getStoreUserId",
@@ -336,8 +343,8 @@ export default defineComponent({
           <stripe-pricing-table
             pricing-table-id="prctbl_1N5a7oDrmPhl15PTgKXzKrPz"
             publishable-key="pk_test_51N1wGGDrmPhl15PTgoJrIXxyVsodv0QVLOwv3BGhKFYErGjD73u08d6unvyr8kudD3MCJNYd0paqpeHJOJFUc4Yu0088kJEQgy"
-            client-reference-id="{{userId}}"
-            customer-email="{{email}}"
+            :client-reference-id="this.formUserId"
+            :customer-email="this.formEmail"
           >
           </stripe-pricing-table>
         </div>

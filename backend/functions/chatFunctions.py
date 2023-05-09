@@ -1,7 +1,8 @@
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from dependencies import database
-from langchain import ConversationChain, PromptTemplate
+from langchain.chains import ConversationChain
+from langchain.prompts import PromptTemplate
 from langchain.llms import PromptLayerOpenAI
 from langchain.memory import ConversationEntityMemory, ConversationBufferMemory
 from langchain.agents import Tool

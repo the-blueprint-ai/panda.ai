@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     WEBHOOKS_PASSWORD: str
     SUBSCRIPTIONS_USERNAME: str
     SUBSCRIPTIONS_PASSWORD: str
+    STRIPE_API_KEY: str
+    STRIPE_ENDPOINT_SECRET: str
     S3_BUCKET: str
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str

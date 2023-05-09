@@ -28,6 +28,7 @@ from routers import roadmap
 from routers import admin
 from routers import faqs
 from routers import email
+from routers import subscriptions
 from routers import webhooks
 
 @lru_cache()
@@ -65,6 +66,7 @@ app.include_router(roadmap.router)
 app.include_router(admin.router)
 app.include_router(faqs.router)
 app.include_router(email.router)
+app.include_router(subscriptions.router)
 app.include_router(webhooks.router)
 app.add_middleware(get_middleware())
 

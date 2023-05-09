@@ -42,14 +42,6 @@ async def receive_webhook(request: Request, authenticated: bool = Depends(verify
     logging.info("Customer Created Webhook received:", str(payload))
     return {"detail": "Webhook received"}
 
-@router.post("/subscribe")
-async def receive_webhook(request: Request, authenticated: bool = Depends(verify_credentials)):
-    if not authenticated:
-        raise HTTPException(status_code=401, detail="Incorrect username or password")
-
-    payload = await request.json()
-    logging.info("Subscribe Webhook received:", str(payload))
-    return {"detail": "Webhook received"}
 
 @router.post("/unsubscribe")
 async def receive_webhook(request: Request, authenticated: bool = Depends(verify_credentials)):

@@ -19,7 +19,7 @@ export default defineComponent({
   created() {
     this.formUserId = this.userId;
     this.formEmail = this.email;
-    console.log("Email: " + this.formEmail)
+    console.log("Email: " + this.formEmail);
   },
   computed: {
     ...mapGetters("userStore", {
@@ -353,7 +353,7 @@ export default defineComponent({
         <div class="row d-inline-flex justify-content-center">
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -378,7 +378,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -400,7 +400,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -425,7 +425,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -450,7 +450,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -475,7 +475,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -500,7 +500,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -522,7 +522,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -546,7 +546,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header pt-4 pb-3">
@@ -568,7 +568,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light border-secondary text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark border-secondary text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header text-bg-secondary pt-4 pb-3">
@@ -593,7 +593,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light border-secondary text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark border-secondary text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header text-bg-secondary pt-4 pb-3">
@@ -619,7 +619,7 @@ export default defineComponent({
           </div>
           <div class="col d-inline-flex justify-content-center">
             <div
-              class="card text-bg-light border-secondary text-center mx-1 mt-1 mb-4"
+              class="card text-bg-dark border-secondary text-center mx-1 mt-1 mb-4"
               style="width: 25rem"
             >
               <div class="card-header text-bg-secondary pt-4 pb-3">

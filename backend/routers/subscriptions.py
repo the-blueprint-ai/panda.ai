@@ -6,7 +6,7 @@ import secrets
 import logging
 import datetime
 from config import settings
-from databases import Database
+from dependencies import database
 import stripe
 from pydantic import ValidationError
 
@@ -19,11 +19,6 @@ router = APIRouter(
 security = HTTPBasic()
 
 stripe.api_key = settings.STRIPE_API_KEY
-
-# DATABASES
-DATABASE_URL = settings.PSQL_DATABASE_URL
-database = Database(DATABASE_URL)
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

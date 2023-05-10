@@ -153,8 +153,8 @@ async def subscription_updated(request: Request):
 
     start = subscription_updated["current_period_start"]
     end = subscription_updated["current_period_end"]
-    subscription_start = datetime.datetime.fromtimestamp(start, tz=datetime.timezone.utc)
-    subscription_end = datetime.datetime.fromtimestamp(end, tz=datetime.timezone.utc)
+    subscription_start = datetime.fromtimestamp(start, tz=timezone.utc)
+    subscription_end = datetime.fromtimestamp(end, tz=timezone.utc)
     
     plan_name = None
     number_messages = None

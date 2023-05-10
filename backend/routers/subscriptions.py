@@ -91,7 +91,7 @@ async def customer_created(request: Request):
         except KeyError:
             return JSONResponse(status_code=400, content={"error": "Stripe-Signature header is missing"})
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_ENDPOINT_SECRET
+            payload, sig_header, settings.STRIPE_CUSTOMER_CREATED_ENDPOINT_SECRET
         )
     except ValueError:
         # Invalid payload
@@ -131,7 +131,7 @@ async def subscription_updated(request: Request):
         except KeyError:
             return JSONResponse(status_code=400, content={"error": "Stripe-Signature header is missing"})
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_ENDPOINT_SECRET
+            payload, sig_header, settings.STRIPE_SUBSCRIPTION_UPDATED_ENDPOINT_SECRET
         )
     except ValueError:
         # Invalid payload

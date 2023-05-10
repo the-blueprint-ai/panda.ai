@@ -202,8 +202,8 @@ async def subscription_updated(request: Request):
     }
 
     query2 = """
-        INSERT INTO panda_ai_user_subscriptions (subscriber_id, subscription_id, plan_id, plan_name, subscription_interval, subscription_start, subscription_end, number_messages, number_integrations)
-        VALUES (:subscriber_id, :subscription_id, :plan_id, :plan_name, :subscription_interval, :subscription_start, :subscription_end, :number_messages, :number_integrations)
+        INSERT INTO panda_ai_user_subscriptions (subscriber_id, user_id, subscription_id, plan_id, plan_name, subscription_interval, subscription_start, subscription_end, number_messages, number_integrations)
+        VALUES (:subscriber_id, :user_id, :subscription_id, :plan_id, :plan_name, :subscription_interval, :subscription_start, :subscription_end, :number_messages, :number_integrations)
         ON CONFLICT (subscriber_id)
         DO UPDATE SET 
             subscription_id = excluded.subscription_id,

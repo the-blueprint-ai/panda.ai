@@ -1,5 +1,5 @@
-fastapi==0.63.0
-uvicorn==0.16.0
+fastapi
+uvicorn
 supertokens-python
 boto3
 python-multipart
@@ -17,3 +17,4 @@ spacy
 numpy
 wolframalpha
 tiktoken
+stripe

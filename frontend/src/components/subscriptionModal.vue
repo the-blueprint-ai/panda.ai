@@ -34,21 +34,25 @@ export default {
         empty: "empty",
         complete: "complete",
       },
-      fonts: ["https://fonts.googleapis.com/css?family=Lato:400,700"],
+      placeholder: {
+        number: "4111 1111 1111 1111",
+        cvv: "CVV",
+        expiry: "MM / YY",
+      },
+      fonts: ['../assets/fonts/iosevka-regular.ttf'],
       styles: {
         base: {
-          color: "#333",
+          color: "#000000",
           fontWeight: "500",
-          fontFamily: "Lato, Segoe UI, Helvetica Neue, sans-serif",
-          fontSize: "16px",
-          fontSmoothing: "antialiased",
+          fontFamily: "Iosevka, Monaco",
+          fontSize: "17px",
 
           ":focus": {
             color: "#424770",
           },
 
           "::placeholder": {
-            color: "transparent",
+            color: "#ced4da",
           },
 
           ":focus::placeholder": {
@@ -106,7 +110,7 @@ export default {
         })
         .catch((error) => {
           this.loading = false;
-          this.error = "Problem while tokenizing your card details";
+          this.error = "Problem with your card details, please try again.";
           this.token = "";
         });
     },
@@ -312,7 +316,7 @@ export default {
             <div class="ex1-fieldset" style="min-width: 80%">
               <div class="form-floating">
                 <input
-                  class="form-control"
+                  class="form-control mb-3"
                   id="nameOnCard"
                   :class="{ val: formNameOnCard }"
                   type="text"
@@ -321,35 +325,21 @@ export default {
                 />
                 <label for="nameOnCard">Name on Card</label>
               </div>
-              <!-- Render card components in fields-mode -->
-              <!-- Pass styles, classes, locale, placeholder, fonts as props -->
-              <CardComponent
-                ref="card"
-                class="fieldset field"
-                :classes="classes"
-				:placeholder="placeholder"
-              >
-                <!-- <div class="form-floating mt-3"> -->
-                  <!-- Card number field -->
-                  <!-- <CardNumber class="form-control" id="cardNumber" />
-                  <label for="cardNumber">Card Number</label>
-                </div> -->
-                <!-- <div class="d-flex">
-                  <div class="form-floating mt-3" style="min-width: 48%"> -->
-                    <!-- Card expiry field -->
-                    <!-- <CardExpiry class="form-control" id="cardExpiry" />
-                    <label for="cardExpiry">Expiry</label>
-                  </div> -->
-                  <!-- <div class="form-floating ms-3 mt-3" style="min-width: 48%"> -->
-                    <!-- Card cvv field -->
-                    <!-- <CardCvv class="form-control" id="cardCVV" />
-                    <label for="cardCVV">CVV</label>
-                  </div>
-                </div> -->
-              </CardComponent>
+              <div class="d-flex flex-column px-2 pt-3 pb-3"  style="border: 1px solid #ced4da; border-radius: 5px">
+                <!-- Render card components in fields-mode -->
+                <!-- Pass styles, classes, locale, placeholder, fonts as props -->
+                <CardComponent
+                  ref="card"
+                  class="fieldset fields"
+                  :classes="classes"
+                  :placeholder="placeholder"
+                  :styles="styles"
+                >
+                </CardComponent>
+              </div>
+              <div class="error text-danger mt-4" role="alert" v-if="error">{{ error }}</div>
+              <div class="token" v-if="token">{{ token }}</div>
             </div>
-            <div class="error" role="alert" v-if="error">{{ error }}</div>
-            <div class="token" v-if="token">{{ token }}</div>
           </div>
         </div>
         <div class="modal-footer text-bg-light">

@@ -11,12 +11,20 @@ export default defineComponent({
       country: "uk",
       subscriptionPeriod: "monthly",
       currentPlanType: "free",
+      formUserId: "",
+      formEmail: "",
     };
   },
   mounted() {},
+  created() {
+    this.formUserId = this.userId;
+    this.formEmail = this.email;
+    console.log("Email: " + this.formEmail)
+  },
   computed: {
     ...mapGetters("userStore", {
       userId: "getStoreUserId",
+      email: "getStoreEmail",
     }),
     isOpen() {
       return this.$store.state.isOpen;
@@ -43,7 +51,8 @@ export default defineComponent({
     <navBar></navBar>
     <div class="container-fluid h-100 bg-primary text-white">
       <div class="container text-center pt-5 pb-5">
-        <div class="ukUSA d-flex justify-content-end mt-n4 mb-5">
+        <h1 class="mb-4">PANDA.AI SUBSCRIPTIONS</h1>
+        <!-- <div class="ukUSA d-flex justify-content-end mt-n4 mb-5">
           <div
             class="btn-group btn-group-sm mb-n5 me-5 align-items-center"
             role="group"
@@ -106,7 +115,7 @@ export default defineComponent({
               autocomplete="off"
               @change="subscriptionPeriod = 'annual'"
             />
-            <label class="btn btn-outline-secondary" for="annual">ANNUAL</label>
+            <label class="btn btn-outline-secondary" for="annual">YEARLY</label>
           </div>
         </div>
         <subscriptionModal
@@ -330,6 +339,15 @@ export default defineComponent({
               </div>
             </div>
           </div>
+        </div> -->
+        <div class="mb-4">
+          <stripe-pricing-table
+            pricing-table-id="prctbl_1N5a7oDrmPhl15PTgKXzKrPz"
+            publishable-key="pk_test_51N1wGGDrmPhl15PTgoJrIXxyVsodv0QVLOwv3BGhKFYErGjD73u08d6unvyr8kudD3MCJNYd0paqpeHJOJFUc4Yu0088kJEQgy"
+            :client-reference-id="this.formUserId"
+            :customer-email="this.formEmail"
+          >
+          </stripe-pricing-table>
         </div>
         <h1 class="mt-5 mb-4">PANDA.AI INTEGRATIONS</h1>
         <div class="row d-inline-flex justify-content-center">

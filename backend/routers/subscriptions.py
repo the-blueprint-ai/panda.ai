@@ -197,7 +197,7 @@ async def subscription_updated(request: Request):
     }
 
     query = """
-        UPDATE panda_ai_users SET number_messages = :number_messages, number_integrations = :number_integrations WHERE subscriber_id = :subscriber_id
+        UPDATE panda_ai_users SET messages_per_month = :number_messages, integrations = :number_integrations WHERE subscriber_id = :subscriber_id
     """
 
     return JSONResponse(content={"message": "New subscription added to database"})

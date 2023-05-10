@@ -51,6 +51,7 @@ export default defineComponent({
     <navBar></navBar>
     <div class="container-fluid h-100 bg-primary text-white">
       <div class="container text-center pt-5 pb-5">
+        <h1 class="mb-4">PANDA.AI SUBSCRIPTIONS</h1>
         <!-- <div class="ukUSA d-flex justify-content-end mt-n4 mb-5">
           <div
             class="btn-group btn-group-sm mb-n5 me-5 align-items-center"

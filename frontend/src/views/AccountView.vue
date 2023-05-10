@@ -567,7 +567,6 @@ export default defineComponent({
               </div>
               <div
                 class="edit ms-5 me-5"
-                v-tooltip="Test"
                 data-bs-toggle="modal"
                 data-bs-target="#userDetailsModal"
               >
@@ -800,6 +799,7 @@ export default defineComponent({
                 :subscription-menu="subscriptionMenu"
                 :data-menu="dataMenu"
                 :settings-menu="settingsMenu"
+                :email="email"
               ></UserSubscription>
               <UserData
                 :history-menu="historyMenu"

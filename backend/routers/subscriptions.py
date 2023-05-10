@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from typing import Optional
 import secrets
 import logging
-import datetime
+from datetime import datetime, timezone
 from config import settings
 from dependencies import database
 import stripe
@@ -220,16 +220,18 @@ async def subscription_updated(request: Request):
 
     await database.execute(query=query2, values=values2)
 
-    values3 = {
-        "subscriber_id": subscriber_id,
-        "number_messages": number_messages,
-        "number_integrations": number_integrations
-    }
 
-    query3 = """
-        UPDATE panda_ai_users SET messages_per_month = :number_messages, integrations = :number_integrations WHERE subscriber_id = :subscriber_id
-    """
+    if(subscription_end > datetime.now(timezone.utc)):
+        values3 = {
+            "subscriber_id": subscriber_id,
+            "number_messages": number_messages,
+            "number_integrations": number_integrations
+        }
 
-    await database.execute(query=query3, values=values3)
+        query3 = """
+            UPDATE panda_ai_users SET messages_per_month = :number_messages, integrations = :number_integrations WHERE subscriber_id = :subscriber_id
+        """
+
+        await database.execute(query=query3, values=values3)
 
     return JSONResponse(content={"message": "New subscription added to database"})

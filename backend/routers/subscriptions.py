@@ -160,7 +160,7 @@ async def subscription_updated(request: Request):
         plan_name = "Bao"
         number_messages = 100
         number_integrations = 3
-    elif plan_id in['price_1N5ZxSDrmPhl15PT1btIcShL', 'price_1N5alADrmPhl15PTFLAFBxTj', 'price_1N5ZxSDrmPhl15PTyUrmbeWI', 'price_1N5alADrmPhl15PTf8m7V3I2']:
+    elif plan_id in['price_1N5ZzgDrmPhl15PTlkZWtVN7', 'price_1N5akmDrmPhl15PToXSoKFUJ', 'price_1N5akmDrmPhl15PT6Rw7OYom', 'price_1N5ZzgDrmPhl15PThFxj0mfm']:
         plan_name = "Mei"
         number_messages = 300
         number_integrations = 5

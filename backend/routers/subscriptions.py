@@ -6,7 +6,7 @@ import secrets
 import logging
 import datetime
 from config import settings
-from databases import Database
+from dependencies import database
 import stripe
 from pydantic import ValidationError
 
@@ -19,11 +19,6 @@ router = APIRouter(
 security = HTTPBasic()
 
 stripe.api_key = settings.STRIPE_API_KEY
-
-# DATABASES
-DATABASE_URL = settings.PSQL_DATABASE_URL
-database = Database(DATABASE_URL)
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -91,7 +86,7 @@ async def customer_created(request: Request):
         except KeyError:
             return JSONResponse(status_code=400, content={"error": "Stripe-Signature header is missing"})
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_ENDPOINT_SECRET
+            payload, sig_header, settings.STRIPE_CUSTOMER_CREATED_ENDPOINT_SECRET
         )
     except ValueError:
         # Invalid payload
@@ -131,7 +126,7 @@ async def subscription_updated(request: Request):
         except KeyError:
             return JSONResponse(status_code=400, content={"error": "Stripe-Signature header is missing"})
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_ENDPOINT_SECRET
+            payload, sig_header, settings.STRIPE_SUBSCRIPTION_UPDATED_ENDPOINT_SECRET
         )
     except ValueError:
         # Invalid payload
@@ -165,7 +160,7 @@ async def subscription_updated(request: Request):
         plan_name = "Bao"
         number_messages = 100
         number_integrations = 3
-    elif plan_id in['price_1N5ZxSDrmPhl15PT1btIcShL', 'price_1N5alADrmPhl15PTFLAFBxTj', 'price_1N5ZxSDrmPhl15PTyUrmbeWI', 'price_1N5alADrmPhl15PTf8m7V3I2']:
+    elif plan_id in['price_1N5ZzgDrmPhl15PTlkZWtVN7', 'price_1N5akmDrmPhl15PToXSoKFUJ', 'price_1N5akmDrmPhl15PT6Rw7OYom', 'price_1N5ZzgDrmPhl15PThFxj0mfm']:
         plan_name = "Mei"
         number_messages = 300
         number_integrations = 5

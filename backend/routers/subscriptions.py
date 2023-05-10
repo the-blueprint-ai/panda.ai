@@ -64,6 +64,25 @@ async def subscription_updated_route(request: Request):
     except Exception as e:
         logger.error(f"Error in subscription_updated_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+
+@router.post("/subscription-deleted")
+async def subscription_deleted_route(request: Request):
+    try:
+        response = await subscription_deleted(request)
+        if response:
+            return response
+        else:
+            raise HTTPException(status_code=404, detail="Subscriber not created")
+    except ValidationError as e:
+        logger.error(f"ValidationError in subscription_deleted_route: {e}, details: {e.errors()}")
+        return JSONResponse(content={"error": "Validation error", "details": e.errors()}, status_code=400)
+    except HTTPException as e:
+        logger.error(f"HTTPException in subscription_deleted_route: {e}")
+        return JSONResponse(content={"error": e.detail}, status_code=e.status_code)
+    except Exception as e:
+        logger.error(f"Error in subscription_deleted_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
     
 
@@ -155,6 +174,7 @@ async def subscription_updated(request: Request):
     end = subscription_updated["current_period_end"]
     subscription_start = datetime.fromtimestamp(start, tz=timezone.utc)
     subscription_end = datetime.fromtimestamp(end, tz=timezone.utc)
+    subscription_status = subscription_updated["status"]
     
     plan_name = None
     number_messages = None
@@ -198,12 +218,13 @@ async def subscription_updated(request: Request):
         "subscription_start": subscription_start,
         "subscription_end": subscription_end,
         "number_messages": number_messages,
-        "number_integrations": number_integrations
+        "number_integrations": number_integrations,
+        "subscription_status": subscription_status
     }
 
     query2 = """
-        INSERT INTO panda_ai_user_subscriptions (subscriber_id, user_id, subscription_id, plan_id, plan_name, subscription_interval, subscription_start, subscription_end, number_messages, number_integrations)
-        VALUES (:subscriber_id, :user_id, :subscription_id, :plan_id, :plan_name, :subscription_interval, :subscription_start, :subscription_end, :number_messages, :number_integrations)
+        INSERT INTO panda_ai_user_subscriptions (subscriber_id, user_id, subscription_id, plan_id, plan_name, subscription_interval, subscription_start, subscription_end, number_messages, number_integrations, subscription_status)
+        VALUES (:subscriber_id, :user_id, :subscription_id, :plan_id, :plan_name, :subscription_interval, :subscription_start, :subscription_end, :number_messages, :number_integrations, :subscription_status)
         ON CONFLICT (subscriber_id)
         DO UPDATE SET 
             subscription_id = excluded.subscription_id,
@@ -215,6 +236,7 @@ async def subscription_updated(request: Request):
             subscription_end = excluded.subscription_end, 
             number_messages = excluded.number_messages, 
             number_integrations = excluded.number_integrations;
+            subscription_status = excluded.subscription_status;
 
     """
 
@@ -235,3 +257,52 @@ async def subscription_updated(request: Request):
         await database.execute(query=query3, values=values3)
 
     return JSONResponse(content={"message": "New subscription added to database"})
+
+async def subscription_deleted(request: Request):
+    try:
+        payload = await request.body()
+        try:
+            sig_header = request.headers["Stripe-Signature"]
+        except KeyError:
+            return JSONResponse(status_code=400, content={"error": "Stripe-Signature header is missing"})
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_SUBSCRIPTION_DELETED_ENDPOINT_SECRET
+        )
+    except ValueError:
+        # Invalid payload
+        return JSONResponse(status_code=400, content={"error": "Invalid payload"})
+    except stripe.error.SignatureVerificationError:
+        # Invalid signature
+        return JSONResponse(status_code=400, content={"error": "Invalid signature"})
+
+    if event["type"] != "customer.subscription.deleted":
+        return {"success": True}
+
+    subscription_deleted = event["data"]["object"]
+
+    if subscription_deleted["object"] != "subscription" or subscription_deleted["status"] != "canceled":
+        return {"success": True}
+
+    subscriber_id = subscription_deleted["customer"]
+    subscription_status = subscription_deleted["status"]
+    plan_id = subscription_deleted["items"]["data"][0]["plan"]["id"]
+
+    values = {
+            "subscriber_id": subscriber_id,
+            "plan_id": plan_id,
+            "subscription_status": subscription_status
+        }
+    
+    query = """
+        UPDATE panda_ai_user_subscriptions SET subscription_status = :subscription_status WHERE subscriber_id = :subscriber_id AND plan_id = :plan_id
+    """
+
+    await database.execute(query=query, values=values)
+
+    query2 = """
+        UPDATE panda_ai_users SET messages_per_month = 0, integrations = 0 WHERE subscriber_id = :subscriber_id
+    """
+
+    await database.execute(query=query2, values={"subscriber_id": subscriber_id})
+
+    return JSONResponse(content={"message": "Subscription cancelled"})

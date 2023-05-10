@@ -39,6 +39,9 @@ async def customer_created_route(request: Request):
     except HTTPException as e:
         logger.error(f"HTTPException in customer_created_route: {e}")
         return JSONResponse(content={"error": e.detail}, status_code=e.status_code)
+    except ValueError as e:
+        logger.error(f"ValueError in customer_created_route: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)  # Return an error status code, e.g., 500
     except Exception as e:
         logger.error(f"Error in customer_created_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
@@ -170,9 +173,24 @@ async def subscription_updated(request: Request):
         number_integrations = 99
     else:
         return JSONResponse(content={"message": "Subscription does not contain expected Plan IDs"})
+    
+    query1 = """
+        SELECT user_id FROM panda_ai_users WHERE subscriber_id = :subscriber_id
+    """
+    result = await database.fetch_one(query=query1, values={"subscriber_id": subscriber_id})
 
-    values = {
+    # If the result is None, the subscriber_id was not found in the table.
+    if result is None:
+        # Handle the error as appropriate for your application.
+        raise ValueError("subscriber_id not found in panda_ai_users table")
+
+    # Extract the user_id from the result.
+    user_id = result["user_id"]
+
+
+    values2 = {
         "subscriber_id": subscriber_id,
+        "user_id": user_id,
         "subscription_id": subscription_id,
         "plan_id": plan_id,
         "plan_name": plan_name,
@@ -183,21 +201,35 @@ async def subscription_updated(request: Request):
         "number_integrations": number_integrations
     }
 
-    query = """
+    query2 = """
         INSERT INTO panda_ai_user_subscriptions (subscriber_id, subscription_id, plan_id, plan_name, subscription_interval, subscription_start, subscription_end, number_messages, number_integrations)
         VALUES (:subscriber_id, :subscription_id, :plan_id, :plan_name, :subscription_interval, :subscription_start, :subscription_end, :number_messages, :number_integrations)
+        ON CONFLICT (subscriber_id)
+        DO UPDATE SET 
+            subscription_id = excluded.subscription_id,
+            user_id = excluded.user_id, 
+            plan_id = excluded.plan_id, 
+            plan_name = excluded.plan_name, 
+            subscription_interval = excluded.subscription_interval, 
+            subscription_start = excluded.subscription_start, 
+            subscription_end = excluded.subscription_end, 
+            number_messages = excluded.number_messages, 
+            number_integrations = excluded.number_integrations;
+
     """
 
-    await database.execute(query=query, values=values)
+    await database.execute(query=query2, values=values2)
 
-    values = {
+    values3 = {
         "subscriber_id": subscriber_id,
         "number_messages": number_messages,
         "number_integrations": number_integrations
     }
 
-    query = """
+    query3 = """
         UPDATE panda_ai_users SET messages_per_month = :number_messages, integrations = :number_integrations WHERE subscriber_id = :subscriber_id
     """
+
+    await database.execute(query=query3, values=values3)
 
     return JSONResponse(content={"message": "New subscription added to database"})

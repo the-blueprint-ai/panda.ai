@@ -13,15 +13,13 @@ export default {
 </script>
 
 <template>
-  <div class="userIntegrations" v-if="integrationsMenu">
+  <div class="d-flex flex-column justify-content-center text-center" v-if="integrationsMenu">
     <h1>COMING SOON...</h1>
+    <p>Add number of integrations</p>
+    <p>Add list of integrations for selection</p>
+    <p>Only allow update once a month</p>
   </div>
 </template>
 
 <style scoped>
-.userIntegrations {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-}
 </style>

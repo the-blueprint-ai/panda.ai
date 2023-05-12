@@ -19,7 +19,6 @@ export default defineComponent({
   created() {
     this.formUserId = this.userId;
     this.formEmail = this.email;
-    console.log("Email: " + this.formEmail);
   },
   computed: {
     ...mapGetters("userStore", {
@@ -342,8 +341,8 @@ export default defineComponent({
         </div> -->
         <div class="mb-4">
           <stripe-pricing-table
-            pricing-table-id="prctbl_1N5a7oDrmPhl15PTgKXzKrPz"
-            publishable-key="pk_test_51N1wGGDrmPhl15PTgoJrIXxyVsodv0QVLOwv3BGhKFYErGjD73u08d6unvyr8kudD3MCJNYd0paqpeHJOJFUc4Yu0088kJEQgy"
+            pricing-table-id="prctbl_1N5aWJDrmPhl15PToGsdMjEU"
+            publishable-key="pk_live_51N1wGGDrmPhl15PTItNKJiYismn8j3Ph21nbhPDUnQMw2vHVLOCal4yxtr0TCrI5aXPOGQFy3UoFzXuUJsDWLbsF0096409MMO"
             :client-reference-id="this.formUserId"
             :customer-email="this.formEmail"
           >

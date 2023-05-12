@@ -296,12 +296,17 @@ export default defineComponent({
 </script>
 
 <template>
-  <main>
+  <main style="height: 71vh">
     <navBar></navBar>
-    <div class="bodyG">
-      <div class="adminPanel">
-        <div class="sidePanel">
-          <h2>ADMIN PANEL</h2>
+    <div class="container-fluid bg-light d-flex text-white">
+      <div
+        class="card mt-4 mb-4 mx-4 text-bg-white text-primary text-center"
+        style="min-width: 250px"
+      >
+        <div class="card-header">
+          <h3 class="text-center pt-2">ADMIN PANEL</h3>
+        </div>
+        <div class="card-body text-start d-flex flex-column pt-4 pb-4 px-4">
           <p
             :class="{
               selected: tab === 'trending',
@@ -395,381 +400,353 @@ export default defineComponent({
             <img src="../assets/icons/database-fill-exclamation.svg" />LOGS
           </p>
         </div>
-        <div class="adminContent">
-          <div v-if="tab === 'trending'" class="trendingAdmin">
-            <div class="usersTopLine">
-              <div class="displayNumber">
-                <h2>Top Entities</h2>
-              </div>
-              <div class="displayNumber">
-                <h2>Top Topics</h2>
-              </div>
-              <div class="displayNumber">
-                <h2>Top 10 chatters</h2>
-              </div>
-              <div class="displayNumber">
-                <h2>Top 10 entity creators</h2>
-              </div>
-              <div class="displayNumber">
-                <h2>Top 10 entity updaters</h2>
-              </div>
+      </div>
+      <div class="adminContent mt-4">
+        <div v-if="tab === 'trending'" class="trendingAdmin">
+          <div class="container-fluid mb-5 d-flex">
+            <div class="card mx-auto" style="width: 200px">
+              <h2>Top Entities</h2>
             </div>
-            <div class="usersTopLine">
-              <div class="displayNumber">
-                <h2>Top Tools</h2>
-              </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h2>Top Topics</h2>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h2>Top 10 chatters</h2>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h2>Top 10 entity creators</h2>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h2>Top 10 entity updaters</h2>
             </div>
           </div>
-          <div v-if="tab === 'users'" class="usersAdmin">
-            <div class="usersTopLine">
-              <div class="displayNumber">
+          <div class="container-fluid mb-5 d-flex">
+            <div class="card mx-auto" style="width: 200px">
+              <h2>Top Tools</h2>
+            </div>
+          </div>
+        </div>
+        <div v-if="tab === 'users'" class="usersAdmin">
+          <div class="container-fluid mb-5 d-flex">
+            <div class="card mx-auto me-3 d-flex flex-fill text-primary text-center" style="height: 300px">
+              <div class="card-body text-center">
+                <BarChart
+                  v-if="this.usersByDay.length > 0"
+                  class="barChartContainer"
+                  :data-by-day="this.usersByDay"
+                  :axis-name="'# New Users'"
+                />
+              </div>
+              <div class="card-footer">
                 <h1 v-text="userStats.totalUsers"></h1>
-                <p># Total Users</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="userStats.dailyUsers"></h1>
-                <p># Daily New Users</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="userStats.weeklyUsers"></h1>
-                <p># Weekly New Users</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="userStats.monthlyUsers"></h1>
-                <p># Monthly New Users</p>
+                <h2>TOTAL USERS</h2>
               </div>
             </div>
-            <div class="usersChart">
-              <BarChart
-                v-if="this.usersByDay.length > 0"
-                :data-by-day="this.usersByDay"
-                :axis-name="'# New Users'"
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="userStats.dailyUsers"></h1>
+              <p># Daily New Users</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="userStats.weeklyUsers"></h1>
+              <p># Weekly New Users</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="userStats.monthlyUsers"></h1>
+              <p># Monthly New Users</p>
+            </div>
+          </div>
+        </div>
+        <div v-if="tab === 'onboarding'" class="onboardingAdmin">
+          <div class="container-fluid mb-5 d-flex">
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="onboardingStats.totalOnboards"></h1>
+              <p># Total Users Onboarded</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="onboardingStats.dailyOnboards"></h1>
+              <p># Daily Onboards</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="onboardingStats.weeklyOnboards"></h1>
+              <p># Weekly Onboards</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="onboardingStats.monthlyOnboards"></h1>
+              <p># Monthly Onboards</p>
+            </div>
+          </div>
+          <div class="usersChart">
+            <BarChart
+              v-if="this.onboardingByDay.length > 0"
+              :data-by-day="this.onboardingByDay"
+              :axis-name="'# New Onboards'"
+            />
+          </div>
+        </div>
+        <div v-if="tab === 'chats'" class="chatsAdmin">
+          <div class="container-fluid mb-5 d-flex">
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="chatStats.totalChats"></h1>
+              <p># Total Chats</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="chatStats.dailyChats"></h1>
+              <p># Daily Chats</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="chatStats.weeklyChats"></h1>
+              <p># Chats This Week</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="chatStats.monthlyChats"></h1>
+              <p># Chats This Month</p>
+            </div>
+          </div>
+          <div class="usersChart">
+            <BarChart
+              v-if="this.chatsByDay.length > 0"
+              :data-by-day="this.chatsByDay"
+            />
+          </div>
+          <div class="usersBottomLine">
+            <div class="card mx-auto" style="width: 200px">
+              <h1>4</h1>
+              <p>Static</p>
+              <p>Average chat length (msgs)</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1>4</h1>
+              <p>Static</p>
+              <p>Average chat length (time)</p>
+            </div>
+          </div>
+        </div>
+        <div v-if="tab === 'entities'" class="entitiesAdmin">
+          <div class="container-fluid mb-5 d-flex">
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.totalEntities"></h1>
+              <p># Total Entities Created</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.dailyEntities"></h1>
+              <p># Daily Entities Created</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.weeklyEntities"></h1>
+              <p># Weekly Entities Created</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.monthlyEntities"></h1>
+              <p># Monthly Entities Created</p>
+            </div>
+          </div>
+          <div class="usersChart">
+            <BarChart
+              v-if="this.entitiesByDay.length > 0"
+              :data-by-day="this.entitiesByDay"
+              :axis-name="'# New Entities'"
+            />
+          </div>
+          <div class="usersBottomLine">
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.totalEntities"></h1>
+              <p># Total Entities Updated</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.dailyEntities"></h1>
+              <p># Daily Entities Updated</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.weeklyEntities"></h1>
+              <p># Weekly Entities Updated</p>
+            </div>
+            <div class="card mx-auto" style="width: 200px">
+              <h1 v-text="entityStats.monthlyEntities"></h1>
+              <p># Monthly Entities Updated</p>
+            </div>
+          </div>
+          <div class="usersChart">
+            <BarChart />
+          </div>
+        </div>
+        <div v-if="tab === 'tools'" class="toolsAdmin">
+          <h2>Tools</h2>
+          <p>Coming soon...</p>
+        </div>
+        <div v-if="tab === 'promptlayer'" class="promptlayerAdmin">
+          <h2>PromptLayer</h2>
+          <p>Coming soon...</p>
+        </div>
+        <div v-if="tab === 'analytics'" class="analyticsAdmin">
+          <h2>panda.ai Site Analytics</h2>
+          <p>Coming soon...</p>
+        </div>
+        <div v-if="tab === 'roadmap'" class="roadmapAdmin">
+          <h2 class="text-center">ADD NEW ROADMAP ITEM</h2>
+          <div
+            class="d-flex mt-5 mb-5 mx-auto align-items-center justify-content-center"
+          >
+            <div class="form-floating me-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="name"
+                v-model="newRoadmapName"
+                @submit.prevent="
+                  saveRoadmapItem(
+                    this.newRoadmapName,
+                    this.newRoadmapDescription
+                  )
+                "
               />
+              <label for="floatingInput">Name</label>
             </div>
-          </div>
-          <div v-if="tab === 'onboarding'" class="onboardingAdmin">
-            <div class="usersTopLine">
-              <div class="displayNumber">
-                <h1 v-text="onboardingStats.totalOnboards"></h1>
-                <p># Total Users Onboarded</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="onboardingStats.dailyOnboards"></h1>
-                <p># Daily Onboards</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="onboardingStats.weeklyOnboards"></h1>
-                <p># Weekly Onboards</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="onboardingStats.monthlyOnboards"></h1>
-                <p># Monthly Onboards</p>
-              </div>
-            </div>
-            <div class="usersChart">
-              <BarChart
-                v-if="this.onboardingByDay.length > 0"
-                :data-by-day="this.onboardingByDay"
-                :axis-name="'# New Onboards'"
+            <div class="form-floating me-3 w-50">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="description"
+                v-model="newRoadmapName"
+                @submit.prevent="
+                  saveRoadmapItem(
+                    this.newRoadmapName,
+                    this.newRoadmapDescription
+                  )
+                "
               />
+              <label for="floatingInput">Description</label>
+            </div>
+            <div class="newRoadmapItemSave">
+              <button
+                class="btn btn-secondary btn-lg ms-4"
+                id="saveRoadmapButton"
+                @click="
+                  saveRoadmapItem(
+                    this.newRoadmapName,
+                    this.newRoadmapDescription
+                  )
+                "
+              >
+                SAVE
+              </button>
             </div>
           </div>
-          <div v-if="tab === 'chats'" class="chatsAdmin">
-            <div class="usersTopLine">
-              <div class="displayNumber">
-                <h1 v-text="chatStats.totalChats"></h1>
-                <p># Total Chats</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="chatStats.dailyChats"></h1>
-                <p># Daily Chats</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="chatStats.weeklyChats"></h1>
-                <p># Chats This Week</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="chatStats.monthlyChats"></h1>
-                <p># Chats This Month</p>
-              </div>
-            </div>
-            <div class="usersChart">
-              <BarChart
-                v-if="this.chatsByDay.length > 0"
-                :data-by-day="this.chatsByDay"
-              />
-            </div>
-            <div class="usersBottomLine">
-              <div class="displayNumber">
-                <h1>4</h1>
-                <p>Static</p>
-                <p>Average chat length (msgs)</p>
-              </div>
-              <div class="displayNumber">
-                <h1>4</h1>
-                <p>Static</p>
-                <p>Average chat length (time)</p>
-              </div>
-            </div>
-          </div>
-          <div v-if="tab === 'entities'" class="entitiesAdmin">
-            <div class="usersTopLine">
-              <div class="displayNumber">
-                <h1 v-text="entityStats.totalEntities"></h1>
-                <p># Total Entities Created</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="entityStats.dailyEntities"></h1>
-                <p># Daily Entities Created</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="entityStats.weeklyEntities"></h1>
-                <p># Weekly Entities Created</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="entityStats.monthlyEntities"></h1>
-                <p># Monthly Entities Created</p>
-              </div>
-            </div>
-            <div class="usersChart">
-              <BarChart
-                v-if="this.entitiesByDay.length > 0"
-                :data-by-day="this.entitiesByDay"
-                :axis-name="'# New Entities'"
-              />
-            </div>
-            <div class="usersBottomLine">
-              <div class="displayNumber">
-                <h1 v-text="entityStats.totalEntities"></h1>
-                <p># Total Entities Updated</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="entityStats.dailyEntities"></h1>
-                <p># Daily Entities Updated</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="entityStats.weeklyEntities"></h1>
-                <p># Weekly Entities Updated</p>
-              </div>
-              <div class="displayNumber">
-                <h1 v-text="entityStats.monthlyEntities"></h1>
-                <p># Monthly Entities Updated</p>
-              </div>
-            </div>
-            <div class="usersChart">
-              <BarChart />
-            </div>
-          </div>
-          <div v-if="tab === 'tools'" class="toolsAdmin">
-            <h2>Tools</h2>
-            <p>Coming soon...</p>
-          </div>
-          <div v-if="tab === 'promptlayer'" class="promptlayerAdmin">
-            <h2>PromptLayer</h2>
-            <p>Coming soon...</p>
-          </div>
-          <div v-if="tab === 'analytics'" class="analyticsAdmin">
-            <h2>panda.ai Site Analytics</h2>
-            <p>Coming soon...</p>
-          </div>
-          <div v-if="tab === 'roadmap'" class="roadmapAdmin">
-            <h2>ADD NEW ROADMAP ITEM</h2>
-            <div class="newRoadmapItem">
-              <div class="newRoadmapName">
-                <p>Name</p>
-                <form
-                  @submit.prevent="
-                    saveRoadmapItem(
-                      this.newRoadmapName,
-                      this.newRoadmapDescription
+          <p v-if="roadmapAdded" class="roadmapSuccess" style="color: green">
+            new roadmap item saved to database
+          </p>
+          <table
+            class="table table-striped table-hover"
+            :key="roadmapData.length"
+          >
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Roadmap ID</th>
+                <th class="text-center" scope="col">Created At</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th class="text-center" scope="col">Tags</th>
+                <th class="text-center" scope="col">Votes</th>
+                <th class="text-center" scope="col">Reviewed</th>
+                <th scope="col">Email</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr v-for="(roadmap, index) in roadmapData" :key="roadmap.id">
+                <td>{{ roadmap.roadmap_id }}</td>
+                <td class="text-center">
+                  {{ formatDateTime(roadmap.created_at) }}
+                </td>
+                <td
+                  contenteditable="true"
+                  @blur="
+                    updateRoadmapData($event, index, 'name', roadmap.roadmap_id)
+                  "
+                  v-text="roadmap.name"
+                ></td>
+                <td
+                  contenteditable="true"
+                  @blur="
+                    updateRoadmapData(
+                      $event,
+                      index,
+                      'description',
+                      roadmap.roadmap_id
                     )
                   "
-                >
-                  <input v-model="newRoadmapName" />
+                  v-text="roadmap.description"
+                ></td>
+                <td
+                  class="text-center"
+                  contenteditable="true"
+                  @blur="
+                    updateRoadmapData($event, index, 'tags', roadmap.roadmap_id)
+                  "
+                  v-text="JSON.parse(roadmap.tags).toString()"
+                ></td>
+                <td
+                  class="text-center"
+                  contenteditable="true"
+                  @blur="
+                    updateRoadmapData(
+                      $event,
+                      index,
+                      'votes',
+                      roadmap.roadmap_id
+                    )
+                  "
+                  v-text="parseInt(roadmap.votes)"
+                ></td>
+                <td
+                  class="text-center"
+                  contenteditable="true"
+                  @blur="
+                    updateRoadmapData(
+                      $event,
+                      index,
+                      'reviewed',
+                      roadmap.roadmap_id
+                    )
+                  "
+                  v-text="roadmap.reviewed"
+                ></td>
+                <td
+                  contenteditable="true"
+                  @blur="
+                    updateRoadmapData(
+                      $event,
+                      index,
+                      'email',
+                      roadmap.roadmap_id
+                    )
+                  "
+                  v-text="roadmap.email"
+                ></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-if="tab === 'faqs'" class="faqsAdmin">
+          <h2 class="text-center">ADD NEW FAQ</h2>
+          <div class="d-flex mb-5 justify-content-center align-items-center">
+            <div class="d-flex">
+              <div class="me-3">
+                <p>Title</p>
+                <form>
+                  <input v-model="newFAQTitle" />
                 </form>
               </div>
-              <div class="newRoadmapDescription">
-                <p>Description</p>
-                <form
-                  @submit.prevent="
-                    saveRoadmapItem(
-                      this.newRoadmapName,
-                      this.newRoadmapDescription
-                    )
-                  "
-                >
-                  <input
-                    v-model="newRoadmapDescription"
-                    @keyup.enter="
-                      saveRoadmapItem(
-                        this.newRoadmapName,
-                        this.newRoadmapDescription
-                      )
-                    "
-                  />
+              <div class="me-3">
+                <p>Question</p>
+                <form>
+                  <input v-model="newFAQQuestion" />
                 </form>
               </div>
-              <div class="newRoadmapItemSave">
-                <button
-                  class="chatButton"
-                  id="saveRoadmapButton"
-                  @click="
-                    saveRoadmapItem(
-                      this.newRoadmapName,
-                      this.newRoadmapDescription
-                    )
-                  "
-                >
-                  SAVE
-                </button>
-              </div>
-            </div>
-            <p v-if="roadmapAdded" class="roadmapSuccess" style="color: green">
-              new roadmap item saved to database
-            </p>
-            <table class="roadmapTable" :key="roadmapData.length">
-              <thead>
-                <tr>
-                  <th>Roadmap ID</th>
-                  <th class="centered">Created At</th>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th class="centered">Tags</th>
-                  <th class="centered">Votes</th>
-                  <th class="centered">Reviewed</th>
-                  <th>Email</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(roadmap, index) in roadmapData" :key="roadmap.id">
-                  <td>{{ roadmap.roadmap_id }}</td>
-                  <td class="centered">
-                    {{ formatDateTime(roadmap.created_at) }}
-                  </td>
-                  <td
-                    contenteditable="true"
-                    @blur="
-                      updateRoadmapData(
-                        $event,
-                        index,
-                        'name',
-                        roadmap.roadmap_id
-                      )
-                    "
-                    v-text="roadmap.name"
-                  ></td>
-                  <td
-                    contenteditable="true"
-                    @blur="
-                      updateRoadmapData(
-                        $event,
-                        index,
-                        'description',
-                        roadmap.roadmap_id
-                      )
-                    "
-                    v-text="roadmap.description"
-                  ></td>
-                  <td
-                    class="centered"
-                    contenteditable="true"
-                    @blur="
-                      updateRoadmapData(
-                        $event,
-                        index,
-                        'tags',
-                        roadmap.roadmap_id
-                      )
-                    "
-                    v-text="JSON.parse(roadmap.tags).toString()"
-                  ></td>
-                  <td
-                    class="centered"
-                    contenteditable="true"
-                    @blur="
-                      updateRoadmapData(
-                        $event,
-                        index,
-                        'votes',
-                        roadmap.roadmap_id
-                      )
-                    "
-                    v-text="parseInt(roadmap.votes)"
-                  ></td>
-                  <td
-                    class="centered"
-                    contenteditable="true"
-                    @blur="
-                      updateRoadmapData(
-                        $event,
-                        index,
-                        'reviewed',
-                        roadmap.roadmap_id
-                      )
-                    "
-                    v-text="roadmap.reviewed"
-                  ></td>
-                  <td
-                    contenteditable="true"
-                    @blur="
-                      updateRoadmapData(
-                        $event,
-                        index,
-                        'email',
-                        roadmap.roadmap_id
-                      )
-                    "
-                    v-text="roadmap.email"
-                  ></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div v-if="tab === 'faqs'" class="faqsAdmin">
-            <h2>ADD NEW FAQ</h2>
-            <div class="newFAQItem">
-              <div class="faqInput">
-                <div class="newFAQTitle">
-                  <p>Title</p>
-                  <form>
-                    <input v-model="newFAQTitle" />
-                  </form>
-                </div>
-                <div class="newFAQQuestion">
-                  <p>Question</p>
-                  <form>
-                    <input v-model="newFAQQuestion" />
-                  </form>
-                </div>
-                <div class="newFAQAnswer">
-                  <p>Answer</p>
-                  <form
-                    @keyup.enter.prevent="
-                      saveFAQItem(
-                        this.newFAQTitle,
-                        this.newFAQQuestion,
-                        this.newFAQAnswer
-                      )
-                    "
-                  >
-                    <input
-                      v-model="newFAQAnswer"
-                      @keyup.enter="
-                        saveFAQItem(
-                          this.newFAQTitle,
-                          this.newFAQQuestion,
-                          this.newFAQAnswer
-                        )
-                      "
-                    />
-                  </form>
-                </div>
-              </div>
-              <div class="newFAQItemSave">
-                <button
-                  class="chatButton"
-                  id="saveFAQButton"
-                  @click="
+              <div class="newFAQAnswer">
+                <p>Answer</p>
+                <form
+                  @keyup.enter.prevent="
                     saveFAQItem(
                       this.newFAQTitle,
                       this.newFAQQuestion,
@@ -777,71 +754,105 @@ export default defineComponent({
                     )
                   "
                 >
-                  SAVE
-                </button>
+                  <input
+                    v-model="newFAQAnswer"
+                    @keyup.enter="
+                      saveFAQItem(
+                        this.newFAQTitle,
+                        this.newFAQQuestion,
+                        this.newFAQAnswer
+                      )
+                    "
+                  />
+                </form>
               </div>
             </div>
-            <p v-if="faqAdded" class="faqSuccess" style="color: green">
-              new faq saved to database
-            </p>
-            <div class="faqTableContainer">
-              <table class="faqTable">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Question</th>
-                    <th>Answer</th>
-                    <th class="centered">Visible</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(faq, index) in faqsData" :key="index">
-                    <td
-                      contenteditable="true"
-                      v-text="faq.title"
-                      @blur="
-                        updateFAQField('title', index, $event.target.innerText)
-                      "
-                    ></td>
-                    <td
-                      contenteditable="true"
-                      v-text="faq.question"
-                      @blur="
-                        updateFAQField(
-                          'question',
-                          index,
-                          $event.target.innerText
-                        )
-                      "
-                    ></td>
-                    <td
-                      contenteditable="true"
-                      v-text="faq.answer"
-                      @blur="
-                        updateFAQField('answer', index, $event.target.innerText)
-                      "
-                    ></td>
-                    <td class="checkBox">
-                      <input
-                        type="checkbox"
-                        v-model="faq.visible"
-                        @change="
-                          updateFAQField('visible', index, faq.visible, $event)
-                        "
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="newFAQItemSave">
+              <button
+                class="btn btn-secondary btn-lg ms-4 mt-5"
+                id="saveFAQButton"
+                @click="
+                  saveFAQItem(
+                    this.newFAQTitle,
+                    this.newFAQQuestion,
+                    this.newFAQAnswer
+                  )
+                "
+              >
+                SAVE
+              </button>
             </div>
           </div>
-          <div v-if="tab === 'logs'" class="logsAdmin">
-            <h2>Server Logs</h2>
-            <p>Coming soon...</p>
+          <p v-if="faqAdded" class="faqSuccess" style="color: green">
+            new faq saved to database
+          </p>
+          <div class="faqTableContainer">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Title</th>
+                  <th>Question</th>
+                  <th>Answer</th>
+                  <th class="centered">Visible</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(faq, index) in faqsData" :key="index">
+                  <td
+                    contenteditable="true"
+                    v-text="faq.title"
+                    @blur="
+                      updateFAQField('title', index, $event.target.innerText)
+                    "
+                  ></td>
+                  <td
+                    contenteditable="true"
+                    v-text="faq.question"
+                    @blur="
+                      updateFAQField('question', index, $event.target.innerText)
+                    "
+                  ></td>
+                  <td
+                    contenteditable="true"
+                    v-text="faq.answer"
+                    @blur="
+                      updateFAQField('answer', index, $event.target.innerText)
+                    "
+                  ></td>
+                  <td class="checkBox">
+                    <input
+                      type="checkbox"
+                      v-model="faq.visible"
+                      @change="
+                        updateFAQField('visible', index, faq.visible, $event)
+                      "
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+        </div>
+        <div v-if="tab === 'logs'" class="logsAdmin">
+          <h2>Server Logs</h2>
+          <p>Coming soon...</p>
         </div>
       </div>
     </div>
     <navFooter></navFooter>
   </main>
 </template>
+
+<style scoped>
+p {
+  margin-top: 20px;
+  display: flex;
+}
+p img {
+  width: 20px;
+  margin-right: 10px;
+}
+p:hover {
+  cursor: pointer;
+}
+</style>

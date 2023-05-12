@@ -235,7 +235,7 @@ async def subscription_updated(request: Request):
             subscription_start = excluded.subscription_start, 
             subscription_end = excluded.subscription_end, 
             number_messages = excluded.number_messages, 
-            number_integrations = excluded.number_integrations;
+            number_integrations = excluded.number_integrations,
             subscription_status = excluded.subscription_status;
 
     """

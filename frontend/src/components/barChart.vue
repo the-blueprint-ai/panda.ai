@@ -36,9 +36,11 @@ export default {
         datasets: [
           {
             label: "Test Data",
+            barThickness: 10,
             backgroundColor: "#FFCB4C",
             hoverBackgroundColor: "#FFFFFF",
-            // borderColor: "#FFFFFF",
+            borderColor: "#FFCB4C",
+            borderRadius: 20,
             hoverBorderColor: "#000000",
             borderWidth: 1,
             data: [],
@@ -60,7 +62,7 @@ export default {
           },
           y: {
             title: {
-              display: true,
+              display: false,
               text: "",
               padding: 16,
               font: {

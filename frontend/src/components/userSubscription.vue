@@ -11,7 +11,7 @@ export default {
   created() {},
   computed: {
     updateSubscriptionLink() {
-      return `https://checkout.mypanda.ai/p/login/test_9AQ3fx2R86MFaqY3cc?prefilled_email=${this.email}`;
+      return `https://checkout.mypanda.ai/p/login/bIY5mGaBeatmdFucMM?prefilled_email=${this.email}`;
     },
   },
   components: {},

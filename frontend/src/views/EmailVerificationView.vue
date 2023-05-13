@@ -5,6 +5,7 @@ import { mapActions, mapGetters } from "vuex";
 import { verifyEmail } from "supertokens-web-js/recipe/emailverification";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -24,27 +25,25 @@ export default defineComponent({
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     async consumeVerificationCode() {
+      const toast = useToast();
       try {
         let response = await verifyEmail();
         if (response.status === "EMAIL_VERIFICATION_INVALID_TOKEN_ERROR") {
           // This can happen if the verification code is expired or invalid.
           // You should ask the user to retry
-          window.alert(
-            "Oops! Seems like the verification link expired. Please try again"
-          );
+          toast.error("Oops! Seems like the verification link expired. Please try again later.");
           this.$router.push("/auth/email"); // back to the email sending screen.
-          // window.location.assign("/auth/email"); // back to the email sending screen.
         } else {
           // email was verified successfully.
+          toast.success("Email verified successfully!");
           this.$router.push(this.userId + "/onboarding");
-          // window.location.href = this.userId + "/onboarding";
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
-          window.alert(err.message);
+          toast.error(err.message);
         } else {
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Seems like the verification link expired. Please try again later.");
         }
       }
     },

@@ -8,6 +8,7 @@ import { emailVerification } from "../composables/emailVerification.js";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -42,11 +43,13 @@ export default defineComponent({
       }, 400);
     },
     password() {
+      const toast = useToast();
       if (this.isPasswordValid == true) {
         this.passwordOk = "ok";
         this.badPasswordError = "";
       } else {
         this.passwordOk = "no";
+        toast.warning("Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.");
         this.badPasswordError =
           "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.";
       }
@@ -75,6 +78,7 @@ export default defineComponent({
       return regex.test(password);
     },
     signUpClicked: async function (store, email, password) {
+      const toast = useToast();
       this.formSubmitted = true;
       this.loading = true;
 
@@ -105,17 +109,18 @@ export default defineComponent({
               // Email validation failed (for example incorrect email syntax),
               // or the email is not unique.
               this.loading = false;
-              window.alert(formField.error);
+              toast.error(formField.error);
             } else if (formField.id === "password") {
               // Password validation failed.
               // Maybe it didn't match the password strength
               this.loading = false;
-              window.alert(formField.error);
+              toast.error(formField.error);
             }
           });
         } else {
           // sign up successful. The session tokens are automatically handled by
           // the frontend SDK.
+          toast.success("Sign up successful!");
           store.commit("userStore/setStoreEmail", email);
           this.emailVerification();
         }
@@ -123,14 +128,15 @@ export default defineComponent({
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
           this.loading = false;
-          window.alert(err.message);
+          toast.error(err.message);
         } else {
           this.loading = false;
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Something went wrong. Please try again later.");
         }
       }
     },
     checkEmail: async function (email) {
+      const toast = useToast();
       try {
         let response = await doesEmailExist({
           email,
@@ -138,6 +144,7 @@ export default defineComponent({
 
         if (response.doesExist) {
           this.emailChecking = false;
+          toast.warning("Email already in use. Please sign in instead");
           this.emailExistsError =
             "Email already in use. Please sign in instead";
           this.emailOk = "no";
@@ -155,12 +162,12 @@ export default defineComponent({
           }, 3000);
         }
       } catch (err) {
-        console.error(err); // log the error to the console
+        toast.error(err);
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
-          window.alert(err.message);
+          toast.error(err.message);
         } else {
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Something went wrong. Please try again later.");
         }
       }
     },

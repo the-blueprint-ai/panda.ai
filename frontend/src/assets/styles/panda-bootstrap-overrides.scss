@@ -7,8 +7,21 @@ $light: #EFEFEF;
 $link-color: #FFCB4C;
 $form-check-input-checked-bg-color: #FFCB4C;
 $form-check-input-checked-border-color: #CC9A00;
+$vt-color-default: #000000;
+$vt-text-color-default: #FFFFFF;
+$vt-color-info: #FFCB4C;
+$vt-text-color-info: #000000;
+$vt-color-warning: #FFCB4C;
+$vt-text-color-warning: #000000;
 
 @import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/vue-toastification/src/scss/_variables";
+@import "node_modules/vue-toastification/src/scss/_toastContainer";
+@import "node_modules/vue-toastification/src/scss/_toast";
+@import "node_modules/vue-toastification/src/scss/_closeButton";
+@import "node_modules/vue-toastification/src/scss/_progressBar";
+@import "node_modules/vue-toastification/src/scss/_icon";
+@import "node_modules/vue-toastification/src/scss/animations/_bounce";
 
 // Bootstrap Overrides
 @font-face {

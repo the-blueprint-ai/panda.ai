@@ -4,7 +4,7 @@ import router from "./router";
 import store from "./store";
 import VueGtag from "vue-gtag";
 import SuperTokens from "supertokens-web-js";
-// import "@/assets/styles/panda-global.scss";
+import Toast, { POSITION } from "vue-toastification";
 import "../node_modules/bootstrap/scss/bootstrap.scss";
 import "@/assets/styles/panda-bootstrap-overrides.scss";
 import { SuperTokensWebJSConfig } from "./config";
@@ -25,6 +25,18 @@ axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 app.use(router);
 app.use(store);
+app.use(Toast, {
+  transition: "Vue-Toastification__bounce",
+  position: POSITION.TOP_RIGHT,
+  timeout: 5000,
+  maxToasts: 20,
+  newestOnTop: true,
+  showCloseButtonOnHover: true,
+  draggable: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  closeOnClick: true,
+});
 app.use(
   VueGtag,
   {

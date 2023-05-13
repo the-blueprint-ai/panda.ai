@@ -5,6 +5,7 @@ import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getRoadmap } from "../composables/getRoadmap.js";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -54,6 +55,7 @@ export default defineComponent({
       this.displayBuiltItemsCount = 6;
     },
     async addIdea(idea) {
+      const toast = useToast();
       try {
         const url =
           import.meta.env.VITE_APP_API_URL + "/roadmap/add-idea?idea=" + idea;
@@ -66,13 +68,14 @@ export default defineComponent({
         this.roadmapSuggestion = "";
 
         if (!res.ok) {
-          throw new Error(`Server responded with status ${res.status}`);
+          toast.error(`Server responded with status ${res.status}`);
         }
       } catch (error) {
-        console.log("An error occurred while upvoting the item:", error);
+        toast.error("An error occurred while upvoting the item:", error);
       }
     },
     async addEmail(id, email) {
+      const toast = useToast();
       try {
         const url =
           import.meta.env.VITE_APP_API_URL +
@@ -87,13 +90,14 @@ export default defineComponent({
         this.email = "";
 
         if (!res.ok) {
-          throw new Error(`Server responded with status ${res.status}`);
+          toast.error(`Server responded with status ${res.status}`);
         }
       } catch (error) {
-        console.log("An error occurred while upvoting the item:", error);
+        toast.error("An error occurred while upvoting the item:", error);
       }
     },
     async upvoteItem(item) {
+      const toast = useToast();
       try {
         const url =
           import.meta.env.VITE_APP_API_URL +
@@ -104,7 +108,7 @@ export default defineComponent({
         });
 
         if (!res.ok) {
-          throw new Error(`Server responded with status ${res.status}`);
+          toast.error(`Server responded with status ${res.status}`);
         }
 
         const updatedItem = await res.json();
@@ -113,7 +117,7 @@ export default defineComponent({
         );
         this.roadmapData.splice(index, 1, updatedItem);
       } catch (error) {
-        console.log("An error occurred while upvoting the item:", error);
+        toast.error("An error occurred while upvoting the item:", error);
       }
     },
   },

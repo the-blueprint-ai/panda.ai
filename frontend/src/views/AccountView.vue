@@ -7,12 +7,15 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getUserChatHistory } from "../composables/getUserChatHistory.js";
+import { getIntegrations } from "../composables/getIntegrations.js";
+import { getIntegrationsList } from "../composables/getIntegrationsList.js";
 import AccountUserChatHistory from "../components/accountUserChatHistory.vue";
 import UserIntegrations from "../components/userIntegrations.vue";
 import UserSubscription from "../components/userSubscription.vue";
 import UserData from "../components/userData.vue";
 import UserSettings from "../components/userSettings.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -80,6 +83,10 @@ export default defineComponent({
     }
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
+    const { integrations } = getIntegrations(this.$store, this.userId);
+    integrations(this.userId);
+    const { integrationsList } = getIntegrationsList(this.$store, this.userId);
+    integrationsList(this.userId);
   },
   computed: {
     ...mapGetters("userStore", {
@@ -102,6 +109,7 @@ export default defineComponent({
       subscriberID: "getStoreSubscriberID",
       planID: "getStorePlanID",
       userStoreChatHistory: "getStoreUserChatHistory",
+      currentIntegrations: "getStoreCurrentIntegrations",
     }),
     isEmailValid() {
       return this.validateEmail(this.new_email);
@@ -127,6 +135,7 @@ export default defineComponent({
         });
 
         if (response.doesExist) {
+          toast.warning("Email already registered. Please choose another one instead.");
           this.emailExistsError =
             "Email already registered. Please choose another one instead.";
           setTimeout(() => {
@@ -135,12 +144,12 @@ export default defineComponent({
           }, 3600);
         }
       } catch (err) {
-        console.error(err); // log the error to the console
+        toast.error(err);
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
-          window.alert(err.message);
+          toast.error(`Server responded with status ${err.message}`);
         } else {
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Something went wrong. Please try again.");
         }
       }
     },
@@ -149,6 +158,7 @@ export default defineComponent({
         let response = await doesUsernameExist(username);
 
         if (response) {
+          toast.warning("Username already registered. Please choose another one instead.");
           this.usernameExistsError =
             "Username already registered. Please choose another one instead.";
           setTimeout(() => {
@@ -157,12 +167,12 @@ export default defineComponent({
           }, 3600);
         }
       } catch (err) {
-        console.error(err); // log the error to the console
+        toast.error(err);
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
-          window.alert(err.message);
+          toast.error(`Server responded with status ${err.message}`);
         } else {
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Something went wrong. Please try again.");
         }
       }
     },
@@ -183,6 +193,7 @@ export default defineComponent({
       this.$refs.avatarInput.click();
     },
     async handleBannerUpload(event) {
+      const toast = useToast();
       const file = event.target.files[0];
       this.formData = new FormData();
       let reader = new FileReader();
@@ -216,8 +227,8 @@ export default defineComponent({
           // Check if the response status indicates an error
           if (!res.ok) {
             const errorResponse = await res.json();
-            console.error("Server error response:", errorResponse);
-            throw new Error(`Server responded with status ${res.status}`);
+            toast.error("Server error response:", errorResponse);
+            toast.error(`Server responded with status ${res.status}`);
           }
 
           // Parse the JSON response
@@ -225,9 +236,10 @@ export default defineComponent({
           const updatedBannerUrl =
             jsonResponse.url + "?t=" + new Date().getTime();
           this.$store.commit("userStore/setStoreBanner", updatedBannerUrl);
+          toast.success("Banner updated successfully!");
         } catch (error) {
           // Handle the error
-          console.error("An error occurred while saving the file:", error);
+          toast.error("An error occurred while saving the file:", error);
         }
       };
     },
@@ -311,6 +323,7 @@ export default defineComponent({
       return new Blob([new Uint8Array(array)], { type: "image/png" });
     },
     async handleAvatarUpload(event) {
+      const toast = useToast();
       const file = event.target.files[0];
       this.formData = new FormData();
       let reader = new FileReader();
@@ -337,8 +350,8 @@ export default defineComponent({
             // Check if the response status indicates an error
             if (!res.ok) {
               const errorResponse = await res.json();
-              console.error("Server error response:", errorResponse);
-              throw new Error(`Server responded with status ${res.status}`);
+              toast.error("Server error response:", errorResponse);
+              toast.error(`Server responded with status ${res.status}`);
             }
 
             // Parse the JSON response
@@ -346,15 +359,17 @@ export default defineComponent({
             const updatedAvatarUrl =
               jsonResponse.url + "?t=" + new Date().getTime();
             this.$store.commit("userStore/setStoreAvatar", updatedAvatarUrl);
+            toast.success("Avatar updated successfully!");
           } catch (error) {
             // Handle the error
-            console.error("An error occurred while saving the file:", error);
+            toast.error("An error occurred while saving the file:", error);
           }
         };
       };
     },
     async updateUserData() {
       this.loading = true;
+      const toast = useToast();
 
       if (this.new_first_name !== "") {
         this.$store.commit("userStore/setStoreFirstName", this.new_first_name);
@@ -388,11 +403,12 @@ export default defineComponent({
         // Check if the response status indicates an error
         if (!res.ok) {
           const errorResponse = await res.json();
-          console.error("Server error response:", errorResponse);
-          throw new Error(`Server responded with status ${res.status}`);
+          toast.error("Server error response:", errorResponse);
+          toast.error(`Server responded with status ${res.status}`);
         } else {
           this.loading = false;
           this.saveDetailsButtonText = "SAVED!";
+          toast.success("Details updated!");
           setTimeout(() => {
             this.saveDetailsButtonText = "SAVE DETAILS";
             this.detailsUpdated = true;
@@ -400,7 +416,7 @@ export default defineComponent({
         }
       } catch (error) {
         // Handle the error
-        console.error("An error occurred while saving the file:", error);
+        toast.error("An error occurred while saving the file:", error);
       }
     },
     closeModal() {
@@ -606,7 +622,7 @@ export default defineComponent({
                           aria-label="Close"
                         ></button>
                       </div>
-                      <p class="text-start mt-n1 mb-0">userID: {{ this.userId }}</p>
+                      <p class="text-start mt-n1 mb-0" style="font-size:12px">{{ this.userId }}</p>
                     </div>
                     <div class="modal-body text-center">
                       <h1>🐼</h1>
@@ -806,7 +822,6 @@ export default defineComponent({
                 :subscription-menu="subscriptionMenu"
                 :data-menu="dataMenu"
                 :settings-menu="settingsMenu"
-                :integrations="integrations"
               ></UserIntegrations>
               <UserSubscription
                 :history-menu="historyMenu"

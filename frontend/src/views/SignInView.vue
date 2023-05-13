@@ -6,6 +6,7 @@ import { mapActions } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -19,6 +20,7 @@ export default defineComponent({
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     signInClicked: async function (email, password) {
+      const toast = useToast();
       this.loading = true;
       try {
         let response = await emailPasswordSignIn({
@@ -39,12 +41,12 @@ export default defineComponent({
             if (formField.id === "email") {
               this.loading = false;
               // Email validation failed (for example incorrect email syntax).
-              window.alert(formField.error);
+              toast.error(formField.error);
             }
           });
         } else if (response.status === "WRONG_CREDENTIALS_ERROR") {
           this.loading = false;
-          window.alert("Email password combination is incorrect.");
+          toast.error("Email password combination is incorrect.");
         } else {
           await this.getSession;
           let userId = await Session.getUserId();
@@ -57,10 +59,10 @@ export default defineComponent({
         if (err.isSuperTokensGeneralError === true) {
           this.loading = false;
           // this may be a custom error message sent from the API by you.
-          window.alert(err.message);
+          toast.error(err.message);
         } else {
           this.loading = false;
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Something went wrong. Please try again later");
         }
       }
     },

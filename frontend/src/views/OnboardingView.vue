@@ -12,6 +12,7 @@ import { streetPanda } from "../data/chat/streetPanda.js";
 import { pandaWeather } from "../data/chat/pandaWeather.js";
 import { saveUserData } from "../composables/saveUserData.js";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -140,6 +141,7 @@ export default defineComponent({
       return chat[Math.floor(Math.random() * chat.length)];
     },
     async finishOnboarding(userId) {
+      const toast = useToast();
       try {
         const url =
           import.meta.env.VITE_APP_API_URL +
@@ -153,10 +155,9 @@ export default defineComponent({
         });
 
         const data = await response.json();
-        console.log(data.message);
         this.$router.push("/pricing");
       } catch (error) {
-        console.error(error);
+        toast.error(error);
       }
     },
     startMessage() {

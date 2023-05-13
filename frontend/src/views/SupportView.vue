@@ -9,6 +9,7 @@ import SpinnerComponent from "../components/spinnerComponent.vue";
 import { sendEmail } from "../composables/sendEmail.js";
 import support_request_html from "../assets/emails/supportRequestEmail.js";
 import support_send_html from "../assets/emails/supportSendEmail.js";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -67,6 +68,7 @@ export default defineComponent({
   },
   methods: {
     async sendSupportEmails(to_email, message) {
+      const toast = useToast();
       this.loading = true;
       const support_message = support_send_html(this.confirmedEmail, message);
       try {
@@ -82,10 +84,11 @@ export default defineComponent({
           "Website support request",
           support_message
         );
+        toast.success("Email sent!");
         this.loading = false;
         this.buttonText = "SENT!";
       } catch (error) {
-        console.error("An error occurred while sending the emails:", error);
+        toast.sucerrorcess("An error occurred while sending the emails:", error);
         this.failedSend = true;
         setTimeout(() => (this.failedSend = false), 2000);
       } finally {

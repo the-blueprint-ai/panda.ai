@@ -23,6 +23,7 @@ const userStore = {
     planID: "",
     userChatHistory: [],
     entities: [],
+    currentIntegrations: [],
   },
   mutations: {
     setStoreSession(state, value) {
@@ -89,6 +90,9 @@ const userStore = {
     setStoreEntities(state, value) {
       state.entities.push(value);
     },
+    setStoreCurrentIntegrations(state, value) {
+      state.currentIntegrations = value;
+    },
   },
   getters: {
     getStoreSession(state) {
@@ -150,6 +154,9 @@ const userStore = {
     },
     getStoreEntities(state) {
       return state.entities;
+    },
+    getStoreCurrentIntegrations(state) {
+      return state.currentIntegrations;
     },
   },
   actions: {

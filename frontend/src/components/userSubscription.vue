@@ -79,7 +79,6 @@ export default {
       } else if (this.planID == "price_1N5akRDrmPhl15PTAek44nms") {
         this.planPrice = "$14.99 per month";
       } else {
-        console.log(`Unknown planID: ${this.planID}`);
         this.planPrice = "£N/A";
       }
     },

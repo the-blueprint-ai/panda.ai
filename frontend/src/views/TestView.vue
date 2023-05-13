@@ -2,6 +2,7 @@
 import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -23,30 +24,12 @@ export default defineComponent({
       modal: null,
     };
   },
-  props: {
-    modalId: {
-      type: String,
-      required: true,
-    },
-  },
   mounted() {
     this.typeSentence();
-    this.isMobile = window.innerWidth <= 768;
-    window.addEventListener("resize", () => {
-      this.isMobile = window.innerWidth <= 768;
-    });
-    const bootstrapModal = new bootstrap.Modal(
-      document.getElementById(this.modalId)
-    );
-    this.modal = bootstrapModal;
+    const toast = useToast();
+    toast.warning("I'm a toast!");
   },
   methods: {
-    closeModal() {
-      this.modal.hide();
-    },
-    openModal() {
-      this.modal.show();
-    },
     getCurrentText(index) {
       if (index < this.currentIndex) {
         return this.sentences[index];
@@ -117,24 +100,6 @@ export default defineComponent({
             <span v-html="getCurrentText(index)"></span>
           </p>
         </div>
-        <ul class="navbar-nav">
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Dropdown
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-        </ul>
       </div>
       <h2 class="cursor text-center">TESTING</h2>
     </div>
@@ -161,7 +126,7 @@ export default defineComponent({
   content: "";
   width: 15px;
   height: 25px;
-  background: #FFCB4C;
+  background: #ffcb4c;
   display: inline-block;
   opacity: 100%;
   animation: cursor-blink 1.5s steps(2, jump-none) infinite;

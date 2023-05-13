@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data: () => {
@@ -41,6 +42,7 @@ export default defineComponent({
       setCharIndexValue: "setCharIndex",
     }),
     async initHomePage() {
+      const toast = useToast();
       this.setCharIndexValue(0);
       this.setTypeValueValue("");
       setTimeout(this.typeText, this.newTextDelay + 200);
@@ -50,7 +52,7 @@ export default defineComponent({
           await this.getUserInfo();
         }
       } catch (error) {
-        console.error("Error in initHomePage:", error);
+        toast.warning("Error initialising Homepage:", error);
       }
     },
     typeText() {

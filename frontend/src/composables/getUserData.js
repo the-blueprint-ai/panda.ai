@@ -54,6 +54,18 @@ export function getUserData(store, userId) {
       if (response.admin) {
         store.commit("userStore/setStoreAdmin", response.admin);
       }
+      if (response.subscribed_at) {
+        store.commit("userStore/setStoreSubscribed", response.subscribed_at);
+      }
+      if (response.integrations) {
+        store.commit("userStore/setStoreIntegrations", response.integrations);
+      }
+      if (response.messages_per_month) {
+        store.commit("userStore/setStoreMessagesPerMonth", response.messages_per_month);
+      }
+      if (response.subscriber_id) {
+        store.commit("userStore/setStoreSubscriberID", response.subscriber_id);
+      }
       if (response.created_at) {
         var dt = DateTime.fromISO(response.created_at);
         store.commit("userStore/setStoreJoined", dt.toLocaleString(DateTime.DATE_FULL));

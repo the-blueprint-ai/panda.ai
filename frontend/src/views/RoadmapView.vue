@@ -40,7 +40,7 @@ export default defineComponent({
       return this.roadmapData.filter((item) => !item.tags.includes("built"));
     },
     sortedNotBuiltItems() {
-      return [...this.notBuiltItems].sort((a, b) => b.votes - a.votes);
+      return [...this.notBuiltItems].sort((a, b) => a.name.localeCompare(b.name));
     },
   },
   methods: {
@@ -109,9 +109,9 @@ export default defineComponent({
 
         const updatedItem = await res.json();
         const index = this.roadmapData.findIndex(
-          (i) => i.id === updatedItem.id
+          (i) => i.roadmap_id === updatedItem.roadmap_id
         );
-        this.roadmapData[index] = updatedItem;
+        this.roadmapData.splice(index, 1, updatedItem);
       } catch (error) {
         console.log("An error occurred while upvoting the item:", error);
       }

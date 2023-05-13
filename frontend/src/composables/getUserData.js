@@ -66,6 +66,9 @@ export function getUserData(store, userId) {
       if (response.subscriber_id) {
         store.commit("userStore/setStoreSubscriberID", response.subscriber_id);
       }
+      if (response.plan_id) {
+        store.commit("userStore/setStorePlanID", response.plan_id);
+      }
       if (response.created_at) {
         var dt = DateTime.fromISO(response.created_at);
         store.commit("userStore/setStoreJoined", dt.toLocaleString(DateTime.DATE_FULL));

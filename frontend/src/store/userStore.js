@@ -19,7 +19,8 @@ const userStore = {
     subscribed: "",
     integrations: 0,
     messagesPerMonth: 0,
-    subscriberId: "",
+    subscriberID: "",
+    planID: "",
     userChatHistory: [],
     entities: [],
   },
@@ -73,7 +74,10 @@ const userStore = {
       state.messagesPerMonth = value;
     },
     setStoreSubscriberID(state, value) {
-      state.subscriberId = value;
+      state.subscriberID = value;
+    },
+    setStorePlanID(state, value) {
+      state.planID = value;
     },
     setStoreUserChatHistory(state, value) {
       state.userChatHistory.push(value);
@@ -137,6 +141,9 @@ const userStore = {
     },
     getStoreSubscriberID(state) {
       return state.subscriberId;
+    },
+    getStorePlanID(state) {
+      return state.planID;
     },
     getStoreUserChatHistory(state) {
       return state.userChatHistory;

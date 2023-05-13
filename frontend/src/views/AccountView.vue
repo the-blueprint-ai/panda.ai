@@ -75,7 +75,9 @@ export default defineComponent({
     },
   },
   async mounted() {
-    await this.getUserInfo();
+    if (!this.userId) {
+      await this.getUserInfo();
+    }
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
   },
@@ -98,6 +100,7 @@ export default defineComponent({
       integrations: "getStoreIntegrations",
       messagesPerMonth: "getStoreMessagesPerMonth",
       subscriberID: "getStoreSubscriberID",
+      planID: "getStorePlanID",
       userStoreChatHistory: "getStoreUserChatHistory",
     }),
     isEmailValid() {
@@ -816,6 +819,7 @@ export default defineComponent({
                 :subscribed="subscribed"
                 :integrations="integrations"
                 :messages-per-month="messagesPerMonth"
+                :planID="planID"
               ></UserSubscription>
               <UserData
                 :history-menu="historyMenu"

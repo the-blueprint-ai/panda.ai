@@ -1,6 +1,5 @@
 <script>
 import { deleteUser } from "../composables/deleteUser.js";
-import LoadingOverlay from "../components/loadingOverlay.vue";
 
 export default {
   data() {
@@ -93,30 +92,33 @@ export default {
       }
     },
   },
-  components: {
-    LoadingOverlay,
-  },
+  components: {},
 };
 </script>
 
 <template>
-  <div class="userSettings text-center" v-if="settingsMenu">
-    <LoadingOverlay
-      v-if="this.loading"
-      :loading="this.loading"
-      :spinner-size="80"
-    ></LoadingOverlay>
-    <h1>🐼</h1>
-    <h2>CHANGE PASSWORD</h2>
-    <p>To change your 🐼 panda.ai password please click the button below:</p>
-    <button
-      type="button"
-      class="btn btn-secondary btn-lg mt-1 mb-5"
-      data-bs-toggle="modal"
-      data-bs-target="#passwordModal"
-    >
-      CHANGE PASSWORD
-    </button>
+  <div class="userSettings d-flex flex-row flex-wrap justify-content-around text-center" v-if="settingsMenu">
+    <div class="card mt-4 mx-auto">
+      <div class="card-header">
+        <h1>🐼</h1>
+        <h2>CHANGE PASSWORD</h2>
+      </div>
+      <div class="card-body">
+        <p>
+          To change your 🐼 panda.ai password please click the button below.
+        </p>
+      </div>
+      <div class="card-footer">
+        <button
+          type="button"
+          class="btn btn-secondary btn-lg mt-2 mb-2"
+          data-bs-toggle="modal"
+          data-bs-target="#passwordModal"
+        >
+          CHANGE PASSWORD
+        </button>
+      </div>
+    </div>
     <div
       class="modal fade"
       id="passwordModal"
@@ -216,18 +218,25 @@ export default {
         </div>
       </div>
     </div>
-    <span class="spacer"></span>
-    <h2>DELETE ACCOUNT</h2>
-    <p>To delete your 🐼 panda.ai account please click the button below:</p>
-    <button
-      type="button"
-      class="btn btn-secondary btn-lg mt-1"
-      data-bs-toggle="modal"
-      data-bs-target="#deleteModal"
-    >
-      DELETE ACCOUNT
-    </button>
-
+    <div class="card mt-4 mx-auto">
+      <div class="card-header">
+        <h1>🐼</h1>
+        <h2>DELETE ACCOUNT</h2>
+      </div>
+      <div class="card-body">
+        <p>To delete your 🐼 panda.ai account please click the button below.</p>
+      </div>
+      <div class="card-footer">
+        <button
+          type="button"
+          class="btn btn-secondary btn-lg mt-2 mb-2"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteModal"
+        >
+          DELETE ACCOUNT
+        </button>
+      </div>
+    </div>
     <div
       class="modal fade"
       id="deleteModal"

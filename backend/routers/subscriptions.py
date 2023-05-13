@@ -247,11 +247,12 @@ async def subscription_updated(request: Request):
         values3 = {
             "subscriber_id": subscriber_id,
             "number_messages": number_messages,
-            "number_integrations": number_integrations
+            "number_integrations": number_integrations,
+            "plan_id": plan_id
         }
 
         query3 = """
-            UPDATE panda_ai_users SET messages_per_month = :number_messages, integrations = :number_integrations WHERE subscriber_id = :subscriber_id
+            UPDATE panda_ai_users SET messages_per_month = :number_messages, integrations = :number_integrations, plan_id = :plan_id WHERE subscriber_id = :subscriber_id
         """
 
         await database.execute(query=query3, values=values3)

@@ -24,17 +24,19 @@ export default {
     },
   },
   async mounted() {
-    try {
-      await this.getSession();
-      if (this.session) {
-        await this.getUserInfo();
+    if (!this.userId) {
+      try {
+        await this.getSession();
+        if (this.session) {
+          await this.getUserInfo();
+        }
+        if (this.userId) {
+          const { userData } = getUserData(this.$store, this.userId);
+          userData(this.userId);
+        }
+      } catch (error) {
+        console.error("Error getting session/userData:", error);
       }
-      if (this.userId) {
-        const { userData } = getUserData(this.$store, this.userId);
-        userData(this.userId);
-      }
-    } catch (error) {
-      console.error("Error getting session/userData:", error);
     }
   },
 

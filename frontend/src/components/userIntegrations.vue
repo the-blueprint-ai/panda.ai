@@ -133,12 +133,11 @@ export default {
       </p>
       <div class="card-footer text-center">
         <button
-          class="btn btn-secondary mt-3 mb-3"
+          class="btn btn-secondary btn-lg mt-3 mb-3"
           @click="saveIntegrations"
           :disabled="!canUpdate"
-          style="width: 150px"
         >
-          Save
+          SAVE INTEGRATIONS
         </button>
         <p class="lh-0 text-danger" v-if="!canUpdate">
           You can only update your integrations once a month.

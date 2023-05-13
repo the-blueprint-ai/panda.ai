@@ -27,8 +27,9 @@ export default defineComponent({
   },
   watch: {},
   async mounted() {
-    await this.getSession();
-    await this.getUserInfo();
+    if (!this.userId) {
+      await this.getUserInfo();
+    }
     const { userData } = getUserData(this.$store, this.userId);
     userData(this.userId);
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);

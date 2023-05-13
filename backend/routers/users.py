@@ -151,7 +151,7 @@ async def set_onboarded_route(userId: str, session: SessionContainer = Depends(v
 
 # FUNCTIONS
 async def get_user_data(user_id: str):
-    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin, subscribed_at, integrations, messages_per_month, subscriber_id FROM panda_ai_users WHERE user_id = :user_id"
+    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin, subscribed_at, integrations, messages_per_month, subscriber_id, plan_id FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 
@@ -176,6 +176,7 @@ async def get_user_data(user_id: str):
         integrations = result["integrations"]
         messages_per_month = result["messages_per_month"]
         subscriber_id = result["subscriber_id"]
+        plan_id = result["plan_id"]
 
         return {
             "user_id": user_id,
@@ -194,6 +195,7 @@ async def get_user_data(user_id: str):
             "integrations": integrations,
             "messages_per_month": messages_per_month,
             "subscriber_id": subscriber_id,
+            "plan_id": plan_id,
         }
     else:
         return None

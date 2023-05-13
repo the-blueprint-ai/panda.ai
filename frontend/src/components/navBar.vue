@@ -317,7 +317,10 @@ export default {
               </div>
               <div class="col px-3" @click="redirectToSubscriptions">
                 <li class="nav-item pt-3">
-                  <img src="../../src/assets/icons/tag.svg" alt="subscriptions" />
+                  <img
+                    src="../../src/assets/icons/tag.svg"
+                    alt="subscriptions"
+                  />
                   <a class="nav-link">subs</a>
                 </li>
               </div>
@@ -344,13 +347,15 @@ export default {
         class="navbarEndButtons col-sm-2 d-flex flex-row justify-content-end"
       >
         <ul class="navbar-nav d-flex flex-row">
-          <li class="nav-item pt-3 me-3" @click="redirectToSupport">
-            <img
-              src="../../src/assets/icons/question-square.svg"
-              alt="support"
-            />
-            <a class="nav-link">support</a>
-          </li>
+          <div class="col px-3" @click="redirectToSupport">
+            <li class="nav-item pt-3">
+              <img
+                src="../../src/assets/icons/question-square.svg"
+                alt="support"
+              />
+              <a class="nav-link">support</a>
+            </li>
+          </div>
           <li v-if="!userId" class="d-flex align-items-center ps-2 px-2">
             <button
               type="button"

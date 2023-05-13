@@ -896,23 +896,23 @@ export default defineComponent({
   height: 900px;
   overflow-y: auto;
 }
-.userChatHistoryMenuButton:hover,
-.userIntegrationsMenuButton:hover,
-.userSubscriptionMenuButton:hover,
-.userDataMenuButton:hover,
-.userSettingsMenuButton:hover {
+h4.userChatHistoryMenuButton:hover,
+h4.userIntegrationsMenuButton:hover,
+h4.userSubscriptionMenuButton:hover,
+h4.userDataMenuButton:hover,
+h4.userSettingsMenuButton:hover {
   background-image: linear-gradient(to right, #ffcb4c 100%, transparent 0%);
-  background-position-y: 45px;
+  background-position-y: 26px;
   background-repeat: repeat-x;
   background-size: 1px 5px;
 }
-.userChatHistoryMenuButton.active,
-.userIntegrationsMenuButton.active,
-.userSubscriptionMenuButton.active,
-.userDataMenuButton.active,
-.userSettingsMenuButton.active {
+h4.userChatHistoryMenuButton.active,
+h4.userIntegrationsMenuButton.active,
+h4.userSubscriptionMenuButton.active,
+h4.userDataMenuButton.active,
+h4.userSettingsMenuButton.active {
   background-image: linear-gradient(to right, #ffcb4c 100%, transparent 0%);
-  background-position-y: 45px;
+  background-position-y: 26px;
   background-repeat: repeat-x;
   background-size: 1px 5px;
 }

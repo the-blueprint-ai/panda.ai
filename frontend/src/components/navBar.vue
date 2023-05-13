@@ -420,7 +420,7 @@ export default {
 
 <style scoped>
 .nav-item {
-  width: 70px;
+  width: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -98,8 +98,10 @@ export default {
 </script>
 
 <template>
-  <div class="row">
-    <div class="navbar navbar-expand-lg bg-white pt-2 pb-2">
+  <div
+    class="navbar navbar-expand-lg d-flex justify-content-between bg-white pt-2 pb-2"
+  >
+    <div class="d-flex align-items-center">
       <button
         class="navbar-toggler ms-4"
         type="button"
@@ -290,23 +292,23 @@ export default {
           ></SpinnerComponent>
         </button>
       </div>
-      <div class="col-sm-1 px-5" style="width: 200px">
+      <div class="px-5" style="width: 200px">
         <a class="navbar-brand" @click="redirectToHome">
           <img class="logo" src="../../src/assets/panda.png" width="50" />
           panda.ai
         </a>
       </div>
-      <div class="col-sm-9 d-flex flex-shrink-1 me-auto">
+      <div class="d-flex flex-shrink-1">
         <div class="container-fluid">
           <div class="navbarLinks navbar" id="navbarNav">
             <ul class="navbar-nav">
-              <div class="col px-3" @click="redirectToHome">
+              <div class="px-3" @click="redirectToHome">
                 <li class="nav-item pt-3">
                   <img src="../../src/assets/icons/house-door.svg" alt="home" />
                   <a class="nav-link">home</a>
                 </li>
               </div>
-              <div class="col px-3" @click="redirectToAbout">
+              <div class="px-3" @click="redirectToAbout">
                 <li class="nav-item pt-3">
                   <img
                     src="../../src/assets/icons/file-person.svg"
@@ -315,7 +317,7 @@ export default {
                   <a class="nav-link">about</a>
                 </li>
               </div>
-              <div class="col px-3" @click="redirectToSubscriptions">
+              <div class="px-3" @click="redirectToSubscriptions">
                 <li class="nav-item pt-3">
                   <img
                     src="../../src/assets/icons/tag.svg"
@@ -324,13 +326,13 @@ export default {
                   <a class="nav-link">subs</a>
                 </li>
               </div>
-              <div class="col px-3" @click="redirectToRoadmap">
+              <div class="px-3" @click="redirectToRoadmap">
                 <li class="nav-item pt-3">
                   <img src="../../src/assets/icons/geo.svg" alt="roadmap" />
                   <a class="nav-link">roadmap</a>
                 </li>
               </div>
-              <div class="col px-3" @click="redirectToPrivacy">
+              <div class="px-3" @click="redirectToPrivacy">
                 <li class="nav-item pt-3">
                   <img
                     src="../../src/assets/icons/file-earmark-lock.svg"
@@ -343,82 +345,75 @@ export default {
           </div>
         </div>
       </div>
-      <div
-        class="navbarEndButtons col-sm-2 d-flex flex-row justify-content-end"
-      >
-        <ul class="navbar-nav d-flex flex-row">
-          <div class="col px-3" @click="redirectToSupport">
-            <li class="nav-item pt-3">
-              <img
-                src="../../src/assets/icons/question-square.svg"
-                alt="support"
-              />
-              <a class="nav-link">support</a>
+    </div>
+    <div class="navbarEndButtons d-flex flex-row justify-content-end">
+      <ul class="navbar-nav d-flex flex-row">
+        <div class="px-3" @click="redirectToSupport">
+          <li class="nav-item pt-3">
+            <img
+              src="../../src/assets/icons/question-square.svg"
+              alt="support"
+            />
+            <a class="nav-link">support</a>
+          </li>
+        </div>
+        <li v-if="!userId" class="d-flex align-items-center ps-2 px-2">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="redirectToSignUp"
+            style="width: 100px"
+          >
+            SIGN UP
+          </button>
+        </li>
+        <li v-if="!userId" class="d-flex align-items-center px-2 pe-5">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="redirectToSignIn"
+            style="width: 100px"
+          >
+            SIGN IN
+          </button>
+        </li>
+        <li v-if="userId" class="dropdown px-3 pe-4">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img v-bind:src="avatar" class="rounded" ref="avatar" width="60" />
+          </a>
+          <ul class="dropdown-menu dropdown-menu-lg-end me-4">
+            <li><a class="dropdown-item" @click="redirectToChat">CHAT</a></li>
+            <li>
+              <a class="dropdown-item" @click="redirectToAccount">ACCOUNT</a>
             </li>
-          </div>
-          <li v-if="!userId" class="d-flex align-items-center ps-2 px-2">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="redirectToSignUp"
-              style="width: 100px"
-            >
-              SIGN UP
-            </button>
-          </li>
-          <li v-if="!userId" class="d-flex align-items-center px-2 pe-5">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="redirectToSignIn"
-              style="width: 100px"
-            >
-              SIGN IN
-            </button>
-          </li>
-          <li v-if="userId" class="dropdown px-3 pe-4">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                v-bind:src="avatar"
-                class="rounded"
-                ref="avatar"
-                width="60"
-              />
-            </a>
-            <ul class="dropdown-menu dropdown-menu-lg-end me-4">
-              <li><a class="dropdown-item" @click="redirectToChat">CHAT</a></li>
-              <li>
-                <a class="dropdown-item" @click="redirectToAccount">ACCOUNT</a>
-              </li>
-              <li><hr v-if="admin" class="dropdown-divider" /></li>
-              <li><h6 v-if="admin" class="dropdown-header">ADMIN</h6></li>
-              <li>
-                <a v-if="admin" class="dropdown-item" @click="redirectToAdmin"
-                  >ADMIN PANEL</a
-                >
-              </li>
-              <li>
-                <a
-                  v-if="admin"
-                  class="dropdown-item"
-                  @click="redirectToUserDashboard"
-                  >USER DASHBOARD</a
-                >
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" @click="onLogout">SIGN OUT</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+            <li><hr v-if="admin" class="dropdown-divider" /></li>
+            <li><h6 v-if="admin" class="dropdown-header">ADMIN</h6></li>
+            <li>
+              <a v-if="admin" class="dropdown-item" @click="redirectToAdmin"
+                >ADMIN PANEL</a
+              >
+            </li>
+            <li>
+              <a
+                v-if="admin"
+                class="dropdown-item"
+                @click="redirectToUserDashboard"
+                >USER DASHBOARD</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" @click="onLogout">SIGN OUT</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

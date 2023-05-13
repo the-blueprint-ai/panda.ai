@@ -9,6 +9,7 @@ import searchIcon from "../assets/icons/google.svg";
 import newsIcon from "../assets/icons/newspaper.svg";
 import musicIcon from "../assets/icons/music-note-list.svg";
 import moviesIcon from "../assets/icons/film.svg";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 import { useToast } from "vue-toastification";
 
 export default {
@@ -30,6 +31,8 @@ export default {
         musicIcon,
         moviesIcon,
       },
+      loading: false,
+      buttonText: "SAVE INTEGRATIONS",
     };
   },
   watch: {
@@ -54,6 +57,7 @@ export default {
   },
   computed: {
     ...mapGetters("userStore", {
+      userId: "getStoreUserId",
       integrations: "getStoreIntegrations",
       currentIntegrations: "getStoreCurrentIntegrations",
     }),
@@ -89,22 +93,29 @@ export default {
   },
   methods: {
     async saveIntegrationsToDB() {
+      this.loading = true;
+      const toast = useToast();
       const payload = {
         user_id: this.userId, // Update with the actual user ID
         selected_integrations: this.selectedIntegrations,
       };
 
-      const response = await saveIntegrations(payload);
-      const toast = useToast();
+      try {
+        const response = await saveIntegrations(payload);
 
-      if (response) {
+        // Check if response exists (if it does not, an error would have been thrown)
+        this.loading = false;
         toast.success("Integrations saved successfully!");
-      } else {
-        toast.error("Problem saving integrations. Please try again.");
+        return response;
+      } catch (error) {
+        this.loading = false;
+        toast.error("An error occurred while saving the integrations.", error);
       }
     },
   },
-  components: {},
+  components: {
+    SpinnerComponent,
+  },
 };
 </script>
 
@@ -126,7 +137,7 @@ export default {
             :value="integration.integration_id"
             v-model="selectedIntegrations"
             :disabled="
-              !canUpdate ||
+              canUpdate ||
               (selectedIntegrations.length >= integrations &&
                 !selectedIntegrations.includes(integration.integration_id))
             "
@@ -155,11 +166,15 @@ export default {
       </p>
       <div class="card-footer text-center">
         <button
-          class="btn btn-secondary btn-lg mt-3 mb-3"
+          class="btn btn-secondary btn-lg d-inline-flex justify-content-center mt-3 mb-3"
           @click="saveIntegrationsToDB"
-          :disabled="!canUpdate"
+          :disabled="canUpdate"
+          style="width: 220px"
         >
-          SAVE INTEGRATIONS
+          <SpinnerComponent
+            :loading="this.loading"
+            :button-text="this.buttonText"
+          ></SpinnerComponent>
         </button>
         <p class="lh-0 text-danger" v-if="!canUpdate">
           You can only update your integrations once a month.

@@ -129,6 +129,7 @@ export default defineComponent({
       return re.test(email);
     },
     checkEmail: async function (email) {
+      const toast = useToast();
       try {
         let response = await doesEmailExist({
           email,

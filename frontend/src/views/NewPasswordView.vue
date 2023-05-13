@@ -4,6 +4,7 @@ import { submitNewPassword } from "supertokens-web-js/recipe/thirdpartyemailpass
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -16,11 +17,13 @@ export default defineComponent({
   },
   watch: {
     password() {
+      const toast = useToast();
       if (this.isPasswordValid == true) {
         this.passwordOk = "ok";
         this.badPasswordError = "";
       } else {
         this.passwordOk = "no";
+        toast.error("Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.");
         this.badPasswordError =
           "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.";
       }
@@ -37,6 +40,7 @@ export default defineComponent({
       return regex.test(password);
     },
     newPasswordEntered: async function (newPassword) {
+      const toast = useToast();
       try {
         let response = await submitNewPassword({
           formFields: [
@@ -51,23 +55,23 @@ export default defineComponent({
           response.formFields.forEach((formField) => {
             if (formField.id === "password") {
               // New password did not meet password criteria on the backend.
-              window.alert(formField.error);
+              toast.error(formField.error);
             }
           });
         } else if (response.status === "RESET_PASSWORD_INVALID_TOKEN_ERROR") {
           // the password reset token in the URL is invalid, expired, or already consumed
-          window.alert("Password reset failed. Please try again");
+          toast.error("Password reset failed. Please try again");
           this.$router.push("signin"); // back to the login screen.
         } else {
-          window.alert("Password reset successful!");
+          toast.success("Password reset successful!");
           this.$router.push("signin"); // back to the login screen.
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
-          window.alert(err.message);
+          toast.error(err.message);
         } else {
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Something went wrong. Please try again later.");
         }
       }
     },

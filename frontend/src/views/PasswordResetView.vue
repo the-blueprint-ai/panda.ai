@@ -4,6 +4,7 @@ import { sendPasswordResetEmail } from "supertokens-web-js/recipe/thirdpartyemai
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -27,6 +28,7 @@ export default defineComponent({
       return re.test(email);
     },
     sendEmailClicked: async function (email) {
+      const toast = useToast();
       this.formSubmitted = true;
       this.loading = true;
       try {
@@ -44,20 +46,21 @@ export default defineComponent({
           response.formFields.forEach((formField) => {
             if (formField.id === "email") {
               // Email validation failed (for example incorrect email syntax).
-              window.alert(formField.error);
+              toast.error(formField.error);
             }
           });
         } else {
           this.loading = false;
           // reset password email sent.
-          window.alert("Please check your email for the password reset link");
+          toast.success("Reset password email sent!");
+          toast.info("Please check your email for the password reset link");
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {
           // this may be a custom error message sent from the API by you.
-          window.alert(err.message);
+          toast.error(err.message);
         } else {
-          window.alert("Oops! Something went wrong.");
+          toast.error("Oops! Something went wrong. Please try again later.");
         }
       }
     },

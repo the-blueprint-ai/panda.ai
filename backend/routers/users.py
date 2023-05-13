@@ -7,13 +7,13 @@ from supertokens_python.recipe.thirdpartyemailpassword.syncio import get_user_by
 from supertokens_python.recipe.session.syncio import revoke_all_sessions_for_user
 from supertokens_python.recipe.thirdpartyemailpassword.interfaces import EmailPasswordSignInWrongCredentialsError
 from supertokens_python.asyncio import delete_user
-from pydantic import ValidationError
+from pydantic import ValidationError, BaseModel
 from config import settings
 from fastapi.responses import JSONResponse
 from cryptography.fernet import Fernet, InvalidToken
 from databases import Database
 import logging
-from typing import Optional, Any
+from typing import Optional, Any, List
 import boto3
 from io import BytesIO
 import os
@@ -39,6 +39,11 @@ key = settings.FERNET_KEY
 if not key:
     raise ValueError("FERNET_KEY environment variable not set")
 cipher_suite = Fernet(key.encode())
+
+# DATA MODELS
+class IntegrationData(BaseModel):
+    user_id: str
+    selected_integrations: List[int]
 
 
 # ROUTERS
@@ -72,6 +77,34 @@ async def do_delete(user_id: str, session: SessionContainer = Depends(verify_ses
         raise e
     except Exception as e:
         logger.error(f"Error in delete_user: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+@router.get("/get-integrations") 
+async def get_integrations_route(userId: str, session: SessionContainer = Depends(verify_session())):
+    try:
+        response = await get_integrations(userId)
+        if "error" in response:
+            raise HTTPException(status_code=500, detail=response["error"])
+        return response
+    except HTTPException as e:
+        logger.error(f"HTTPException in get_integrations_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in get_integrations_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@router.get("/get-integrations-list") 
+async def get_integrations_list_route(session: SessionContainer = Depends(verify_session())):
+    try:
+        response = await get_integrations_list()
+        if "error" in response:
+            raise HTTPException(status_code=500, detail=response["error"])
+        return response
+    except HTTPException as e:
+        logger.error(f"HTTPException in get_integrations_list_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in get_integrations_list_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.post("/save")
@@ -148,10 +181,24 @@ async def set_onboarded_route(userId: str, session: SessionContainer = Depends(v
         logger.error(f"Error in set_onboarded_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
+@router.post("/set-integrations") 
+async def set_integrations_route(integration_data: IntegrationData, session: SessionContainer = Depends(verify_session())):
+    try:
+        response = await set_integrations(integration_data.user_id, integration_data.selected_integrations)
+        if "error" in response:
+            raise HTTPException(status_code=500, detail=response["error"])
+        return {"message": "User integrations updated successfully"}
+    except HTTPException as e:
+        logger.error(f"HTTPException in set_integrations_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in set_integrations_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
 
 # FUNCTIONS
 async def get_user_data(user_id: str):
-    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin, subscribed_at, integrations, messages_per_month, subscriber_id FROM panda_ai_users WHERE user_id = :user_id"
+    query = "SELECT user_id, created_at, first_name, last_name, username, email, avatar, banner, about, onboarded, subscriber, admin, subscribed_at, integrations, messages_per_month, subscriber_id, plan_id FROM panda_ai_users WHERE user_id = :user_id"
     values = {"user_id": user_id}
     result = await database.fetch_one(query=query, values=values)
 
@@ -176,6 +223,7 @@ async def get_user_data(user_id: str):
         integrations = result["integrations"]
         messages_per_month = result["messages_per_month"]
         subscriber_id = result["subscriber_id"]
+        plan_id = result["plan_id"]
 
         return {
             "user_id": user_id,
@@ -194,6 +242,7 @@ async def get_user_data(user_id: str):
             "integrations": integrations,
             "messages_per_month": messages_per_month,
             "subscriber_id": subscriber_id,
+            "plan_id": plan_id,
         }
     else:
         return None
@@ -491,4 +540,55 @@ async def set_onboarded(user_id: str):
     
     except Exception as e:
         response = {"error": str(e)}
+        return response
+    
+async def get_integrations(user_id: str):
+    query = "SELECT integration_id, last_updated FROM panda_ai_user_integrations WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    result = await database.fetch_all(query=query, values=values)
+
+    if result:
+        integrations = []
+        for row in result:
+            integrations.append({
+                "integration_id": row["integration_id"],
+                "last_updated": row["last_updated"],
+            })
+        return integrations
+    else:
+        response = {"message": "No integrations found"}
+        return response
+    
+async def set_integrations(user_id: str, selected_integrations: list):
+    # Start by deleting all existing rows for this user
+    delete_query = "DELETE FROM panda_ai_user_integrations WHERE user_id = :user_id"
+    await database.execute(query=delete_query, values={"user_id": user_id})
+
+    # Then, insert the new integrations
+    for integration_id in selected_integrations:
+        insert_query = """
+        INSERT INTO panda_ai_user_integrations (user_id, integration_id, last_updated) 
+        VALUES (:user_id, :integration_id, NOW())
+        """
+        values = {"user_id": user_id, "integration_id": integration_id}
+        await database.execute(query=insert_query, values=values)
+
+    # If code reaches this point, it means all operations were successful
+    return {"message": "Integrations updated successfully"}
+
+async def get_integrations_list():
+    query = "SELECT * FROM panda_ai_integrations"
+    result = await database.fetch_all(query=query)
+
+    if result:
+        integrations_list = []
+        for row in result:
+            integrations_list.append({
+                "integration_id": row["integration_id"],
+                "integration_name": row["integration_name"],
+                "integration_icon": row["integration_icon"],
+            })
+        return integrations_list
+    else:
+        response = {"message": "No integrations list found"}
         return response

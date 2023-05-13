@@ -11,6 +11,7 @@ import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
 import { updateUserChatHistory } from "../composables/updateUserChatHistory.js";
 import { pandaChat } from "../composables/pandaChat.js";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -27,8 +28,9 @@ export default defineComponent({
   },
   watch: {},
   async mounted() {
-    await this.getSession();
-    await this.getUserInfo();
+    if (!this.userId) {
+      await this.getUserInfo();
+    }
     const { userData } = getUserData(this.$store, this.userId);
     userData(this.userId);
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
@@ -89,6 +91,7 @@ export default defineComponent({
       this.focusInput();
     },
     async submitMessage(username) {
+      const toast = useToast();
       const tempMessage = this.messageToSend;
       this.loading = true;
       this.messageToSend = "🐼 thinking...";
@@ -127,14 +130,14 @@ export default defineComponent({
           );
           this.chat_id = savedChatId;
         } catch (error) {
-          console.error("Failed to save chat history:", error);
+          toast.error("Failed to save chat history:", error);
         }
       } else {
         // Update chat history with the existing chat_id
         try {
           await updateUserChatHistory(this.chat_id, chatHistory);
         } catch (error) {
-          console.error("Failed to update chat history:", error);
+          toast.error("Failed to update chat history:", error);
         }
       }
       this.messageToSend = "";

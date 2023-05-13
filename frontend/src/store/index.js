@@ -6,6 +6,7 @@ import userStore from "./userStore";
 import roadmapStore from "./roadmapStore";
 import faqsStore from "./faqsStore";
 import userStatsStore from "./userStatsStore";
+import integrationsStore from "./integrationsStore";
 
 // Create a new store instance.
 export default createStore({
@@ -17,6 +18,7 @@ export default createStore({
     roadmapStore: roadmapStore,
     faqsStore: faqsStore,
     userStatsStore: userStatsStore,
+    integrationsStore: integrationsStore,
   },
   state() {
     return {

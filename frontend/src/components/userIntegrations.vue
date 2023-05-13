@@ -1,4 +1,6 @@
 <script>
+import { mapGetters } from "vuex";
+import { saveIntegrations } from "../composables/saveIntegrations.js";
 import videosIcon from "../assets/icons/youtube.svg";
 import mapsIcon from "../assets/icons/geo-alt-fill.svg";
 import imagesIcon from "../assets/icons/image.svg";
@@ -7,6 +9,7 @@ import searchIcon from "../assets/icons/google.svg";
 import newsIcon from "../assets/icons/newspaper.svg";
 import musicIcon from "../assets/icons/music-note-list.svg";
 import moviesIcon from "../assets/icons/film.svg";
+import { useToast } from "vue-toastification";
 
 export default {
   data() {
@@ -15,42 +18,18 @@ export default {
     date.setDate(date.getDate() - 5); // Subtract five days
     let timestamp = date.getTime(); // Get timestamp
     return {
-      integrationsList: [
-        { id: 1, name: "VIDEO", icon: videosIcon },
-        {
-          id: 2,
-          name: "MAPS",
-          icon: mapsIcon,
-        },
-        {
-          id: 3,
-          name: "IMAGES",
-          icon: imagesIcon,
-        },
-        {
-          id: 4,
-          name: "WIKIPEDIA",
-          icon: wikipediaIcon,
-        },
-        {
-          id: 5,
-          name: "SEARCH",
-          icon: searchIcon,
-        },
-        { id: 6, name: "NEWS", icon: newsIcon },
-        {
-          id: 7,
-          name: "MUSIC",
-          icon: musicIcon,
-        },
-        {
-          id: 8,
-          name: "MOVIES/TV SHOWS",
-          icon: moviesIcon,
-        },
-      ],
       lastUpdated: timestamp,
       selectedIntegrations: [],
+      icons: {
+        videosIcon,
+        mapsIcon,
+        imagesIcon,
+        wikipediaIcon,
+        searchIcon,
+        newsIcon,
+        musicIcon,
+        moviesIcon,
+      },
     };
   },
   watch: {
@@ -67,7 +46,6 @@ export default {
   },
   props: {
     integrationsMenu: Boolean,
-    integrations: Number,
   },
   created() {
     if (this.integrations >= this.integrationsList.length) {
@@ -75,6 +53,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters("userStore", {
+      integrations: "getStoreIntegrations",
+      currentIntegrations: "getStoreCurrentIntegrations",
+    }),
+    ...mapGetters("integrationsStore", {
+      integrationsList: "getStoreIntegrationsList",
+    }),
     canUpdate() {
       let lastUpdatedDate = new Date(this.lastUpdated);
       let currentDate = new Date();
@@ -84,6 +69,39 @@ export default {
         lastUpdatedDate.getFullYear() < currentDate.getFullYear() ||
         lastUpdatedDate.getMonth() < currentDate.getMonth()
       );
+    },
+  },
+  async mounted() {
+    if (this.currentIntegrations && this.currentIntegrations.length > 0) {
+      // Set selectedIntegrations to the array of integration_id from currentIntegrations
+      this.selectedIntegrations = this.currentIntegrations.map(
+        (integration) => integration.integration_id
+      );
+
+      // Sort currentIntegrations by last_updated in ascending order
+      const sortedIntegrations = [...this.currentIntegrations].sort(
+        (a, b) => new Date(a.last_updated) - new Date(b.last_updated)
+      );
+
+      // Set lastUpdated to the earliest timestamp (i.e., last_updated of the first element in sortedIntegrations)
+      this.lastUpdated = new Date(sortedIntegrations[0].last_updated).getTime();
+    }
+  },
+  methods: {
+    async saveIntegrationsToDB() {
+      const payload = {
+        user_id: this.userId, // Update with the actual user ID
+        selected_integrations: this.selectedIntegrations,
+      };
+
+      const response = await saveIntegrations(payload);
+      const toast = useToast();
+
+      if (response) {
+        toast.success("Integrations saved successfully!");
+      } else {
+        toast.error("Problem saving integrations. Please try again.");
+      }
     },
   },
   components: {},
@@ -100,22 +118,26 @@ export default {
         <div
           class="form-check form-switch"
           v-for="integration in integrationsList"
-          :key="integration.id"
+          :key="integration.integration_id"
         >
           <input
             class="form-check-input active-bg-secondary"
             type="checkbox"
-            :value="integration.id"
+            :value="integration.integration_id"
             v-model="selectedIntegrations"
             :disabled="
               !canUpdate ||
               (selectedIntegrations.length >= integrations &&
-                !selectedIntegrations.includes(integration.id))
+                !selectedIntegrations.includes(integration.integration_id))
             "
           />
           <label class="form-check-label d-flex" for="flexCheckDefault">
-            <img :src="integration.icon" alt="" class="icon ms-2 me-2" />
-            - {{ integration.name }}
+            <img
+              :src="icons[integration.integration_icon]"
+              alt=""
+              class="icon ms-2 me-2"
+            />
+            - {{ integration.integration_name }}
           </label>
         </div>
       </div>
@@ -133,12 +155,11 @@ export default {
       </p>
       <div class="card-footer text-center">
         <button
-          class="btn btn-secondary mt-3 mb-3"
-          @click="saveIntegrations"
+          class="btn btn-secondary btn-lg mt-3 mb-3"
+          @click="saveIntegrationsToDB"
           :disabled="!canUpdate"
-          style="width: 150px"
         >
-          Save
+          SAVE INTEGRATIONS
         </button>
         <p class="lh-0 text-danger" v-if="!canUpdate">
           You can only update your integrations once a month.

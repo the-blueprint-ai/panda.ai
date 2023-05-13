@@ -1,11 +1,13 @@
 <script>
-import { DateTime } from 'luxon';
+import { DateTime } from "luxon";
+import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default {
   data() {
     return {
       planName: "",
       integrationsMessage: "",
+      planPrice: "",
     };
   },
   watch: {},
@@ -16,10 +18,12 @@ export default {
     subscribed: String,
     integrations: Number,
     messagesPerMonth: Number,
+    planID: String,
   },
   created() {
     this.checkIntegrations();
     this.setPlanName();
+    this.setPlanPrice();
   },
   computed: {
     updateSubscriptionLink() {
@@ -32,11 +36,11 @@ export default {
   },
   methods: {
     setPlanName() {
-      if (this.messagesPerMonth == 100 && this.integrations == 3) {
+      if (this.messagesPerMonth == 100) {
         this.planName = "Bao";
-      } else if (this.messagesPerMonth == 300 && this.integrations == 5) {
+      } else if (this.messagesPerMonth == 300) {
         this.planName = "Mei";
-      } else if (this.messagesPerMonth == 1000 && this.integrations == 99) {
+      } else if (this.messagesPerMonth == 1000) {
         this.planName = "Da";
       } else {
         this.planName = "No";
@@ -49,8 +53,39 @@ export default {
         this.integrationsMessage = `Access to ${this.integrations} integrations`;
       }
     },
+    setPlanPrice() {
+      if (this.planID == "price_1N5ZxSDrmPhl15PT1btIcShL") {
+        this.planPrice = "£29.99 per year";
+      } else if (this.planID == "price_1N5alADrmPhl15PTFLAFBxTj") {
+        this.planPrice = "$29.99 per year";
+      } else if (this.planID == "price_1N5ZxSDrmPhl15PTyUrmbeWI") {
+        this.planPrice = "£2.99 per month";
+      } else if (this.planID == "price_1N5alADrmPhl15PTf8m7V3I2") {
+        this.planPrice = "$2.99 per month";
+      } else if (this.planID == "price_1N5ZzgDrmPhl15PThFxj0mfm") {
+        this.planPrice = "£59.99 per year";
+      } else if (this.planID == "price_1N5akmDrmPhl15PT6Rw7OYom") {
+        this.planPrice = "$59.99 per year";
+      } else if (this.planID == "price_1N5ZzgDrmPhl15PTlkZWtVN7") {
+        this.planPrice = "£5.99 per month";
+      } else if (this.planID == "price_1N5akmDrmPhl15PToXSoKFUJ") {
+        this.planPrice = "$5.99 per month";
+      } else if (this.planID == "price_1N5a0sDrmPhl15PTaunA98bh") {
+        this.planPrice = "£149.99 per year";
+      } else if (this.planID == "price_1N5akRDrmPhl15PTDgdDCmPZ") {
+        this.planPrice = "$149.99 per year";
+      } else if (this.planID == "price_1N5a0sDrmPhl15PT8n9RF5eI") {
+        this.planPrice = "£14.99 per month";
+      } else if (this.planID == "price_1N5akRDrmPhl15PTAek44nms") {
+        this.planPrice = "$14.99 per month";
+      } else {
+        this.planPrice = "£N/A";
+      }
+    },
   },
-  components: {},
+  components: {
+    SpinnerComponent,
+  },
 };
 </script>
 
@@ -64,12 +99,23 @@ export default {
         <h3 class="mt-2">CURRENT SUBSCRIPTION PACKAGE:</h3>
       </div>
       <div class="card-body">
-        <img src="../assets/panda.png" style="width: 100px" />
-        <h2 class="mb-4">{{ planName }} Plan</h2>
-        <h5>{{ messagesPerMonth }} messages per month</h5>
-        <h5 class="mb-4">{{ this.integrationsMessage }}</h5>
-        <h2>£5.99 per month</h2>
-        <p>You have been a subscriber since {{ setTime }}.</p>
+        <div
+          v-if="
+            !planName || !messagesPerMonth || !integrationsMessage || !setTime
+          "
+          class="d-flex flex-column align-items-center"
+        >
+          <SpinnerComponent :loading="true" class="mt-4"></SpinnerComponent>
+          <h3 class="mt-4">LOADING...</h3>
+        </div>
+        <div v-else>
+          <img src="../assets/panda.png" style="width: 100px" />
+          <h2 class="mb-4">{{ planName }} Plan</h2>
+          <h5>{{ messagesPerMonth }} messages per month</h5>
+          <h5 class="mb-4">{{ integrationsMessage }}</h5>
+          <h2>{{ planPrice }}</h2>
+          <p>You have been a subscriber since {{ setTime }}.</p>
+        </div>
       </div>
       <div class="card-footer">
         <a :href="updateSubscriptionLink" target="_blank">

@@ -16,6 +16,10 @@ const userStore = {
     onboarded: false,
     subscriber: false,
     admin: false,
+    subscribed: "",
+    integrations: 0,
+    messagesPerMonth: 0,
+    subscriberId: "",
     userChatHistory: [],
     entities: [],
   },
@@ -58,6 +62,18 @@ const userStore = {
     },
     setStoreAdmin(state, value) {
       state.admin = value;
+    },
+    setStoreSubscribed(state, value) {
+      state.subscribed = value;
+    },
+    setStoreIntegrations(state, value) {
+      state.integrations = value;
+    },
+    setStoreMessagesPerMonth(state, value) {
+      state.messagesPerMonth = value;
+    },
+    setStoreSubscriberID(state, value) {
+      state.subscriberId = value;
     },
     setStoreUserChatHistory(state, value) {
       state.userChatHistory.push(value);
@@ -109,6 +125,18 @@ const userStore = {
     },
     getStoreAdmin(state) {
       return state.admin;
+    },
+    getStoreSubscribed(state) {
+      return state.subscribed;
+    },
+    getStoreIntegrations(state) {
+      return state.integrations;
+    },
+    getStoreMessagesPerMonth(state) {
+      return state.messagesPerMonth;
+    },
+    getStoreSubscriberID(state) {
+      return state.subscriberId;
     },
     getStoreUserChatHistory(state) {
       return state.userChatHistory;

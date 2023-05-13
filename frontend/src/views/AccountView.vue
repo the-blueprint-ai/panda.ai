@@ -94,6 +94,10 @@ export default defineComponent({
       onboarded: "getStoreOnboarded",
       subscriber: "getStoreSubscriber",
       admin: "getStoreAdmin",
+      subscribed: "getStoreSubscribed",
+      integrations: "getStoreIntegrations",
+      messagesPerMonth: "getStoreMessagesPerMonth",
+      subscriberID: "getStoreSubscriberID",
       userStoreChatHistory: "getStoreUserChatHistory",
     }),
     isEmailValid() {
@@ -585,16 +589,21 @@ export default defineComponent({
               >
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title" id="userDetailsModalLabel">
-                        EDIT YOUR DETAILS
-                      </h4>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
+                    <div
+                      class="modal-header d-inline-flex flex-column align-items-start w-100"
+                    >
+                      <div class="d-flex flex-row align-items-start w-100">
+                        <h4 class="modal-title" id="userDetailsModalLabel">
+                          EDIT YOUR DETAILS
+                        </h4>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <p class="text-start mt-n1 mb-0">userID: {{ this.userId }}</p>
                     </div>
                     <div class="modal-body text-center">
                       <h1>🐼</h1>
@@ -718,7 +727,9 @@ export default defineComponent({
             class="card text-bg-white text-primary mt-4"
           >
             <div class="card-header">
-              <div class="accountCardTitles d-flex justify-content-around pt-3 pb-2">
+              <div
+                class="accountCardTitles d-flex justify-content-around pt-3 pb-2"
+              >
                 <h4
                   class="userChatHistoryMenuButton"
                   :class="{ active: historyMenuActive }"
@@ -792,6 +803,7 @@ export default defineComponent({
                 :subscription-menu="subscriptionMenu"
                 :data-menu="dataMenu"
                 :settings-menu="settingsMenu"
+                :integrations="integrations"
               ></UserIntegrations>
               <UserSubscription
                 :history-menu="historyMenu"
@@ -800,6 +812,10 @@ export default defineComponent({
                 :data-menu="dataMenu"
                 :settings-menu="settingsMenu"
                 :email="email"
+                :subscriber="subscriber"
+                :subscribed="subscribed"
+                :integrations="integrations"
+                :messages-per-month="messagesPerMonth"
               ></UserSubscription>
               <UserData
                 :history-menu="historyMenu"

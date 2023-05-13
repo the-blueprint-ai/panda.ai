@@ -85,7 +85,7 @@ export default {
     </div>
     <div class="bottomLinks nav col-sm-10 justify-content-end px-5">
       <div class="col-1" style="min-width: 150px">
-        <h3 class="pb-3"><strong>LINKS</strong></h3>
+        <h3 class="pb-3">LINKS</h3>
         <p class="ps-1 lh-1" navigate-to="home" @click="goToPage('/')">home</p>
         <p class="ps-1 lh-1" navigate-to="roadmap" @click="goToPage('/roadmap')">
           roadmap
@@ -95,7 +95,7 @@ export default {
         </p>
       </div>
       <div class="col-1" style="min-width: 150px">
-        <h3 class="pb-3"><strong>COMPANY</strong></h3>
+        <h3 class="pb-3">COMPANY</h3>
         <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/about')">
           about
         </p>
@@ -118,7 +118,7 @@ export default {
         </p>
       </div>
       <div class="col-1" style="min-width: 150px">
-        <h3 class="pb-3"><strong>SUPPORT</strong></h3>
+        <h3 class="pb-3">SUPPORT</h3>
         <p class="ps-1 lh-1" navigate-to="support" @click="goToPage('/support')">
           support
         </p>
@@ -127,7 +127,7 @@ export default {
         </p>
       </div>
       <div class="col-1" style="min-width: 150px">
-        <h3 class="pb-3"><strong>SOCIAL</strong></h3>
+        <h3 class="pb-3">SOCIAL</h3>
         <p class="ps-1 lh-1" navigate-to="discord" @click="navigate($event)">
           Discord
         </p>

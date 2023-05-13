@@ -161,35 +161,35 @@ export default {
           <ul class="navbar-nav flex-grow-1">
             <li><hr class="divider mt-0 mb-0" /></li>
             <li
-              class="nav-item w-100 d-flex flex-row align-items-start ps-2 pt-3"
+              class="nav-item d-flex flex-row align-items-start ps-2 pt-3"
               @click="redirectToHome"
             >
               <img src="../../src/assets/icons/house-door.svg" alt="home" />
               <p class="nav-link text-uppercase ms-4 mb-0">home</p>
             </li>
             <li
-              class="nav-item w-100 d-flex flex-row align-items-start ps-2 pt-3"
+              class="nav-item d-flex flex-row align-items-start ps-2 pt-3"
               @click="redirectToAbout"
             >
               <img src="../../src/assets/icons/file-person.svg" alt="about" />
               <p class="nav-link text-uppercase ms-4 mb-0">about</p>
             </li>
             <li
-              class="nav-item w-100 d-flex flex-row align-items-start ps-2 pt-3"
+              class="nav-item d-flex flex-row align-items-start ps-2 pt-3"
               @click="redirectToPricing"
             >
               <img src="../../src/assets/icons/tag.svg" alt="subscriptions" />
-              <p class="nav-link text-uppercase ms-4 mb-0">subscriptions</p>
+              <p class="nav-link text-uppercase ms-4 mb-0">subs</p>
             </li>
             <li
-              class="nav-item w-100 d-flex flex-row align-items-start ps-2 pt-3"
+              class="nav-item d-flex flex-row align-items-start ps-2 pt-3"
               @click="redirectToRoadmap"
             >
               <img src="../../src/assets/icons/geo.svg" alt="roadmap" />
               <p class="nav-link text-uppercase ms-4 mb-0">roadmap</p>
             </li>
             <li
-              class="nav-item w-100 d-flex flex-row align-items-start ps-2 pt-3"
+              class="nav-item d-flex flex-row align-items-start ps-2 pt-3"
               @click="redirectToPrivacy"
             >
               <img
@@ -420,7 +420,7 @@ export default {
 
 <style scoped>
 .nav-item {
-  width: 3.9vw;
+  width: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;

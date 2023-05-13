@@ -344,14 +344,14 @@ export default {
         class="navbarEndButtons col-sm-2 d-flex flex-row justify-content-end"
       >
         <ul class="navbar-nav d-flex flex-row">
-          <li class="nav-item pt-3" @click="redirectToSupport">
+          <li class="nav-item pt-3 me-3" @click="redirectToSupport">
             <img
               src="../../src/assets/icons/question-square.svg"
               alt="support"
             />
             <a class="nav-link">support</a>
           </li>
-          <li v-if="!userId" class="d-flex align-items-center ps-5 px-2">
+          <li v-if="!userId" class="d-flex align-items-center ps-2 px-2">
             <button
               type="button"
               class="btn btn-secondary"
@@ -442,6 +442,11 @@ a:hover {
   }
   .offcanvas {
     display: none;
+  }
+}
+@media (max-width: 1050px) {
+  .nav-item {
+    width: 55px;
   }
 }
 @media (max-width: 992px) {

@@ -49,6 +49,7 @@ export default {
   },
   props: {
     integrationsMenu: Boolean,
+    integrations: Number,
   },
   created() {
     if (this.integrations >= this.integrationsList.length) {
@@ -64,6 +65,13 @@ export default {
     ...mapGetters("integrationsStore", {
       integrationsList: "getStoreIntegrationsList",
     }),
+    integrationsDifference() {
+      const difference = this.integrations - this.selectedIntegrations.length;
+      return difference > 0 ? difference : 0;
+    },
+    integrationsWarning() {
+      return this.integrationsDifference > 0;
+    },
     canUpdate() {
       let lastUpdatedDate = new Date(this.lastUpdated);
       let currentDate = new Date();
@@ -95,21 +103,31 @@ export default {
     async saveIntegrationsToDB() {
       this.loading = true;
       const toast = useToast();
-      const payload = {
-        user_id: this.userId, // Update with the actual user ID
-        selected_integrations: this.selectedIntegrations,
-      };
-
-      try {
-        const response = await saveIntegrations(payload);
-
-        // Check if response exists (if it does not, an error would have been thrown)
+      if (this.integrationsDifference > 0) {
         this.loading = false;
-        toast.success("Integrations saved successfully!");
-        return response;
-      } catch (error) {
-        this.loading = false;
-        toast.error("An error occurred while saving the integrations.", error);
+        toast.warning(
+          `You have ${this.integrationsDifference} more integration(s) to choose.`
+        );
+      } else {
+        const payload = {
+          user_id: this.userId, // Update with the actual user ID
+          selected_integrations: this.selectedIntegrations,
+        };
+
+        try {
+          const response = await saveIntegrations(payload);
+
+          // Check if response exists (if it does not, an error would have been thrown)
+          this.loading = false;
+          toast.success("Integrations saved successfully!");
+          return response;
+        } catch (error) {
+          this.loading = false;
+          toast.error(
+            "An error occurred while saving the integrations.",
+            error
+          );
+        }
       }
     },
   },
@@ -121,9 +139,9 @@ export default {
 
 <template>
   <div class="d-flex justify-content-center" v-if="integrationsMenu">
-    <div class="card mt-2 w-50">
+    <div class="card mt-2 w-50 text-center">
       <div class="card-header text-center">
-        <h3 class="mt-2">SELECT YOUR INTEGRATIONS</h3>
+        <h3 class="mt-2">SELECT YOUR {{ integrations }} INTEGRATIONS</h3>
       </div>
       <div class="card-body d-flex flex-column mx-auto">
         <div
@@ -137,7 +155,7 @@ export default {
             :value="integration.integration_id"
             v-model="selectedIntegrations"
             :disabled="
-              !canUpdate ||
+              canUpdate ||
               (selectedIntegrations.length >= integrations &&
                 !selectedIntegrations.includes(integration.integration_id))
             "
@@ -152,23 +170,17 @@ export default {
           </label>
         </div>
       </div>
-      <p
-        v-if="selectedIntegrations.length >= integrations"
-        class="text-warning mx-auto"
-      >
-        You have reached your maximum number of integrations.
+      <p v-if="integrationsDifference == 1" class="text-warning text-center">
+        You have {{ integrationsDifference }} more integration to select.
       </p>
-      <p
-        v-if="selectedIntegrations.length >= integrations"
-        class="lh-0 mt-n3 text-warning mx-auto"
-      >
-        If you would like to add another, please deselect one first.
+      <p v-if="integrationsDifference > 1" class="text-warning text-center">
+        You have {{ integrationsDifference }} more integrations to select.
       </p>
       <div class="card-footer text-center">
         <button
           class="btn btn-secondary btn-lg d-inline-flex justify-content-center mt-3 mb-3"
           @click="saveIntegrationsToDB"
-          :disabled="!canUpdate"
+          :disabled="canUpdate"
           style="width: 220px"
         >
           <SpinnerComponent
@@ -180,7 +192,7 @@ export default {
           You can only update your integrations once a month.
         </p>
         <p class="mt-n3 lh-0 text-danger" v-if="!canUpdate">
-          Please come back next month.
+          Please come back next month to update them.
         </p>
       </div>
     </div>

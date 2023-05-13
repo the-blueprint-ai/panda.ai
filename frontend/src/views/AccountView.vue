@@ -823,6 +823,7 @@ export default defineComponent({
                 :subscription-menu="subscriptionMenu"
                 :data-menu="dataMenu"
                 :settings-menu="settingsMenu"
+                :integrations="integrations"
               ></UserIntegrations>
               <UserSubscription
                 :history-menu="historyMenu"

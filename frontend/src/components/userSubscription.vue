@@ -47,7 +47,7 @@ export default {
       }
     },
     checkIntegrations() {
-      if (this.integrations == 99) {
+      if (this.integrations > 5) {
         this.integrationsMessage = "Access to ALL integrations";
       } else {
         this.integrationsMessage = `Access to ${this.integrations} integrations`;

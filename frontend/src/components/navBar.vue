@@ -179,7 +179,7 @@ export default {
               @click="redirectToPricing"
             >
               <img src="../../src/assets/icons/tag.svg" alt="subscriptions" />
-              <p class="nav-link text-uppercase ms-4 mb-0">subs</p>
+              <p class="nav-link text-uppercase ms-4 mb-0">subscriptions</p>
             </li>
             <li
               class="nav-item d-flex flex-row align-items-start ps-2 pt-3"
@@ -318,7 +318,7 @@ export default {
               <div class="col px-3" @click="redirectToSubscriptions">
                 <li class="nav-item pt-3">
                   <img src="../../src/assets/icons/tag.svg" alt="subscriptions" />
-                  <a class="nav-link">subscriptions</a>
+                  <a class="nav-link">subs</a>
                 </li>
               </div>
               <div class="col px-3" @click="redirectToRoadmap">
@@ -420,7 +420,7 @@ export default {
 
 <style scoped>
 .nav-item {
-  width: 80px;
+  width: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;

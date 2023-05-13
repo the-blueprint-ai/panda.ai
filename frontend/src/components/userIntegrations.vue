@@ -155,7 +155,7 @@ export default {
             :value="integration.integration_id"
             v-model="selectedIntegrations"
             :disabled="
-              canUpdate ||
+              !canUpdate ||
               (selectedIntegrations.length >= integrations &&
                 !selectedIntegrations.includes(integration.integration_id))
             "
@@ -180,7 +180,7 @@ export default {
         <button
           class="btn btn-secondary btn-lg d-inline-flex justify-content-center mt-3 mb-3"
           @click="saveIntegrationsToDB"
-          :disabled="canUpdate"
+          :disabled="!canUpdate"
           style="width: 220px"
         >
           <SpinnerComponent

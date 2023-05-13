@@ -139,7 +139,7 @@ export default {
 
 <template>
   <div class="d-flex justify-content-center" v-if="integrationsMenu">
-    <div class="card mt-2 w-50 text-center">
+    <div class="card mt-2 text-center">
       <div class="card-header text-center">
         <h3 class="mt-2">SELECT YOUR {{ integrations }} INTEGRATIONS</h3>
       </div>

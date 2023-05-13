@@ -136,7 +136,9 @@ export default defineComponent({
         });
 
         if (response.doesExist) {
-          toast.warning("Email already registered. Please choose another one instead.");
+          toast.warning(
+            "Email already registered. Please choose another one instead."
+          );
           this.emailExistsError =
             "Email already registered. Please choose another one instead.";
           setTimeout(() => {
@@ -159,7 +161,9 @@ export default defineComponent({
         let response = await doesUsernameExist(username);
 
         if (response) {
-          toast.warning("Username already registered. Please choose another one instead.");
+          toast.warning(
+            "Username already registered. Please choose another one instead."
+          );
           this.usernameExistsError =
             "Username already registered. Please choose another one instead.";
           setTimeout(() => {
@@ -569,7 +573,17 @@ export default defineComponent({
                     @change="handleAvatarUpload"
                   />
                   <div class="profileDetails">
-                    <h2 class="card-title">{{ first_name }} {{ last_name }}</h2>
+                    <div class="d-flex flex-row align-items-center">
+                      <h2 class="card-title">
+                        {{ first_name }} {{ last_name }}
+                      </h2>
+                      <img
+                        v-if="subscribed"
+                        class="subscriberCheck mb-1 ms-2"
+                        src="../assets/icons/patch-check-fill.svg"
+                        style="width: 25px"
+                      />
+                    </div>
                     <h5 class="card-subtitle mb-2 text-muted">
                       {{ username }}
                     </h5>
@@ -623,7 +637,9 @@ export default defineComponent({
                           aria-label="Close"
                         ></button>
                       </div>
-                      <p class="text-start mt-n1 mb-0" style="font-size:12px">{{ this.userId }}</p>
+                      <p class="text-start mt-n1 mb-0" style="font-size: 12px">
+                        {{ this.userId }}
+                      </p>
                     </div>
                     <div class="modal-body text-center">
                       <h1>🐼</h1>

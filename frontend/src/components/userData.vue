@@ -2,6 +2,7 @@
 import { mapGetters } from "vuex";
 import { getEntities } from "../composables/getEntities.js";
 import { updateEntityDescription } from "../composables/updateEntityDescription.js";
+import { deleteEntity } from "../composables/deleteEntity.js";
 
 export default {
   data() {
@@ -63,6 +64,7 @@ export default {
   created() {},
   methods: {
     updateEntityDescription,
+    deleteEntity,
     dataTabSelector(tabName) {
       this.tab = tabName;
     },
@@ -152,7 +154,7 @@ export default {
           </thead>
           <tbody>
             <tr v-for="(entity, index) in entitiesData" :key="entity.entity">
-              <td>{{ entity.entity }}</td>
+              <td><strong>{{ entity.entity }}</strong></td>
               <td
                 contenteditable="true"
                 @blur="
@@ -162,7 +164,7 @@ export default {
                 {{ entity.description }}
               </td>
               <td class="align-middle">
-                <img src="../assets/icons/x-circle-fill.svg" />
+                <img src="../assets/icons/x-circle-fill.svg" @click="deleteEntity(userId, entity)" />
               </td>
             </tr>
           </tbody>

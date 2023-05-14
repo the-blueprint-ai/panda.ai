@@ -26,12 +26,13 @@ import logging
 import boto3
 import json
 import tiktoken
+from starlette import status
+import requests
 from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from functions.entityFunctions import get_most_relevant_entities
 from functions.toolFunctions import NewsSearchTool, WikipediaSearchTool, YouTubeSearchTool, GoogleMapsSearchTool, GoogleImageSearchTool, GoogleSearchTool, SpotifySearchTool, TMDBSearchTool
-# from functions.subscriptionFunctions import get_user_messages_this_month
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
 
@@ -51,27 +52,9 @@ wolfram = WolframAlphaAPIWrapper(wolfram_alpha_appid = settings.WOLFRAM_ALPHA_AP
 
 tools = [
     Tool(
-        name = "Internet Search",
-        func=search.run,
-        description="Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term.",
-        return_direct=True
-    ),
-    Tool(
         name = "Maths",
         func=wolfram.run,
         description="Use this when you want need to do maths or make some calculations. Use this more than any other tool if the question is about maths or making calculations. The input to this should be numbers in a maths expression",
-        return_direct=True
-    ),
-    Tool(
-        name = "Latest News Search",
-        func=news.run,
-        description=" Use this when you want to get information about the latest news, top news headlines or current news stories. Use this more than Internet Search if the question is about News. The input should be a question in natural language that this API can answer.",
-        return_direct=True
-    ),
-    Tool(
-        name = "Wikipedia Search",
-        func=wikipedia.run,
-        description="Use this when you want to search wikipedia about things you have no knowledge of. Use this more than Internet Search if the question is about Wikipedia. The input to this should be a single search term.",
         return_direct=True
     ),
     Tool(
@@ -81,9 +64,33 @@ tools = [
         return_direct=True
     ),
     Tool(
+        name = "Map & Location Search",
+        func=maps.run,
+        description="Use this when you want to search for a map or get a location. Use this more than any other tool if the question is about locations or maps. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
         name = "Image Search",
         func=images.run,
         description="Use this when you want to search for images. Use this more than any other tool if the question is about images. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Wikipedia Search",
+        func=wikipedia.run,
+        description="Use this when you want to search wikipedia about things you have no knowledge of. Use this more than Internet Search if the question is about Wikipedia. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Internet Search",
+        func=search.run,
+        description="Use this when you want to search the internet to answer questions about things you have no knowledge of. The input to this should be a single search term.",
+        return_direct=True
+    ),
+    Tool(
+        name = "Latest News Search",
+        func=news.run,
+        description="Use this when you want to get information about the latest news, top news headlines or current news stories. Use this more than Internet Search if the question is about News. The input should be a question in natural language that this API can answer.",
         return_direct=True
     ),
     Tool(
@@ -96,12 +103,6 @@ tools = [
         name = "Movie & TV Search",
         func= movie.run,
         description="Use this when you want to search for a movie, tv show or actor. Use this more than any other tool if the question is about movies, tv shows or actors. The input to this should be a single search term.",
-        return_direct=True
-    ),
-    Tool(
-        name = "Map & Location Search",
-        func=maps.run,
-        description="Use this when you want to search for a map or get a location. Use this more than any other tool if the question is about locations or maps. The input to this should be a single search term.",
         return_direct=True
     )
 ]
@@ -121,6 +122,9 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     elif (messages_count >= messages_allowed):
         return JSONResponse(content={"response": f"<span>Apologies! You have used up your monthly messages allowance. To add more messages to your monthly plan or to upgrade your subscription, please see the infomation below:</span><h5 class='mt-4 mb-0'>ADD ONS</h5><span><p>You can add more messages to your monthly subscription as a one-off or ongoing every month by visiting your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, heading to the Subscription tab and updating your subscription details.</p><span><h5 class='mt-4 mb-0'>UPGRADING</h5><span><p>To upgrade your subscription to include more messages per month in your plan you can go to your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, head to the Subscriptions tab and upgrade your subscription.</p></span>"})
     else:
+        integration_ids = await get_user_tools(userid)
+        filtered_tools = [tools[0]]
+        filtered_tools += [tool for i, tool in enumerate(tools) if i in integration_ids and i != 0]
         llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0.05, pl_tags=[f"{ userid }"], return_pl_id=True)
         memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
@@ -163,7 +167,6 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
 
         MY_FORMAT_INSTRUCTIONS = FORMAT_INSTRUCTIONS
 
-
         class pandaAgent(ConversationalAgent):
             @classmethod
             def create_prompt(
@@ -187,7 +190,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
                 )
 
         agent_chain = initialize_agent(
-            tools,
+            filtered_tools,
             llm,
             # return_intermediate_steps=True,
             agent=pandaAgent,
@@ -195,7 +198,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
         )
 
         prompt_template = pandaAgent.create_prompt(
-            tools,
+            filtered_tools,
             MY_PREFIX,
             MY_SUFFIX,
             MY_FORMAT_INSTRUCTIONS,
@@ -208,10 +211,20 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
             await save_new_message(userid, chatid, message, response, tokens, True)
             return JSONResponse(content={"response": response})
 
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Network error while running agent_chain: {e}")
+            await save_new_message(userid, chatid, message, "Apologies! We're experiencing network issues. Please try again later.", tokens, False)
+            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Service temporarily unavailable")
+
+        except ValueError as e:
+            logging.error(f"Value error while running agent_chain: {e}")
+            await save_new_message(userid, chatid, message, "Apologies! Something was wrong with the input. Please try again.", tokens, False)
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid input")
+
         except Exception as e:
-            logging.error(f"Error while running agent_chain: {e}")
-            await save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later", tokens, False)
-            return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later 🐼"})
+            logging.error(f"Unexpected error while running agent_chain: {e}")
+            await save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False)
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
 async def save_entities(userid: str, message: str):
@@ -432,3 +445,13 @@ async def get_subscriber_and_user_messages_per_month(user_id: str):
     result = await database.fetch_one(query=query, values=values)
 
     return result
+
+async def get_user_tools(user_id: str):
+    query = "SELECT integration_id FROM panda_ai_user_integrations WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    result = await database.fetch_all(query=query, values=values)
+
+    # Extract the integration_ids from the result
+    integration_ids = [row["integration_id"] for row in result]
+
+    return integration_ids

@@ -59,7 +59,6 @@ export default {
   computed: {
     ...mapGetters("userStore", {
       userId: "getStoreUserId",
-      integrations: "getStoreIntegrations",
       currentIntegrations: "getStoreCurrentIntegrations",
     }),
     ...mapGetters("integrationsStore", {

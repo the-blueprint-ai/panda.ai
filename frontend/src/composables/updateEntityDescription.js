@@ -1,5 +1,8 @@
+import { useToast } from "vue-toastification";
+
 export function updateEntityDescription(event, entitiesData, index) {
   async function updateEntities() {
+    const toast = useToast();
     // Get the new description from the event target
     const newDescription = event.target.innerText;
 
@@ -22,24 +25,24 @@ export function updateEntityDescription(event, entitiesData, index) {
       const res = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "content-type": "application/json",
         },
         body: JSON.stringify(payload),
       });
       if (!res.ok) {
         if (res.status === 403) {
-          console.log("Session is not available or not authorized");
+          toast.error("Session is not available or not authorized.");
           return res;
         }
         if (res.status === 404) {
-          console.log("Entity not found");
+          toast.error("Entity not found.");
           return res;
         }
         throw new Error(`Server responded with status ${res.status}`);
       }
-      console.log("Entity data updated successfully");
+      toast.success("Entity description updated successfully!");
     } catch (error) {
-      console.error("Error updating entity description:", error);
+      toast.error("Error updating entity. Please try again.");
     }
   }
   updateEntities(); // Call the function directly

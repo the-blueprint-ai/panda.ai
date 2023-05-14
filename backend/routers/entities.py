@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Body
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from pydantic import BaseModel
@@ -26,6 +26,17 @@ class EntityItem(BaseModel):
     updated: datetime
 
 
+class DeleteEntityItem(BaseModel):
+    user_id: str
+    entity: Optional[str] = None
+
+
+class UpdateEntityItem(BaseModel):
+    userId: str
+    entity: str
+    description: str
+
+
 # ROUTERS
 @router.get("/get")
 async def fetch_user_entities(user_id: str, entity: str, session: SessionContainer = Depends(verify_session())):
@@ -39,9 +50,9 @@ async def fetch_all_user_entities(user_id: str, session: SessionContainer = Depe
     return result
 
 
-@router.get("/delete")
-async def delete_user_entity(user_id: str, entity: Optional[str] = None, session: SessionContainer = Depends(verify_session())):
-    result = await delete_entity(user_id, entity, session)
+@router.delete("/delete")
+async def delete_user_entity(item: DeleteEntityItem = Body(...), session: SessionContainer = Depends(verify_session())):
+    result = await delete_entity(item.user_id, item.entity, session)
     return result
 
 
@@ -51,6 +62,6 @@ async def add_user_entity(item: EntityItem, session: SessionContainer = Depends(
     return result
 
 @router.post("/update-description")
-async def update_entity_description(item: EntityItem, session: SessionContainer = Depends(verify_session())):
+async def update_entity_description(item: UpdateEntityItem, session: SessionContainer = Depends(verify_session())):
     result = await update_entity(item, session)
     return result

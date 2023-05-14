@@ -1,7 +1,9 @@
 import { DateTime } from "luxon";
+import { useToast } from "vue-toastification";
 
 export function getUserData(store, userId) {
   async function userData() {
+    const toast = useToast();
     try {
       const url =
         import.meta.env.VITE_APP_API_URL + "/users/get?user_id=" + userId;
@@ -12,12 +14,12 @@ export function getUserData(store, userId) {
       // Check if the response status indicates an error
       if (!res.ok) {
         if (res.status === 403) {
-          console.log("Session is not available or not authorized");
+          toast.error("Session is not available or not authorized");
           // Update the UI or take other actions as needed
           return;
         }
         if (res.status === 404) {
-          console.log("User not found");
+          toast.error("User not found");
           return;
         }
         throw new Error(`Server responded with status ${res.status}`);
@@ -75,7 +77,7 @@ export function getUserData(store, userId) {
       }
     } catch (error) {
       // Handle the error
-      console.log("An error occurred while saving the file:", error);
+      toast.error("An error occurred while saving the file:", error);
     }
   }
   userData(); // Call the function directly with userId

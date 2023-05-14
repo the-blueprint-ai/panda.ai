@@ -208,6 +208,13 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
 
         try:
             response = agent_chain.run(input=f"{ message }")
+
+            # check if response is None or an empty string
+            if not response:
+                logging.error("Received blank response from agent_chain.run")
+                await save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False)
+                return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later."})
+
             await save_new_message(userid, chatid, message, response, tokens, True)
             return JSONResponse(content={"response": response})
 

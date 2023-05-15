@@ -41,7 +41,9 @@ export default defineComponent({
       return this.roadmapData.filter((item) => !item.tags.includes("built"));
     },
     sortedNotBuiltItems() {
-      return [...this.notBuiltItems].sort((a, b) => a.name.localeCompare(b.name));
+      return [...this.notBuiltItems].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
     },
   },
   methods: {
@@ -138,86 +140,72 @@ export default defineComponent({
       >
         <h1>🐼</h1>
         <h1>PANDA.AI PRODUCT ROADMAP</h1>
-        <h4 class="mt-4">
+        <h4 class="mt-4 mb-5">
           Upvote the features you like and we’ll notify you once they've
           launched...
         </h4>
-        <div v-if="roadmapData.length > 0" class="">
-          <div class="row mt-5">
-            <div
-              class="col d-flex justify-content-center"
-              v-for="item in sortedNotBuiltItems"
-              :key="item.name"
-            >
-              <div
-                class="card text-bg-dark text-center mb-3 border-primary"
-                style="width: 35rem"
-              >
-                <div class="card-header pt-3 pb-3 border-primary">
-                  <h2 class="text-uppercase">{{ item.name }}</h2>
-                  <div
-                    class="btn btn-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
-                    v-if="item.tags.includes('built')"
-                  >
-                    <p class="text-uppercase" style="height: 10px">built</p>
-                    <img
-                      src="../assets/icons/check-circle-fill.svg"
-                      class="ms-3 mt-n1"
-                    />
-                  </div>
-                  <div
-                    class="btn btn-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
-                    v-if="item.tags.includes('in progress')"
-                  >
-                    <p class="text-uppercase" style="height: 10px">
-                      in progress
-                    </p>
-                    <img
-                      src="../assets/icons/fast-forward-circle-fill.svg"
-                      class="ms-3 mt-n1"
-                    />
-                  </div>
-                  <div
-                    class="btn btn-secondary mt-2 mb-1 d-inline-flex justify-content-center align-items-center"
-                    v-if="item.tags.includes('newly added')"
-                  >
-                    <p class="text-uppercase" style="height: 10px">
-                      newly added
-                    </p>
-                    <img
-                      src="../assets/icons/star-fill.svg"
-                      class="ms-3 mt-n1"
-                    />
-                  </div>
+        <div v-if="roadmapData.length > 0" class="d-flex flex-row flex-wrap justify-content-around">
+          <div
+            class="d-flex justify-content-center"
+            v-for="item in sortedNotBuiltItems"
+            :key="item.name"
+          >
+            <div class="roadMapCard card d-flex text-bg-dark text-center mb-4 border-primary">
+              <div class="card-header pt-3 pb-3 border-primary">
+                <h2 class="text-uppercase">{{ item.name }}</h2>
+                <div
+                  class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
+                  v-if="item.tags.includes('built')"
+                >
+                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">built</p>
+                  <img
+                    src="../assets/icons/check-circle-fill.svg"
+                    class="ms-2 mt-n1"
+                  />
                 </div>
-                <div class="card-body pt-4 pb-2 px-3 border-primary">
-                  <p>{{ item.description }}</p>
+                <div
+                  class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
+                  v-if="item.tags.includes('in progress')"
+                >
+                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">in progress</p>
+                  <img
+                    src="../assets/icons/fast-forward-circle-fill.svg"
+                    class="ms-2 mt-n1"
+                  />
                 </div>
-                <div class="card-footer pt-4 pb-4 border-primary">
-                  <div
-                    v-if="!item.tags.includes('built')"
-                    class="d-flex align-items-center justify-content-center"
+                <div
+                  class="badge rounded-pill text-bg-secondary d-inline-flex justify-content-center align-items-center"
+                  v-if="item.tags.includes('newly added')"
+                >
+                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">newly added</p>
+                  <img src="../assets/icons/star-fill.svg" class="ms-2" />
+                </div>
+              </div>
+              <div class="card-body pt-4 pb-2 px-3 border-primary">
+                <p>{{ item.description }}</p>
+              </div>
+              <div class="card-footer pt-4 pb-4 border-primary">
+                <div
+                  v-if="!item.tags.includes('built')"
+                  class="d-flex align-items-center justify-content-center"
+                >
+                  <button
+                    class="btn btn-secondary btn-lg d-inline-flex justify-content-between px-3"
+                    @click="upvoteItem(item)"
+                    style="height: 50px; width: 200px"
                   >
-                    <button
-                      class="btn btn-secondary btn-lg d-inline-flex justify-content-between px-3"
-                      @click="upvoteItem(item)"
-                      style="height: 50px; width: 200px"
-                    >
-                      <img
-                        src="../assets/icons/arrow-up-circle-fill.svg"
-                        class="mt-1"
-                        width="26"
-                      />
-                      <p
-                        class="text-uppercase d-inline-flex align-items-center"
-                      >
-                        Upvote
-                      </p>
-                      <p class="" id="roadmapItemVotes">
-                        <strong>{{ item.votes }}</strong>
-                      </p>
-                    </button>
-                  </div>
+                    <img
+                      src="../assets/icons/arrow-up-circle-fill.svg"
+                      class="mt-1"
+                      width="26"
+                    />
+                    <p class="text-uppercase d-inline-flex align-items-center">
+                      Upvote
+                    </p>
+                    <p class="" id="roadmapItemVotes">
+                      <strong>{{ item.votes }}</strong>
+                    </p>
+                  </button>
                 </div>
               </div>
             </div>
@@ -279,31 +267,31 @@ export default defineComponent({
               <div class="card-header pt-3 pb-3">
                 <h2 class="text-uppercase">{{ item.name }}</h2>
                 <div
-                  class="btn btn-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
+                  class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('built')"
                 >
-                  <p class="text-uppercase" style="height: 10px">built</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">built</p>
                   <img
                     src="../assets/icons/check-circle-fill.svg"
-                    class="ms-3 mt-n1"
+                    class="ms-2"
                   />
                 </div>
                 <div
-                  class="btn btn-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
+                  class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('in progress')"
                 >
-                  <p class="text-uppercase" style="height: 10px">in progress</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">in progress</p>
                   <img
                     src="../assets/icons/fast-forward-circle-fill.svg"
-                    class="ms-3 mt-n1"
+                    class="ms-2"
                   />
                 </div>
                 <div
-                  class="btn btn-secondary mt-2 mb-1 d-inline-flex justify-content-center align-items-center"
+                  class="badge rounded-pill text-bg-secondary mt-2 mb-1 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('newly added')"
                 >
-                  <p class="text-uppercase" style="height: 10px">newly added</p>
-                  <img src="../assets/icons/star-fill.svg" class="ms-3 mt-n1" />
+                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">newly added</p>
+                  <img src="../assets/icons/star-fill.svg" class="ms-2" />
                 </div>
               </div>
               <div class="card-body pt-4 pb-2 px-3">
@@ -409,5 +397,20 @@ export default defineComponent({
   top: 0;
   background-color: rgba(255, 255, 255, 0.8);
   overflow: hidden;
+}
+@media (min-width: 1200px) {
+  .roadMapCard {
+    width: 500px;
+  }
+}
+@media (min-width: 576px) {
+  .roadMapCard {
+    width: 400px;
+  }
+}
+@media (max-width: 576px) {
+  .roadMapCard {
+    width: 300px;
+  }
 }
 </style>

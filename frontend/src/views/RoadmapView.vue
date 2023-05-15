@@ -157,7 +157,7 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('built')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">built</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">built</p>
                   <img
                     src="../assets/icons/check-circle-fill.svg"
                     class="ms-2 mt-n1"
@@ -167,7 +167,7 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('in progress')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">in progress</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">in progress</p>
                   <img
                     src="../assets/icons/fast-forward-circle-fill.svg"
                     class="ms-2 mt-n1"
@@ -177,7 +177,7 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('newly added')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">newly added</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">newly added</p>
                   <img src="../assets/icons/star-fill.svg" class="ms-2" />
                 </div>
               </div>
@@ -270,7 +270,7 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('built')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">built</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">built</p>
                   <img
                     src="../assets/icons/check-circle-fill.svg"
                     class="ms-2"
@@ -280,7 +280,7 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('in progress')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">in progress</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">in progress</p>
                   <img
                     src="../assets/icons/fast-forward-circle-fill.svg"
                     class="ms-2"
@@ -290,7 +290,7 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('newly added')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 12px">newly added</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">newly added</p>
                   <img src="../assets/icons/star-fill.svg" class="ms-2" />
                 </div>
               </div>

@@ -1,5 +1,6 @@
 // Bootstrap Variable Overrides
 $enable-negative-margins: true;
+$enable-shadows: true;
 $body-bg: #FFFFFF;
 $primary: #000000;
 $secondary: #FFCB4C;
@@ -7,6 +8,8 @@ $light: #EFEFEF;
 $link-color: #FFCB4C;
 $form-check-input-checked-bg-color: #FFCB4C;
 $form-check-input-checked-border-color: #CC9A00;
+
+// Toasts CSS
 $vt-color-default: #000000;
 $vt-text-color-default: #FFFFFF;
 $vt-color-info: #FFCB4C;

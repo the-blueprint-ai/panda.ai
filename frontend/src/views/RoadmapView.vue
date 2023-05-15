@@ -150,7 +150,7 @@ export default defineComponent({
             v-for="item in sortedNotBuiltItems"
             :key="item.name"
           >
-            <div class="card text-bg-dark text-center mb-4 border-primary" style="width: 400px">
+            <div class="roadMapCard card d-flex text-bg-dark text-center mb-4 border-primary">
               <div class="card-header pt-3 pb-3 border-primary">
                 <h2 class="text-uppercase">{{ item.name }}</h2>
                 <div
@@ -397,5 +397,20 @@ export default defineComponent({
   top: 0;
   background-color: rgba(255, 255, 255, 0.8);
   overflow: hidden;
+}
+@media (min-width: 1200px) {
+  .roadMapCard {
+    width: 500px;
+  }
+}
+@media (min-width: 576px) {
+  .roadMapCard {
+    width: 400px;
+  }
+}
+@media (max-width: 576px) {
+  .roadMapCard {
+    width: 300px;
+  }
 }
 </style>

@@ -1,4 +1,7 @@
 <script>
+import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
+
 export default {
   data() {
     return {
@@ -6,12 +9,17 @@ export default {
       pandaImage: "",
       userImage: "",
       thinkingImage: "",
+      loading: false,
+      buttonText: "SUBMIT FEEDBACK",
+      upFeedback: "",
+      downFeedback: "",
     };
   },
   props: {
     message: Object,
     searchTerm: String,
     // isDisabled: Boolean,
+    userId: String,
   },
   async created() {
     const pandaImageModule = await import("../assets/panda.png");
@@ -43,7 +51,7 @@ export default {
       const urlPattern = /(https?:\/\/[^\s/$.?#].[^\s]*)/gi;
 
       // Create a temporary DOM element to parse and manipulate the message HTML
-      const tempDiv = document.createElement('div');
+      const tempDiv = document.createElement("div");
       tempDiv.innerHTML = message;
 
       // Iterate through all text nodes within the temporary DOM element
@@ -77,6 +85,25 @@ export default {
         return this.avatar;
       }
     },
+    submitRating(user_id, message, rating) {
+      console.log(
+        "User ID: " + user_id +
+        "Message: " + message +
+        "Rating: " + rating
+      )
+    },
+    submitFeedback(user_id, message, rating, feedback) {
+      this.loading = true;
+      console.log(
+        "User ID: " + user_id +
+        ", Message: " + message +
+        ", Rating: " + rating +
+        ", Feedback: " + feedback
+      )
+    },
+  },
+  components: {
+    SpinnerComponent,
   },
 };
 </script>
@@ -84,17 +111,142 @@ export default {
 <template>
   <div :class="['chatMessage', message.user, messageClass]">
     <img v-bind:src="messageImage()" class="chatAvatar" />
-    <p class="message" v-html="formatMessage(message.message)"></p>
-    <span class="messageRating" v-if="message.user == 'panda' && !isDisabled">
-      <img class="thumbUp" src="../assets/icons/hand-thumbs-up.svg" />
-      <img class="thumbDown" src="../assets/icons/hand-thumbs-down.svg" />
-    </span>
+    <div class="w-100 d-flex flex-row justify-content-between">
+      <p class="message" v-html="formatMessage(message.message)"></p>
+      <span class="thumbs d-flex" v-if="message.user == 'panda'">
+        <div
+          class="d-flex"
+          data-bs-toggle="modal"
+          data-bs-target="#thumbsUpModal"
+          @click="submitRating(userId, message.message, 'up')"
+        >
+          <img class="thumbUp" src="../assets/icons/hand-thumbs-up.svg" />
+        </div>
+        <div
+          class="d-flex"
+          data-bs-toggle="modal"
+          data-bs-target="#thumbsDownModal"
+          @click="submitRating(userId, message.message, 'down')"
+        >
+          <img
+            class="thumbDown ms-2"
+            src="../assets/icons/hand-thumbs-down.svg"
+          />
+        </div>
+      </span>
+    </div>
+    <div
+      class="modal fade"
+      id="thumbsUpModal"
+      tabindex="-1"
+      aria-labelledby="thumbsUpModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex mt-2 mb-n2">
+              <img
+                class="thumbUpAdditional me-3"
+                src="../assets/icons/hand-thumbs-up.svg"
+              />
+              <p class="mt-1">Please provide additional feedback</p>
+            </div>
+            <button
+              type="button"
+              class="btn-close me-1"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="form-floating mt-n3 mb-2">
+              <textarea
+                type="text"
+                class="form-control mt-4"
+                id="floatingTextarea"
+                v-model="upFeedback"
+              ></textarea>
+              <label for="floatingTextarea"
+                >What would you like to add to the feedback?</label
+              >
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              @click="submitFeedback(userId, message.message, 'up', this.upFeedback)"
+              type="button"
+              class="btn btn-secondary d-flex justify-content-center"
+              style="width:150px"
+            >
+              <SpinnerComponent
+                :loading="this.loading"
+                :button-text="this.buttonText"
+              ></SpinnerComponent>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="thumbsDownModal"
+      tabindex="-1"
+      aria-labelledby="thumbsDownModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex mt-2 mb-n2">
+              <img
+                class="thumbDownAdditional me-3"
+                src="../assets/icons/hand-thumbs-down.svg"
+              />
+              <p class="mt-1">Please provide additional feedback</p>
+            </div>
+            <button
+              type="button"
+              class="btn-close me-1"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="form-floating mt-n3 mb-2">
+              <textarea
+                type="text"
+                class="form-control mt-4"
+                id="floatingTextarea"
+                v-model="downFeedback"
+              ></textarea>
+              <label for="floatingTextarea"
+                >What would you like to add to the feedback?</label
+              >
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              @click="submitFeedback(userId, message.message, 'down', this.downFeedback)"
+              type="button"
+              class="btn btn-secondary d-flex justify-content-center"
+              style="width:150px"
+            >
+              <SpinnerComponent
+                :loading="this.loading"
+                :button-text="this.buttonText"
+              ></SpinnerComponent>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .userChat {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   text-align: left;
   display: flex;
   max-width: 785px;
@@ -103,12 +255,16 @@ export default {
   justify-content: right;
   align-items: right;
 }
+.userChat p {
+  width: 100%;
+  text-align: end;
+}
 .userChat.highlighted {
   position: relative;
   width: 99%;
   margin-top: 5px;
   margin-bottom: 5px;
-  background-color: #FFCB4C;
+  background-color: #ffcb4c;
   border-radius: 15px;
   flex-direction: row-reverse;
   justify-content: right;
@@ -116,7 +272,7 @@ export default {
   border: none;
 }
 .pandaChat {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   text-align: left;
   display: flex;
   max-width: 785px;
@@ -130,14 +286,14 @@ export default {
   width: 99%;
   margin-top: 5px;
   margin-bottom: 5px;
-  background-color: #FFCB4C;
+  background-color: #ffcb4c;
   border-radius: 15px;
   border: none;
 }
 .chatMessage {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #EFEFEF;
+  border-bottom: 1px solid #efefef;
 }
 .message {
   display: flex;
@@ -148,7 +304,7 @@ export default {
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 15px;
-  width:fit-content;
+  width: fit-content;
   word-wrap: break-word;
   border-radius: 15px;
   color: #000000;
@@ -162,7 +318,7 @@ export default {
   text-align: center;
 }
 .message a:hover {
-  color: #FFCB4C;
+  color: #ffcb4c;
   text-decoration: none;
 }
 .chatAvatar {
@@ -171,6 +327,34 @@ export default {
   margin: 5px;
   margin-bottom: 12px;
   border-radius: 10px;
+}
+.thumbs {
+  margin-right: -63px;
+  opacity: 0.2;
+}
+.thumbUp,
+.thumbDown {
+  margin: auto;
+  padding: 5px;
+  height: 30px;
+  border-radius: 5px;
+}
+.thumbUp:hover,
+.thumbDown:hover {
+  cursor: pointer;
+  background-color: #efefef;
+}
+.thumbUpAdditional,
+.thumbDownAdditional {
+  height: 30px;
+  padding: 5px;
+  border-radius: 5px;
+}
+.thumbUpAdditional {
+  background-color: lightgreen;
+}
+.thumbDownAdditional {
+  background-color: red;
 }
 @media (max-width: 576px) {
   .chatAvatar {

@@ -91,7 +91,7 @@ export default {
       >
         <img src="../assets/icons/list-ul.svg" />ENTITIES
       </h4>
-      <h4
+      <!-- <h4
         :class="{
           selected: tab === 'documents',
           unselected: tab !== 'documents',
@@ -114,7 +114,7 @@ export default {
         @click="dataTabSelector('browsing')"
       >
         <img src="../assets/icons/browser-safari.svg" />BROWSING
-      </h4>
+      </h4> -->
     </div>
     <div class="accountCardSelector">
       <select v-model="tab" class="form-select mb-2" @change="onTabChange">

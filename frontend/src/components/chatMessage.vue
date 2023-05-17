@@ -1,6 +1,8 @@
 <script>
 import SpinnerComponent from "../components/spinnerComponent.vue";
 import { useToast } from "vue-toastification";
+import { submitRating } from "../composables/submitRating.js";
+import { submitFeedback } from "../composables/submitFeedback.js";
 
 export default {
   data() {
@@ -18,7 +20,7 @@ export default {
   props: {
     message: Object,
     searchTerm: String,
-    // isDisabled: Boolean,
+    feedbackDisabled: Boolean,
     userId: String,
   },
   async created() {
@@ -85,21 +87,27 @@ export default {
         return this.avatar;
       }
     },
-    submitRating(user_id, message, rating) {
-      console.log(
-        "User ID: " + user_id +
-        "Message: " + message +
-        "Rating: " + rating
-      )
-    },
-    submitFeedback(user_id, message, rating, feedback) {
+    async submitRating(user_id, message, rating) {
       this.loading = true;
-      console.log(
-        "User ID: " + user_id +
-        ", Message: " + message +
-        ", Rating: " + rating +
-        ", Feedback: " + feedback
-      )
+      try {
+        await submitRating(user_id, message, rating);
+        console.log("Rating submitted successfully");
+      } catch (error) {
+        console.error("Error submitting rating");
+      } finally {
+        this.loading = false;
+      }
+    },
+    async submitFeedback(user_id, message, rating, feedback) {
+      this.loading = true;
+      try {
+        await submitFeedback(user_id, message, rating, feedback);
+        useToast().success("Feedback submitted successfully");
+      } catch (error) {
+        useToast().error("Error submitting feedback");
+      } finally {
+        this.loading = false;
+      }
     },
   },
   components: {
@@ -113,7 +121,7 @@ export default {
     <img v-bind:src="messageImage()" class="chatAvatar" />
     <div class="w-100 d-flex flex-row justify-content-between">
       <p class="message" v-html="formatMessage(message.message)"></p>
-      <span class="thumbs d-flex" v-if="message.user == 'panda'">
+      <span class="thumbs d-flex" v-if="message.user == 'panda' && !feedbackDisabled">
         <div
           class="d-flex"
           data-bs-toggle="modal"
@@ -174,10 +182,14 @@ export default {
           </div>
           <div class="modal-footer">
             <button
-              @click="submitFeedback(userId, message.message, 'up', this.upFeedback)"
+              @click="
+                submitFeedback(userId, message.message, 'up', this.upFeedback)
+              "
               type="button"
               class="btn btn-secondary d-flex justify-content-center"
-              style="width:150px"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              style="width: 150px"
             >
               <SpinnerComponent
                 :loading="this.loading"
@@ -227,10 +239,19 @@ export default {
           </div>
           <div class="modal-footer">
             <button
-              @click="submitFeedback(userId, message.message, 'down', this.downFeedback)"
+              @click="
+                submitFeedback(
+                  userId,
+                  message.message,
+                  'down',
+                  this.downFeedback
+                )
+              "
               type="button"
               class="btn btn-secondary d-flex justify-content-center"
-              style="width:150px"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              style="width: 150px"
             >
               <SpinnerComponent
                 :loading="this.loading"

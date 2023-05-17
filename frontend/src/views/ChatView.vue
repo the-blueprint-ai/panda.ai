@@ -204,7 +204,7 @@ export default defineComponent({
                 :class="item.user === 'panda' ? 'pandaChat' : 'userChat'"
                 :key="item.user + '-' + index"
                 :search-term="currentSearchTerm"
-                :is-disabled="this.isDisabled"
+                :feedback-disabled="false"
                 :user-id="userId"
               ></chatMessage>
             </div>

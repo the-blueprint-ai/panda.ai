@@ -127,10 +127,7 @@ export default {
 </script>
 
 <template>
-  <div
-    class="userChatHistory"
-    v-if="this.userChatHistory && historyMenu"
-  >
+  <div class="userChatHistory" v-if="this.userChatHistory && historyMenu">
     <div class="chatHistorySideBar">
       <div class="input-group sticky-top">
         <input
@@ -226,7 +223,7 @@ export default {
           :class="contentItem.user === 'panda' ? 'pandaChat' : 'userChat'"
           :key="contentIndex"
           :searchTerm="chatHistorySearch"
-          :is-disabled="this.isDisabled"
+          :feedback-disabled="true"
         ></chatMessage>
       </span>
     </div>
@@ -306,10 +303,9 @@ export default {
   .chatSelector {
     display: block;
     padding-bottom: 10px;
-    border-bottom: 1px solid #EFEFEF;
+    border-bottom: 1px solid #efefef;
   }
 }
 @media (max-width: 576px) {
-
 }
 </style>

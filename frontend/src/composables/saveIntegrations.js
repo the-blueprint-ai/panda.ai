@@ -1,4 +1,7 @@
+import { useToast } from "vue-toastification";
+
 export async function saveIntegrations(payload) {
+  const toast = useToast();
   try {
     const url = import.meta.env.VITE_APP_API_URL + "/users/set-integrations";
     const res = await fetch(url, {
@@ -12,7 +15,7 @@ export async function saveIntegrations(payload) {
     // Check if the response status indicates an error
     if (!res.ok) {
       if (res.status === 403) {
-        console.log("Session is not available or not authorized");
+        toast.error("Session is not available or not authorized");
         // Update the UI or take other actions as needed
         return;
       }
@@ -23,7 +26,7 @@ export async function saveIntegrations(payload) {
     return response;
   } catch (error) {
     // Handle the error
-    console.log("An error occurred while saving the file:", error);
+    toast.error("An error occurred while saving the integrations.");
     throw error; // Rethrow the error to be caught by the calling code
   }
 }

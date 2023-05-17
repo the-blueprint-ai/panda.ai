@@ -3,11 +3,11 @@ from fastapi.responses import JSONResponse
 from dependencies import database
 from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
-from langchain.llms import PromptLayerOpenAI
 from langchain.memory import ConversationEntityMemory, ConversationBufferMemory
 from langchain.agents import Tool
 from langchain.agents import AgentType
 from langchain.agents.agent import Agent
+from langchain.schema import HumanMessage
 from langchain.agents.conversational.base import ConversationalAgent
 from langchain.chat_models import PromptLayerChatOpenAI
 from langchain.tools.base import BaseTool
@@ -20,14 +20,9 @@ from langchain.base_language import BaseLanguageModel
 from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from typing import Any, List, Optional, Sequence, Type, Union, Dict
-import promptlayer
 from config import settings
-import logging
-import boto3
-import json
-import tiktoken
+import logging, re, asyncio, json, tiktoken, requests, boto3, promptlayer
 from starlette import status
-import requests
 from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
@@ -110,11 +105,12 @@ tools = [
 
 # FUNCTIONS
 async def pandaChatAgent(userid: str, first_name: str, last_name: str, username: str, message: str):
-    # await save_entities(userid, message)
-    check_data = await get_subscriber_and_user_messages_per_month(userid)
+    check_data, number_of_messages_this_month = await asyncio.gather(
+        get_subscriber_and_user_messages_per_month(userid),
+        get_user_messages_this_month(userid)
+    )
     subscriber = check_data["subscriber"]
     messages_allowed = check_data["messages_per_month"]
-    number_of_messages_this_month = await get_user_messages_this_month(userid)
     messages_count = number_of_messages_this_month["count"]
 
     if (subscriber == False):
@@ -122,25 +118,28 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     elif (messages_count >= messages_allowed):
         return JSONResponse(content={"response": f"<span>Apologies! You have used up your monthly messages allowance. To add more messages to your monthly plan or to upgrade your subscription, please see the infomation below:</span><h5 class='mt-4 mb-0'>ADD ONS</h5><span><p>You can add more messages to your monthly subscription as a one-off or ongoing every month by visiting your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, heading to the Subscription tab and updating your subscription details.</p><span><h5 class='mt-4 mb-0'>UPGRADING</h5><span><p>To upgrade your subscription to include more messages per month in your plan you can go to your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, head to the Subscriptions tab and upgrade your subscription.</p></span>"})
     else:
-        integration_ids = await get_user_tools(userid)
+        integration_ids, entities, chat_history = await asyncio.gather(
+            get_user_tools(userid),
+            get_most_relevant_entities(userid, message),
+            get_user_chat_history(userid)
+        )
+
+        if chat_history is not None and chat_history[0].get("chat_id") is not None:
+            chatid = chat_history[0]["chat_id"]
+        else:
+            chatid = 0
+   
         filtered_tools = [tools[0]]
         filtered_tools += [tool for i, tool in enumerate(tools) if i in integration_ids and i != 0]
+        formatted_entities = '\n'.join([f"{item['entity']}: {item['description']}" for item in entities])
+        asyncio.create_task(save_entities(userid, first_name, message, formatted_entities, chat_history, chatid))
+
         llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0.05, pl_tags=[f"{ userid }"], return_pl_id=True)
         memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
         today = datetime.today()
         suffix = 'th' if 11 <= today.day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(today.day % 10, 'th')
         current_date = today.strftime(f"%d{suffix} %B %Y")
-
-        entities = await get_most_relevant_entities(userid, message)
-        formatted_entities = '\n'.join([f"{item['entity']}: {item['description']}" for item in entities])
-
-        chat_history = await get_user_chat_history(userid)
-
-        if chat_history is not None and chat_history[0].get("chat_id") is not None:
-            chatid = chat_history[0]["chat_id"]
-        else:
-            chatid = 0
 
         prefix_dict = promptlayer.prompts.get("main_panda_chat_prefix")
         suffix_dict = promptlayer.prompts.get("main_panda_chat_suffix")
@@ -212,45 +211,48 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
             # check if response is None or an empty string
             if not response:
                 logging.error("Received blank response from agent_chain.run")
-                await save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False)
+                asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False))
                 return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later."})
 
-            await save_new_message(userid, chatid, message, response, tokens, True)
+            asyncio.create_task(save_new_message(userid, chatid, message, response, tokens, True))
             return JSONResponse(content={"response": response})
 
         except requests.exceptions.RequestException as e:
             logging.error(f"Network error while running agent_chain: {e}")
-            await save_new_message(userid, chatid, message, "Apologies! We're experiencing network issues. Please try again later.", tokens, False)
+            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! We're experiencing network issues. Please try again later.", tokens, False))
             raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Service temporarily unavailable")
 
         except ValueError as e:
             logging.error(f"Value error while running agent_chain: {e}")
-            await save_new_message(userid, chatid, message, "Apologies! Something was wrong with the input. Please try again.", tokens, False)
+            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something was wrong with the input. Please try again.", tokens, False))
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid input")
 
         except Exception as e:
             logging.error(f"Unexpected error while running agent_chain: {e}")
-            await save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False)
+            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False))
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
-async def save_entities(userid: str, message: str):
+async def save_entities(userid: str, first_name: str, message: str, entities: str, chat_history: List, chatid: int):
     entity_llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0, pl_tags=[f"{ userid }", "entityCreation"])
     
-    memory = ConversationEntityMemory(llm=entity_llm)
-    
-    conversation = ConversationChain(
-        llm=entity_llm, 
-        verbose=True,
-        prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE,
-        memory=memory
+    ENTITY_PROMPT = promptlayer.prompts.get("main_panda_chat_entity_saving")
+
+    ENTITY_DICT = ENTITY_PROMPT['template']
+
+    MY_ENTITY_DICT = ENTITY_DICT.format(
+        chat_history = chat_history,
+        entities = entities,
+        message = message,
+        first_name = first_name
     )
 
-    response = conversation.predict(input=message)
+    tokens = num_tokens_from_string(MY_ENTITY_DICT, "cl100k_base")
+    response = entity_llm([HumanMessage(content=MY_ENTITY_DICT)])
 
     if response:
-        entity_memory = conversation.memory.entity_store.store
-
+        new_entities = parse_entities_message(response.content)
+        logging.info("New Entities: " + str(new_entities))
         dynamodb = boto3.resource(
             'dynamodb',
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -261,31 +263,45 @@ async def save_entities(userid: str, message: str):
         timestamp = datetime.utcnow().isoformat()
 
         try:
-            for entity, description in entity_memory.items():
+            for entity, description in new_entities.items():
+                # Skip this iteration if the entity or description is empty
+                if not entity or not description:
+                    continue
 
-                response = table.get_item(
-                    Key={
-                        'userId': userid,
-                        'entity': entity
-                    }
-                )
+                # Skip this iteration if the description contains 'already saved'
+                target_strings = ['already saved', 'saved entity']
+                if any(target in description.lower() for target in target_strings):
+                    continue
 
-                existing_description = response.get('Item', {}).get('description', '')
-                combined_description = f"{existing_description} {description}"
+                # Check if the description ends with '(updated information)'
+                if description.endswith('(updated information)'):
+                    # Remove the '(updated information)' part from the description
+                    description = description.replace('(updated information)', '').strip()
 
-                summary_llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0, pl_tags=[f"{ userid }", "summarisation"])
-                summarised_description = summary_llm(f"Summarise this for me and DO NOT leave out any details: {combined_description}")
+                    # Fetch the current description from the database
+                    current_entry = table.get_item(
+                        Key={
+                            'userId': userid,
+                            'entity': entity
+                        }
+                    )
 
-                new_description = summarised_description.replace("\n", "")
+                    # Append the new information to the current description
+                    if 'Item' in current_entry:
+                        current_description = current_entry['Item'].get('description', '')
+                        description = current_description + '. ' + description
+
+                # Remove anything in brackets at the end of the value
+                description = re.sub(r'\(.*\)$', '', description).strip()
 
                 response = table.update_item(
                     Key={
                         'userId': userid,
                         'entity': entity
                     },
-                    UpdateExpression="SET description = :newDescription, updated = :updated, created_at = if_not_exists(created_at, :created_at)",
+                    UpdateExpression="SET description = :description, updated = :updated, created_at = if_not_exists(created_at, :created_at)",
                     ExpressionAttributeValues={
-                        ':newDescription': new_description,
+                        ':description': description,
                         ':updated': timestamp,
                         ':created_at': timestamp
                     },
@@ -293,18 +309,57 @@ async def save_entities(userid: str, message: str):
                 )
 
                 if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-                    return None
+                    continue
                 else:
-                    logging.info(f"Failed to update entities. Response: {response}")
-
+                    logging.error(f"Failed to update entities. Response: {response}")
+                    return asyncio.create_task(save_new_message(userid, chatid, message, "Failed to update entities", tokens, False))
+                
+            return asyncio.create_task(save_new_message(userid, chatid, message, "Entities updated and saved successfully", tokens, True))
 
         except ClientError as e:
-            logging.info(e.response['Error']['Message'])
-
-        return logging.info("Entities saved to DynamoDB successfully")
+            logging.error(e.response['Error']['Message'])
+            return asyncio.create_task(save_new_message(userid, chatid, message, "Failed to update entities", tokens, False))
 
     else:
+        asyncio.create_task(save_new_message(userid, chatid, message, "Entities not created", tokens, False))
         raise HTTPException(status_code=400, detail="An error occurred while saving the entities.")
+
+
+def parse_entities_message(message: str) -> Dict[str, str]:
+    # Split the message by newline
+    lines = message.split("\n")
+
+    # Initialize an empty dictionary
+    entities = {}
+
+    # Iterate over each line
+    for line in lines:
+        # Skip the first line that only contains "New Entities:"
+        if line == "New Entities":
+            continue
+
+        # Skip the line if it does not contain a colon
+        if ":" not in line:
+            continue
+
+        # Split the line into entity and description using the first colon as a separator
+        entity, description = line.split(":", 1)
+
+        # Remove leading and trailing whitespace
+        entity = entity.strip()
+        description = description.strip()
+
+        # Remove leading dash and space from entity
+        entity = entity.lstrip('- ')
+
+        # Add the entity and its description to the dictionary
+        entities[entity] = description
+
+    # Return None if the entities dictionary is empty
+    if not entities:
+        return None
+
+    return entities
 
 
 async def get_user_chat_history(user_id: str):
@@ -462,3 +517,54 @@ async def get_user_tools(user_id: str):
     integration_ids = [row["integration_id"] for row in result]
 
     return integration_ids
+
+async def rate_message(userid: str, message: str, rating: str):
+    if rating == "up":
+        rating_bool = True
+    elif rating == "down":
+        rating_bool = False
+    else:
+        raise HTTPException(status_code=400, detail="Invalid rating")
+
+    query = """
+        UPDATE panda_ai_messages 
+        SET thumb_rating = :rating 
+        WHERE user_id = :user_id 
+        AND message_response = :message 
+        AND message_id = (
+            SELECT MAX(message_id) 
+            FROM panda_ai_messages 
+            WHERE user_id = :user_id 
+            AND message_response = :message
+        )
+    """
+    values = {"user_id": userid, "message": message, "rating": rating_bool}
+    await database.execute(query, values)
+
+    return {"message": "Message rated successfully"}
+
+async def feedback_message(userid: str, message: str, rating: str, feedback: str):
+    if rating == "up":
+        rating_bool = True
+    elif rating == "down":
+        rating_bool = False
+    else:
+        raise HTTPException(status_code=400, detail="Invalid rating")
+
+    query = """
+        UPDATE panda_ai_messages 
+        SET feedback_comment = :feedback 
+        WHERE user_id = :user_id 
+        AND message_response = :message
+        AND thumb_rating = :rating
+        AND message_id = (
+            SELECT MAX(message_id) 
+            FROM panda_ai_messages 
+            WHERE user_id = :user_id 
+            AND message_response = :message
+        )
+    """
+    values = {"user_id": userid, "message": message, "rating": rating_bool, "feedback": feedback}
+    await database.execute(query, values)
+
+    return {"message": "Message feedback saved successfully"}

@@ -142,31 +142,35 @@ export default {
       <div class="card-header text-center">
         <h3 class="mt-2">SELECT YOUR {{ integrations }} INTEGRATIONS</h3>
       </div>
-      <div class="card-body d-flex flex-column mx-auto">
-        <div
-          class="form-check form-switch"
-          v-for="integration in integrationsList"
-          :key="integration.integration_id"
-        >
-          <input
-            class="form-check-input active-bg-secondary"
-            type="checkbox"
-            :value="integration.integration_id"
-            v-model="selectedIntegrations"
-            :disabled="
-              !canUpdate ||
-              (selectedIntegrations.length >= integrations &&
-                !selectedIntegrations.includes(integration.integration_id))
-            "
-          />
-          <label class="form-check-label d-flex" for="flexCheckDefault">
-            <img
-              :src="icons[integration.integration_icon]"
-              alt=""
-              class="icon ms-2 me-2"
+      <div
+        class="card-body w-100 d-flex flex-column align-items-center mx-auto"
+      >
+        <div class="align-items-start">
+          <div
+            class="form-check form-switch"
+            v-for="integration in integrationsList"
+            :key="integration.integration_id"
+          >
+            <input
+              class="form-check-input active-bg-secondary"
+              type="checkbox"
+              :value="integration.integration_id"
+              v-model="selectedIntegrations"
+              :disabled="
+                !canUpdate ||
+                (selectedIntegrations.length >= integrations &&
+                  !selectedIntegrations.includes(integration.integration_id))
+              "
             />
-            - {{ integration.integration_name }}
-          </label>
+            <label class="form-check-label d-flex text-nowrap" for="flexCheckDefault">
+              <img
+                :src="icons[integration.integration_icon]"
+                alt=""
+                class="icon ms-2 me-2"
+              />
+              - {{ integration.integration_name }}
+            </label>
+          </div>
         </div>
       </div>
       <p v-if="integrationsDifference == 1" class="text-warning text-center">
@@ -180,7 +184,6 @@ export default {
           class="btn btn-secondary btn-lg d-inline-flex justify-content-center mt-3 mb-3"
           @click="saveIntegrationsToDB"
           :disabled="!canUpdate"
-          style="width: 220px"
         >
           <SpinnerComponent
             :loading="this.loading"

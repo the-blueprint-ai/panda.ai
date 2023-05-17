@@ -18,3 +18,5 @@ numpy
 wolframalpha
 tiktoken
 stripe
+pinecone-client
+sentence-transformers

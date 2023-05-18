@@ -19,6 +19,8 @@ from langchain.callbacks.base import BaseCallbackManager
 from langchain.base_language import BaseLanguageModel
 from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
+from sentence_transformers import SentenceTransformer
+import pinecone
 from typing import Any, List, Optional, Sequence, Type, Union, Dict
 from config import settings
 import logging, re, asyncio, json, tiktoken, requests, boto3, promptlayer
@@ -33,8 +35,11 @@ promptlayer.api_key = settings.PRMPTLYR_API_KEY
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-            
 
+model = SentenceTransformer('all-MiniLM-L6-v2')
+pinecone.init(api_key=settings.PINECONE_API_KEY)
+index = pinecone.Index(index_name="panda-ai-user-entities")
+            
 search = GoogleSearchTool()
 news = NewsSearchTool()
 wikipedia = WikipediaSearchTool()
@@ -308,7 +313,16 @@ async def save_entities(userid: str, first_name: str, message: str, entities: st
                     ReturnValues="UPDATED_NEW"
                 )
 
-                if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                # Compute embedding for the description and add it to Pinecone
+                embedding = model.encode([description])[0]
+                unique_id = userid + "/" + entity
+                metadata = {
+                    "user_id": userid
+                }
+                pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)])
+
+
+                if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_response.upserted_count == 1:
                     continue
                 else:
                     logging.error(f"Failed to update entities. Response: {response}")

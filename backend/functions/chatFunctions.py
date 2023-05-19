@@ -19,6 +19,8 @@ from langchain.callbacks.base import BaseCallbackManager
 from langchain.base_language import BaseLanguageModel
 from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
+from sentence_transformers import SentenceTransformer
+import pinecone
 from typing import Any, List, Optional, Sequence, Type, Union, Dict
 from config import settings
 import logging, re, asyncio, json, tiktoken, requests, boto3, promptlayer
@@ -33,8 +35,11 @@ promptlayer.api_key = settings.PRMPTLYR_API_KEY
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-            
 
+model = SentenceTransformer('all-MiniLM-L6-v2')
+pinecone.init(api_key=settings.PINECONE_API_KEY, environment=settings.PINECONE_ENVIRONMENT_NAME)
+index = pinecone.Index("panda-ai-user-entities")
+            
 search = GoogleSearchTool()
 news = NewsSearchTool()
 wikipedia = WikipediaSearchTool()
@@ -128,6 +133,13 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
             chatid = chat_history[0]["chat_id"]
         else:
             chatid = 0
+
+        if chat_history and chat_history[0]:
+            chat_script = chat_history[0]['chat_script']
+            formatted_chat_history = '\n'.join(f"{item['user']}: {item['message']}" for item in reversed(chat_script))
+        else:
+            formatted_chat_history = ''
+            print("chat_history or its first item is None")
    
         filtered_tools = [tools[0]]
         filtered_tools += [tool for i, tool in enumerate(tools) if i in integration_ids and i != 0]
@@ -158,7 +170,7 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
         )
         MY_SUFFIX = SUFFIX.format(
             entities = formatted_entities,
-            current_history = "\n".join([f"{entry['user']}: {entry['message']}" if 'message' in entry else f"{entry['user']}:" for entry in reversed(chat_history[0]["chat_script"] if chat_history else [])]),
+            current_history = formatted_chat_history,
             chat_history = "{chat_history}",
             input = "{input}",
             agent_scratchpad = "{agent_scratchpad}",
@@ -235,13 +247,19 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
 
 async def save_entities(userid: str, first_name: str, message: str, entities: str, chat_history: List, chatid: int):
     entity_llm=PromptLayerChatOpenAI(openai_api_key = settings.OPENAI_API_KEY, model_name="gpt-3.5-turbo", temperature=0, pl_tags=[f"{ userid }", "entityCreation"])
+    if chat_history and chat_history[0]:
+        chat_script = chat_history[0]['chat_script']
+        formatted_chat_history = '\n'.join(f"{item['user']}: {item['message']}" for item in reversed(chat_script))
+    else:
+        formatted_chat_history = ''
+        print("chat_history or its first item is None")
     
     ENTITY_PROMPT = promptlayer.prompts.get("main_panda_chat_entity_saving")
 
     ENTITY_DICT = ENTITY_PROMPT['template']
 
     MY_ENTITY_DICT = ENTITY_DICT.format(
-        chat_history = chat_history,
+        chat_history = formatted_chat_history,
         entities = entities,
         message = message,
         first_name = first_name
@@ -252,7 +270,17 @@ async def save_entities(userid: str, first_name: str, message: str, entities: st
 
     if response:
         new_entities = parse_entities_message(response.content)
-        logging.info("New Entities: " + str(new_entities))
+
+        # Check if new_entities is not None
+        if new_entities is None:
+            logging.info("No new entities were parsed from the response.")
+            return
+        
+        # Check if new_entities is an empty dictionary
+        if not new_entities:
+            logging.info("The entities dictionary is empty.")
+            return # or raise an exception, or handle the error in some other way
+
         dynamodb = boto3.resource(
             'dynamodb',
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -292,6 +320,7 @@ async def save_entities(userid: str, first_name: str, message: str, entities: st
                         description = current_description + '. ' + description
 
                 # Remove anything in brackets at the end of the value
+                entity = re.sub(r'\(.*\)$', '', entity).strip()
                 description = re.sub(r'\(.*\)$', '', description).strip()
 
                 response = table.update_item(
@@ -308,7 +337,15 @@ async def save_entities(userid: str, first_name: str, message: str, entities: st
                     ReturnValues="UPDATED_NEW"
                 )
 
-                if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                # Compute embedding for the description and add it to Pinecone
+                embedding_description = entity + ': ' + description
+                embedding = model.encode([embedding_description])[0]
+                embedding = [embedding.tolist()]
+                unique_id = userid + "/" + entity
+                metadata = {"user_id": userid}
+                pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
+
+                if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_response['upserted_count'] == 1:
                     continue
                 else:
                     logging.error(f"Failed to update entities. Response: {response}")
@@ -355,12 +392,8 @@ def parse_entities_message(message: str) -> Dict[str, str]:
         # Add the entity and its description to the dictionary
         entities[entity] = description
 
-    # Return None if the entities dictionary is empty
-    if not entities:
-        return None
-
+    # Return the entities dictionary even if it is empty
     return entities
-
 
 async def get_user_chat_history(user_id: str):
     query = "SELECT chat_id, user_id, created_at, updated_at, chat_script FROM panda_ai_user_chat_history WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1"

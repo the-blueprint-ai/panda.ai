@@ -40,6 +40,8 @@ class Settings(BaseSettings):
     AWS_REGION: str
     PSQL_DATABASE_URL: str
     FERNET_KEY: str
+    PINECONE_API_KEY: str
+    PINECONE_ENVIRONMENT_NAME: str
     SPTKNS_CONNECTION_URI: str
     SPTKNS_API_KEY: str
     SPTKNS_DASHBOARD_API_KEY: str

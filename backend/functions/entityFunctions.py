@@ -1,6 +1,8 @@
 from fastapi import Depends, HTTPException
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
+from sentence_transformers import SentenceTransformer
+import pinecone
 from config import settings
 from cryptography.fernet import Fernet
 from typing import Optional, List
@@ -8,12 +10,8 @@ import logging
 from pydantic import BaseModel
 from datetime import datetime
 import boto3
-import spacy
 from heapq import nlargest
-import numpy as np
 from boto3.dynamodb.conditions import Key, Attr
-
-nlp = spacy.load("en_core_web_md")
 
 # DATABASES
 dynamodb = boto3.resource(
@@ -22,6 +20,9 @@ dynamodb = boto3.resource(
     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
     region_name=settings.AWS_REGION,
 )
+model = SentenceTransformer('all-MiniLM-L6-v2')
+pinecone.init(api_key=settings.PINECONE_API_KEY, environment=settings.PINECONE_ENVIRONMENT_NAME)
+index = pinecone.Index("panda-ai-user-entities")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -55,7 +56,6 @@ async def get_user_entities(user_id: str, entity: str, session: SessionContainer
     else:
         return {"error": "Item not found"}
 
-
 async def get_all_user_entities(user_id: str):
     table = dynamodb.Table('panda-ai-entities')
     response = table.query(
@@ -67,71 +67,35 @@ async def get_all_user_entities(user_id: str):
 
 
 async def get_most_relevant_entities(user_id: str, message: str, top_n: int = 3):
-    all_entities = await get_all_user_entities(user_id)
+    try:
+        message_vector = model.encode(message)
+        message_vector = [message_vector.tolist()]
 
-    if not all_entities:
+        # Query Pinecone for most similar entities
+        query_results = index.query(queries=message_vector, top_k=top_n, namespace='panda-ai-entities', filter={'user_id': user_id})
+
+        # Extract the unique ids of the most similar entities
+        matches = query_results['results'][0]['matches']
+        unique_ids = [match['id'] for match in matches]
+        scores = [match['score'] for match in matches]
+
+        # Query DynamoDB to get descriptions for these entities
+        table = dynamodb.Table('panda-ai-entities')
+        most_relevant_entities = []
+        for uid, score in zip(unique_ids, scores):
+            response = table.get_item(Key={'userId': uid.split('/')[0], 'entity': uid.split('/')[1]})
+            description = response['Item']['description']
+            most_relevant_entities.append({
+                'entity': uid.split('/')[1],  # Extract entity from unique id
+                'description': description,
+                'weight': float(score)
+            })
+
+        return most_relevant_entities
+
+    except Exception as e:
+        print("Error occurred:", e)
         return []
-
-    message_vector = nlp(message).vector
-
-    def cosine_similarity(a, b):
-        norm_a = np.linalg.norm(a)
-        norm_b = np.linalg.norm(b)
-        
-        # Handle cases where either norm is zero or very close to zero
-        if np.isclose(norm_a, 0, atol=1e-8) or np.isclose(norm_b, 0, atol=1e-8):
-            return 0.0
-
-        return np.dot(a, b) / (norm_a * norm_b)
-
-    entities_with_similarity = [
-        {
-            "entity": entity,
-            "similarity": cosine_similarity(
-                message_vector,
-                nlp(entity["entity"] + " " + entity.get("description", "")).vector
-            ),
-        }
-        for entity in all_entities
-    ]
-
-    # Boost similarity score if message contains entity name
-    boost = 0.5
-    for entity in entities_with_similarity:
-        if entity["entity"]["entity"].lower() in message.lower():
-            entity["similarity"] += boost
-
-    # Separate entities with direct name matches
-    direct_matches = [
-        entity
-        for entity in entities_with_similarity
-        if entity["entity"]["entity"].lower() in message.lower()
-    ]
-
-    # Remove direct matches from entities_with_similarity
-    entities_with_similarity = [
-        entity
-        for entity in entities_with_similarity
-        if entity not in direct_matches
-    ]
-
-    # Get the most relevant entities based on similarity scores
-    most_relevant_by_similarity = nlargest(top_n - len(direct_matches), entities_with_similarity, key=lambda x: x["similarity"])
-
-    # Combine direct matches and most relevant entities by similarity
-    most_relevant_entities = direct_matches + most_relevant_by_similarity
-
-    # Return a flat object with entity, description, and weight over 0.5
-    most_relevant_entities = [entity for entity in most_relevant_entities if entity["similarity"] > 0.5]
-    return [
-        {
-            "entity": entity["entity"]["entity"],
-            "description": entity["entity"].get("description", ""),
-            "weight": float(entity["similarity"]),
-        }
-        for entity in most_relevant_entities
-    ]
-
 
 async def get_all_entities(session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
@@ -140,9 +104,9 @@ async def get_all_entities(session: SessionContainer = Depends(verify_session())
 
     return items
 
-
 async def delete_entity(user_id: str, entity: Optional[str] = None, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
+    pinecone_ids_to_delete = []  # List of ids to delete in Pinecone
     
     if entity is None:
         # Delete all entities for the user
@@ -158,6 +122,7 @@ async def delete_entity(user_id: str, entity: Optional[str] = None, session: Ses
                         'entity': item['entity']
                     }
                 )
+                pinecone_ids_to_delete.append(item['userId'] + "/" + item['entity'])  # Add to list of Pinecone ids to delete
         
     else:
         # Delete the specific entity for the user
@@ -167,12 +132,16 @@ async def delete_entity(user_id: str, entity: Optional[str] = None, session: Ses
                 'entity': entity
             }
         )
+        pinecone_ids_to_delete.append(user_id + "/" + entity)  # Add to list of Pinecone ids to delete
 
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+    # Delete in Pinecone
+    delete_response = index.delete(ids=pinecone_ids_to_delete, namespace='panda-ai-entities')
+    pinecone_success = delete_response == {}  # Checks if the response is an empty dict
+
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:
         return {"message": "Item deleted successfully"}
     else:
-        raise HTTPException(status_code=500, detail="Error deleting item from the table")
-
+        raise HTTPException(status_code=500, detail="Error deleting entity from the databases")
 
 
 async def add_entity(item: EntityItem, session: SessionContainer = Depends(verify_session())):
@@ -192,11 +161,21 @@ async def add_entity(item: EntityItem, session: SessionContainer = Depends(verif
         },
         ReturnValues="UPDATED_NEW"
     )
+
+    # Compute embedding for the description and add it to Pinecone
+    embedding = model.encode([item.description])[0]
+    embedding = [embedding.tolist()]
+    unique_id = item.userId + "/" + item.entity
+    metadata = {
+        "user_id": item.userId
+    }
+    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
+    pinecone_success = pinecone_response == {}  # Checks if the response is an empty dict
     
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-        return {"message": "Item added successfully"}
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:
+        return {"message": "Entity added successfully"}
     else:
-        raise HTTPException(status_code=500, detail="Error adding item to the table")
+        raise HTTPException(status_code=500, detail="Error adding entity to the databases")
     
 async def update_entity(entity_update: EntityItem, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
@@ -216,9 +195,23 @@ async def update_entity(entity_update: EntityItem, session: SessionContainer = D
         ReturnValues="UPDATED_NEW"
     )
     
-    # Check if the update was successful
-    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
-        raise HTTPException(status_code=500, detail="Error updating Entity data.")
-    
-    # Return a success message
-    return {"message": "Description updated successfully"}
+    # Compute new embedding for the description and update it in Pinecone
+    embedding_description = entity_update.entity + ': ' + entity_update.description
+    embedding = model.encode([embedding_description])[0]
+    embedding = [embedding.tolist()]
+    unique_id = entity_update.userId + "/" + entity_update.entity
+    metadata = {
+        "user_id": entity_update.userId
+    }
+    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
+    pinecone_success = pinecone_response == {}  # Checks if the response is an empty dict
+
+    # Check if both updates were successful
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:
+        return {"message": "Entity description updated successfully"}
+    else:
+        raise HTTPException(status_code=500, detail="Error updating entity in the databases.")
+
+# Compute cosine similarity
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))

@@ -296,7 +296,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main style="max-height: 71vh !important; min-height: 71vh !important">
     <navBar></navBar>
     <div class="container-fluid bg-light d-flex text-white">
       <div
@@ -427,32 +427,130 @@ export default defineComponent({
           </div>
         </div>
         <div v-if="tab === 'users'" class="usersAdmin">
-          <div class="container-fluid mb-5 d-flex">
-            <div class="card mx-auto me-3 d-flex flex-fill text-primary text-center" style="height: 300px">
-              <div class="card-body text-center">
-                <BarChart
-                  v-if="this.usersByDay.length > 0"
-                  class="barChartContainer"
-                  :data-by-day="this.usersByDay"
-                  :axis-name="'# New Users'"
-                />
+          <div class="container-fluid mb-5 d-flex flex-column flex-wrap">
+            <h3 class="text-primary mt-3 mb-3">NEW USERS</h3>
+            <div class="d-flex flex-column w-100 align-items-center">
+              <div class="d-flex flex-wrap">
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.totalUsers"></h1>
+                    <h2>TOTAL USERS</h2>
+                  </div>
+                </div>
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.dailyUsers"></h1>
+                    <h2>DAILY USERS</h2>
+                  </div>
+                </div>
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.weeklyUsers"></h1>
+                    <h2>WEEKLY USERS</h2>
+                  </div>
+                </div>
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.monthlyUsers"></h1>
+                    <h2>MONTHLY USERS</h2>
+                  </div>
+                </div>
               </div>
-              <div class="card-footer">
-                <h1 v-text="userStats.totalUsers"></h1>
-                <h2>TOTAL USERS</h2>
+              <div class="d-flex flex-wrap flex-fill">
+                <div
+                  class="card mx-auto px-4 pt-4 pb-4 me-3 mb-3 d-flex text-primary text-center align-items-center justify-content-center"
+                >
+                  <BarChart
+                    v-if="this.usersByDay.length > 0"
+                    class="barChartContainer"
+                    :data-by-day="this.usersByDay"
+                    :axis-name="'# New Users'"
+                  />
+                </div>
               </div>
             </div>
-            <div class="card mx-auto" style="width: 200px">
-              <h1 v-text="userStats.dailyUsers"></h1>
-              <p># Daily New Users</p>
-            </div>
-            <div class="card mx-auto" style="width: 200px">
-              <h1 v-text="userStats.weeklyUsers"></h1>
-              <p># Weekly New Users</p>
-            </div>
-            <div class="card mx-auto" style="width: 200px">
-              <h1 v-text="userStats.monthlyUsers"></h1>
-              <p># Monthly New Users</p>
+          </div>
+          <div class="container-fluid mb-5 d-flex flex-column flex-wrap">
+            <h3 class="text-primary mt-3 mb-3">ACTIVE USERS</h3>
+            <div class="d-flex flex-column w-100 align-items-center">
+              <div class="d-flex flex-wrap">
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.totalUsers"></h1>
+                    <h2>TOTAL USERS</h2>
+                  </div>
+                </div>
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.dailyUsers"></h1>
+                    <h2>DAILY USERS</h2>
+                  </div>
+                </div>
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.weeklyUsers"></h1>
+                    <h2>WEEKLY USERS</h2>
+                  </div>
+                </div>
+                <div
+                  class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
+                  style="height: 150px; width: 250px"
+                >
+                  <div
+                    class="card-body text-center d-flex flex-column align-items center justify-content-center"
+                  >
+                    <h1 v-text="userStats.monthlyUsers"></h1>
+                    <h2>MONTHLY USERS</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-wrap flex-fill">
+                <div
+                  class="card mx-auto px-4 pt-4 pb-4 me-3 mb-3 d-flex text-primary text-center align-items-center justify-content-center"
+                >
+                  <BarChart
+                    v-if="this.usersByDay.length > 0"
+                    class="barChartContainer"
+                    :data-by-day="this.usersByDay"
+                    :axis-name="'# New Users'"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

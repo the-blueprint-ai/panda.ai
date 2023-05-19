@@ -10,12 +10,8 @@ import logging
 from pydantic import BaseModel
 from datetime import datetime
 import boto3
-import spacy
 from heapq import nlargest
-import numpy as np
 from boto3.dynamodb.conditions import Key, Attr
-
-nlp = spacy.load("en_core_web_md")
 
 # DATABASES
 dynamodb = boto3.resource(
@@ -26,7 +22,7 @@ dynamodb = boto3.resource(
 )
 model = SentenceTransformer('all-MiniLM-L6-v2')
 pinecone.init(api_key=settings.PINECONE_API_KEY, environment=settings.PINECONE_ENVIRONMENT_NAME)
-index = pinecone.Index(index_name="panda-ai-user-entities")
+index = pinecone.Index("panda-ai-user-entities")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -72,21 +68,23 @@ async def get_all_user_entities(user_id: str):
 
 async def get_most_relevant_entities(user_id: str, message: str, top_n: int = 3):
     try:
-        message_vector = model.encode([message])[0]
+        message_vector = model.encode(message)
+        message_vector = [message_vector.tolist()]
 
         # Query Pinecone for most similar entities
-        query_results = index.query(queries=[message_vector], top_k=top_n, filter={"user_id": user_id}, namespace='panda-ai-entities')
+        query_results = index.query(queries=message_vector, top_k=top_n, namespace='panda-ai-entities', filter={'user_id': user_id})
 
         # Extract the unique ids of the most similar entities
-        unique_ids = query_results.results[0].ids
+        matches = query_results['results'][0]['matches']
+        unique_ids = [match['id'] for match in matches]
+        scores = [match['score'] for match in matches]
 
         # Query DynamoDB to get descriptions for these entities
         table = dynamodb.Table('panda-ai-entities')
         most_relevant_entities = []
-        for uid in unique_ids:
+        for uid, score in zip(unique_ids, scores):
             response = table.get_item(Key={'userId': uid.split('/')[0], 'entity': uid.split('/')[1]})
             description = response['Item']['description']
-            score = query_results.results[0].scores[unique_ids.index(uid)]
             most_relevant_entities.append({
                 'entity': uid.split('/')[1],  # Extract entity from unique id
                 'description': description,
@@ -166,13 +164,15 @@ async def add_entity(item: EntityItem, session: SessionContainer = Depends(verif
 
     # Compute embedding for the description and add it to Pinecone
     embedding = model.encode([item.description])[0]
+    embedding = [embedding.tolist()]
     unique_id = item.userId + "/" + item.entity
     metadata = {
         "user_id": item.userId
     }
-    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)])
+    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
+    pinecone_success = pinecone_response == {}  # Checks if the response is an empty dict
     
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_response.upserted_count == 1:
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:
         return {"message": "Entity added successfully"}
     else:
         raise HTTPException(status_code=500, detail="Error adding entity to the databases")
@@ -196,15 +196,18 @@ async def update_entity(entity_update: EntityItem, session: SessionContainer = D
     )
     
     # Compute new embedding for the description and update it in Pinecone
-    embedding = model.encode([entity_update.description])[0]
+    embedding_description = entity_update.entity + ': ' + entity_update.description
+    embedding = model.encode([embedding_description])[0]
+    embedding = [embedding.tolist()]
     unique_id = entity_update.userId + "/" + entity_update.entity
     metadata = {
         "user_id": entity_update.userId
     }
-    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)])
+    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
+    pinecone_success = pinecone_response == {}  # Checks if the response is an empty dict
 
     # Check if both updates were successful
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_response.upserted_count == 1:
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:
         return {"message": "Entity description updated successfully"}
     else:
         raise HTTPException(status_code=500, detail="Error updating entity in the databases.")

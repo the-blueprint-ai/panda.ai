@@ -223,25 +223,25 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
             # check if response is None or an empty string
             if not response:
                 logging.error("Received blank response from agent_chain.run")
-                asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False))
+                asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False, "error"))
                 return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later."})
 
-            asyncio.create_task(save_new_message(userid, chatid, message, response, tokens, True))
+            asyncio.create_task(save_new_message(userid, chatid, message, response, tokens, True, "message"))
             return JSONResponse(content={"response": response})
 
         except requests.exceptions.RequestException as e:
             logging.error(f"Network error while running agent_chain: {e}")
-            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! We're experiencing network issues. Please try again later.", tokens, False))
+            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! We're experiencing network issues. Please try again later.", tokens, False, "error"))
             raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Service temporarily unavailable")
 
         except ValueError as e:
             logging.error(f"Value error while running agent_chain: {e}")
-            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something was wrong with the input. Please try again.", tokens, False))
+            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something was wrong with the input. Please try again.", tokens, False, "error"))
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid input")
 
         except Exception as e:
             logging.error(f"Unexpected error while running agent_chain: {e}")
-            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False))
+            asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False, "error"))
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
@@ -349,16 +349,16 @@ async def save_entities(userid: str, first_name: str, message: str, entities: st
                     continue
                 else:
                     logging.error(f"Failed to update entities. Response: {response}")
-                    return asyncio.create_task(save_new_message(userid, chatid, message, "Failed to update entities", tokens, False))
+                    return asyncio.create_task(save_new_message(userid, chatid, message, "Failed to update entities", tokens, False, "error"))
                 
-            return asyncio.create_task(save_new_message(userid, chatid, message, "Entities updated and saved successfully", tokens, True))
+            return asyncio.create_task(save_new_message(userid, chatid, message, "Entities updated and saved successfully", tokens, True, "entity"))
 
         except ClientError as e:
             logging.error(e.response['Error']['Message'])
-            return asyncio.create_task(save_new_message(userid, chatid, message, "Failed to update entities", tokens, False))
+            return asyncio.create_task(save_new_message(userid, chatid, message, "Failed to update entities", tokens, False, "error"))
 
     else:
-        asyncio.create_task(save_new_message(userid, chatid, message, "Entities not created", tokens, False))
+        asyncio.create_task(save_new_message(userid, chatid, message, "Entities not created", tokens, False, "error"))
         raise HTTPException(status_code=400, detail="An error occurred while saving the entities.")
 
 
@@ -496,7 +496,7 @@ def initialize_agent(
     )
 
 
-async def save_new_message(user_id: str, chat_id: int, message: str, message_response: str, tokens: int, success: bool):
+async def save_new_message(user_id: str, chat_id: int, message: str, message_response: str, tokens: int, success: bool, type: str):
 
     cost = round((tokens/1000) * 0.002, 6)  # Calculate the cost for GPT 3.5 TURBO
 
@@ -507,12 +507,13 @@ async def save_new_message(user_id: str, chat_id: int, message: str, message_res
         "message_response": message_response,
         "tokens": tokens,
         "cost": cost,
-        "success": success
+        "success": success,
+        "type": type
     }
 
     query = """
-        INSERT INTO panda_ai_messages (user_id, chat_id, message, message_response, tokens, cost, success)
-        VALUES (:user_id, :chat_id, :message, :message_response, :tokens, :cost, :success)
+        INSERT INTO panda_ai_messages (user_id, chat_id, message, message_response, tokens, cost, success, type)
+        VALUES (:user_id, :chat_id, :message, :message_response, :tokens, :cost, :success, :type)
     """
 
     await database.execute(query=query, values=values)

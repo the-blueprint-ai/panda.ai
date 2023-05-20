@@ -1,10 +1,13 @@
 <script>
 import { deleteUser } from "../composables/deleteUser.js";
+import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default {
   data() {
     return {
       loading: false,
+      buttonText: "CHANGE PASSWORD",
       passwordOverlay: false,
       deleteOverlay: false,
       currentPassword: "",
@@ -55,9 +58,10 @@ export default {
       this.deleteOverlay = false;
       this.loading = true;
       await deleteUser(userId);
-      window.location.href = "http://localhost:3000/";
+      this.$router.push("/");
     },
     async changePassword(userId, email, oldPassword, newPassword) {
+      const toast = useToast();
       this.passwordOverlay = false;
       this.loading = true;
       try {
@@ -79,25 +83,30 @@ export default {
         if (!res.ok) {
           const errorResponse = await res.json();
           console.error("Server error response:", errorResponse);
-          window.alert("Password updated unsuccessful. Please try again.");
+          toast.warning("Password updated unsuccessful. Please try again.");
         }
         this.loading = false;
-        window.alert(
+        toast.success(
           "Password updated successfully. Please sign in again with your new password."
         );
-        window.location.href = "http://localhost:3000/signin";
+        this.$router.push("/signin/");
       } catch (error) {
         // Handle the error
         console.error("An error occurred while saving the file:", error);
       }
     },
   },
-  components: {},
+  components: {
+    SpinnerComponent,
+  },
 };
 </script>
 
 <template>
-  <div class="userSettings d-flex flex-row flex-wrap justify-content-around text-center" v-if="settingsMenu">
+  <div
+    class="userSettings d-flex flex-row flex-wrap justify-content-around text-center"
+    v-if="settingsMenu"
+  >
     <div class="card mt-4 mx-auto">
       <div class="card-header">
         <h1>🐼</h1>
@@ -176,14 +185,6 @@ export default {
                 v-model="confirmNewPassword"
                 autocomplete="password"
                 placeholder="confirm new password"
-                @keyup.enter="
-                  changePassword(
-                    this.userId,
-                    this.email,
-                    this.currentPassword,
-                    this.newPassword
-                  )
-                "
               />
               <label for="floatingInput">confirm new password</label>
               <div id="passwordHelpBlock" class="form-text">
@@ -207,11 +208,16 @@ export default {
                 )
               "
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-secondary d-flex justify-content-center"
+              data-bs-dismiss="modal"
+              style="width: 35%"
             >
-              CHANGE PASSWORD
+              <SpinnerComponent
+                :loading="this.loading"
+                :button-text="this.buttonText"
+              ></SpinnerComponent>
             </button>
-            <button v-else class="btn btn-secondary" disabled>
+            <button v-else class="btn btn-secondary" style="width: 35%" disabled>
               CHANGE PASSWORD
             </button>
           </div>
@@ -257,7 +263,8 @@ export default {
           </div>
           <div class="modal-body text-center">
             <h1>🐼</h1>
-            <p>We're very sad to see you leave us 😭.</p>
+            <p class="mb-4">We're very sad to see you leave us 😭.</p>
+            <p class="mb-4 text-danger">PLEASE NOTE: Deleting your account will delete all your data from our systems and cancel your subscription. The data will not be recoverable if you change your mind and 🐼 panda.ai will no longer remember anything about you 😭.</p>
             <p>
               To confirm deletion of your 🐼 panda.ai account please re-enter
               your email address below and click confirm deletion.
@@ -272,7 +279,7 @@ export default {
                 :placeholder="email"
                 autocomplete="email"
               />
-              <label for="floatingInput">{{ email }}</label>
+              <label for="floatingInput">Enter email...</label>
             </div>
           </div>
           <div class="modal-footer">

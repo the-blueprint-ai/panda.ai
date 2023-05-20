@@ -1,5 +1,6 @@
 <script>
 import { defineComponent } from "vue";
+import { mapMutations } from "vuex";
 import {
   emailPasswordSignUp,
   doesEmailExist,
@@ -43,13 +44,11 @@ export default defineComponent({
       }, 400);
     },
     password() {
-      const toast = useToast();
       if (this.isPasswordValid == true) {
         this.passwordOk = "ok";
         this.badPasswordError = "";
       } else {
         this.passwordOk = "no";
-        toast.warning("Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.");
         this.badPasswordError =
           "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.";
       }
@@ -67,6 +66,10 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapMutations("userStore", {
+      setStoreUserId: "setStoreUserId",
+      setStoreEmail: "setStoreEmail",
+    }),
     emailVerification,
     validateEmail: function (email) {
       var re =
@@ -77,7 +80,7 @@ export default defineComponent({
       const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
       return regex.test(password);
     },
-    signUpClicked: async function (store, email, password) {
+    signUpClicked: async function (email, password) {
       const toast = useToast();
       this.formSubmitted = true;
       this.loading = true;
@@ -117,12 +120,15 @@ export default defineComponent({
               toast.error(formField.error);
             }
           });
-        } else {
+        } else if (response.status === "OK") {
           // sign up successful. The session tokens are automatically handled by
           // the frontend SDK.
           toast.success("Sign up successful!");
-          store.commit("userStore/setStoreEmail", email);
-          this.emailVerification();
+          let userId = response.user.id;
+          let userEmail = response.user.email;
+          this.setStoreUserId(userId);
+          this.setStoreEmail(userEmail);
+          emailVerification(userId, toast);
         }
       } catch (err) {
         if (err.isSuperTokensGeneralError === true) {
@@ -175,10 +181,10 @@ export default defineComponent({
       this.$router.push("/signin");
     },
     toToS() {
-      this.$router.push("/terms-of-service");
+      window.open("/terms-of-service", "_blank");
     },
     toPP() {
-      this.$router.push("/privacy-policy");
+      window.open("/privacy-policy", "_blank");
     },
   },
   components: {
@@ -224,7 +230,6 @@ export default defineComponent({
                     'is-invalid': emailExistsError,
                   }"
                   required
-                  disabled
                 />
                 <label for="floatingInput">Email</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
@@ -256,7 +261,6 @@ export default defineComponent({
                     'is-invalid': this.password.length > 0 && !isPasswordValid,
                   }"
                   required
-                  disabled
                 />
                 <label for="floatingPassword">Password</label>
                 <div class="valid-feedback">🐼 Looks good!</div>
@@ -282,7 +286,6 @@ export default defineComponent({
                     'is-invalid': formSubmitted && !agreeToSPP,
                   }"
                   required
-                  disabled
                 />
                 <label class="form-check-label" for="ToS&PP"
                   >Please agree to our

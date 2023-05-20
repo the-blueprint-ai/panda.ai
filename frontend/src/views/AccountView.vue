@@ -405,8 +405,18 @@ export default defineComponent({
           method: "POST",
         });
 
+        const url2 =
+          import.meta.env.VITE_APP_API_URL +
+          "/users/change-email?user_id=" +
+          this.userId +
+          "&new_email=" +
+          this.email;
+        const res2 = await fetch(url2, {
+          method: "POST",
+        });
+
         // Check if the response status indicates an error
-        if (!res.ok) {
+        if (!res.ok || !res2.ok) {
           const errorResponse = await res.json();
           toast.error("Server error response:", errorResponse);
           toast.error(`Server responded with status ${res.status}`);
@@ -574,11 +584,11 @@ export default defineComponent({
                   />
                   <div class="profileDetails">
                     <div class="d-flex flex-row align-items-center">
-                      <h2 class="card-title">
+                      <h2 class="card-title" style="margin-top: 30px">
                         {{ first_name }} {{ last_name }}
                       </h2>
                       <img
-                        v-if="subscribed"
+                        v-if="subscriber"
                         class="subscriberCheck mb-1 ms-2"
                         src="../assets/icons/patch-check-fill.svg"
                         style="width: 25px"
@@ -598,7 +608,7 @@ export default defineComponent({
                     Let's Chat
                   </button>
                 </div>
-                <div class="about ms-5">
+                <div v-if="about.length > 0" class="about ms-5">
                   <h2>ABOUT</h2>
                   <p>{{ about }}</p>
                 </div>
@@ -882,15 +892,28 @@ export default defineComponent({
 
 <style scoped>
 .bannerCamera {
-  max-width: 1200px;
-  margin-left: -1200px;
+  width: 1295px;
   opacity: 0;
   position: absolute;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  transition: 0.5s ease;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  transition: 1s ease;
 }
 .bannerCamera:hover {
+  transition-delay: 0.3s;
+  opacity: 1;
+  cursor: pointer;
+}
+.avatarCamera {
+  width: 186px;
+  margin-top: -193px;
+  margin-left: 17px;
+  opacity: 0;
+  position: absolute;
+  border-radius: 40px;
+  transition: 1s ease;
+}
+.avatarCamera:hover {
   transition-delay: 0.3s;
   opacity: 1;
   cursor: pointer;

@@ -10,7 +10,7 @@ import "@/assets/styles/panda-bootstrap-overrides.scss";
 import { SuperTokensWebJSConfig } from "./config";
 import axios from "axios";
 
-import "bootstrap"
+import "bootstrap";
 
 SuperTokens.init(SuperTokensWebJSConfig);
 
@@ -40,7 +40,7 @@ app.use(Toast, {
 app.use(
   VueGtag,
   {
-    appName: 'panda.ai',
+    appName: "panda.ai",
     config: { id: "G-HS1DM7DQXW" },
   },
   router

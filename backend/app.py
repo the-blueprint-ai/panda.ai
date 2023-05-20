@@ -1,6 +1,7 @@
 from uvicorn import Config, Server
 from functools import lru_cache
 from config import settings
+from fastapi_utils.tasks import repeat_every
 
 from fastapi import FastAPI, Depends, File, UploadFile
 from fastapi.exceptions import RequestValidationError
@@ -30,6 +31,8 @@ from routers import faqs
 from routers import email
 from routers import subscriptions
 from routers import webhooks
+
+from functions.repeatedFunctions import Ping
 
 @lru_cache()
 def get_settings():
@@ -69,6 +72,11 @@ app.include_router(email.router)
 app.include_router(subscriptions.router)
 app.include_router(webhooks.router)
 app.add_middleware(get_middleware())
+
+@app.on_event("startup")
+@repeat_every(wait_first = True, seconds=60, max_repetitions=5)  # 1 minute
+def ping_task() -> None:
+    Ping()
 
 
 # Catch exceptions

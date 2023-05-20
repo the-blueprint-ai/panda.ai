@@ -3,6 +3,7 @@ import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions, mapGetters } from "vuex";
 import { getUserData } from "../composables/getUserData.js";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default {
   data() {
@@ -31,7 +32,8 @@ export default {
           await this.getUserInfo();
         }
         if (this.userId) {
-          const { userData } = getUserData(this.$store, this.userId);
+          const toast = useToast();
+          const { userData } = getUserData(this.$store, this.userId, toast);
           userData(this.userId);
         }
       } catch (error) {

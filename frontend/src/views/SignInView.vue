@@ -1,7 +1,6 @@
 <script>
 import { defineComponent } from "vue";
 import { emailPasswordSignIn } from "supertokens-web-js/recipe/thirdpartyemailpassword";
-import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
@@ -19,6 +18,29 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
+    async getOnboarded(userId) {
+      try {
+        const url =
+          import.meta.env.VITE_APP_API_URL +
+          "/users/get-onboarded?userId=" +
+          userId;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
     signInClicked: async function (email, password) {
       const toast = useToast();
       this.loading = true;
@@ -48,11 +70,15 @@ export default defineComponent({
           this.loading = false;
           toast.error("Email password combination is incorrect.");
         } else {
-          await this.getSession;
-          let userId = await Session.getUserId();
+          let userId = response && response.user ? response.user.id : null;
           if (userId) {
             this.loading = false;
-            this.$router.push("/auth/" + userId + "/chat");
+            let onboarded = await this.getOnboarded(userId);
+            if (!onboarded) {
+              this.$router.push("/auth/" + userId + "/onboarding");
+            } else {
+              this.$router.push("/auth/" + userId + "/chat");
+            }
           }
         }
       } catch (err) {
@@ -122,7 +148,7 @@ export default defineComponent({
                 id="floatingPassword"
                 placeholder="sKad00sh"
                 autocomplete="password"
-                @keyup.enter="signInClicked(this.email, this.password)"
+                @keydown.enter.stop.prevent="signInClicked(this.email, this.password)"
               />
               <label for="floatingPassword">Password</label>
             </div>

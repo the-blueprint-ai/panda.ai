@@ -10,6 +10,7 @@ import logging
 from pydantic import BaseModel
 from datetime import datetime
 import boto3
+import numpy as np
 from heapq import nlargest
 from boto3.dynamodb.conditions import Key, Attr
 
@@ -22,7 +23,7 @@ dynamodb = boto3.resource(
 )
 model = SentenceTransformer('all-MiniLM-L6-v2')
 pinecone.init(api_key=settings.PINECONE_API_KEY, environment=settings.PINECONE_ENVIRONMENT_NAME)
-index = pinecone.Index("panda-ai-user-entities")
+index = pinecone.Index('panda-ai-user-entities')
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -107,42 +108,46 @@ async def get_all_entities(session: SessionContainer = Depends(verify_session())
 async def delete_entity(user_id: str, entity: Optional[str] = None, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
     pinecone_ids_to_delete = []  # List of ids to delete in Pinecone
-    
-    if entity is None:
-        # Delete all entities for the user
-        response = table.scan(
-            FilterExpression=Attr('userId').eq(user_id)
-        )
-        
-        with table.batch_writer() as batch:
-            for item in response['Items']:
-                batch.delete_item(
-                    Key={
-                        'userId': item['userId'],
-                        'entity': item['entity']
-                    }
-                )
-                pinecone_ids_to_delete.append(item['userId'] + "/" + item['entity'])  # Add to list of Pinecone ids to delete
-        
-    else:
-        # Delete the specific entity for the user
-        response = table.delete_item(
-            Key={
-                'userId': user_id,
-                'entity': entity
-            }
-        )
-        pinecone_ids_to_delete.append(user_id + "/" + entity)  # Add to list of Pinecone ids to delete
 
-    # Delete in Pinecone
-    delete_response = index.delete(ids=pinecone_ids_to_delete, namespace='panda-ai-entities')
-    pinecone_success = delete_response == {}  # Checks if the response is an empty dict
+    try:
+        if entity is None:
+            # Delete all entities for the user
+            response = table.scan(FilterExpression=Attr('userId').eq(user_id))
 
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:
-        return {"message": "Item deleted successfully"}
-    else:
-        raise HTTPException(status_code=500, detail="Error deleting entity from the databases")
+            with table.batch_writer() as batch:
+                for item in response['Items']:
+                    batch.delete_item(
+                        Key={
+                            'userId': item['userId'],
+                            'entity': item['entity']
+                        }
+                    )
+                    pinecone_ids_to_delete.append(item['userId'] + "/" + item['entity'])  # Add to list of Pinecone ids to delete
+        else:
+            # Delete the specific entity for the user
+            response = table.delete_item(
+                Key={
+                    'userId': user_id,
+                    'entity': entity
+                }
+            )
+            pinecone_ids_to_delete.append(user_id + "/" + entity)  # Add to list of Pinecone ids to delete
 
+        if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+            raise Exception("Error deleting entity from DynamoDB")
+
+        # Delete in Pinecone
+        delete_response = index.delete(ids=pinecone_ids_to_delete, namespace='panda-ai-entities')
+
+        if delete_response != {}:
+            raise Exception("Error deleting entity from Pinecone")
+
+        logging.info(f"Entity(s) for user {user_id} deleted successfully")
+        return {"message": "Entity(s) deleted successfully"}
+
+    except Exception as e:
+        logging.error(f"Exception while deleting entity for user {user_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def add_entity(item: EntityItem, session: SessionContainer = Depends(verify_session())):
     table = dynamodb.Table('panda-ai-entities')
@@ -163,14 +168,17 @@ async def add_entity(item: EntityItem, session: SessionContainer = Depends(verif
     )
 
     # Compute embedding for the description and add it to Pinecone
-    embedding = model.encode([item.description])[0]
+    embedding_description = item.entity + ': ' + item.description
+    embedding = model.encode([embedding_description])[0]
     embedding = [embedding.tolist()]
     unique_id = item.userId + "/" + item.entity
-    metadata = {
-        "user_id": item.userId
-    }
-    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
-    pinecone_success = pinecone_response == {}  # Checks if the response is an empty dict
+    metadata = {"user_id": item.userId}
+    try:
+        pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
+        pinecone_success = pinecone_response == {'upserted_count': 1}
+    except Exception as e:
+        print("Error occurred while interacting with Pinecone: ", e)
+        raise HTTPException(status_code=500, detail="Error updating entity in Pinecone.")
     
     if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:
         return {"message": "Entity added successfully"}
@@ -200,11 +208,13 @@ async def update_entity(entity_update: EntityItem, session: SessionContainer = D
     embedding = model.encode([embedding_description])[0]
     embedding = [embedding.tolist()]
     unique_id = entity_update.userId + "/" + entity_update.entity
-    metadata = {
-        "user_id": entity_update.userId
-    }
-    pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
-    pinecone_success = pinecone_response == {}  # Checks if the response is an empty dict
+    metadata = {"user_id": entity_update.userId}
+    try:
+        pinecone_response = index.upsert(vectors=[(unique_id, embedding, metadata)], namespace='panda-ai-entities')
+        pinecone_success = pinecone_response == {'upserted_count': 1}
+    except Exception as e:
+        print("Error occurred while interacting with Pinecone: ", e)
+        raise HTTPException(status_code=500, detail="Error updating entity in Pinecone.")
 
     # Check if both updates were successful
     if response['ResponseMetadata']['HTTPStatusCode'] == 200 and pinecone_success:

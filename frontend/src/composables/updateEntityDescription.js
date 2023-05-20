@@ -1,8 +1,5 @@
-import { useToast } from "vue-toastification";
-
-export function updateEntityDescription(event, entitiesData, index) {
+export function updateEntityDescription(event, entitiesData, index, toast) {
   async function updateEntities() {
-    const toast = useToast();
     // Get the new description from the event target
     const newDescription = event.target.innerText;
 
@@ -45,7 +42,10 @@ export function updateEntityDescription(event, entitiesData, index) {
       toast.error("Error updating entity. Please try again.");
     }
   }
-  updateEntities(); // Call the function directly
+
+  // Wrap the call with Promise handler
+  updateEntities().catch(error => console.error(error));
+
   return {
     updateEntities,
   };

@@ -4,15 +4,18 @@ import { mapActions, mapGetters } from "vuex";
 import * as Session from "supertokens-web-js/recipe/session";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
+import { emailVerification } from "../composables/emailVerification.js";
 import { saveEmail } from "../composables/saveEmail.js";
 import { sendEmail } from "../composables/sendEmail.js";
 import welcome_html from "../assets/emails/welcomeEmail.js";
 import SpinnerComponent from "../components/spinnerComponent.vue";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
     return {
       sendButtonText: "LOGOUT",
+      loading: false,
     };
   },
   watch: {},
@@ -35,6 +38,11 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
+    async callEmailVerification(userId) {
+      console.log("called");
+      const toast = useToast();
+      await emailVerification(userId, toast);
+    },
     async onLogout() {
       await Session.signOut();
       this.$router.push("/");
@@ -70,7 +78,7 @@ export default defineComponent({
             </p>
             <h5
               class="text-secondary mt-4"
-              @click="emailVerification"
+              @click="callEmailVerification(userId)"
               style="cursor: pointer"
             >
               RESEND EMAIL
@@ -79,8 +87,8 @@ export default defineComponent({
               <button
                 type="button"
                 class="btn btn-secondary btn-lg mb-3 d-inline-flex justify-content-center"
-                style="width: 70%"
                 @click="onLogout"
+                style="width: 70%"
               >
                 <SpinnerComponent
                   :loading="this.loading"

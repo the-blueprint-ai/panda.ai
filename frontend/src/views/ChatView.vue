@@ -31,7 +31,8 @@ export default defineComponent({
     if (!this.userId) {
       await this.getUserInfo();
     }
-    const { userData } = getUserData(this.$store, this.userId);
+    const toast = useToast();
+    const { userData } = getUserData(this.$store, this.userId, toast);
     userData(this.userId);
     const { userChatHistory } = getUserChatHistory(this.$store, this.userId);
     userChatHistory(this.userId);
@@ -184,7 +185,7 @@ export default defineComponent({
               <button
                 class="btn btn-secondary btn-lg"
                 @click="startNewChat"
-                style="height: 57px; width: 80%"
+                style="height: 72px; width: 80%"
               >
                 START NEW CHAT
               </button>
@@ -225,7 +226,7 @@ export default defineComponent({
                   name="userInput"
                   placeholder="🐼 enter your message..."
                   ref="messageInput"
-                  style="min-height: 60px"
+                  style="min-height: 75px"
                 ></textarea>
                 <label
                   v-if="!this.loading"

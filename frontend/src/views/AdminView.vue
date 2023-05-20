@@ -401,7 +401,7 @@ export default defineComponent({
           </p>
         </div>
       </div>
-      <div class="adminContent mt-4">
+      <div class="adminContent mt-4 d-flex w-100 mx-auto">
         <div v-if="tab === 'trending'" class="trendingAdmin">
           <div class="container-fluid mb-5 d-flex">
             <div class="card mx-auto" style="width: 200px">
@@ -426,10 +426,10 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <div v-if="tab === 'users'" class="usersAdmin">
-          <div class="container-fluid mb-5 d-flex flex-column flex-wrap">
-            <h3 class="text-primary mt-3 mb-3">NEW USERS</h3>
-            <div class="d-flex flex-column w-100 align-items-center">
+        <div v-if="tab === 'users'" class="usersAdmin w-100">
+          <div class="container-fluid mb-5 d-flex flex-column">
+            <h3 class="text-primary mt-3 mb-3 border-bottom">NEW USERS</h3>
+            <div class="d-flex flex-column align-items-center">
               <div class="d-flex flex-wrap">
                 <div
                   class="card mx-auto me-3 mb-3 d-flex text-primary text-center"
@@ -491,7 +491,7 @@ export default defineComponent({
             </div>
           </div>
           <div class="container-fluid mb-5 d-flex flex-column flex-wrap">
-            <h3 class="text-primary mt-3 mb-3">ACTIVE USERS</h3>
+            <h3 class="text-primary mt-3 mb-3 border-bottom">ACTIVE USERS</h3>
             <div class="d-flex flex-column w-100 align-items-center">
               <div class="d-flex flex-wrap">
                 <div

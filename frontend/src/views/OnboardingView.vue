@@ -155,7 +155,7 @@ export default defineComponent({
         });
 
         const data = await response.json();
-        this.$router.push("/pricing");
+        this.$router.push("/auth/" + userId + "/account");
       } catch (error) {
         toast.error(error);
       }
@@ -296,7 +296,7 @@ export default defineComponent({
             ),
           3841
         );
-        setTimeout(() => this.setSuccess(""), 32000);
+        setTimeout(() => this.setSuccess(""), 3200);
         setTimeout(() => this.finishOnboarding(this.userId), 41600);
         setTimeout(() => this.setIsDisabledValue(false), 41600);
       }
@@ -336,16 +336,18 @@ export default defineComponent({
     <navBar></navBar>
     <div v-if="session">
       <div class="container-fluid bg-light text-white">
-        <div class="container pt-5 pb-5 d-flex justify-content-center">
-          <div class="chatCard card text-bg-white text-primary text-center me-3">
+        <div class="container pt-5 pb-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="chatCard card w-100 text-bg-white text-primary text-center me-3">
             <div
-              class="card-body scrollable-card-body text-start pt-4 pb-4 px-4"
+              class="onboardingWindow card-body scrollable-card-body d-flex flex-column-reverse text-start pt-4 pb-4 px-4"
             >
               <chatMessage
                 v-for="item in chatHistory"
                 :message="item"
                 :class="item.user + 'Chat'"
                 :key="item.user"
+                :feedback-disabled="true"
+                :user-id="userId"
               ></chatMessage>
             </div>
             <div class="card-footer pt-2 pt-1">
@@ -393,7 +395,7 @@ export default defineComponent({
               </div>
             </div>
           </div>
-          <div v-if="imageDrop">
+          <div v-if="imageDrop" class="w-50 text-align-center">
             <ImageUpload
               :user-id="this.userId"
               @image-uploaded.once="submitMessage()"
@@ -413,6 +415,9 @@ export default defineComponent({
 .chatCard {
   height: 1000px;
   max-width: 830px;
+}
+.onboardingWindow {
+  overflow: scroll;
 }
 .pandaChat {
   background-color: #ffffff;

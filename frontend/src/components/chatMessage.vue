@@ -99,6 +99,11 @@ export default {
       }
     },
     async submitFeedback(user_id, message, rating, feedback) {
+      // Check if message length is 0
+      if (message.length === 0) {
+        return; // Stop the function
+      }
+
       this.loading = true;
       try {
         await submitFeedback(user_id, message, rating, feedback);

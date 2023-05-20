@@ -3,6 +3,7 @@ import { mapGetters } from "vuex";
 import { getEntities } from "../composables/getEntities.js";
 import { updateEntityDescription } from "../composables/updateEntityDescription.js";
 import { deleteEntity } from "../composables/deleteEntity.js";
+import { useToast } from "vue-toastification";
 
 export default {
   data() {
@@ -63,13 +64,16 @@ export default {
   },
   created() {},
   methods: {
-    updateEntityDescription,
+    callUpdaeEntityDescription(event, entities, index) {
+      const toast = useToast();
+      updateEntityDescription(event, entities, index, toast);
+    },
     deleteEntity,
     dataTabSelector(tabName) {
       this.tab = tabName;
     },
     redirectToChat() {
-      this.$router.push("/" + this.userId + "/chat");
+      this.$router.push("/auth/" + this.userId + "/chat");
     },
     onTabChange(event) {
       this.tab = event.target.value;
@@ -158,7 +162,7 @@ export default {
               <td
                 contenteditable="true"
                 @blur="
-                  updateEntityDescription($event, this.entitiesData, index)
+                  callUpdaeEntityDescription($event, this.entitiesData, index)
                 "
               >
                 {{ entity.description }}
@@ -169,13 +173,13 @@ export default {
             </tr>
           </tbody>
         </table>
-        <div v-else class="noEntityData">
-          <h2>No entities data available</h2>
+        <div v-else class="noEntityData d-flex flex-column align-items-center">
+          <h2 class="text-start w-100">No entities data available</h2>
           <p style="text-align: center">
             Please have more chats with 🐼 panda.ai so that it can learn more
             about you.
           </p>
-          <button class="chatButton" @click="redirectToChat">Let's Chat</button>
+          <button class="btn btn-secondary btn-lg w-25" @click="redirectToChat">Let's Chat</button>
         </div>
       </div>
       <div v-if="tab === 'documents'" class="documentsData">

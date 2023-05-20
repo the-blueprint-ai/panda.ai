@@ -12,13 +12,11 @@ from config import settings
 from fastapi.responses import JSONResponse
 from cryptography.fernet import Fernet, InvalidToken
 from databases import Database
-import logging
+import logging, asyncio, hashlib, os, boto3
 from typing import Optional, Any, List
-import boto3
 from io import BytesIO
-import os
 from functions.entityFunctions import delete_entity
-import hashlib
+from functions.subscriptionFunctions import cancel_subscription
 
 # CONFIG
 router = APIRouter(
@@ -65,9 +63,10 @@ async def get_user_data_route(user_id: str, session: SessionContainer = Depends(
 @router.get("/delete")
 async def do_delete(user_id: str, session: SessionContainer = Depends(verify_session())):
     try:
-        await delete_user(user_id) # this will succeed even if the userId didn't exist.
-        await delete_internal_user(user_id, session)
-        response = await delete_internal_user(user_id)
+        response = await asyncio.gather(
+            delete_user(user_id), # this will succeed even if the userId didn't exist.
+            delete_internal_user(user_id, session)
+        )   
         if response:
             return response
         else:
@@ -165,6 +164,32 @@ def update_password_route(oldPassword: str, newPassword: str, session: SessionCo
         raise e
     except Exception as e:
         logger.error(f"Error in update_password_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@router.post("/change-email") 
+def update_email_route(user_id: str, new_email: str, session: SessionContainer = Depends(verify_session())):
+    try:
+        response = update_email(user_id, new_email)
+        if "error" in response:
+            raise HTTPException(status_code=500, detail=response["error"])
+        return {"message": "Email updated successfully"}
+    except HTTPException as e:
+        logger.error(f"HTTPException in update_email_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in update_email_route: {e}, type: {type(e)}, args: {e.args}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+@router.get("/get-onboarded") 
+async def get_onboarded_route(userId: str, session: SessionContainer = Depends(verify_session())):
+    try:
+        response = await get_onboarded(userId)
+        return response
+    except HTTPException as e:
+        logger.error(f"HTTPException in get_onboarded_route: {e}, type: {type(e)}, args: {e.args}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error in get_onboarded_route: {e}, type: {type(e)}, args: {e.args}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @router.post("/set-onboarded") 
@@ -439,33 +464,17 @@ async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
     except Exception as e:
         response = {"error": str(e)}
         return response
-
-async def delete_user_chat_history(user_id: str):
-    try:
-        query = "DELETE FROM panda_ai_user_chat_history WHERE user_id = :user_id"
-        values = {"user_id": user_id}
-        results = await database.fetch_all(query=query, values=values)
-
-        return {"message": "User chat history deleted successfully"}
-
-    except ValidationError as e:
-        response = {"error": "Validation error", "details": e.errors()}
-        return response
     
-    except Exception as e:
-        response = {"error": str(e)}
-        return response
-
 
 async def delete_internal_user(user_id: str, session: SessionContainer = Depends(verify_session())):
     try:
-        await delete_entity(user_id)
-        await delete_user_chat_history(user_id)
-
-        # revoke all sessions for the user
-        revoke_all_sessions_for_user(user_id)
-        # revoke the user's current session, we do this to remove the auth cookies, logging out the user on the frontend
-        session.sync_revoke_session()
+        response = await asyncio.gather(
+            delete_user_chat_history(user_id),
+            delete_entity(user_id),
+            delete_user_integrations(user_id),
+            delete_user_messages(user_id),
+            delete_user_subscription(user_id)
+        ) 
 
         query = """
             DELETE FROM panda_ai_users WHERE user_id = :user_id
@@ -474,6 +483,12 @@ async def delete_internal_user(user_id: str, session: SessionContainer = Depends
             "user_id": user_id
         }
         await database.execute(query=query, values=values)
+
+        # revoke all sessions for the user
+        await revoke_all_sessions_for_user(user_id)
+        # revoke the user's current session, we do this to remove the auth cookies, logging out the user on the frontend
+        session.sync_revoke_session()
+
         return {"message": "User deleted successfully"}
 
     except ValidationError as e:
@@ -484,6 +499,93 @@ async def delete_internal_user(user_id: str, session: SessionContainer = Depends
         response = {"error": str(e)}
         return response
 
+
+async def delete_user_chat_history(user_id: str):
+    query = "DELETE FROM panda_ai_user_chat_history WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    try:
+        results = await database.execute(query=query, values=values)
+
+        if results:
+            logging.info(f"Deleted {results} chat history record(s) for user {user_id}")
+            return {"message": f"Deleted {results} chat history record(s) successfully"}
+        else:
+            logging.info(f"No chat history found for user {user_id}")
+            return {"message": f"No chat history found for user {user_id}"}
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        logging.error(f"Validation error while deleting chat history for user {user_id}: {response}")
+        return response
+    except Exception as e:
+        response = {"error": str(e)}
+        logging.error(f"Exception while deleting chat history for user {user_id}: {str(e)}")
+        return response
+
+async def delete_user_integrations(user_id: str):
+    query = "DELETE FROM panda_ai_user_integrations WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    try:
+        results = await database.execute(query=query, values=values)
+
+        if results:
+            logging.info(f"Deleted {results} integration(s) for user {user_id}")
+            return {"message": f"Deleted {results} integration(s) successfully"}
+        else:
+            logging.info(f"No integrations found for user {user_id}")
+            return {"message": f"No integrations found for user {user_id}"}
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        logging.error(f"Validation error while deleting integrations for user {user_id}: {response}")
+        return response
+    except Exception as e:
+        response = {"error": str(e)}
+        logging.error(f"Exception while deleting integrations for user {user_id}: {str(e)}")
+        return response
+    
+async def delete_user_messages(user_id: str):
+    query = "DELETE FROM panda_ai_messages WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    try:
+        results = await database.execute(query=query, values=values)
+
+        if results:
+            logging.info(f"Deleted {results} message(s) for user {user_id}")
+            return {"message": f"Deleted {results} message(s) successfully"}
+        else:
+            logging.info(f"No messages found for user {user_id}")
+            return {"message": f"No messages found for user {user_id}"}
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        logging.error(f"Validation error while deleting messages for user {user_id}: {response}")
+        return response
+    except Exception as e:
+        response = {"error": str(e)}
+        logging.error(f"Exception while deleting messages for user {user_id}: {str(e)}")
+        return response
+    
+async def delete_user_subscription(user_id: str):
+    await cancel_subscription(user_id)
+    logging.info(f"User {user_id}'s subscriptions cancelled successfully from Stripe")
+
+    query = "DELETE FROM panda_ai_user_subscriptions WHERE user_id = :user_id"
+    values = {"user_id": user_id}
+    try:
+        results = await database.execute(query=query, values=values)
+
+        if results:
+            logging.info(f"Deleted {results} subscription(s) for user {user_id} in the database")
+            return {"message": f"Deleted {results} subscription(s) successfully"}
+        else:
+            logging.info(f"No subscriptions found for user {user_id} in the database")
+            return {"message": f"No subscriptions found for user {user_id}"}
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        logging.error(f"Validation error while deleting subscriptions for user {user_id}: {response}")
+        return response
+    except Exception as e:
+        response = {"error": str(e)}
+        logging.error(f"Exception while deleting subscriptions for user {user_id}: {str(e)}")
+        return response
 
 def update_password(oldPassword: str, newPassword: str, session: SessionContainer = Depends(verify_session())):
     try:
@@ -520,18 +622,57 @@ def update_password(oldPassword: str, newPassword: str, session: SessionContaine
         response = {"error": str(e)}
         return response
 
+def update_email(user_id: str, new_email: str):
+    try:
+        # update the users password
+        update_email_or_password(user_id, email=new_email)
+
+        return {"message": "Email updated successfully"}
+
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        return response
+    
+    except Exception as e:
+        response = {"error": str(e)}
+        return response
+
+
+async def get_onboarded(user_id: str):
+    try:
+        query = """
+            SELECT onboarded
+            FROM panda_ai_users 
+            WHERE user_id = :user_id
+        """
+        values = {
+            "user_id": user_id
+        }
+        response = await database.execute(query=query, values=values)
+        return response
+
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        return response
+    
+    except Exception as e:
+        response = {"error": str(e)}
+        return response
+
 
 async def set_onboarded(user_id: str):
     try:
         query = """
             UPDATE panda_ai_users 
-            SET onboarded = true , onboarded_at = NOW()
+            SET onboarded = true , subscriber = true, onboarded_at = NOW(), messages_per_month = 20, integrations = 8
             WHERE user_id = :user_id
         """
         values = {
             "user_id": user_id
         }
         await database.execute(query=query, values=values)
+        integrations = {1, 2, 3, 4, 5, 6, 7, 8}
+        await set_integrations(user_id, integrations)
         return {"message": "User set as onboarded successfully"}
 
     except ValidationError as e:

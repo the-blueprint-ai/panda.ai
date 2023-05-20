@@ -199,40 +199,48 @@ export default {
     @dragstart.prevent
     @drop.prevent="handleFileChange($event.dataTransfer)"
   >
-    <input
-      class="imageInput"
-      id="imageInput"
-      type="file"
-      accept="image/png, image/jpg, image/jpeg, image/gif"
-      @change="handleFileChange($event.target)"
-      required
-    />
-    <p
-      class="text-primary"
+    <div
       v-if="(preview == null) & (fileError == null)"
-      for="imageInput"
-      v-text="imageDropPhrase"
-    ></p>
-    <div v-if="this.preview">
-      <img
-        src="../assets/icons/x-circle.svg"
-        class="cancelButton"
-        v-on:click="clear"
-      />
-    </div>
-    <img class="dropImage" v-bind:src="preview" />
-    <p id="badFile" for="imageInput" style="color: #ffcb4c; margin: 5px"></p>
-    <button
-      v-if="saveButton"
-      class="btn btn-secondary btn-lg"
-      type="submit"
-      v-on:click="save"
+      class="mt-n4 d-flex flex-column justify-content-center align-items-center"
     >
-      <SpinnerComponent
-        :loading="this.loading"
-        :button-text="this.buttonText"
-      ></SpinnerComponent>
-    </button>
+      <input
+        class="imageInput"
+        id="imageInput"
+        type="file"
+        accept="image/png, image/jpg, image/jpeg, image/gif"
+        @change="handleFileChange($event.target)"
+        required
+      />
+      <img
+        src="../assets/icons/camera-blk.svg"
+        class="mt-4 mb-2"
+        style="width: 30px"
+      />
+      <p class="text-primary" for="imageInput" v-text="imageDropPhrase"></p>
+    </div>
+    <div class="d-flex align-items-center">
+      <div v-if="this.preview">
+        <img
+          src="../assets/icons/x-circle.svg"
+          class="cancelButton mb-4"
+          v-on:click="clear"
+        />
+      </div>
+      <img class="dropImage" v-bind:src="preview" />
+      <p id="badFile" for="imageInput" style="color: #ffcb4c; margin: 5px"></p>
+      <button
+        v-if="saveButton"
+        class="saveButton btn btn-secondary btn-lg d-flex justify-content-center"
+        type="submit"
+        v-on:click="save"
+        style="height: 50px"
+      >
+        <SpinnerComponent
+          :loading="this.loading"
+          :button-text="this.buttonText"
+        ></SpinnerComponent>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -242,7 +250,7 @@ export default {
   height: 150px;
   width: 95%;
   border-radius: 8px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: 2px dashed #000000;
   display: flex;
   flex-direction: row;
@@ -272,5 +280,8 @@ export default {
   position: absolute;
   z-index: 100;
   cursor: pointer;
+}
+.saveButton {
+  z-index: 100;
 }
 </style>

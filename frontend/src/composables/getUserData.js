@@ -1,9 +1,8 @@
 import { DateTime } from "luxon";
-import { useToast } from "vue-toastification";
+import router from "../router";
 
-export function getUserData(store, userId) {
+export function getUserData(store, userId, toast) {
   async function userData() {
-    const toast = useToast();
     try {
       const url =
         import.meta.env.VITE_APP_API_URL + "/users/get?user_id=" + userId;
@@ -15,6 +14,7 @@ export function getUserData(store, userId) {
       if (!res.ok) {
         if (res.status === 403) {
           toast.error("Session is not available or not authorized");
+          router.push("/auth/email");
           // Update the UI or take other actions as needed
           return;
         }

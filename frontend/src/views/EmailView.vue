@@ -39,7 +39,6 @@ export default defineComponent({
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
     async callEmailVerification(userId) {
-      console.log("called");
       const toast = useToast();
       await emailVerification(userId, toast);
     },

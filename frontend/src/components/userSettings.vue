@@ -217,7 +217,12 @@ export default {
                 :button-text="this.buttonText"
               ></SpinnerComponent>
             </button>
-            <button v-else class="btn btn-secondary" style="width: 35%" disabled>
+            <button
+              v-else
+              class="btn btn-secondary"
+              style="width: 35%"
+              disabled
+            >
               CHANGE PASSWORD
             </button>
           </div>
@@ -264,7 +269,12 @@ export default {
           <div class="modal-body text-center">
             <h1>🐼</h1>
             <p class="mb-4">We're very sad to see you leave us 😭.</p>
-            <p class="mb-4 text-danger">PLEASE NOTE: Deleting your account will delete all your data from our systems and cancel your subscription. The data will not be recoverable if you change your mind and 🐼 panda.ai will no longer remember anything about you 😭.</p>
+            <p class="mb-4 text-danger">
+              PLEASE NOTE: Deleting your account will delete all your data from
+              our systems and cancel your subscription. The data will not be
+              recoverable if you change your mind and 🐼 panda.ai will no longer
+              remember anything about you 😭.
+            </p>
             <p>
               To confirm deletion of your 🐼 panda.ai account please re-enter
               your email address below and click confirm deletion.

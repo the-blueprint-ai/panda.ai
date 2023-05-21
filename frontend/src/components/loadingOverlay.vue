@@ -20,7 +20,11 @@ export default {
 
 <template>
   <div id="loadingOverlay" class="overlay" :class="{ active: loadingOverlay }">
-    <SpinnerComponent id="loadingSpinner" :loading="this.loading" spinner-size="80"></SpinnerComponent>
+    <SpinnerComponent
+      id="loadingSpinner"
+      :loading="this.loading"
+      spinner-size="80"
+    ></SpinnerComponent>
     <h2>loading...</h2>
   </div>
 </template>

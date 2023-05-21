@@ -162,7 +162,10 @@ export default {
                   !selectedIntegrations.includes(integration.integration_id))
               "
             />
-            <label class="form-check-label d-flex text-nowrap" for="flexCheckDefault">
+            <label
+              class="form-check-label d-flex text-nowrap"
+              for="flexCheckDefault"
+            >
               <img
                 :src="icons[integration.integration_icon]"
                 alt=""

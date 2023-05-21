@@ -2,7 +2,9 @@ export function getEntities(store, userId) {
   async function entities() {
     try {
       const url =
-        import.meta.env.VITE_APP_API_URL + "/entities/get-all?user_id=" + userId;
+        import.meta.env.VITE_APP_API_URL +
+        "/entities/get-all?user_id=" +
+        userId;
       const res = await fetch(url, {
         method: "GET",
       });

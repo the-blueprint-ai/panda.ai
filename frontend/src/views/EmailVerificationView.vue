@@ -36,7 +36,9 @@ export default defineComponent({
         if (response.status === "EMAIL_VERIFICATION_INVALID_TOKEN_ERROR") {
           // This can happen if the verification code is expired or invalid.
           // You should ask the user to retry
-          toast.error("Oops! Seems like the verification link expired. Please try again later.");
+          toast.error(
+            "Oops! Seems like the verification link expired. Please try again later."
+          );
           this.$router.push("/auth/verify-email"); // back to the email sending screen.
         } else {
           // email was verified successfully.
@@ -48,7 +50,9 @@ export default defineComponent({
           // this may be a custom error message sent from the API by you.
           toast.error(err.message);
         } else {
-          toast.error("Oops! Seems like the verification link expired. Please try again later.");
+          toast.error(
+            "Oops! Seems like the verification link expired. Please try again later."
+          );
         }
       }
     },

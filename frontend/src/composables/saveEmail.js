@@ -27,8 +27,14 @@ export async function saveEmail(userId, email) {
         if (!res1.ok || !res2.ok) {
           const errorResponse1 = await res1.json();
           const errorResponse2 = await res2.json();
-          console.error("Server error response:", errorResponse1, errorResponse2);
-          throw new Error(`Server responded with status ${res1.status} or ${res2.status}`);
+          console.error(
+            "Server error response:",
+            errorResponse1,
+            errorResponse2
+          );
+          throw new Error(
+            `Server responded with status ${res1.status} or ${res2.status}`
+          );
         }
 
         resolve(); // Resolve the promise when the request is successful

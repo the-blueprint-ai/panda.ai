@@ -8,7 +8,7 @@ import Toast, { POSITION } from "vue-toastification";
 import "../node_modules/bootstrap/scss/bootstrap.scss";
 import "@/assets/styles/panda-bootstrap-overrides.scss";
 import { SuperTokensWebJSConfig } from "./config";
-import axios from "axios";
+// import axios from "axios";
 
 import "bootstrap";
 
@@ -20,8 +20,8 @@ router.afterEach((to, from) => {
   store.commit("setIsOpen", false);
 });
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
+// axios.defaults.withCredentials = true;
+// axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 app.use(router);
 app.use(store);

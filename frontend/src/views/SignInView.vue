@@ -148,7 +148,9 @@ export default defineComponent({
                 id="floatingPassword"
                 placeholder="sKad00sh"
                 autocomplete="password"
-                @keydown.enter.stop.prevent="signInClicked(this.email, this.password)"
+                @keydown.enter.stop.prevent="
+                  signInClicked(this.email, this.password)
+                "
               />
               <label for="floatingPassword">Password</label>
             </div>

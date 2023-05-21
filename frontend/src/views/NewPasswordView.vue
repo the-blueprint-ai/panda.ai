@@ -23,7 +23,9 @@ export default defineComponent({
         this.badPasswordError = "";
       } else {
         this.passwordOk = "no";
-        toast.error("Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.");
+        toast.error(
+          "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number."
+        );
         this.badPasswordError =
           "Your password must be at least 8 characters long and include one lowercase, one uppercase and a number.";
       }

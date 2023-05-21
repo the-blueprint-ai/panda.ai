@@ -75,7 +75,7 @@ export default {
   justify-content: space-between;
   margin-top: 0px;
   margin-bottom: 15px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #000000;
   border: none;
   border-radius: 8px;
@@ -83,14 +83,14 @@ export default {
   text-align: left;
   text-transform: uppercase;
   font-size: 18px;
-  font-family: 'Iosevka';
+  font-family: "Iosevka";
 }
 .faqQuestion img {
   margin-top: 4px;
 }
 .faqQuestion:hover {
   cursor: pointer;
-  background-color: #FFCB4C;
+  background-color: #ffcb4c;
 }
 .faqAnswer {
   width: 85%;
@@ -100,7 +100,7 @@ export default {
   text-align: start;
 }
 .faqAnswer a {
-  color: #FFCB4C;
+  color: #ffcb4c;
   text-decoration: none;
 }
 </style>

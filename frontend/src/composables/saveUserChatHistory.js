@@ -8,7 +8,10 @@ export function saveUserChatHistory(user_id, chat_script) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user_id, chat_script: JSON.stringify(chat_script) }),
+          body: JSON.stringify({
+            user_id,
+            chat_script: JSON.stringify(chat_script),
+          }),
         });
 
         // Check if the response status indicates an error

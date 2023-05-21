@@ -37,10 +37,11 @@ export default defineComponent({
           <li>
             <h3 class="text-secondary">INFORMATION WE COLLECT</h3>
             <p class="mb-3">
-            We collect information that you provide to us directly and
-            information that is generated as you use our services. This may
-            include:
-            <ol type="a">
+              We collect information that you provide to us directly and
+              information that is generated as you use our services. This may
+              include:
+            </p>
+            <ol type="a" class="mb-3">
               <li>
                 Personal Information: When you interact with our AI chatbot, we
                 collect and store the content of your messages and other
@@ -52,13 +53,11 @@ export default defineComponent({
                 spending habits to personalise your AI chatbot experience.
               </li>
             </ol>
-          </p>
           </li>
           <li>
             <h3 class="text-secondary">HOW WE USE YOUR INFORMATION</h3>
-            <p class="mb-3">
-            We use your information to:
-            <ol type="a">
+            <p class="mb-3">We use your information to:</p>
+            <ol type="a" class="mb-3">
               <li>
                 Provide and improve our services: We use your information to
                 deliver the personalised AI chatbot experience and make
@@ -69,31 +68,33 @@ export default defineComponent({
                 your inquiries and provide customer support.
               </li>
             </ol>
-          </p>
           </li>
           <li>
-            <h3 class="text-secondary">LAWFUL BASIS FOR PROCESSING PERSONAL DATA</h3>
+            <h3 class="text-secondary">
+              LAWFUL BASIS FOR PROCESSING PERSONAL DATA
+            </h3>
             <p class="mb-3">
-            Under the GDPR, our lawful basis for processing your personal data
-            is your explicit consent. By using our services, you give us
-            permission to collect, use, and share your information as described
-            in this Privacy Policy.
-          </p>
+              Under the GDPR, our lawful basis for processing your personal data
+              is your explicit consent. By using our services, you give us
+              permission to collect, use, and share your information as
+              described in this Privacy Policy.
+            </p>
           </li>
           <li>
             <h3 class="text-secondary">DATA RETENTION PERIOD</h3>
             <p class="mb-3">
-            We will retain your personal data until you decide to delete your
-            data and/or delete your account. Upon deletion, we will remove your
-            information from our systems.
-          </p>
+              We will retain your personal data until you decide to delete your
+              data and/or delete your account. Upon deletion, we will remove
+              your information from our systems.
+            </p>
           </li>
           <li>
             <h3 class="text-secondary">YOUR DATA RIGHTS</h3>
             <p class="mb-3">
-            As a data subject, you have the following rights under the GDPR and
-            UK data privacy laws:
-            <ol type="a">
+              As a data subject, you have the following rights under the GDPR
+              and UK data privacy laws:
+            </p>
+            <ol type="a" class="mb-3">
               <li>
                 Access: You have the right to access your data at any time.
               </li>
@@ -123,31 +124,33 @@ export default defineComponent({
                 rights have been violated.
               </li>
             </ol>
-          </p>
           </li>
           <li>
             <h3 class="text-secondary">DATA STORAGE AND TRANSFERS</h3>
             <p class="mb-3">
-            All data is currently held within the UK. If this changes in the
-            future, we will inform our users and update our Privacy Policy
-            accordingly.
-          </p>
+              All data is currently held within the UK. If this changes in the
+              future, we will inform our users and update our Privacy Policy
+              accordingly.
+            </p>
           </li>
           <li>
             <h3 class="text-secondary">CHANGES TO OUR PRIVACY POLICY</h3>
             <p class="mb-3">
-            We may update this Privacy Policy from time to time. When we make
-            changes, we will update the "Effective Date" at the top of this
-            policy and notify you of any material changes. We encourage you to
-            periodically review this policy to stay informed about how we are
-            protecting your information.
-          </p>
+              We may update this Privacy Policy from time to time. When we make
+              changes, we will update the "Effective Date" at the top of this
+              policy and notify you of any material changes. We encourage you to
+              periodically review this policy to stay informed about how we are
+              protecting your information.
+            </p>
           </li>
           <li>
             <h3 class="text-secondary">CONTACT US</h3>
             <p>
               If you have any questions or concerns about this Privacy Policy,
-              Policy, please contact us at: <a class="text-secondary" href="mailto:privacy@mypanda.ai">privacy@mypanda.ai</a>
+              Policy, please contact us at:
+              <a class="text-secondary" href="mailto:privacy@mypanda.ai"
+                >privacy@mypanda.ai</a
+              >
             </p>
           </li>
         </ol>

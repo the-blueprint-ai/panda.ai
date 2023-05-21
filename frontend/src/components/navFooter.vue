@@ -29,7 +29,11 @@ export default {
   <div class="row h-200 pt-5 pb-3 bg-white">
     <div class="col-sm-2 px-5">
       <div class="row pb-5" @click="redirectToHome" style="min-width: 300px">
-        <img class="w-25 h-25" src="../../src/assets/panda.png"  style="min-width: 100px" />
+        <img
+          class="w-25 h-25"
+          src="../../src/assets/panda.png"
+          style="min-width: 100px"
+        />
         <div class="col mt-n2" style="min-width: 150px">
           <h4 class="pt-3 lh-1">panda.ai</h4>
           <p class="lh-1">MADE WITH ❤️</p>
@@ -87,10 +91,18 @@ export default {
       <div class="col-1" style="min-width: 150px">
         <h3 class="pb-3">LINKS</h3>
         <p class="ps-1 lh-1" navigate-to="home" @click="goToPage('/')">home</p>
-        <p class="ps-1 lh-1" navigate-to="roadmap" @click="goToPage('/roadmap')">
+        <p
+          class="ps-1 lh-1"
+          navigate-to="roadmap"
+          @click="goToPage('/roadmap')"
+        >
           roadmap
         </p>
-        <p class="ps-1 lh-1" navigate-to="privacy" @click="goToPage('/privacy')">
+        <p
+          class="ps-1 lh-1"
+          navigate-to="privacy"
+          @click="goToPage('/privacy')"
+        >
           privacy
         </p>
       </div>
@@ -99,7 +111,11 @@ export default {
         <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/about')">
           about
         </p>
-        <p class="ps-1 lh-1" navigate-to="about" @click="goToPage('/subscriptions')">
+        <p
+          class="ps-1 lh-1"
+          navigate-to="about"
+          @click="goToPage('/subscriptions')"
+        >
           subscriptions
         </p>
         <p
@@ -119,10 +135,18 @@ export default {
       </div>
       <div class="col-1" style="min-width: 150px">
         <h3 class="pb-3">SUPPORT</h3>
-        <p class="ps-1 lh-1" navigate-to="support" @click="goToPage('/support')">
+        <p
+          class="ps-1 lh-1"
+          navigate-to="support"
+          @click="goToPage('/support')"
+        >
           support
         </p>
-        <p class="ps-1 lh-1" navigate-to="contact" @click="goToPage('/contact')">
+        <p
+          class="ps-1 lh-1"
+          navigate-to="contact"
+          @click="goToPage('/contact')"
+        >
           contact us
         </p>
       </div>
@@ -139,7 +163,9 @@ export default {
         </p>
       </div>
     </div>
-    <div class="copywright row px-5 pt-3 text-center"><h5>©panda.ai 2023</h5></div>
+    <div class="copywright row px-5 pt-3 text-center">
+      <h5>©panda.ai 2023</h5>
+    </div>
   </div>
 </template>
 

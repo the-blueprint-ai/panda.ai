@@ -18,7 +18,8 @@ export function updateEntityDescription(event, entitiesData, index, toast) {
     };
     try {
       // Send an HTTP request to your backend API to update the entity description in the database
-      const url = import.meta.env.VITE_APP_API_URL + "/entities/update-description";
+      const url =
+        import.meta.env.VITE_APP_API_URL + "/entities/update-description";
       const res = await fetch(url, {
         method: "POST",
         headers: {
@@ -44,7 +45,7 @@ export function updateEntityDescription(event, entitiesData, index, toast) {
   }
 
   // Wrap the call with Promise handler
-  updateEntities().catch(error => console.error(error));
+  updateEntities().catch((error) => console.error(error));
 
   return {
     updateEntities,

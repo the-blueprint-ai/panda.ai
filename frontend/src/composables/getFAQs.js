@@ -40,7 +40,13 @@ export function getFAQs(store) {
       }, []);
 
       // Define the order of the sections
-      const sectionOrder = ["general", "account", "support", "platform", "subscriptions"];
+      const sectionOrder = [
+        "general",
+        "account",
+        "support",
+        "platform",
+        "subscriptions",
+      ];
 
       // Sort the FAQ sections based on the sectionOrder array
       const sortedFaqs = faqs.sort((a, b) => {

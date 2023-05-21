@@ -126,7 +126,10 @@ export default {
     <img v-bind:src="messageImage()" class="chatAvatar" />
     <div class="w-100 d-flex flex-row justify-content-between">
       <p class="message" v-html="formatMessage(message.message)"></p>
-      <span class="thumbs d-flex" v-if="message.user == 'panda' && !feedbackDisabled">
+      <span
+        class="thumbs d-flex"
+        v-if="message.user == 'panda' && !feedbackDisabled"
+      >
         <div
           class="d-flex"
           data-bs-toggle="modal"

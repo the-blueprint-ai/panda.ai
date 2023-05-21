@@ -65,7 +65,10 @@ export default defineComponent({
     <navBar></navBar>
     <div class="container-fluid h-100 bg-primary text-white">
       <div class="container text-center pt-5 pb-5">
-        <div class="card text-bg-light mt-5 mb-3 m-auto" style="max-width: 32rem">
+        <div
+          class="card text-bg-light mt-5 mb-3 m-auto"
+          style="max-width: 32rem"
+        >
           <div class="card-header pt-3 pb-3">
             <h1>🐼</h1>
             <h1>CONTACT US</h1>
@@ -126,7 +129,12 @@ export default defineComponent({
                 :button-text="this.buttonText"
               ></SpinnerComponent>
             </button>
-            <button v-else class="btn btn-secondary btn-lg m-auto" style="width: 70%" disabled>
+            <button
+              v-else
+              class="btn btn-secondary btn-lg m-auto"
+              style="width: 70%"
+              disabled
+            >
               SEND
             </button>
           </div>

@@ -101,7 +101,7 @@ export default defineComponent({
 
         const data = await res.json(); // get the response data from the server
         this.newIdeaId = data.roadmap_id; // set the newIdeaId to the returned roadmap_id
-        this.emailRoadmapSuggestion = this.roadmapSuggestion
+        this.emailRoadmapSuggestion = this.roadmapSuggestion;
         this.roadmapSuggestion = "";
 
         if (!res.ok) {
@@ -181,20 +181,27 @@ export default defineComponent({
           Upvote the features you like and we’ll notify you once they've
           launched...
         </h4>
-        <div v-if="roadmapData.length > 0" class="d-flex flex-row flex-wrap justify-content-around">
+        <div
+          v-if="roadmapData.length > 0"
+          class="d-flex flex-row flex-wrap justify-content-around"
+        >
           <div
             class="d-flex justify-content-center"
             v-for="item in sortedNotBuiltItems"
             :key="item.name"
           >
-            <div class="roadMapCard card d-flex text-bg-dark text-center mb-4 border-primary">
+            <div
+              class="roadMapCard card d-flex text-bg-dark text-center mb-4 border-primary"
+            >
               <div class="card-header pt-3 pb-3 border-primary">
                 <h2 class="text-uppercase">{{ item.name }}</h2>
                 <div
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('built')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">built</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">
+                    built
+                  </p>
                   <img
                     src="../assets/icons/check-circle-fill.svg"
                     class="ms-2 mt-n1"
@@ -204,7 +211,9 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('in progress')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">in progress</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">
+                    in progress
+                  </p>
                   <img
                     src="../assets/icons/fast-forward-circle-fill.svg"
                     class="ms-2 mt-n1"
@@ -214,7 +223,9 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('newly added')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">newly added</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">
+                    newly added
+                  </p>
                   <img src="../assets/icons/star-fill.svg" class="ms-2" />
                 </div>
               </div>
@@ -307,7 +318,9 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('built')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">built</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">
+                    built
+                  </p>
                   <img
                     src="../assets/icons/check-circle-fill.svg"
                     class="ms-2"
@@ -317,7 +330,9 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 me-3 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('in progress')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">in progress</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">
+                    in progress
+                  </p>
                   <img
                     src="../assets/icons/fast-forward-circle-fill.svg"
                     class="ms-2"
@@ -327,7 +342,9 @@ export default defineComponent({
                   class="badge rounded-pill text-bg-secondary mt-2 mb-1 d-inline-flex justify-content-center align-items-center"
                   v-if="item.tags.includes('newly added')"
                 >
-                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">newly added</p>
+                  <p class="text-uppercase ms-1 pt-2" style="height: 11px">
+                    newly added
+                  </p>
                   <img src="../assets/icons/star-fill.svg" class="ms-2" />
                 </div>
               </div>

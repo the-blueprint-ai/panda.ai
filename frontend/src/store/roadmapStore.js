@@ -25,8 +25,8 @@ const roadmapStore = {
       state.roadmapTags.push(...value);
     },
     setRoadmapVotes(state, value) {
-        state.roadmapVotes = value;
-      },
+      state.roadmapVotes = value;
+    },
   },
   getters: {
     getRoadmapData(state) {

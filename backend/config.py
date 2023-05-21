@@ -94,7 +94,7 @@ app_info = InputAppInfo(
 
 framework = "fastapi"
 
-def custom_email_deliver(original_implementation: EmailDeliveryOverrideInput) -> EmailDeliveryOverrideInput:
+def custom_email_delivery(original_implementation: EmailDeliveryOverrideInput) -> EmailDeliveryOverrideInput:
     original_send_email = original_implementation.send_email
 
     async def send_email(template_vars: EmailTemplateVars, user_context: Dict[str, Any]) -> None:
@@ -113,7 +113,7 @@ def custom_email_deliver(original_implementation: EmailDeliveryOverrideInput) ->
 recipe_list = [
     session.init(), # initializes session features
     thirdpartyemailpassword.init(
-        email_delivery=EmailDeliveryConfig(override=custom_email_deliver),
+        email_delivery=EmailDeliveryConfig(override=custom_email_delivery),
         providers=[
             # We have provided you with development keys which you can use for testing.
             # IMPORTANT: Please replace them with your own OAuth keys for production use.

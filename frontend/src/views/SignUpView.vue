@@ -77,7 +77,7 @@ export default defineComponent({
       return re.test(email);
     },
     validatePassword: function (password) {
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[a-zA-Z\d!@#$%^&*()]{8,}$/;
       return regex.test(password);
     },
     signUpClicked: async function (email, password) {
@@ -272,7 +272,7 @@ export default defineComponent({
                 </div>
                 <div id="passwordHelpBlock" class="form-text">
                   Your password must be at least 8 characters long and include
-                  one lowercase, one uppercase and a number.
+                  one lowercase, one uppercase, a number and a special character.
                 </div>
               </div>
               <div class="form-check ms-4 pt-4 pb-4 px-4">
@@ -289,9 +289,9 @@ export default defineComponent({
                 />
                 <label class="form-check-label" for="ToS&PP"
                   >Please agree to our
-                  <a class="text-secondary" @click="toToS">Terms of Service</a>
+                  <a class="text-secondary" @click="toToS" style="text-decoration: none">Terms of Service</a>
                   and
-                  <a class="text-secondary" @click="toPP">Privacy Policy</a> to
+                  <a class="text-secondary" @click="toPP" style="text-decoration: none">Privacy Policy</a> to
                   continue.</label
                 >
                 <div

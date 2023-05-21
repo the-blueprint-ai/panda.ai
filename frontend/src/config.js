@@ -9,9 +9,7 @@ export const SuperTokensWebJSConfig = {
     websiteDomain: import.meta.env.VITE_APP_BASE_URL,
   },
   recipeList: [
-    EmailVerification.init({
-      mode: "REQUIRED", // or "OPTIONAL"
-    }),
+    EmailVerification.init(),
     Session.init(),
     ThirdPartyEmailPassword.init(),
   ],

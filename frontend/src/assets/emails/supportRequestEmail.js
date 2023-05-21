@@ -9,7 +9,7 @@ const support_request_html = `
       <table width="90%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top: 20px; background-color: #000000; border-radius: 10px; text-align: center;">
           <tr>
             <td style="padding: 40px; font-size: 12px;">
-              <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=logo"><img src="https://www.mypanda.ai/assets/panda.396faefe.png" class="biglogo" width="100" /></a>
+              <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=logo"><img src="https://s3.eu-west-2.amazonaws.com/panda.ai/panda-standard.png" class="biglogo" width="100" /></a>
               <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=title" style="text-decoration: none;"><h1 style="font-size: 24px; font-weight: bold; text-align: center; color: #FFFFFF; margin-bottom: 20px;">THANK YOU FOR YOUR SUPPORT MESSAGE</h1></a>
               <p style="text-align: left;">Hi,</p>
               <p style="text-align: left;">Thank you for sending us a support request. We're just a small team at 🐼 panda.ai at the moment, but will get back to you as soon as we can.</p>

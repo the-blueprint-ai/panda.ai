@@ -9,7 +9,7 @@ const welcome_email = `
       <table width="90%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top: 20px; background-color: #000000; border-radius: 10px; text-align: center;">
           <tr>
             <td style="padding: 40px; font-size: 12px;">
-              <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=logo"><img src="https://www.mypanda.ai/assets/panda.396faefe.png" class="biglogo" width="100" /></a>
+              <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=logo"><img src="https://s3.eu-west-2.amazonaws.com/panda.ai/panda-standard.png" class="biglogo" width="100" /></a>
               <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=title" style="text-decoration: none;"><h1 style="font-size: 24px; font-weight: bold; text-align: center; color: #FFFFFF; margin-bottom: 20px;">WELCOME TO PANDA.AI!</h1></a>
               <p style="text-align: left;">Hi!</p>
               <p style="text-align: left;">We're thrilled to have you on board! Thank you for for taking 🐼 panda.ai out for a spin. We believe in the power of personalised AI experiences and giving users complete control over their own data.</p>

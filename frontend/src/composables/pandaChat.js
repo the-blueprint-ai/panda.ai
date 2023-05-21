@@ -1,7 +1,23 @@
-export async function pandaChat(user_id, first_name, last_name, username, message) {
+export async function pandaChat(
+  user_id,
+  first_name,
+  last_name,
+  username,
+  message
+) {
   try {
     const url =
-      import.meta.env.VITE_APP_API_URL + "/gpt/chat?user_id=" + user_id + "&first_name=" + first_name + "&last_name=" + last_name + "&username=" + username + "&message=" + message;
+      import.meta.env.VITE_APP_API_URL +
+      "/gpt/chat?user_id=" +
+      user_id +
+      "&first_name=" +
+      first_name +
+      "&last_name=" +
+      last_name +
+      "&username=" +
+      username +
+      "&message=" +
+      message;
     const res = await fetch(url, {
       method: "GET",
     });

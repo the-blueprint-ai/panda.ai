@@ -21,5 +21,9 @@ export default ({ mode }) => {
     define: {
       "process.env": env,
     },
+    build: {
+      minify: "terser",
+      sourcemap: false,
+    },
   });
 };

@@ -4,10 +4,10 @@
 
 /* Import mobile styles */
 @media screen and (max-width: 767px) {
-    @import "./panda-mobile";
+  @import "./panda-mobile";
 }
-  
+
 /* Import desktop styles */
 @media screen and (min-width: 768px) {
-    @import "./panda-desktop";
+  @import "./panda-desktop";
 }

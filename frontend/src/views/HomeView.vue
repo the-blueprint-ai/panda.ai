@@ -99,17 +99,23 @@ export default defineComponent({
         <img src="../../src/assets/panda.png" width="200" />
         <h1 class="pt-5 pb-5">
           <span class="typed-text">{{ typeValue }}</span>
-          <span class="cursorSpace" :class="{ typing: typeStatus }">&nbsp;</span>
+          <span class="cursorSpace" :class="{ typing: typeStatus }"
+            >&nbsp;</span
+          >
           <span class="cursor"></span>
         </h1>
         <div v-if="session">
           <router-link :to="'/auth/' + userId + '/chat'">
-            <button type="button" class="btn btn-secondary btn-lg">LET'S CHAT</button>
+            <button type="button" class="btn btn-secondary btn-lg">
+              LET'S CHAT
+            </button>
           </router-link>
         </div>
         <div v-else>
           <router-link :to="'/signin'">
-            <button type="button" class="btn btn-secondary btn-lg">LET'S CHAT</button>
+            <button type="button" class="btn btn-secondary btn-lg">
+              LET'S CHAT
+            </button>
           </router-link>
         </div>
       </div>
@@ -129,7 +135,7 @@ export default defineComponent({
   content: "";
   width: 20px;
   height: 35px;
-  background: #FFFFFF;
+  background: #ffffff;
   display: inline-block;
   opacity: 100%;
   animation: cursor-blink 1s steps(2, jump-none) infinite;

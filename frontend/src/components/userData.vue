@@ -158,7 +158,9 @@ export default {
           </thead>
           <tbody>
             <tr v-for="(entity, index) in entitiesData" :key="entity.entity">
-              <td><strong>{{ entity.entity }}</strong></td>
+              <td>
+                <strong>{{ entity.entity }}</strong>
+              </td>
               <td
                 contenteditable="true"
                 @blur="
@@ -168,7 +170,10 @@ export default {
                 {{ entity.description }}
               </td>
               <td class="align-middle">
-                <img src="../assets/icons/x-circle-fill.svg" @click="deleteEntity(userId, entity)" />
+                <img
+                  src="../assets/icons/x-circle-fill.svg"
+                  @click="deleteEntity(userId, entity)"
+                />
               </td>
             </tr>
           </tbody>
@@ -179,7 +184,9 @@ export default {
             Please have more chats with 🐼 panda.ai so that it can learn more
             about you.
           </p>
-          <button class="btn btn-secondary btn-lg w-25" @click="redirectToChat">Let's Chat</button>
+          <button class="btn btn-secondary btn-lg w-25" @click="redirectToChat">
+            Let's Chat
+          </button>
         </div>
       </div>
       <div v-if="tab === 'documents'" class="documentsData">

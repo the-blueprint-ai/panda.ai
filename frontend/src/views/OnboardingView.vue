@@ -336,8 +336,12 @@ export default defineComponent({
     <navBar></navBar>
     <div v-if="session">
       <div class="container-fluid bg-light text-white">
-        <div class="container pt-5 pb-5 d-flex flex-column justify-content-center align-items-center">
-          <div class="chatCard card w-100 text-bg-white text-primary text-center me-3">
+        <div
+          class="container pt-5 pb-5 d-flex flex-column justify-content-center align-items-center"
+        >
+          <div
+            class="chatCard card w-100 text-bg-white text-primary text-center me-3"
+          >
             <div
               class="onboardingWindow card-body scrollable-card-body d-flex flex-column-reverse text-start pt-4 pb-4 px-4"
             >
@@ -402,8 +406,12 @@ export default defineComponent({
               :chat-name="chatName"
             ></ImageUpload>
           </div>
-          <h5 v-if="success" class="text-primary text-center mt-5">Image uploaded successfully!</h5>
-          <h5 v-if="error" class="text-danger text-center mt-5">Error uploading image, please try again.</h5>
+          <h5 v-if="success" class="text-primary text-center mt-5">
+            Image uploaded successfully!
+          </h5>
+          <h5 v-if="error" class="text-danger text-center mt-5">
+            Error uploading image, please try again.
+          </h5>
         </div>
       </div>
     </div>

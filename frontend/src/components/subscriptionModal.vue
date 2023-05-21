@@ -39,7 +39,7 @@ export default {
         cvv: "CVV",
         expiry: "MM / YY",
       },
-      fonts: ['../assets/fonts/iosevka-regular.ttf'],
+      fonts: ["../assets/fonts/iosevka-regular.ttf"],
       styles: {
         base: {
           color: "#000000",
@@ -325,7 +325,10 @@ export default {
                 />
                 <label for="nameOnCard">Name on Card</label>
               </div>
-              <div class="d-flex flex-column px-2 pt-3 pb-3"  style="border: 1px solid #ced4da; border-radius: 5px">
+              <div
+                class="d-flex flex-column px-2 pt-3 pb-3"
+                style="border: 1px solid #ced4da; border-radius: 5px"
+              >
                 <!-- Render card components in fields-mode -->
                 <!-- Pass styles, classes, locale, placeholder, fonts as props -->
                 <CardComponent
@@ -337,7 +340,9 @@ export default {
                 >
                 </CardComponent>
               </div>
-              <div class="error text-danger mt-4" role="alert" v-if="error">{{ error }}</div>
+              <div class="error text-danger mt-4" role="alert" v-if="error">
+                {{ error }}
+              </div>
               <div class="token" v-if="token">{{ token }}</div>
             </div>
           </div>

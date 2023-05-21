@@ -160,7 +160,9 @@ export default defineComponent({
   <main style="height: 71vh">
     <navBar></navBar>
     <div v-if="session">
-      <div class="container-fluid bg-light text-white d-flex flex-column align-items-center">
+      <div
+        class="container-fluid bg-light text-white d-flex flex-column align-items-center"
+      >
         <div class="container d-flex pt-5 pb-5">
           <div
             v-if="userStoreChatHistory"

@@ -81,7 +81,6 @@ settings = Settings()
 
 # This is the location of the SuperTokens core.
 supertokens_config = SupertokensConfig(
-    # https://try.supertokens.com is for demo purposes. Replace this with the address of your core instance (sign up on supertokens.com), or self host a core.
     connection_uri=settings.SPTKNS_CONNECTION_URI,
     api_key=settings.SPTKNS_API_KEY
 )
@@ -102,7 +101,7 @@ def custom_email_delivery(original_implementation: EmailDeliveryOverrideInput) -
         # or even deep link it to your mobile app
         # This is: `${websiteDomain}${websiteBasePath}/reset-password`
         template_vars.password_reset_link = template_vars.password_reset_link.replace(
-            "http://localhost:3000/auth/reset-password", "http://localhost:3000/reset-password")
+            f"{settings.WEBSITE_DOMAIN}/auth/reset-password", f"{settings.WEBSITE_DOMAIN}/reset-password")
         return await original_send_email(template_vars, user_context)
 
     original_implementation.send_email = send_email
@@ -113,7 +112,7 @@ def custom_email_delivery(original_implementation: EmailDeliveryOverrideInput) -
 recipe_list = [
     session.init(), # initializes session features
     thirdpartyemailpassword.init(
-        email_delivery=EmailDeliveryConfig(override=custom_email_delivery),
+        # email_delivery=EmailDeliveryConfig(override=custom_email_delivery),
         providers=[
             # We have provided you with development keys which you can use for testing.
             # IMPORTANT: Please replace them with your own OAuth keys for production use.

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "run-p type-check build-only",
+    "build": "npm-run-all --parallel type-check build-only",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit --skipLibCheck",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@chargebee/chargebee-js-vue-wrapper": "^0.3.1",
     "@popperjs/core": "^2.11.6",
+    "@vue/cli-service": "^5.0.8",
     "axios": "^1.3.4",
     "bootstrap": "5.2.3",
     "bootstrap-icons": "^1.10.3",

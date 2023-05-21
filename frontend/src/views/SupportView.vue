@@ -88,7 +88,7 @@ export default defineComponent({
         this.loading = false;
         this.buttonText = "SENT!";
       } catch (error) {
-        toast.sucerrorcess("An error occurred while sending the emails:", error);
+        toast.error("An error occurred while sending the emails:", error);
         this.failedSend = true;
         setTimeout(() => (this.failedSend = false), 2000);
       } finally {

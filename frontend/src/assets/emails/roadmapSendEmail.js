@@ -3,17 +3,17 @@ const support_send_email = (confirmedEmail, message) => `
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Support Ticket Raised</title>
+    <title>New Roadmap Idea Submitted</title>
   </head>
   <body style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; background-color: #EFEFEF; font-family: Monaco; font-size: 12px; line-height: 1.5; color: #000000; text-decoration: none; min-height: 100%; max-width: 600px; border-radius: 10px; margin: 0 auto;">   
       <table width="90%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top: 20px; color: #FFFFFF; background-color: #000000; border-radius: 10px; text-align: center;">
           <tr>
             <td style="padding: 40px; font-size: 12px;">
               <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=logo"><img src="https://s3.eu-west-2.amazonaws.com/panda.ai/panda-standard.png" class="biglogo" width="100" /></a>
-              <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=title" style="text-decoration: none;"><h1 style="font-size: 24px; font-weight: bold; text-align: center; color: #FFFFFF; margin-bottom: 20px;">SUPPORT REQUEST</h1></a>
-              <h2 style="text-align: left;">We've received a support request from:</h2>
+              <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=title" style="text-decoration: none;"><h1 style="font-size: 24px; font-weight: bold; text-align: center; color: #FFFFFF; margin-bottom: 20px;">NEW ROADMAP IDEA</h1></a>
+              <h2 style="text-align: left;">We've received a new roadmap idea from:</h2>
               <p style="text-align: left;"><a style="color: #FFFFFF; text-decoration: none;">` + confirmedEmail + `</a></p>
-              <h2 style="text-align: left;"><strong>Message as follows:</strong></h2>
+              <h2 style="text-align: left;"><strong>Idea as follows:</strong></h2>
               <p style="text-align: left;">` + message + `</p>
             </td>
           </tr>

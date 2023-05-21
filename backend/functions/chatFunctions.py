@@ -21,6 +21,7 @@ from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from sentence_transformers import SentenceTransformer
 import pinecone
+from cryptography.fernet import Fernet, InvalidToken
 from typing import Any, List, Optional, Sequence, Type, Union, Dict
 from config import settings
 import logging, re, asyncio, json, tiktoken, requests, boto3, promptlayer
@@ -30,8 +31,14 @@ from datetime import date, datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from functions.entityFunctions import get_most_relevant_entities
 from functions.toolFunctions import NewsSearchTool, WikipediaSearchTool, YouTubeSearchTool, GoogleMapsSearchTool, GoogleImageSearchTool, GoogleSearchTool, SpotifySearchTool, TMDBSearchTool
+from functions.emailFunctions import email_send
 
 promptlayer.api_key = settings.PRMPTLYR_API_KEY
+
+key = settings.FERNET_KEY
+if not key:
+    raise ValueError("FERNET_KEY environment variable not set")
+cipher_suite = Fernet(key.encode())
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -119,10 +126,14 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
     messages_count = number_of_messages_this_month["count"]
 
     if (subscriber == False):
-        return JSONResponse(content={"response": "<span>Apologies! You need to subscribe to one of our packages to use 🐼 panda.ai. You can find more information about our subscription packages <a href='https://www.mypanda.ai/pricing' target='_blank'>here</a>.</span>"})
+        return JSONResponse(content={"response": "<span>Apologies! You need to subscribe to one of our packages to use 🐼 panda.ai. You can find more information about our subscription packages <a href='https://www.mypanda.ai/subscriptions' target='_blank'>here</a>.</span>"})
     elif (messages_count >= messages_allowed):
         return JSONResponse(content={"response": f"<span>Apologies! You have used up your monthly messages allowance. To add more messages to your monthly plan or to upgrade your subscription, please see the infomation below:</span><h5 class='mt-4 mb-0'>ADD ONS</h5><span><p>You can add more messages to your monthly subscription as a one-off or ongoing every month by visiting your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, heading to the Subscription tab and updating your subscription details.</p><span><h5 class='mt-4 mb-0'>UPGRADING</h5><span><p>To upgrade your subscription to include more messages per month in your plan you can go to your <a href='https://www.mypanda.ai/auth/{userid}/account' target='_blank' style='text-decoration: none'>account page</a>, head to the Subscriptions tab and upgrade your subscription.</p></span>"})
     else:
+        if (messages_allowed & messages_count == 20):
+            await end_trial(userid)
+            return JSONResponse(content={"response": "<span>Thank you for trying 🐼 panda.ai. Your free trial of 20 messages has now ended. If you would like to continue using 🐼 panda.ai you can sign up to one of our subscription packages <a href='https://www.mypanda.ai/subscriptions' target='_blank'>here</a>.</span>"})
+
         integration_ids, entities, chat_history = await asyncio.gather(
             get_user_tools(userid),
             get_most_relevant_entities(userid, message),
@@ -602,3 +613,64 @@ async def feedback_message(userid: str, message: str, rating: str, feedback: str
     await database.execute(query, values)
 
     return {"message": "Message feedback saved successfully"}
+
+async def end_trial(userid: str):
+    query = """
+        UPDATE panda_ai_users 
+        SET subscriber = false, integrations = 0, messages_per_month = 0
+        WHERE user_id = :user_id
+    """
+    values = {"user_id": userid}
+    await database.execute(query, values)
+
+    query2 = """
+        SELECT email
+        FROM panda_ai_users
+        WHERE user_id = :user_id
+    """
+    values2 = {"user_id": userid}
+    result = await database.execute(query2, values2)
+
+    html = f"""\
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Free Trial Ended</title>
+        </head>
+        <body style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; background-color: #EFEFEF; font-family: Monaco; font-size: 12px; line-height: 1.5; color: #FFFFFF; min-height: 100%; max-width: 600px; border-radius: 10px; margin: 0 auto;">   
+            <table width="90%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top: 20px; background-color: #000000; border-radius: 10px; text-align: center;">
+                <tr>
+                    <td style="padding: 40px; font-size: 12px;">
+                    <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=logo"><img src="https://s3.eu-west-2.amazonaws.com/panda.ai/panda-standard.png" class="biglogo" width="100" /></a>
+                    <a href="https://www.mypanda.ai?utm_source=panda.ai&utm_medium=email&utm_campaign=welcome&utm_content=title" style="text-decoration: none;"><h1 style="font-size: 24px; font-weight: bold; text-align: center; color: #FFFFFF; margin-bottom: 20px;">YOUR FREE TRIAL HAS ENEDED</h1></a>
+                    <p style="text-align: left;">Hi,</p>
+                    <p style="text-align: left;">Thank you for trying 🐼 panda.ai. Your free trial of 20 messages has now ended.</p>
+                    <p style="text-align: left;">If you would like to continue using 🐼 panda.ai you can sign up to one of our <a href="https://www.mypanda.ai/subscriptions?utm_source=panda.ai&utm_medium=email&utm_campaign=trial_end&utm_content=subscription_link">subscription packages</a>.</p>
+                    <p style="text-align: left;">We have lots of options to choose from, like our Mei plan that gives you 300 messages per month and access to 5 of our integrations. You can sign up for just a month and cancel at any time.</p>
+                    <p style="text-align: left;">We really hope you enjoyed using 🐼 panda.ai and are interested in any ideas of feedback you might have. You can make new idea suggestions <a href="https://www.mypanda.ai/roadmap?utm_source=panda.ai&utm_medium=email&utm_campaign=trial_end&utm_content=roadmap_link">here</a> and feedback using the form <a href="https://www.mypanda.ai/contact?utm_source=panda.ai&utm_medium=email&utm_campaign=trial_end&utm_content=contact_us_link">here</a>.</p>
+                    <p style="text-align: left;">Thank you again for trying 🐼 panda.ai!</p>
+                    <p style="text-align: left;">Love & hugs,</p>
+                    <p style="text-align: left;"><strong>🐼</strong></p>
+                    </td>
+                </tr>
+            </table>
+            <div data-role="module-unsubscribe" class="module" role="module" data-type="unsubscribe" style="color:#444444; font-size:12px; line-height:20px; padding:16px 16px 16px 16px; text-align:Center;" data-muid="4e838cf3-9892-4a6d-94d6-170e474d21e5">
+            
+            <p style="font-size:12px; line-height:20px; color: #000000;">
+                <a href="[unsubscribe]" target="_blank" class="Unsubscribe--unsubscribeLink" style="font-family: Monaco; color: #000000; text-decoration:none;">
+                UNSUBSCRIBE
+                </a>
+            </p>
+            </div>
+        </body>
+    </html>
+    """
+
+    if result:
+        try:
+            decrypted_email = cipher_suite.decrypt(result["email"].encode()).decode('utf-8')
+        except InvalidToken:
+            return {"error": "Error decrpyting user data"} 
+
+        await email_send('subscriptions@mypanda.ai', decrypted_email, 'Your Free Trial of 🐼 panda.ai has ended', html)

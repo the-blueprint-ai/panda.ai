@@ -15,12 +15,10 @@ s3 = boto3.client('s3', aws_access_key_id = settings.AWS_ACCESS_KEY_ID, aws_secr
 DATABASE_URL = settings.PSQL_DATABASE_URL
 database = Database(DATABASE_URL)
 
-
 key = settings.FERNET_KEY
 if not key:
     raise ValueError("FERNET_KEY environment variable not set")
 cipher_suite = Fernet(key.encode())
-
 
 # HELPER FUNCTIONS
 async def get_user_data(user_id: str):

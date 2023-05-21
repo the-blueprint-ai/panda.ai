@@ -4,6 +4,9 @@ import { mapGetters } from "vuex";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { getRoadmap } from "../composables/getRoadmap.js";
+import { sendEmail } from "../composables/sendEmail.js";
+import roadmap_request_html from "../assets/emails/roadmapRequestEmail.js";
+import roadmap_send_html from "../assets/emails/roadmapSendEmail.js";
 import SpinnerComponent from "../components/spinnerComponent.vue";
 import { useToast } from "vue-toastification";
 
@@ -13,6 +16,7 @@ export default defineComponent({
       roadmapOverlay: false,
       email: "",
       roadmapSuggestion: "",
+      emailRoadmapSuggestion: "",
       newIdeaId: 0,
       displayBuiltItemsCount: 6,
       loading: false,
@@ -47,6 +51,36 @@ export default defineComponent({
     },
   },
   methods: {
+    async sendRoadmapEmails(to_email, message) {
+      const toast = useToast();
+      this.loading = true;
+      const roadmap_message = roadmap_send_html(to_email, message);
+      try {
+        await sendEmail(
+          "support@mypanda.ai",
+          to_email,
+          "Thank you for your suggestion!",
+          roadmap_request_html
+        );
+        await sendEmail(
+          "website@mypanda.ai",
+          "support@mypanda.ai",
+          "New Roadmap Idea Submitted",
+          roadmap_message
+        );
+        toast.success("Email sent!");
+        this.loading = false;
+        this.notifyMeButtonText = "SENT!";
+      } catch (error) {
+        toast.error("An error occurred while sending the emails:", error);
+        this.failedSend = true;
+        setTimeout(() => (this.failedSend = false), 2000);
+      } finally {
+        setTimeout(() => (this.buttonText = "NOTIFY ME"), 2000);
+        setTimeout(() => (this.email = ""), 2000);
+        setTimeout(() => (this.roadmapSuggestion = ""), 2000);
+      }
+    },
     activateOverlay() {
       this.roadmapOverlay = !this.roadmapOverlay;
     },
@@ -67,6 +101,7 @@ export default defineComponent({
 
         const data = await res.json(); // get the response data from the server
         this.newIdeaId = data.roadmap_id; // set the newIdeaId to the returned roadmap_id
+        this.emailRoadmapSuggestion = this.roadmapSuggestion
         this.roadmapSuggestion = "";
 
         if (!res.ok) {
@@ -78,6 +113,8 @@ export default defineComponent({
     },
     async addEmail(id, email) {
       const toast = useToast();
+      await this.sendRoadmapEmails(email, this.emailRoadmapSuggestion);
+      this.emailRoadmapSuggestion = "";
       try {
         const url =
           import.meta.env.VITE_APP_API_URL +
@@ -203,7 +240,7 @@ export default defineComponent({
                       Upvote
                     </p>
                     <p class="" id="roadmapItemVotes">
-                      <strong>{{ item.votes }}</strong>
+                      {{ item.votes }}
                     </p>
                   </button>
                 </div>

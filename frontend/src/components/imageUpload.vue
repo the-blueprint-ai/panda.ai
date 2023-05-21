@@ -1,6 +1,5 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import axios from "axios";
 import SpinnerComponent from "../components/spinnerComponent.vue";
 
 export default {
@@ -62,17 +61,6 @@ export default {
       } else if (chatName == "pandaWeather") {
         this.imageDropPhrase = "drop it, human...";
       }
-    },
-    getMessage: async function () {
-      axios
-        .get("/test")
-        .then((res) => {
-          this.setMsg(res.data);
-          console.log(this.msg);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
     },
     cropToSquare: function (img, callback) {
       const canvas = document.createElement("canvas");

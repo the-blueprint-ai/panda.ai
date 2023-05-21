@@ -18,8 +18,13 @@ export default defineComponent({
       email: "getStoreEmail",
     }),
   },
-  mounted() {
-    this.consumeVerificationCode();
+  async mounted() {
+    if (!this.session) {
+      await this.getSession();
+      this.consumeVerificationCode();
+    } else if (this.session) {
+      this.consumeVerificationCode();
+    }
   },
 
   methods: {
@@ -32,7 +37,7 @@ export default defineComponent({
           // This can happen if the verification code is expired or invalid.
           // You should ask the user to retry
           toast.error("Oops! Seems like the verification link expired. Please try again later.");
-          this.$router.push("/auth/email"); // back to the email sending screen.
+          this.$router.push("/auth/verify-email"); // back to the email sending screen.
         } else {
           // email was verified successfully.
           toast.success("Email verified successfully!");

@@ -13,7 +13,6 @@ export async function emailVerification(userId, toast) {
       router.push("/auth/email");
     }
   } catch (err) {
-    console.error(err);
     if (err.isSuperTokensGeneralError === true) {
       toast.error(err.message);
     } else {

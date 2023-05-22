@@ -356,7 +356,8 @@ export default defineComponent({
             </div>
             <div class="card-footer pt-2 pt-1">
               <div class="chatBox form-floating mb-3 d-flex">
-                <img v-bind:src="avatar" class="chatAvatar mt-3" />
+                <img v-if="avatar" v-bind:src="avatar" class="chatAvatar mt-3" />
+                <img v-else src="../assets/user.png" class="chatAvatar mt-3" />
                 <textarea
                   :disabled="isDisabled"
                   class="form-control mt-3 mx-3 shadow-none"

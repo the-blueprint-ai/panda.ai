@@ -94,7 +94,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="container-fluid vh-100 bg-black text-white">
+    <div class="mainContainer container-fluid bg-black text-white">
       <div class="container text-center pt-5 pb-5">
         <img src="../../src/assets/panda.png" width="200" />
         <h1 class="pt-5 pb-5">

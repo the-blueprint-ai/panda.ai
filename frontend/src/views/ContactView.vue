@@ -63,7 +63,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="container-fluid vh-100 bg-primary text-white">
+    <div class="mainContainer container-fluid bg-primary text-white">
       <div class="container text-center pt-5 pb-5">
         <div
           class="card text-bg-light mt-5 mb-3 m-auto"

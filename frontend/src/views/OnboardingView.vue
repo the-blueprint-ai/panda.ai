@@ -335,7 +335,7 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div v-if="session">
-      <div class="container-fluid bg-light text-white">
+      <div class="mainContainer container-fluid bg-light text-white">
         <div
           class="container pt-5 pb-5 d-flex flex-column justify-content-center align-items-center"
         >

@@ -37,6 +37,10 @@ $vt-text-color-warning: #000000;
     url("../fonts/iosevka-regular.woff2") format("woff2");
 }
 
+.mainContainer {
+  min-height: 95vh;
+}
+
 :root {
   --bs-font-sans-serif: "Iosevka", "Monaco", -apple-system, system-ui,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",

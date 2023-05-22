@@ -2,7 +2,7 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions, mapGetters } from "vuex";
 import { getUserData } from "../composables/getUserData.js";
-import SpinnerComponent from "../components/spinnerComponent.vue";
+import SpinnerComponent from "./spinnerComponent.vue";
 import { useToast } from "vue-toastification";
 
 export default {

@@ -87,9 +87,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main>
     <navBar></navBar>
-    <div class="container-fluid h-100 bg-primary text-white">
+    <div class="container-fluid vh-100 bg-primary text-white">
       <div class="container text-center pt-5 pb-5">
         <h1 class="mb-5">TESTING</h1>
         <button class="btn btn-secondary mb-5" @click="addSentences">

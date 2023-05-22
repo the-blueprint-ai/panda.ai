@@ -296,9 +296,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="max-height: 71vh !important; min-height: 71vh !important">
+  <main>
     <navBar></navBar>
-    <div class="container-fluid bg-light d-flex text-white">
+    <div class="container-fluid bg-light d-flex text-white vh-100">
       <div
         class="card mt-4 mb-4 mx-4 text-bg-white text-primary text-center"
         style="min-width: 250px"

@@ -157,7 +157,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main>
     <navBar></navBar>
     <div v-if="session">
       <div
@@ -268,7 +268,8 @@ export default defineComponent({
 
 <style scoped>
 .scrollable-card-body {
-  height: 900px;
+  /* height: 900px; */
+  height: 75vh;
   overflow-y: auto;
 }
 .chatAvatar {

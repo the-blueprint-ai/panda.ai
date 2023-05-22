@@ -23,7 +23,8 @@ export default ({ mode }) => {
     },
     build: {
       minify: "terser",
-      sourcemap: false,
+      assetsInlineLimit: 0,
+      manifest: true,
     },
   });
 };

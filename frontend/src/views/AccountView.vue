@@ -892,7 +892,7 @@ export default defineComponent({
 
 <style scoped>
 .bannerCamera {
-  width: 1295px;
+  width: 100%;
   opacity: 0;
   position: absolute;
   border-top-left-radius: 5px;

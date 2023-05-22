@@ -21,6 +21,7 @@ export default defineComponent({
       chatIndex: "",
       parts: [],
       chatName: "",
+      isImageUpload: false,
     };
   },
   computed: {
@@ -113,9 +114,6 @@ export default defineComponent({
         // if no previous function has been selected, select a random one
         this.chatIndex = this.getRandomChat.previousFunction =
           chatFunctions[Math.floor(Math.random() * chatFunctions.length)];
-        this.parts = String(this.chatIndex).split(/\s*\(\s*/);
-        const functionPrefix = "function ";
-        this.chatName = this.parts[0].substring(functionPrefix.length);
       }
       const chat = this.getRandomChat.previousFunction(
         daypart,
@@ -123,6 +121,7 @@ export default defineComponent({
         last_name,
         username
       );
+      this.chatName = chat[0].message;
       return chat;
     },
     getDaypart() {
@@ -296,7 +295,7 @@ export default defineComponent({
             ),
           45441
         );
-        setTimeout(() => this.setSuccess(""), 45442);
+        setTimeout(() => this.setSuccess(""), 6000);
         setTimeout(() => this.finishOnboarding(this.userId), 49280);
         setTimeout(() => this.setIsDisabledValue(false), 49280);
       }
@@ -340,7 +339,7 @@ export default defineComponent({
           class="container pt-4 pb-4 d-flex flex-column justify-content-center align-items-center"
         >
           <div
-            class="chatCard card w-100 text-bg-white text-primary text-center me-3"
+            class="chatCard card w-100 text-bg-white text-primary text-center me-3" :class="{ 'shrink': isImageUpload }"
           >
             <div
               class="onboardingWindow card-body scrollable-card-body d-flex flex-column-reverse text-start pt-4 pb-4 px-4"
@@ -400,11 +399,12 @@ export default defineComponent({
               </div>
             </div>
           </div>
-          <div v-if="imageDrop" class="w-50 text-align-center">
+          <div v-if="imageDrop" class="w-50 text-align-center mt-3">
             <ImageUpload
               :user-id="this.userId"
-              @image-uploaded.once="submitMessage()"
-              :chat-name="chatName"
+              @image-uploaded.once="submitMessage(); isImageUpload = false"
+              :chat-name="this.chatName"
+              @image-upload-started="isImageUpload = true"
             ></ImageUpload>
           </div>
           <h5 v-if="success" class="text-primary text-center mt-4">
@@ -424,6 +424,10 @@ export default defineComponent({
 .chatCard {
   height: 89vh;
   max-width: 830px;
+}
+.shrink {
+  height: 80vh;
+  transition: height 0.3s ease-out;
 }
 .onboardingWindow {
   overflow: scroll;

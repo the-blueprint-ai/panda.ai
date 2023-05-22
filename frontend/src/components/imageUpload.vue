@@ -6,7 +6,6 @@ export default {
   data() {
     return {
       formData: null,
-      imageDropPhrase: "",
       loading: false,
       buttonText: "SAVE",
       file: "",
@@ -14,6 +13,9 @@ export default {
     };
   },
   props: ["userId", "chatName"],
+  mounted() {
+    this.$emit('image-upload-started');
+  },
   computed: {
     ...mapGetters("userStore", {
       avatar: "getStoreAvatar",
@@ -30,9 +32,18 @@ export default {
       success: "getSuccess",
       error: "getError",
     }),
+    imageDropPhrase() {
+    if (this.chatName.includes("Private")) {
+      return "drop it, then give me 10...";
+    } else if (this.chatName.includes("Ahoy")) {
+      return "drop it, ye scallywag...";
+    } else if (this.chatName.includes("'Sup")) {
+      return "drop it like a thotty, drop it like a thotty...";
+    } else if (this.chatName.includes("Congratulations")) {
+      return "drop it, human...";
+    }
+    return "drop that face right here!";
   },
-  created() {
-    this.setImageDropPhrase(this.chatName);
   },
   methods: {
     ...mapMutations("userStore", {
@@ -52,18 +63,6 @@ export default {
       setSuccess: "setSuccess",
       setError: "setError",
     }),
-    setImageDropPhrase(chatName) {
-      if (chatName === "privatePanda") {
-        this.imageDropPhrase = "drop it, then give me 10...";
-      } else if (chatName === "piratePanda") {
-        this.imageDropPhrase = "drop it, ye scallywag...";
-      } else if (chatName === "streetPanda") {
-        this.imageDropPhrase =
-          "drop it like a thotty, drop it like a thotty...";
-      } else if (chatName === "pandaWeather") {
-        this.imageDropPhrase = "drop it, human...";
-      }
-    },
     cropToSquare: function (img, callback) {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");

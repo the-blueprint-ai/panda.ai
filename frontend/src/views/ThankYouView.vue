@@ -26,9 +26,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main>
     <navBar></navBar>
-    <div class="container-fluid h-100 bg-primary text-white">
+    <div class="container-fluid vh-100 bg-primary text-white">
       <div class="container pt-5 pb-5 text-center">
         <img src="../../src/assets/panda.png" width="200" />
         <h1 class="mt-5">THANK YOU!</h1>

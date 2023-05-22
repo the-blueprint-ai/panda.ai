@@ -332,7 +332,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main>
     <navBar></navBar>
     <div v-if="session">
       <div class="container-fluid bg-light text-white">
@@ -421,7 +421,7 @@ export default defineComponent({
 
 <style scoped>
 .chatCard {
-  height: 1000px;
+  height: 75vh;
   max-width: 830px;
 }
 .onboardingWindow {

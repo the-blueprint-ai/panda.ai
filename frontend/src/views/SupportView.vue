@@ -109,7 +109,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="min-height: 71vh">
+  <main>
     <navBar></navBar>
     <div class="container-fluid bg-primary text-white">
       <div v-if="this.getStoreFAQs" class="container pt-5 pb-5 text-center">

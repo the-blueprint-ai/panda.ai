@@ -535,7 +535,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main style="height: 71vh">
+  <main>
     <navBar></navBar>
     <div v-if="session">
       <div class="container-fluid bg-light text-white">

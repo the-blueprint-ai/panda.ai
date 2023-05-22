@@ -163,7 +163,7 @@ export default defineComponent({
       <div
         class="mainContainer container-fluid bg-light text-white d-flex flex-column align-items-center"
       >
-        <div class="container d-flex pt-5 pb-5">
+        <div class="container d-flex pt-4 pb-4">
           <div
             v-if="userStoreChatHistory"
             class="historyCard card text-bg-white text-primary text-center me-3"
@@ -268,8 +268,7 @@ export default defineComponent({
 
 <style scoped>
 .scrollable-card-body {
-  /* height: 900px; */
-  height: 75vh;
+  height: 89vh;
   overflow-y: auto;
 }
 .chatAvatar {

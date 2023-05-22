@@ -21,6 +21,7 @@ export default defineComponent({
       chatIndex: "",
       parts: [],
       chatName: "",
+      isImageUpload: false,
     };
   },
   computed: {
@@ -113,9 +114,6 @@ export default defineComponent({
         // if no previous function has been selected, select a random one
         this.chatIndex = this.getRandomChat.previousFunction =
           chatFunctions[Math.floor(Math.random() * chatFunctions.length)];
-        this.parts = String(this.chatIndex).split(/\s*\(\s*/);
-        const functionPrefix = "function ";
-        this.chatName = this.parts[0].substring(functionPrefix.length);
       }
       const chat = this.getRandomChat.previousFunction(
         daypart,
@@ -123,6 +121,7 @@ export default defineComponent({
         last_name,
         username
       );
+      this.chatName = chat[0].message;
       return chat;
     },
     getDaypart() {
@@ -253,40 +252,40 @@ export default defineComponent({
           60
         );
         setTimeout(() => this.addToChatHistory(this.getRandomChat()[12]), 3200);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[13]), 6400);
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[14]), 9600);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[13]), 7040);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[14]), 10880);
         setTimeout(
           () => this.addToChatHistory(this.getRandomChat()[15]),
-          12800
+          14720
         );
-        setTimeout(() => this.addToChatHistory(this.getRandomChat()[16]), 1600);
+        setTimeout(() => this.addToChatHistory(this.getRandomChat()[16]), 18560);
         setTimeout(
           () => this.addToChatHistory(this.getRandomChat()[17]),
-          19200
-        );
-        setTimeout(
-          () => this.addToChatHistory(this.getRandomChat()[18]),
           22400
         );
         setTimeout(
+          () => this.addToChatHistory(this.getRandomChat()[18]),
+          26240
+        );
+        setTimeout(
           () => this.addToChatHistory(this.getRandomChat()[19]),
-          25600
+          30080
         );
         setTimeout(
           () => this.addToChatHistory(this.getRandomChat()[20]),
-          28800
+          33920
         );
         setTimeout(
           () => this.addToChatHistory(this.getRandomChat()[21]),
-          32000
+          37760
         );
         setTimeout(
           () => this.addToChatHistory(this.getRandomChat()[22]),
-          35200
+          41600
         );
         setTimeout(
           () => this.addToChatHistory(this.getRandomChat()[23]),
-          38400
+          45440
         );
         setTimeout(
           () =>
@@ -294,11 +293,11 @@ export default defineComponent({
               this.chatHistoryObject.user_id,
               this.chatHistoryObject.chat_script
             ),
-          3841
+          45441
         );
-        setTimeout(() => this.setSuccess(""), 3200);
-        setTimeout(() => this.finishOnboarding(this.userId), 41600);
-        setTimeout(() => this.setIsDisabledValue(false), 41600);
+        setTimeout(() => this.setSuccess(""), 6000);
+        setTimeout(() => this.finishOnboarding(this.userId), 49280);
+        setTimeout(() => this.setIsDisabledValue(false), 49280);
       }
       this.messageToSend = "";
     },
@@ -337,10 +336,10 @@ export default defineComponent({
     <div v-if="session">
       <div class="mainContainer container-fluid bg-light text-white">
         <div
-          class="container pt-5 pb-5 d-flex flex-column justify-content-center align-items-center"
+          class="container pt-4 pb-4 d-flex flex-column justify-content-center align-items-center"
         >
           <div
-            class="chatCard card w-100 text-bg-white text-primary text-center me-3"
+            class="chatCard card w-100 text-bg-white text-primary text-center me-3" :class="{ 'shrink': isImageUpload }"
           >
             <div
               class="onboardingWindow card-body scrollable-card-body d-flex flex-column-reverse text-start pt-4 pb-4 px-4"
@@ -356,7 +355,8 @@ export default defineComponent({
             </div>
             <div class="card-footer pt-2 pt-1">
               <div class="chatBox form-floating mb-3 d-flex">
-                <img v-bind:src="avatar" class="chatAvatar mt-3" />
+                <img v-if="avatar" v-bind:src="avatar" class="chatAvatar mt-3" />
+                <img v-else src="../assets/user.png" class="chatAvatar mt-3" />
                 <textarea
                   :disabled="isDisabled"
                   class="form-control mt-3 mx-3 shadow-none"
@@ -399,17 +399,18 @@ export default defineComponent({
               </div>
             </div>
           </div>
-          <div v-if="imageDrop" class="w-50 text-align-center">
+          <div v-if="imageDrop" class="w-50 text-align-center mt-3">
             <ImageUpload
               :user-id="this.userId"
-              @image-uploaded.once="submitMessage()"
-              :chat-name="chatName"
+              @image-uploaded.once="submitMessage(); isImageUpload = false"
+              :chat-name="this.chatName"
+              @image-upload-started="isImageUpload = true"
             ></ImageUpload>
           </div>
-          <h5 v-if="success" class="text-primary text-center mt-5">
+          <h5 v-if="success" class="text-primary text-center mt-4">
             Image uploaded successfully!
           </h5>
-          <h5 v-if="error" class="text-danger text-center mt-5">
+          <h5 v-if="error" class="text-danger text-center mt-4">
             Error uploading image, please try again.
           </h5>
         </div>
@@ -421,8 +422,12 @@ export default defineComponent({
 
 <style scoped>
 .chatCard {
-  height: 75vh;
+  height: 89vh;
   max-width: 830px;
+}
+.shrink {
+  height: 80vh;
+  transition: height 0.3s ease-out;
 }
 .onboardingWindow {
   overflow: scroll;

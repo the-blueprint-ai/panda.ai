@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import * as Session from "supertokens-web-js/recipe/session";
 import { checkAdmin } from "../composables/checkAdmin.js";
 import HomeView from "../views/HomeView.vue";
-import notFoundView from "../views/404View.vue";
+import NotFoundView from "../views/NotFoundView.vue";
 import AccountView from "../views/AccountView.vue";
 import ChatView from "../views/ChatView.vue";
 import OnboardingView from "../views/OnboardingView.vue";
@@ -53,8 +53,8 @@ const router = createRouter({
     },
     {
       path: "/:pathMatch(.*)",
-      name: "404",
-      component: notFoundView,
+      name: "NotFoundView",
+      component: NotFoundView,
     },
     {
       path: "/signin",

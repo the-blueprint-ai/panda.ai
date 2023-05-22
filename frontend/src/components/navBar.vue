@@ -2,7 +2,7 @@
 import * as Session from "supertokens-web-js/recipe/session";
 import { mapActions, mapGetters } from "vuex";
 import { getUserData } from "../composables/getUserData.js";
-import SpinnerComponent from "../components/spinnerComponent.vue";
+import SpinnerComponent from "./spinnerComponent.vue";
 import { useToast } from "vue-toastification";
 
 export default {
@@ -146,7 +146,16 @@ export default {
           </div>
           <div v-if="userId" class="d-flex flex-column align-items-center">
             <img
+              v-if="avatar"
               v-bind:src="avatar"
+              class="img-thumbnail rounded-circle mt-3"
+              ref="avatar"
+              width="150"
+              @click="redirectToAccount"
+            />
+            <img
+              v-else
+              src="../assets/user.png"
               class="img-thumbnail rounded-circle mt-3"
               ref="avatar"
               width="150"
@@ -389,7 +398,8 @@ export default {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img v-bind:src="avatar" class="rounded" ref="avatar" width="60" />
+            <img v-if="avatar" v-bind:src="avatar" class="rounded" ref="avatar" width="60" />
+            <img v-else src="../assets/user.png" class="rounded" ref="avatar" width="60" />
           </a>
           <ul class="dropdown-menu dropdown-menu-lg-end me-4">
             <li><a class="dropdown-item" @click="redirectToChat">CHAT</a></li>

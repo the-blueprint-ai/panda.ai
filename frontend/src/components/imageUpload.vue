@@ -6,12 +6,16 @@ export default {
   data() {
     return {
       formData: null,
-      imageDropPhrase: "",
       loading: false,
       buttonText: "SAVE",
+      file: "",
+      fileType: "",
     };
   },
   props: ["userId", "chatName"],
+  mounted() {
+    this.$emit('image-upload-started');
+  },
   computed: {
     ...mapGetters("userStore", {
       avatar: "getStoreAvatar",
@@ -28,9 +32,18 @@ export default {
       success: "getSuccess",
       error: "getError",
     }),
+    imageDropPhrase() {
+    if (this.chatName.includes("Private")) {
+      return "drop it, then give me 10...";
+    } else if (this.chatName.includes("Ahoy")) {
+      return "drop it, ye scallywag...";
+    } else if (this.chatName.includes("'Sup")) {
+      return "drop it like a thotty, drop it like a thotty...";
+    } else if (this.chatName.includes("Congratulations")) {
+      return "drop it, human...";
+    }
+    return "drop that face right here!";
   },
-  mounted() {
-    this.setImageDropPhrase(this.chatName);
   },
   methods: {
     ...mapMutations("userStore", {
@@ -50,18 +63,6 @@ export default {
       setSuccess: "setSuccess",
       setError: "setError",
     }),
-    setImageDropPhrase(chatName) {
-      if (chatName == "privatePanda") {
-        this.imageDropPhrase = "drop it, then give me 10...";
-      } else if (chatName == "piratePanda") {
-        this.imageDropPhrase = "drop it, ye scallywag...";
-      } else if (chatName == "streetPanda") {
-        this.imageDropPhrase =
-          "drop it like a thotty, drop it like a thotty...";
-      } else if (chatName == "pandaWeather") {
-        this.imageDropPhrase = "drop it, human...";
-      }
-    },
     cropToSquare: function (img, callback) {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
@@ -103,7 +104,7 @@ export default {
             " file, please only upload a .png, .jpg, .jpeg or .gif"
         );
         document.getElementById("badFile").innerHTML = this.fileError;
-        setTimeout(() => this.clear(), 3);
+        setTimeout(() => this.clear(), 30);
         setTimeout(
           () => (
             this.setFileError(null),
@@ -161,7 +162,7 @@ export default {
         // Handle the error
         this.setError("An error occurred while saving the file:", error);
         setTimeout(() => this.setImageDropValue("active"), 9200);
-        this.setSuccess("");
+        this.setSuccess(false);
       }
     },
     clear: function () {
@@ -188,7 +189,7 @@ export default {
     @drop.prevent="handleFileChange($event.dataTransfer)"
   >
     <div
-      v-if="(preview == null) & (fileError == null)"
+      v-if="(this.preview === null) & (fileError === null)"
       class="mt-n4 d-flex flex-column justify-content-center align-items-center"
     >
       <input
@@ -207,7 +208,7 @@ export default {
       <p class="text-primary" for="imageInput" v-text="imageDropPhrase"></p>
     </div>
     <div class="d-flex align-items-center">
-      <div v-if="this.preview">
+      <div v-if="preview">
         <img
           src="../assets/icons/x-circle.svg"
           class="cancelButton mb-4"

@@ -9,7 +9,7 @@ const userStore = {
     last_name: "",
     username: "",
     email: "",
-    avatar: "../../src/assets/user.png",
+    avatar: "",
     banner: "",
     joined: "",
     about: "",

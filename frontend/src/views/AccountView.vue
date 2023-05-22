@@ -538,7 +538,7 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div v-if="session">
-      <div class="container-fluid bg-light text-white">
+      <div class="mainContainer container-fluid bg-light text-white">
         <div class="container d-flex flex-column pt-4 pb-5">
           <div
             v-if="userStoreChatHistory"
@@ -941,6 +941,9 @@ export default defineComponent({
   position: relative;
   margin-top: -205px;
   margin-left: 10px;
+}
+.subscriberCheck {
+  z-index: 200;
 }
 .profileDetails {
   margin-top: -30px;

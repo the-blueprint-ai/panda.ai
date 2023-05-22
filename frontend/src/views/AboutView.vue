@@ -14,7 +14,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="container-fluid vh-100 bg-primary text-white">
+    <div class="mainContainer container-fluid bg-primary text-white">
       <div class="container pt-5 pb-5">
         <h2>About 🐼 panda.ai</h2>
         <p>

@@ -14,7 +14,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="container-fluid vh-100 bg-primary text-white">
+    <div class="mainContainer container-fluid bg-primary text-white">
       <div class="container pt-5 pb-5">
         <h2 class="text-center">🐼 PANDA.AI TERMS OF SERVICE</h2>
         <div class="aboutContainerLine"></div>

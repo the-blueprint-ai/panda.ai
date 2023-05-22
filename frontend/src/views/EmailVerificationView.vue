@@ -71,7 +71,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="container-fluid vh-100 bg-primary text-white">
+    <div class="mainContainer container-fluid bg-primary text-white">
       <div class="container d-flex justify-content-center pt-5 pb-5">
         <div class="card text-bg-light text-center mb-3" style="width: 32rem">
           <div class="card-header pt-3 pb-3">

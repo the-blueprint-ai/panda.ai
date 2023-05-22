@@ -171,7 +171,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="container-fluid bg-primary text-white">
+    <div class="mainContainer container-fluid bg-primary text-white">
       <div
         class="container text-center d-flex flex-column justify-content-center pt-5 pb-5"
       >

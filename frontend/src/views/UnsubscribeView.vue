@@ -14,7 +14,7 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="container-fluid vh-100 bg-primary text-white">
+    <div class="mainContainer container-fluid bg-primary text-white">
       <div class="container pt-5 pb-5 text-center">
         <img src="../../src/assets/panda.png" width="200" />
         <h1 class="mt-5">SUCCESSFULLY UNSUBSCRIBED</h1>

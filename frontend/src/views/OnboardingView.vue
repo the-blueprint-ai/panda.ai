@@ -407,10 +407,10 @@ export default defineComponent({
               :chat-name="chatName"
             ></ImageUpload>
           </div>
-          <h5 v-if="success" class="text-primary text-center mt-5">
+          <h5 v-if="success" class="text-primary text-center mt-4">
             Image uploaded successfully!
           </h5>
-          <h5 v-if="error" class="text-danger text-center mt-5">
+          <h5 v-if="error" class="text-danger text-center mt-4">
             Error uploading image, please try again.
           </h5>
         </div>

@@ -3,7 +3,7 @@ const imageUploadStore = {
   state: {
     fileName: "",
     formData: null,
-    success: "",
+    success: false,
     error: "",
   },
   mutations: {

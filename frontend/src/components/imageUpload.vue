@@ -9,6 +9,8 @@ export default {
       imageDropPhrase: "",
       loading: false,
       buttonText: "SAVE",
+      file: "",
+      fileType: "",
     };
   },
   props: ["userId", "chatName"],
@@ -29,7 +31,7 @@ export default {
       error: "getError",
     }),
   },
-  mounted() {
+  created() {
     this.setImageDropPhrase(this.chatName);
   },
   methods: {
@@ -51,14 +53,14 @@ export default {
       setError: "setError",
     }),
     setImageDropPhrase(chatName) {
-      if (chatName == "privatePanda") {
+      if (chatName === "privatePanda") {
         this.imageDropPhrase = "drop it, then give me 10...";
-      } else if (chatName == "piratePanda") {
+      } else if (chatName === "piratePanda") {
         this.imageDropPhrase = "drop it, ye scallywag...";
-      } else if (chatName == "streetPanda") {
+      } else if (chatName === "streetPanda") {
         this.imageDropPhrase =
           "drop it like a thotty, drop it like a thotty...";
-      } else if (chatName == "pandaWeather") {
+      } else if (chatName === "pandaWeather") {
         this.imageDropPhrase = "drop it, human...";
       }
     },
@@ -103,7 +105,7 @@ export default {
             " file, please only upload a .png, .jpg, .jpeg or .gif"
         );
         document.getElementById("badFile").innerHTML = this.fileError;
-        setTimeout(() => this.clear(), 3);
+        setTimeout(() => this.clear(), 30);
         setTimeout(
           () => (
             this.setFileError(null),
@@ -161,7 +163,7 @@ export default {
         // Handle the error
         this.setError("An error occurred while saving the file:", error);
         setTimeout(() => this.setImageDropValue("active"), 9200);
-        this.setSuccess("");
+        this.setSuccess(false);
       }
     },
     clear: function () {
@@ -188,7 +190,7 @@ export default {
     @drop.prevent="handleFileChange($event.dataTransfer)"
   >
     <div
-      v-if="(preview == null) & (fileError == null)"
+      v-if="(this.preview === null) & (fileError === null)"
       class="mt-n4 d-flex flex-column justify-content-center align-items-center"
     >
       <input
@@ -207,7 +209,7 @@ export default {
       <p class="text-primary" for="imageInput" v-text="imageDropPhrase"></p>
     </div>
     <div class="d-flex align-items-center">
-      <div v-if="this.preview">
+      <div v-if="preview">
         <img
           src="../assets/icons/x-circle.svg"
           class="cancelButton mb-4"

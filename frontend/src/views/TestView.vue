@@ -3,6 +3,8 @@ import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { useToast } from "vue-toastification";
+import { Popover } from "bootstrap";
+import { Tooltip } from "bootstrap";
 
 export default defineComponent({
   data() {
@@ -28,6 +30,10 @@ export default defineComponent({
     this.typeSentence();
     const toast = useToast();
     toast.warning("I'm a toast!");
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new Popover(popoverTriggerEl))
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl))
   },
   methods: {
     getCurrentText(index) {
@@ -89,19 +95,25 @@ export default defineComponent({
 <template>
   <main>
     <navBar></navBar>
-    <div class="mainContainer container-fluid bg-primary text-white">
+    <div class="mainContainer container-fluid bg-primary text-white d-flex flex-column align-items-center">
       <div class="container text-center pt-5 pb-5">
         <h1 class="mb-5">TESTING</h1>
         <button class="btn btn-secondary mb-5" @click="addSentences">
           Add sentences
         </button>
         <div id="app">
-          <p v-for="(sentence, index) in sentences" :key="index">
+          <p v-for="(sentence, index) in sentences" :key="index" class="cursor text-center">
             <span v-html="getCurrentText(index)"></span>
           </p>
         </div>
       </div>
       <h2 class="cursor text-center">TESTING</h2>
+      <button type="button" class="btn btn-lg btn-danger mt-5 mb-5" trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-title="A title" data-bs-content="And here's some amazing content. It's very engaging. Right?">
+          Click for popover
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
+  Tooltip on top
+</button>
     </div>
     <navFooter></navFooter>
   </main>

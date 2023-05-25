@@ -13,7 +13,7 @@ const userStore = {
     banner: "",
     joined: "",
     about: "",
-    onboarded: false,
+    onboarded: null,
     subscriber: false,
     admin: false,
     subscribed: "",

@@ -88,7 +88,7 @@ class WikipediaSearchTool(BaseTool):
             try:
                 data = response.json()
             except JSONDecodeError:
-                return "🐼 I'm so sorry! The Wikipedia entry is unavailable at the moment. Please try again later."
+                return f"🐼 I'm so sorry! The Wikipedia entry on {query} is unavailable at the moment. Please try again later."
 
             # Parse the data and return the desired value
             wikiTitle = data.get('title', 'No title available')
@@ -111,7 +111,7 @@ class WikipediaSearchTool(BaseTool):
             return html
         else:
             # Handle the error or return a default value
-            return "No Wikipedia entry available"
+            return f"🐼 I'm so sorry! The Wikipedia entry on {query} is unavailable at the moment. Please try again later."
 
     async def _arun(self, query: str) -> str:
         """Use the tool asynchronously."""
@@ -146,8 +146,8 @@ class YouTubeSearchTool(BaseTool):
         <div class='card-header text-uppercase pt-3 pb-2 px-3'>
             <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank" style='text-decoration: none'><h2 class='text-primary text-uppercase'>{query}</h2></a>
         </div>
-        <div class='card-body pt-2 pb-1 px-2' style='width: 100%'>
-            <iframe width="100%" height="315" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div class='card-body pt-2 pb-1 px-2' style='max-width: 100%'>
+            <iframe width="100%" height="280" src="https://www.youtube-nocookie.com/embed/{ytVideoId}" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         <div class="card-footer pt-2 pb-2 px-2">
             <a href="https://www.youtube.com/watch?v={ytVideoId}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style='width: 80%'>SEE MORE...</button></a>
@@ -181,7 +181,7 @@ class GoogleMapsSearchTool(BaseTool):
                     <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank" style='text-decoration: none'><h2 class='text-primary text-uppercase'>{query}</h2></a>
                 </div>
                 <div class='card-body pt-2 pb-1 px-2' style='width: 100%'>
-                    <iframe width="560" height="315" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src={url} allowfullscreen></iframe>
+                    <iframe width="100%" height="315" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src={url} allowfullscreen></iframe>
                 </div>
                 <div class="card-footer pt-2 pb-2 px-2">
                     <a href="https://www.google.com/maps/search/{encoded_query}" target="_blank"><button class="btn btn-secondary btn-lg text-center" style='width: 80%'>SEE MORE...</button></a>

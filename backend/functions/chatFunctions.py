@@ -237,6 +237,11 @@ async def pandaChatAgent(userid: str, first_name: str, last_name: str, username:
                 asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False, "error"))
                 return JSONResponse(content={"response": "Apologies! Something has gone wrong, please try again later."})
 
+            if not response or response.isspace():
+                logging.error("Final check caught a blank response")
+                asyncio.create_task(save_new_message(userid, chatid, message, "Apologies! Something has gone wrong, please try again later.", tokens, False, "error"))
+                response = "Apologies! Something has gone wrong, please try again later."
+
             asyncio.create_task(save_new_message(userid, chatid, message, response, tokens, True, "message"))
             return JSONResponse(content={"response": response})
 

@@ -9,6 +9,8 @@ export default defineComponent({
   data: () => {
     return {
       typingTimeout: null,
+      subTitle: false,
+      chatButton: false,
     };
   },
   computed: {
@@ -28,6 +30,12 @@ export default defineComponent({
   },
   async mounted() {
     this.initHomePage();
+    setTimeout(() => {
+      this.subTitle = true;
+    }, 3500);
+    setTimeout(() => {
+      this.chatButton = true;
+    }, 4500);
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
@@ -104,16 +112,17 @@ export default defineComponent({
           >
           <span class="cursor"></span>
         </h1>
+        <h4 v-show="subTitle" class="fade-in mt-n5 mb-5 text-secondary">PERSONALISED AI AT YOUR FINGERTIPS</h4>
         <div v-if="session">
           <router-link :to="'/auth/' + userId + '/chat'">
-            <button type="button" class="btn btn-secondary btn-lg">
+            <button v-show="chatButton" type="button" class="button btn btn-lg btn-light btn-lg">
               LET'S CHAT
             </button>
           </router-link>
         </div>
         <div v-else>
           <router-link :to="'/signin'">
-            <button type="button" class="btn btn-secondary btn-lg">
+            <button v-show="chatButton" type="button" class="btn btn-lg btn-light btn-lg">
               LET'S CHAT
             </button>
           </router-link>
@@ -139,6 +148,20 @@ export default defineComponent({
   display: inline-block;
   opacity: 100%;
   animation: cursor-blink 1s steps(2, jump-none) infinite;
+}
+.fade-in {
+  animation: fade-in 1s ease-in;
+}
+.button {
+  animation: fade-in 0.5s ease-in;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @media (max-width: 992px) {
   .cursor::after {

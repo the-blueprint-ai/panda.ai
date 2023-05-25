@@ -212,13 +212,13 @@ export default defineComponent({
               ></chatMessage>
             </div>
             <div class="card-footer pt-2 pt-1">
-              <div class="chatBox form-floating mb-2 d-flex">
+              <div class="chatBox form-floating mb-2 d-flex align-items-center">
                 <img
                   v-if="this.loading"
                   src="../assets/thinking.png"
-                  class="chatAvatar mt-2"
+                  class="chatAvatar"
                 />
-                <img v-else v-bind:src="avatar" class="chatAvatar mt-2" />
+                <img v-else v-bind:src="avatar" class="chatAvatar" />
                 <textarea
                   :disabled="this.loading || isDisabled"
                   class="form-control mt-1 mx-3 shadow-none"
@@ -239,10 +239,10 @@ export default defineComponent({
                 >
                 <button
                   :disabled="this.loading || isDisabled"
-                  class="chatButton btn btn-secondary btn-lg mt-2"
+                  class="chatButton btn btn-secondary btn-lg d-flex justify-content-center align-items-center mt-1"
                   id="sendButton"
                   @click="submitMessage(this.username)"
-                  style="max-height: 60px"
+                  style="height: 60px; width: 100px;"
                 >
                   <SpinnerComponent
                     :loading="this.loading"
@@ -268,7 +268,7 @@ export default defineComponent({
 
 <style scoped>
 .scrollable-card-body {
-  height: 89vh;
+  height: 78vh;
   overflow-y: auto;
 }
 .chatAvatar {

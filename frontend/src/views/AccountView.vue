@@ -16,6 +16,7 @@ import UserData from "../components/userData.vue";
 import UserSettings from "../components/userSettings.vue";
 import SpinnerComponent from "../components/spinnerComponent.vue";
 import { useToast } from "vue-toastification";
+import { Modal } from "bootstrap";
 
 export default defineComponent({
   data() {
@@ -87,6 +88,16 @@ export default defineComponent({
     integrations(this.userId);
     const { integrationsList } = getIntegrationsList(this.$store, this.userId);
     integrationsList(this.userId);
+    this.$nextTick(function () {
+      if (this.onboarded === false) {
+      let modalElement = this.$refs.onboardingModal;
+      let modal = new Modal(modalElement, {
+        keyboard: false
+      });
+      modal.show();
+      this.finishOnboarding(this.userId);
+    }
+    })
   },
   computed: {
     ...mapGetters("userStore", {
@@ -123,6 +134,26 @@ export default defineComponent({
     ...mapMutations("chatStore", {
       setIsDisabled: "setIsDisabled",
     }),
+    async finishOnboarding(userId) {
+      const toast = useToast();
+      try {
+        const url =
+          import.meta.env.VITE_APP_API_URL +
+          "/users/set-onboarded?userId=" +
+          userId;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+        this.$router.push("/auth/" + userId + "/account");
+      } catch (error) {
+        toast.error(error);
+      }
+    },
     validateEmail: function (email) {
       var re =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -589,7 +620,7 @@ export default defineComponent({
                       </h2>
                       <img
                         v-if="subscriber"
-                        class="subscriberCheck mb-1 ms-2"
+                        class="subscriberCheck"
                         src="../assets/icons/patch-check-fill.svg"
                         style="width: 25px"
                       />
@@ -881,6 +912,348 @@ export default defineComponent({
                 :user-id="this.userId"
                 :email="this.email"
               ></UserSettings>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal"
+          id="onboardingModal"
+          tabindex="-1"
+          aria-labelledby="onboardingModalLabel"
+          aria-hidden="true"
+          ref="onboardingModal"
+            >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div
+                class="modal-header d-inline-flex flex-column align-items-start w-100"
+              >
+                <div class="d-flex flex-row align-items-start w-100">
+                    <h3 class="modal-title text-primary" id="onboardingModalLabel">🐼 WELCOME TO YOUR ACCOUNT</h3>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="modal-body text-primary" style="height: 250px">
+                <p>This is your 🐼 panda.ai account page where you can control all of your account settings.</p>
+                <p>As part of signing up to 🐼 panda.ai we have given you 20 FREE messages and access to ALL our integrations.</p>
+                <p>Once you have used your 20 messages you will need to sign up to one of our subscription packages, which you can see under subscriptions.</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Next"
+                  data-bs-target="#onboardingModal2"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  NEXT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal"
+          id="onboardingModal2"
+          tabindex="-1"
+          aria-labelledby="onboardingModal2Label"
+          aria-hidden="true"
+          ref="onboardingModal2"
+            >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div
+                class="modal-header d-inline-flex flex-column align-items-start w-100"
+              >
+                <div class="d-flex flex-row align-items-start w-100">
+                    <h3 class="modal-title text-primary" id="onboardingModal2Label">🐼 WELCOME TO YOUR ACCOUNT</h3>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="modal-body text-primary" style="height: 250px">
+                <h4>ACCOUNT DETAILS</h4>
+                <p>In the top section you can update your avatar, your profile banner and edit your details, including username and email address by cliking on the triple dots on the right.</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Previous"
+                  data-bs-target="#onboardingModal"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  PREVIOUS
+                </button>
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Next"
+                  data-bs-target="#onboardingModal3"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  NEXT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal"
+          id="onboardingModal3"
+          tabindex="-1"
+          aria-labelledby="onboardingModal3Label"
+          aria-hidden="true"
+          ref="onboardingModal3"
+            >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div
+                class="modal-header d-inline-flex flex-column align-items-start w-100"
+              >
+                <div class="d-flex flex-row align-items-start w-100">
+                    <h3 class="modal-title text-primary" id="onboardingModal2Label">🐼 WELCOME TO YOUR ACCOUNT</h3>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="modal-body text-primary" style="height: 250px">
+                <h4>CHAT HISTORY</h4>
+                <p>You can see all of your chat history in the main section and search for any words or phrases to help you navigate all the conversations you've had with 🐼 panda.ai</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Previous"
+                  data-bs-target="#onboardingModal2"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  PREVIOUS
+                </button>
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Next"
+                  data-bs-target="#onboardingModal4"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  NEXT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal"
+          id="onboardingModal4"
+          tabindex="-1"
+          aria-labelledby="onboardingModal4Label"
+          aria-hidden="true"
+          ref="onboardingModal4"
+            >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div
+                class="modal-header d-inline-flex flex-column align-items-start w-100"
+              >
+                <div class="d-flex flex-row align-items-start w-100">
+                    <h3 class="modal-title text-primary" id="onboardingModal2Label">🐼 WELCOME TO YOUR ACCOUNT</h3>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="modal-body text-primary" style="height: 250px">
+                <h4>INTEGRATIONS</h4>
+                <p>You can see the total number of integrations you have available and the ones which you have enabled. You can only enable integrations once a month, so once you've set them you won't be able to change them until the 1st of the next month.</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Previous"
+                  data-bs-target="#onboardingModal3"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  PREVIOUS
+                </button>
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Next"
+                  data-bs-target="#onboardingModal5"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  NEXT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal"
+          id="onboardingModal5"
+          tabindex="-1"
+          aria-labelledby="onboardingModal5Label"
+          aria-hidden="true"
+          ref="onboardingModal5"
+            >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div
+                class="modal-header d-inline-flex flex-column align-items-start w-100"
+              >
+                <div class="d-flex flex-row align-items-start w-100">
+                    <h3 class="modal-title text-primary" id="onboardingModal2Label">🐼 WELCOME TO YOUR ACCOUNT</h3>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="modal-body text-primary" style="height: 250px">
+                <h4>SUBSCRIPTION</h4>
+                <p>Here is where you can see the details of your subscription, or see the available packages if you haven't yet subscribed. You are able to change your subscription at any time to another package.</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Previous"
+                  data-bs-target="#onboardingModal4"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  PREVIOUS
+                </button>
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Next"
+                  data-bs-target="#onboardingModal6"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  NEXT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal"
+          id="onboardingModal6"
+          tabindex="-1"
+          aria-labelledby="onboardingModal6Label"
+          aria-hidden="true"
+          ref="onboardingModal6"
+            >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div
+                class="modal-header d-inline-flex flex-column align-items-start w-100"
+              >
+                <div class="d-flex flex-row align-items-start w-100">
+                    <h3 class="modal-title text-primary" id="onboardingModal2Label">🐼 WELCOME TO YOUR ACCOUNT</h3>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="modal-body text-primary" style="height: 250px">
+                <h4>DATA</h4>
+                <p>This is where you can see all of the memories that 🐼 panda.ai has created during your conversations. You are able to edit and delete them whenever you wish.</p>
+                <p>More of your data will become avaialble for you to see here as we add more features to 🐼 panda.ai</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Previous"
+                  data-bs-target="#onboardingModal5"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  PREVIOUS
+                </button>
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Next"
+                  data-bs-target="#onboardingModal7"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  NEXT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal"
+          id="onboardingModal7"
+          tabindex="-1"
+          aria-labelledby="onboardingModal7Label"
+          aria-hidden="true"
+          ref="onboardingModal7"
+            >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div
+                class="modal-header d-inline-flex flex-column align-items-start w-100"
+              >
+                <div class="d-flex flex-row align-items-start w-100">
+                    <h3 class="modal-title text-primary" id="onboardingModal2Label">🐼 WELCOME TO YOUR ACCOUNT</h3>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="modal-body text-primary" style="height: 250px">
+                <h4>SETTINGS</h4>
+                <p>Here you can change your password or delete your account.</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  class="btn btn-secondary d-flex justify-content-center"
+                  aria-label="Previous"
+                  data-bs-target="#onboardingModal6"
+                  data-bs-toggle="modal"
+                  style="width: 130px"
+                >
+                  PREVIOUS
+                </button>
+                <button
+                  class="btn btn-primary d-flex justify-content-center"
+                  aria-label="Next"
+                  data-bs-dismiss="modal"
+                  style="width: 130px"
+                >
+                  CLOSE
+                </button>
+              </div>
             </div>
           </div>
         </div>

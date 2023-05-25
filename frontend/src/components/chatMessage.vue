@@ -125,7 +125,7 @@ export default {
   <div :class="['chatMessage', message.user, messageClass]">
     <img v-bind:src="messageImage()" class="chatAvatar" />
     <div class="w-100 d-flex flex-row justify-content-between">
-      <p class="message" v-html="formatMessage(message.message)"></p>
+      <p class="message w-100" v-html="formatMessage(message.message)"></p>
       <span
         class="thumbs d-flex"
         v-if="message.user == 'panda' && !feedbackDisabled"

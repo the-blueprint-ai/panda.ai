@@ -94,6 +94,7 @@ export default defineComponent({
       setLastNameValue: "setStoreLastName",
       setUsernameValue: "setStoreUsername",
       setAvatarValue: "setStoreAvatar",
+      setStoreOnboarded: "setStoreOnboarded",
     }),
     ...mapMutations("imageUploadStore", {
       setSuccess: "setSuccess",
@@ -139,25 +140,8 @@ export default defineComponent({
     randomChat(chat) {
       return chat[Math.floor(Math.random() * chat.length)];
     },
-    async finishOnboarding(userId) {
-      const toast = useToast();
-      try {
-        const url =
-          import.meta.env.VITE_APP_API_URL +
-          "/users/set-onboarded?userId=" +
-          userId;
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await response.json();
-        this.$router.push("/auth/" + userId + "/account");
-      } catch (error) {
-        toast.error(error);
-      }
+    finishOnboarding() {
+      setStoreOnboarded(false)
     },
     startMessage() {
       this.setIsDisabledValue(true);
@@ -296,7 +280,7 @@ export default defineComponent({
           45441
         );
         setTimeout(() => this.setSuccess(""), 6000);
-        setTimeout(() => this.finishOnboarding(this.userId), 49280);
+        setTimeout(() => this.finishOnboarding(), 49280);
         setTimeout(() => this.setIsDisabledValue(false), 49280);
       }
       this.messageToSend = "";
@@ -354,9 +338,9 @@ export default defineComponent({
               ></chatMessage>
             </div>
             <div class="card-footer pt-2 pt-1">
-              <div class="chatBox form-floating mb-3 d-flex">
-                <img v-if="avatar" v-bind:src="avatar" class="chatAvatar mt-3" />
-                <img v-else src="../assets/user.png" class="chatAvatar mt-3" />
+              <div class="chatBox form-floating mb-2 d-flex align-items-center">
+                <img v-if="avatar" v-bind:src="avatar" class="chatAvatar" />
+                <img v-else src="../assets/user.png" class="chatAvatar" />
                 <textarea
                   :disabled="isDisabled"
                   class="form-control mt-3 mx-3 shadow-none"
@@ -383,15 +367,15 @@ export default defineComponent({
                     class="btn btn-secondary btn-lg"
                     id="sendButton"
                     @click="submitMessage()"
-                    style="max-height: 60px"
+                    style="height: 60px; width: 100px;"
                   >
                     SEND
                   </button>
                   <button
-                    class="btn btn-secondary btn-lg ms-3 me-2"
+                    class="btn btn-secondary btn-lg ms-2"
                     id="undoButton"
                     @click="removeMessage()"
-                    style="max-height: 60px"
+                    style="height: 60px; width: 100px;"
                   >
                     UNDO
                   </button>

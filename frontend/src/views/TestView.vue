@@ -3,7 +3,6 @@ import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { useToast } from "vue-toastification";
-import { Popover } from "bootstrap";
 
 export default defineComponent({
   data() {
@@ -29,8 +28,6 @@ export default defineComponent({
     this.typeSentence();
     const toast = useToast();
     toast.warning("I'm a toast!");
-    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new Popover(popoverTriggerEl))
   },
   methods: {
     getCurrentText(index) {
@@ -105,9 +102,6 @@ export default defineComponent({
         </div>
       </div>
       <h2 class="cursor text-center">TESTING</h2>
-      <button type="button" class="btn btn-lg btn-danger mt-5" data-bs-toggle="popover" data-bs-custom-class="custom-popover" data-bs-placement="top" data-bs-title="A title" data-bs-content="And here's some amazing content. It's very engaging. Right?">
-          Click for popover
-      </button>
     </div>
     <navFooter></navFooter>
   </main>

@@ -94,6 +94,7 @@ export default defineComponent({
       setLastNameValue: "setStoreLastName",
       setUsernameValue: "setStoreUsername",
       setAvatarValue: "setStoreAvatar",
+      setStoreOnboarded: "setStoreOnboarded",
     }),
     ...mapMutations("imageUploadStore", {
       setSuccess: "setSuccess",
@@ -139,25 +140,8 @@ export default defineComponent({
     randomChat(chat) {
       return chat[Math.floor(Math.random() * chat.length)];
     },
-    async finishOnboarding(userId) {
-      const toast = useToast();
-      try {
-        const url =
-          import.meta.env.VITE_APP_API_URL +
-          "/users/set-onboarded?userId=" +
-          userId;
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await response.json();
-        this.$router.push("/auth/" + userId + "/account");
-      } catch (error) {
-        toast.error(error);
-      }
+    finishOnboarding() {
+      setStoreOnboarded(false)
     },
     startMessage() {
       this.setIsDisabledValue(true);
@@ -296,7 +280,7 @@ export default defineComponent({
           45441
         );
         setTimeout(() => this.setSuccess(""), 6000);
-        setTimeout(() => this.finishOnboarding(this.userId), 49280);
+        setTimeout(() => this.finishOnboarding(), 49280);
         setTimeout(() => this.setIsDisabledValue(false), 49280);
       }
       this.messageToSend = "";

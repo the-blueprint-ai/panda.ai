@@ -354,9 +354,9 @@ export default defineComponent({
               ></chatMessage>
             </div>
             <div class="card-footer pt-2 pt-1">
-              <div class="chatBox form-floating mb-3 d-flex">
-                <img v-if="avatar" v-bind:src="avatar" class="chatAvatar mt-3" />
-                <img v-else src="../assets/user.png" class="chatAvatar mt-3" />
+              <div class="chatBox form-floating mb-2 d-flex align-items-center">
+                <img v-if="avatar" v-bind:src="avatar" class="chatAvatar" />
+                <img v-else src="../assets/user.png" class="chatAvatar" />
                 <textarea
                   :disabled="isDisabled"
                   class="form-control mt-3 mx-3 shadow-none"
@@ -383,15 +383,15 @@ export default defineComponent({
                     class="btn btn-secondary btn-lg"
                     id="sendButton"
                     @click="submitMessage()"
-                    style="max-height: 60px"
+                    style="height: 60px; width: 100px;"
                   >
                     SEND
                   </button>
                   <button
-                    class="btn btn-secondary btn-lg ms-3 me-2"
+                    class="btn btn-secondary btn-lg ms-2"
                     id="undoButton"
                     @click="removeMessage()"
-                    style="max-height: 60px"
+                    style="height: 60px; width: 100px;"
                   >
                     UNDO
                   </button>

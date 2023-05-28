@@ -3,6 +3,8 @@ import { defineComponent } from "vue";
 import navBar from "../components/navBar.vue";
 import navFooter from "../components/navFooter.vue";
 import { useToast } from "vue-toastification";
+import { Popover } from "bootstrap";
+import { Tooltip } from "bootstrap";
 
 export default defineComponent({
   data() {
@@ -28,6 +30,10 @@ export default defineComponent({
     this.typeSentence();
     const toast = useToast();
     toast.warning("I'm a toast!");
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new Popover(popoverTriggerEl))
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl))
   },
   methods: {
     getCurrentText(index) {
@@ -102,6 +108,12 @@ export default defineComponent({
         </div>
       </div>
       <h2 class="cursor text-center">TESTING</h2>
+      <button type="button" class="btn btn-lg btn-danger mt-5 mb-5" trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-title="A title" data-bs-content="And here's some amazing content. It's very engaging. Right?">
+          Click for popover
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
+  Tooltip on top
+</button>
     </div>
     <navFooter></navFooter>
   </main>
@@ -130,13 +142,5 @@ export default defineComponent({
   display: inline-block;
   opacity: 100%;
   animation: cursor-blink 1.5s steps(2, jump-none) infinite;
-}
-.custom-popover {
-  --bs-popover-max-width: 200px;
-  --bs-popover-border-color: var(--bs-primary);
-  --bs-popover-header-bg: var(--bs-primary);
-  --bs-popover-header-color: var(--bs-white);
-  --bs-popover-body-padding-x: 1rem;
-  --bs-popover-body-padding-y: .5rem;
 }
 </style>

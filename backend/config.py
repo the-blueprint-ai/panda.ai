@@ -15,7 +15,6 @@ from supertokens_python.recipe.thirdpartyemailpassword import (
 )
 from supertokens_python.recipe.thirdpartyemailpassword.types import EmailDeliveryOverrideInput, EmailTemplateVars
 from supertokens_python.ingredients.emaildelivery.types import EmailDeliveryConfig
-from supertokens_python.recipe.emailverification.types import EmailDeliveryOverrideInput as EVEmailDeliveryOverrideInput, EmailTemplateVars as EVEmailTemplateVars
 
 # Python Environment Variable setup required on System or .env file
 config_env = {
@@ -108,56 +107,38 @@ def custom_email_delivery(original_implementation: EmailDeliveryOverrideInput) -
     original_implementation.send_email = send_email
     return original_implementation
 
-
-def custom_emailverification_delivery(original_implementation: EVEmailDeliveryOverrideInput) -> EVEmailDeliveryOverrideInput:
-    original_send_email = original_implementation.send_email
-
-    async def send_email(template_vars: EVEmailTemplateVars, user_context: Dict[str, Any]) -> None:
-        #todo: create and send email verification email
-
-        # Or use the original implementation which calls the default service,
-        # or a service that you may have specified in the email_delivery object.
-        return await original_send_email(template_vars, user_context)
-
-    original_implementation.send_email = send_email
-    return original_implementation
-
-
 # RecipeList contains all the modules that you want to
 # Use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
 recipe_list = [
     session.init(), # initializes session features
     thirdpartyemailpassword.init(
-        email_delivery=EmailDeliveryConfig(override=custom_email_delivery),
+        # email_delivery=EmailDeliveryConfig(override=custom_email_delivery),
         providers=[
             # We have provided you with development keys which you can use for testing.
             # IMPORTANT: Please replace them with your own OAuth keys for production use.
-            # Google(
-            #     is_default=True,
-            #     client_id=settings.GOOGLE_CLIENT_ID,
-            #     client_secret=settings.GOOGLE_CLIENT_SECRET
+            Google(
+                is_default=True,
+                client_id=settings.GOOGLE_CLIENT_ID,
+                client_secret=settings.GOOGLE_CLIENT_SECRET
+            ),
+            # Facebook(
+            #     client_id=settings.FACEBOOK_CLIENT_ID,
+            #     client_secret=settings.FACEBOOK_CLIENT_SECRET
             # ),
-            # # Facebook(
-            # #     client_id=settings.FACEBOOK_CLIENT_ID,
-            # #     client_secret=settings.FACEBOOK_CLIENT_SECRET
-            # # ),
-            # Github(
-            #     is_default=True,
-            #     client_id=settings.GITHUB_CLIENT_ID,
-            #     client_secret=settings.GITHUB_CLIENT_SECRET,
-            # ),
-            # Apple(
-            #     is_default=True,
-            #     client_id=settings.APPLE_CLIENT_ID,
-            #     client_key_id=settings.APPLE_CLIENT_KEY_ID,
-            #     client_team_id=settings.APPLE_CLIENT_TEAM_ID,
-            #     client_private_key=settings.APPLE_CLIENT_PRIVATE_KEY,
-            # ),
+            Github(
+                is_default=True,
+                client_id=settings.GITHUB_CLIENT_ID,
+                client_secret=settings.GITHUB_CLIENT_SECRET,
+            ),
+            Apple(
+                is_default=True,
+                client_id=settings.APPLE_CLIENT_ID,
+                client_key_id=settings.APPLE_CLIENT_KEY_ID,
+                client_team_id=settings.APPLE_CLIENT_TEAM_ID,
+                client_private_key=settings.APPLE_CLIENT_PRIVATE_KEY,
+            ),
         ]
     ),
-    emailverification.init(
-        mode='REQUIRED',
-        email_delivery=EmailDeliveryConfig(override=custom_emailverification_delivery)
-    ),
+    emailverification.init(mode='REQUIRED'),
     dashboard.init(api_key=settings.SPTKNS_DASHBOARD_API_KEY)
 ]

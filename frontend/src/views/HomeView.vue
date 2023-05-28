@@ -11,6 +11,7 @@ export default defineComponent({
       typingTimeout: null,
       subTitle: false,
       chatButton: false,
+      demoVideo: false,
     };
   },
   computed: {
@@ -36,6 +37,9 @@ export default defineComponent({
     setTimeout(() => {
       this.chatButton = true;
     }, 4500);
+    setTimeout(() => {
+      this.demoVideo = true;
+    }, 5500);
   },
   methods: {
     ...mapActions("userStore", ["getSession", "getUserInfo"]),
@@ -103,7 +107,7 @@ export default defineComponent({
   <main>
     <navBar></navBar>
     <div class="mainContainer container-fluid bg-black text-white">
-      <div class="container text-center pt-5 pb-5">
+      <div class="container text-center pt-5 pb-5 d-flex flex-column align-items-center">
         <img src="../../src/assets/panda.png" width="200" />
         <h1 class="pt-5 pb-5">
           <span class="typed-text">{{ typeValue }}</span>
@@ -127,6 +131,11 @@ export default defineComponent({
             </button>
           </router-link>
         </div>
+        <div class="mt-5"></div>
+        <h2 v-show="demoVideo" class="mt-5">DEMO VIDEO</h2>
+        <div v-show="demoVideo" class="videoContainer mt-3">
+          <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/-9C9n_pFByY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
       </div>
     </div>
     <navFooter></navFooter>
@@ -162,6 +171,15 @@ export default defineComponent({
   to {
     opacity: 1;
   }
+}
+.videoContainer {
+  width: 570px;
+  background-color: #000000;
+  padding: 5px;
+  border-radius: 20px;
+}
+.demoVideo {
+  border-radius: 20px;
 }
 @media (max-width: 992px) {
   .cursor::after {

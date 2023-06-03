@@ -27,7 +27,7 @@ router = APIRouter(
 register_events(router)
 
 # DATABASES
-S3_BUCKET = settings.S3_BUCKET #"panda.ai"
+S3_BUCKET = settings.S3_BUCKET
 s3 = boto3.client('s3', aws_access_key_id = settings.AWS_ACCESS_KEY_ID, aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY)
 
 logging.basicConfig(level=logging.INFO)
@@ -473,7 +473,8 @@ async def delete_internal_user(user_id: str, session: SessionContainer = Depends
             delete_entity(user_id),
             delete_user_integrations(user_id),
             delete_user_messages(user_id),
-            delete_user_subscription(user_id)
+            delete_user_subscription(user_id),
+            delete_user_s3(user_id)
         ) 
 
         query = """
@@ -578,6 +579,22 @@ async def delete_user_subscription(user_id: str):
         else:
             logging.info(f"No subscriptions found for user {user_id} in the database")
             return {"message": f"No subscriptions found for user {user_id}"}
+    except ValidationError as e:
+        response = {"error": "Validation error", "details": e.errors()}
+        logging.error(f"Validation error while deleting subscriptions for user {user_id}: {response}")
+        return response
+    except Exception as e:
+        response = {"error": str(e)}
+        logging.error(f"Exception while deleting subscriptions for user {user_id}: {str(e)}")
+        return response
+    
+async def delete_user_s3(user_id:str):
+    try:
+        response = s3.list_objects_v2(Bucket=S3_BUCKET, Prefix=user_id)
+        if 'Contents' in response:
+            objects_to_delete = [{'Key': obj['Key']} for obj in response['Contents']]
+            s3.delete_objects(Bucket=S3_BUCKET, Delete={'Objects': objects_to_delete})
+    
     except ValidationError as e:
         response = {"error": "Validation error", "details": e.errors()}
         logging.error(f"Validation error while deleting subscriptions for user {user_id}: {response}")

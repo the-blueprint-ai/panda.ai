@@ -1,7 +1,7 @@
 # 🐼 panda.ai
 
 ## Demo Video
-![](https://github.com/the-blueprint-ai/panda.ai/blob/0c328ab2cd56318c80809b141e5fc8af02ccfdf2/frontend/src/assets/screenshots/demo_video.mp4)
+![](frontend/src/assets/screenshots/demo_video.mp4)
 
 ## ABOUT 🐼 PANDA.AI
 

@@ -1,6 +1,7 @@
 # 🐼 panda.ai
 
-[![amplifybutton](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/username/repository)
+## Demo Video
+[Demo Video](https://player.vimeo.com/video/832939398?h=8f842725ce&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479)
 
 ## ABOUT 🐼 PANDA.AI
 

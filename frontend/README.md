@@ -1,7 +1,7 @@
 # 🐼 panda.ai
 
 ## Demo Video
-https://player.vimeo.com/video/832939398?h=8f842725ce&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479
+https://github.com/the-blueprint-ai/panda.ai/blob/0c328ab2cd56318c80809b141e5fc8af02ccfdf2/frontend/src/assets/screenshots/demo_video.mp4
 
 ## Recommended IDE Setup
 

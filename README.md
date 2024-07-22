@@ -2,7 +2,7 @@
 
 ## Demo Video
 [![](https://raw.githubusercontent.com/the-blueprint-ai/panda.ai/dev/frontend/src/assets/screenshots/demo_video_title.jpg)](https://raw.githubusercontent.com/the-blueprint-ai/panda.ai/dev/frontend/src/assets/screenshots/demo_video.mp4)
-https://user-images.githubusercontent.com/the-blueprint-ai/panda.ai/blob/86cbf0ce420197aed9f63c088e05f8cccc02ec2e/frontend/src/assets/screenshots/demo_video.mp4
+https://user-images.githubusercontent.com/the-blueprint-ai/panda.ai/frontend/src/assets/screenshots/demo_video.mp4
 
 ## ABOUT 🐼 PANDA.AI
 

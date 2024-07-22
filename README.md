@@ -22,14 +22,36 @@ https://github.com/user-attachments/assets/0e2a9e6a-56d4-4a61-b532-d6560f514035
 
 ## TECHNOLOGY USED
 
-- Vue.js 3
-- Vuex for state management
-- Vue Router for navigation
-- Bootstrap for styling
-- SuperTokens for authentication
-- Stripe for payment processing
-- Luxon for date and time handling
-- Chart.js for data visualization
+**Backend**
+- **API Framework**: FastAPI
+- **Databases**:
+    - S3
+    - PostgresSQL
+    - DynamoDB
+    - Pinecone
+- **Authentication**: SuperTokens
+- **LLMs & Tools**: 
+    - OpenAI GPT-3.5 Turbo
+    - Langchain
+
+**Frontend**
+- **Framework**: Vue.js 3
+- **State Management**: Vuex
+- **Routing**: Vue Router
+- **UI Framework**: Bootstrap 5
+- **Payment Processing**: Stripe
+- **Date and Time Handling**: Luxon
+- **Data Visualization**: Chart.js
+- **HTTP Client**: Axios (for API requests)
+- **Toast Notifications**: Vue Toastification
+- **API Integrations**:
+  - YouTube API
+  - Google Maps API
+  - Wikipedia API
+  - Spotify API
+  - Google News API
+  - TMDB API
+  - SendGrid API
 
 ## PRIVACY & DATA HANDLING
 At panda.ai, we take your privacy seriously. Here are some key points about our data handling practices:

@@ -133,8 +133,9 @@ export default defineComponent({
         </div>
         <div class="mt-5"></div>
         <h2 v-show="demoVideo" class="mt-5">DEMO VIDEO</h2>
-        <div v-show="demoVideo" class="videoContainer mt-3">
-          <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/-9C9n_pFByY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div v-show="demoVideo" class="videoContainer mt-0">
+          <!-- <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/-9C9n_pFByY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> -->
+          <div style="padding:50% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/832939398?h=8f842725ce&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="panda.ai Demo Video"></iframe></div>
       </div>
       </div>
     </div>

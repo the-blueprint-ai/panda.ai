@@ -206,8 +206,6 @@ async def save_user_banner(user_id: str, file: UploadFile = File(...)):
         response = {"error": str(e)}
         return response
 
-    return response
-
 
 async def save_user_avatar(user_id: str, file: UploadFile = File(...)):
     try:

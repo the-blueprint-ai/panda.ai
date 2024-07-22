@@ -3,10 +3,8 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.session import SessionContainer
 from config import settings
 import logging
-import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from python_http_client.exceptions import HTTPError
 
 
 logging.basicConfig(level=logging.INFO)
@@ -24,13 +22,12 @@ async def email_send(from_email: str, to_emails: str, subject: str, html_content
     try:
         sg = SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
 
-        # Send an HTTP POST request to /mail/send
         response = sg.send(message)
 
         return{"Email sent successfully"}
     
-    except HTTPError as e:
-        print(e.to_dict)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while trying to send email: {e}")
 
 async def add_contact(user_id: str, email: str):
 
@@ -54,5 +51,5 @@ async def add_contact(user_id: str, email: str):
 
         return{"Email saved successfully"}
 
-    except HTTPError as e:
-        print(e.to_dict)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while trying to send email: {e}")

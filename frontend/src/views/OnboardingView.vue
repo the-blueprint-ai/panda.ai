@@ -12,7 +12,6 @@ import { streetPanda } from "../data/chat/streetPanda.js";
 import { pandaWeather } from "../data/chat/pandaWeather.js";
 import { saveUserData } from "../composables/saveUserData.js";
 import { saveUserChatHistory } from "../composables/saveUserChatHistory.js";
-import { useToast } from "vue-toastification";
 
 export default defineComponent({
   data() {
@@ -141,7 +140,8 @@ export default defineComponent({
       return chat[Math.floor(Math.random() * chat.length)];
     },
     finishOnboarding() {
-      setStoreOnboarded(false)
+      this.setStoreOnboarded(false);
+      this.$router.push("/auth/" + this.userId + "/account");
     },
     startMessage() {
       this.setIsDisabledValue(true);

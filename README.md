@@ -31,7 +31,7 @@ https://github.com/user-attachments/assets/0e2a9e6a-56d4-4a61-b532-d6560f514035
 - Luxon for date and time handling
 - Chart.js for data visualization
 
-## PRIVACY & DATA HANDLINOG
+## PRIVACY & DATA HANDLING
 At panda.ai, we take your privacy seriously. Here are some key points about our data handling practices:
 
 - Users have full control over their data

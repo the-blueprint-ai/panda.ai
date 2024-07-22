@@ -5,31 +5,36 @@ https://github.com/user-attachments/assets/0e2a9e6a-56d4-4a61-b532-d6560f514035
 
 [High Res Version Here](https://player.vimeo.com/video/832939398)
 
-## ABOUT 🐼 PANDA.AI
-
-Welcome to 🐼 panda.ai, where we believe in the power of personalised AI experiences and giving users complete control over their own data. Founded in 2023, we're on a mission to change the AI chatbot landscape by ensuring that our users have full ownership and control of their digital lives.
-
 ## THE PLATFORM 🐼
 
 🐼 panda.ai is an artificial intelligence personal assistant designed to learn from you and adapt to your unique needs. As you interact with 🐼 panda.ai, it will evolve and grow, learning from your conversations, web browsing behaviour, social media activity, music preferences, and even your spending habits. Our goal is to create a highly personalised digital assistant that knows and understands each user individually.
 
-## WHAT SETS US APART 🔐
+## FEATURES
 
-At 🐼 panda.ai, we're not like other large digital platforms. We believe in putting the user first, which means giving you complete ownership and control of your data. It's a whole new approach to AI that emphasises data privacy and ethical practices.
+- Personalized AI chat assistant
+- User authentication and account management
+- Subscription plans with different tiers
+- Integration selection for enhanced AI capabilities
+- User data management and privacy controls
+- Admin panel for managing users and viewing statistics
+- Roadmap for upcoming features
+- FAQ and support system
 
-## POWERED BY OPENAI'S CHATGPT LLM 🔋
+## TECHNOLOGY USED
 
-While we don't have any significant partnerships or collaborations to mention, it's worth noting that our AI is built on top of OpenAI's ChatGPT LLM, the technology foundation that powers 🐼 panda.ai's awesomeness.
+- Vue.js 3
+- Vuex for state management
+- Vue Router for navigation
+- Bootstrap for styling
+- SuperTokens for authentication
+- Stripe for payment processing
+- Luxon for date and time handling
+- Chart.js for data visualization
 
-## OUR CORE VALUES 🦄
+## PRIVACY & DATA HANDLINOG
+At panda.ai, we take your privacy seriously. Here are some key points about our data handling practices:
 
-At 🐼 panda.ai, we live by three core values:
-1. CHALLENGING THE STATUS QUO 💪
-2. CURIOSITY 🧐
-3. COLLABORATION 🤝
-
-These values guide our mission to revolutionize the AI chatbot industry and provide users with a truly personalized and ethical AI experience.
-
-## OUR VISION FOR THE FUTURE 🔮
-
-🐼 panda.ai aspires to provide a fully personalized AI assistant that caters to all of your digital needs. In the future, we aim to create a platform that not only understands each user individually but can also preempt and predict your needs, making your digital life more seamless and enjoyable.
+- Users have full control over their data
+- All data is stored securely and can be deleted at any time
+- We do not train AI models on user data
+- Users can view and manage all data collected by panda.ai

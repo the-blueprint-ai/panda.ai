@@ -1,8 +1,9 @@
 # 🐼 panda.ai
 
 ## Demo Video
-[![](https://raw.githubusercontent.com/the-blueprint-ai/panda.ai/dev/frontend/src/assets/screenshots/demo_video_title.jpg)](https://raw.githubusercontent.com/the-blueprint-ai/panda.ai/dev/frontend/src/assets/screenshots/demo_video.mp4)
-https://user-images.githubusercontent.com/the-blueprint-ai/panda.ai/frontend/src/assets/screenshots/demo_video.mp4
+https://github.com/user-attachments/assets/0e2a9e6a-56d4-4a61-b532-d6560f514035
+
+[High Res Version Here](https://player.vimeo.com/video/832939398)
 
 ## ABOUT 🐼 PANDA.AI
 

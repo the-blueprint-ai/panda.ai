@@ -5,7 +5,7 @@ https://github.com/user-attachments/assets/0e2a9e6a-56d4-4a61-b532-d6560f514035
 
 [High Res Version Here](https://player.vimeo.com/video/832939398)
 
-## THE PLATFORM 🐼
+## THE PLATFORM
 
 🐼 panda.ai is an artificial intelligence personal assistant designed to learn from you and adapt to your unique needs. As you interact with 🐼 panda.ai, it will evolve and grow, learning from your conversations, web browsing behaviour, social media activity, music preferences, and even your spending habits. Our goal is to create a highly personalised digital assistant that knows and understands each user individually.
 
@@ -54,9 +54,9 @@ https://github.com/user-attachments/assets/0e2a9e6a-56d4-4a61-b532-d6560f514035
   - SendGrid API
 
 ## PRIVACY & DATA HANDLING
-At panda.ai, we take your privacy seriously. Here are some key points about our data handling practices:
+At 🐼 panda.ai, we take your privacy seriously. Here are some key points about our data handling practices:
 
 - Users have full control over their data
 - All data is stored securely and can be deleted at any time
 - We do not train AI models on user data
-- Users can view and manage all data collected by panda.ai
+- Users can view and manage all data collected by 🐼 panda.ai

@@ -9,7 +9,7 @@ https://github.com/user-attachments/assets/0e2a9e6a-56d4-4a61-b532-d6560f514035
 
 🐼 panda.ai is an artificial intelligence personal assistant designed to learn from you and adapt to your unique needs. As you interact with 🐼 panda.ai, it will evolve and grow, learning from your conversations, web browsing behaviour, social media activity, music preferences, and even your spending habits. Our goal is to create a highly personalised digital assistant that knows and understands each user individually.
 
-## FEATURES
+## FEATURES
 
 - Personalized AI chat assistant
 - User authentication and account management
